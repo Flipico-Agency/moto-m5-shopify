@@ -1,0 +1,65 @@
+<div class="section_tire-model_top">
+  <div class="padding-global">
+    <div class="container-large">
+      <div class="padding-section-small">
+        <div class="tire-model_component">
+          <div class="tire-model_content-top">
+            <div class="tire-model_wrapper">
+              {{ section.settings.zdjecie-opony | image_url: height: 500 | image_tag: class: "tire-model_main-image" }}
+              <div class="tire-model_title-wrapper">
+                <h2 class="heading-style-h5">
+                  {{ section.settings.nazwa-producenta }}</h2>
+                <h1 class="heading-style-h3">
+                  {{ section.settings.nazwa-modelu }}</h1>
+                <div class="margin-top margin-small">
+                  <p>{{ section.settings.krotki-opis-modelu }}</p>
+                </div>
+                <div class="margin-top margin-xsmall">
+                  <a class="button is-link is-icon">Czytaj dalej<svg class="icon-embed-xxsmall" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ic" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2m-.35 12.65l-2.79-2.79c-.32-.32-.1-.86.35-.86h5.59c.45 0 .67.54.35.85l-2.79 2.79c-.2.2-.52.2-.71.01"></path></svg></a>
+                </div>
+              </div>
+              <div>
+              </div>
+              {{ section.settings.zdjecie-producenta | image_url: height: 64 | image_tag: class: "tire-model_producer-logo", id: 'w-node-dff49e8a-c49a-8dae-b921-49cd5adce057-5adce040' }}
+              <div id="w-node-dff49e8a-c49a-8dae-b921-49cd5adce058-5adce040" class="tire-model_benefits-wrapper">
+                {% render 'benefits-small' %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "tire_model-top",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "zdjecie-opony",
+        "label": "Zdjęcie opony"
+      }, {
+        "type": "image_picker",
+        "id": "zdjecie-producenta",
+        "label": "Zdjęcie producenta"
+      }, {
+        "type": "text",
+        "id": "nazwa-modelu",
+        "label": "Nazwa modelu",
+        "default": "Nazwa Modelu"
+      }, {
+        "type": "text",
+        "id": "nazwa-producenta",
+        "label": "Nazwa producenta",
+        "default": "Nazwa Producenta"
+      }, {
+        "type": "text",
+        "id": "krotki-opis-modelu",
+        "label": "Krótki opis modelu",
+        "default": "Lorem ipsum"
+      }
+    ]
+  }
+{% endschema %}

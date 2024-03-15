@@ -1,0 +1,1 @@
+{"sections":{"main":{"type":"tire-model_top","settings":{"zdjecie-opony":"{{ metaobject.zdjecie.value }}","zdjecie-producenta":"{{ metaobject.marka.value.logo.value }}","nazwa-modelu":"{{ metaobject.model.value }}","nazwa-producenta":"{{ metaobject.marka.value.name.value }}","krotki-opis-modelu":"{{ metaobject.opis_seo.value }}"}}},"order":["main"]}
