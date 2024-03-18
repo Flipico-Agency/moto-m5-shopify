@@ -1,16 +1,18 @@
 <html>
-<head>
-  {{ content_for_header }}
-  {{ 'style.css' |  asset_url | stylesheet_tag }}
-</head>
-<body>
-  {{ 'script.js' |  asset_url | script_tag }}
-<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-  <div class="page-wrapper">
-  {% render 'header' %}
-    <div class="main-wrapper">
-      {{ content_for_layout }}
+  <head>
+    {{ content_for_header }}
+    {{ 'style.css' | asset_url | stylesheet_tag }}
+    {{ 'normalise.css' | asset_url | stylesheet_tag }}
+    {{ 'globalstyles.css' | asset_url | stylesheet_tag }}
+    {{ 'script.js' | asset_url | script_tag }}
+  </head>
+  <body>
+    <div class="page-wrapper">
+      {% render 'header' %}
+      <div class="main-wrapper">
+        {{ content_for_layout }}
+      </div>
+      {% render 'footer' %}
     </div>
-  </div>
-</body>
+  </body>
 </html>

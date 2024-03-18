@@ -1,1 +1,222 @@
-[]
+[{
+    "name": "theme_info",
+    "theme_name": "MotoM5",
+    "theme_author": "Flipico Agency",
+    "theme_version": "1.0.2",
+    "theme_documentation_url": "https:\/\/flipico.agency",
+    "theme_support_email": "kontakt@flipico.agency"
+}, {
+    "name": "Seo Settings",
+    "settings": [{
+            "type": "image_picker",
+            "id": "favicon",
+            "label": "Favicon Image",
+            "info": "Will be scaled down to 32x32px"
+        },
+        {
+            "type": "image_picker",
+            "id": "apple_touch_icon",
+            "label": "Apple touch icon image",
+            "info": "Will be scaled down to 120x120px"
+        },
+        {
+            "type": "text",
+            "id": "social_twitter_link",
+            "label": "Twitter Link"
+        },
+        {
+            "type": "checkbox",
+            "id": "enable_product_rich_snippets",
+            "label": "Enable Product Rich Snippets",
+            "default": true
+        },
+        {
+            "type": "checkbox",
+            "id": "enable_article_rich_snippets",
+            "label": "Enable Article Rich Snippets",
+            "default": true
+        }
+    ]
+}, {
+    "name": "Colors Settings",
+    "settings": [{
+            "type": "color",
+            "id": "color_color_grayiron_grayiron600",
+            "label": "Color color grayiron  grayiron600",
+            "default": "#51525c"
+        },
+        {
+            "type": "color",
+            "id": "color_color_red_red600",
+            "label": "Color color red  red600",
+            "default": "#d92d20"
+        },
+        {
+            "type": "color",
+            "id": "color_color_red_red700",
+            "label": "Color color red  red700",
+            "default": "#b42318"
+        },
+        {
+            "type": "color",
+            "id": "color_color_red_red800",
+            "label": "Color color red  red800",
+            "default": "#912018"
+        },
+        {
+            "type": "color",
+            "id": "color_color_light_grey",
+            "label": "Color color  light grey",
+            "default": "#f4f4f4"
+        },
+        {
+            "type": "color",
+            "id": "color_color_grayiron_grayiron400",
+            "label": "Color color grayiron  grayiron400",
+            "default": "#a0a0ab"
+        },
+        {
+            "type": "color",
+            "id": "color_color_grayiron_grayiron200",
+            "label": "Color color grayiron  grayiron200",
+            "default": "#e4e4e7"
+        },
+        {
+            "type": "color",
+            "id": "color_color_grayiron_grayiron300",
+            "label": "Color color grayiron  grayiron300",
+            "default": "#d1d1d6"
+        },
+        {
+            "type": "color",
+            "id": "color_color_grayiron_grayiron100",
+            "label": "Color color grayiron  grayiron100",
+            "default": "#f4f4f5"
+        },
+        {
+            "type": "color",
+            "id": "color_color_red_red500",
+            "label": "Color color red  red500",
+            "default": "#f04438"
+        },
+        {
+            "type": "color",
+            "id": "color_color_red_red400",
+            "label": "Color color red  red400",
+            "default": "#f97066"
+        },
+        {
+            "type": "color",
+            "id": "color_color_red_red300",
+            "label": "Color color red  red300",
+            "default": "#fda29b"
+        },
+        {
+            "type": "color",
+            "id": "color_color_red_red25",
+            "label": "Color color red  red25",
+            "default": "#fffbfa"
+        },
+        {
+            "type": "color",
+            "id": "color_color_red_red900",
+            "label": "Color color red  red900",
+            "default": "#7a271a"
+        },
+        {
+            "type": "color",
+            "id": "color_color_red_red100",
+            "label": "Color color red  red100",
+            "default": "#fee4e2"
+        },
+        {
+            "type": "color",
+            "id": "color_color_red_red50",
+            "label": "Color color red  red50",
+            "default": "#fef3f2"
+        },
+        {
+            "type": "color",
+            "id": "color_color_red_red200",
+            "label": "Color color red  red200",
+            "default": "#fecdca"
+        },
+        {
+            "type": "color",
+            "id": "color_color_grayiron_grayiron500",
+            "label": "Color color grayiron  grayiron500",
+            "default": "#70707b"
+        },
+        {
+            "type": "color",
+            "id": "color_color_grayiron_grayiron700",
+            "label": "Color color grayiron  grayiron700",
+            "default": "#3f3f46"
+        },
+        {
+            "type": "color",
+            "id": "color_color_grayiron_grayiron50",
+            "label": "Color color grayiron  grayiron50",
+            "default": "#fafafa"
+        },
+        {
+            "type": "color",
+            "id": "color_color_grayiron_grayiron800",
+            "label": "Color color grayiron  grayiron800",
+            "default": "#26272b"
+        },
+        {
+            "type": "color",
+            "id": "color_color_grayiron_grayiron25",
+            "label": "Color color grayiron  grayiron25",
+            "default": "#fcfcfc"
+        },
+        {
+            "type": "color",
+            "id": "color_color_grayiron_grayiron900",
+            "label": "Color color grayiron  grayiron900",
+            "default": "#18181b"
+        },
+        {
+            "type": "color",
+            "id": "color_status_color_green",
+            "label": "Color status color  green",
+            "default": "#229757"
+        },
+        {
+            "type": "color",
+            "id": "color_status_color_green_light",
+            "label": "Color status color  green light",
+            "default": "#e3fff0"
+        },
+        {
+            "type": "color",
+            "id": "color_season_summer",
+            "label": "Color season  summer",
+            "default": "#f0b646"
+        },
+        {
+            "type": "color",
+            "id": "color_season_winter",
+            "label": "Color season  winter",
+            "default": "#4875f8"
+        }
+    ]
+}, {
+    "name": "Products Collection Settings",
+    "settings": [{
+            "type": "collection",
+            "id": "collection_categories_template",
+            "label": "Collection Categories Template"
+        },
+        {
+            "type": "range",
+            "id": "collection_categories_template_limit",
+            "label": "Collection Categories Template limit",
+            "min": 1,
+            "max": 50,
+            "step": 1,
+            "default": 3
+        }
+    ]
+}]

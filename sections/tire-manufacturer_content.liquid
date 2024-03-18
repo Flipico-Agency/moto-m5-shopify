@@ -1,0 +1,168 @@
+<div class="padding-global {{ section.settings.background }}">
+  <div class="container-large">
+    {% for block in section.blocks %}
+      {% case block.type %}
+        {% when 'tires-models' %}
+          <div class="padding-section-{{ section.settings.padding }}">
+            <div class="white-container shadow-small">Modele</div>
+          </div>
+        {% when 'tires-season' %}
+          <div class="padding-section-{{ section.settings.padding }}">
+            <div class="white-container shadow-small">
+              <div class="margin-bottom margin-medium">
+                <h4>
+                  Opony {{ metaobject.name }} według sezonu</h4>
+              </div>
+              <div class="grid-3">
+                <div class="season_select-wrapper shadow-small">
+                  <p class="text-weight-semibold text-color-black">Opony Letnie {{ metaobject.name }}</p>
+                </div>
+                <div class="season_select-wrapper shadow-small">
+                  <p class="text-weight-semibold text-color-black">Opony Zimowe {{ metaobject.name }}</p>
+                </div>
+                <div class="season_select-wrapper shadow-small">
+                  <p class="text-weight-semibold text-color-black">Opony Całoroczne {{ metaobject.name }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% when 'seo-description' %}
+          <div class="padding-section-{{ section.settings.padding }}">
+            <div class="margin-bottom margin-medium">
+              {{ block.settings.logo | image_url: height: 100 | image_tag: max-width: 200 }}
+            </div>
+            <div class="content7_component">
+              <div class="text-rich-text">
+                {{ block.settings.first-description }}
+              </div>
+              <div class="text-rich-text">
+                {{ block.settings.second-description }}
+              </div>
+            </div>
+          </div>
+      {% endcase %}
+    {% endfor %}
+  </div>
+</div>
+
+
+{% schema %}
+  {
+    "name": "Treść i Linki",
+    "tag": "section",
+    "class": "section_content-list",
+    "limit": 1,
+    "settings": [
+      {
+        "id": "padding",
+        "type": "select",
+        "label": "Odstępy",
+        "options": [
+          {
+            "value": "medium",
+            "label": "Średnie"
+          }, {
+            "value": "small",
+            "label": "Małe"
+          }, {
+            "value": "xsmall",
+            "label": "X Małe"
+          }
+        ],
+        "default": "xsmall"
+      }, {
+        "id": "background",
+        "type": "select",
+        "label": "Kolor tła",
+        "options": [
+          {
+            "value": "background-color-white",
+            "label": "Biały"
+          }, {
+            "value": "background-color-grayiron50",
+            "label": "Szary"
+          }
+        ],
+        "default": "background-color-grayiron50"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Treść i Linki"
+      }
+    ],
+    "blocks": [
+      {
+        "name": "Sezony Opon",
+        "type": "tires-season",
+        "settings": [
+          {
+            "type": "url",
+            "id": "link-letnie",
+            "label": "Opony Letnie"
+          }, {
+            "type": "url",
+            "id": "link-zimowe",
+            "label": "Opony Zimowe"
+          }, {
+            "type": "url",
+            "id": "link-caloroczne",
+            "label": "Opony Całoroczne"
+          }
+        ]
+      }, {
+        "name": "Polecane Modele",
+        "type": "tires-models",
+        "settings": [
+          {
+            "type": "text",
+            "id": "first-model",
+            "label": "Pierwszy Model"
+          }, {
+            "type": "text",
+            "id": "second-model",
+            "label": "Drugi Model"
+          }, {
+            "type": "text",
+            "id": "third-model",
+            "label": "Trzeci Model"
+          }
+        ]
+      }, {
+        "name": "Opis SEO",
+        "type": "seo-description",
+        "settings": [
+          {
+            "type": "richtext",
+            "id": "first-description",
+            "label": "Opis Lewa Kolumna"
+          }, {
+            "type": "richtext",
+            "id": "second-description",
+            "label": "Opis Prawa Kolumna"
+          }, {
+            "type": "image_picker",
+            "id": "logo",
+            "label": "Logo"
+          }
+
+        ]
+      }
+    ]
+  }
+{% endschema %}
+
+
+{% stylesheet %}
+  .season_select-wrapper {
+    grid-column-gap: 0.75rem;
+    grid-row-gap: 0.75rem;
+    border-radius: 0.5rem;
+    align-items: center;
+    padding: 1.5rem;
+    display: flex;
+  }
+  @media screen and (max-width: 991px) {}
+@media screen and (max-width: 767px) {}
+@media screen and (max-width: 479px) {}
+{% endstylesheet %}

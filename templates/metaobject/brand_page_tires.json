@@ -1,0 +1,9 @@
+{
+    "sections": {
+        "tire-model_top": {
+            "type": "tire-manufacturer_header",
+            "settings": {}
+        }
+    },
+    "order": ["tire-manufacturer_header"]
+}

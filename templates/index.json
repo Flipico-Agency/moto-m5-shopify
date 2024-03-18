@@ -1,0 +1,9 @@
+{
+    "sections": {
+        "main": {
+            "type": "logo-list",
+            "settings": {}
+        }
+    },
+    "order": ["main"]
+}

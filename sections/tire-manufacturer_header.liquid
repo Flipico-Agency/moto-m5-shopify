@@ -1,0 +1,135 @@
+<div class="padding-global">
+  <div class="container-large">
+    <div class="header_manufacturer-category_content">
+      <div class="margin-bottom margin-large">
+        <div class="max-width-large">
+          <div class="margin-bottom margin-xsmall">
+            <h1 class="text-color-white">
+              {{ section.settings.nazwa-producenta }}
+            </h1>
+          </div>
+          <p class="text-weight-semibold text-color-white">
+            {{ section.settings.krotki-opis-producenta }}
+          </p>
+        </div>
+      </div>
+      <div class="header_manufacturer-category_content-wrapper">
+        <div bind="5e6c1e57-437a-81a0-6432-efb0527f2acf" class="form-block-2 w-form">
+          <form
+            id="email-form-2"
+            name="email-form-2"
+            data-name="Email Form 2"
+            method="get"
+            class="div-block-8-copy-copyavweva"
+            data-wf-page-id="65f0653287fcaeba84b7870a"
+            data-wf-element-id="5e6c1e57-437a-81a0-6432-efb0527f2ad0"
+            aria-label="Email Form 2">
+            <div id="w-node-_5e6c1e57-437a-81a0-6432-efb0527f2ad1-84b7870a" class="cawecawecwace">
+              <div
+                wized="filter_field_width"
+                id="w-node-_5e6c1e57-437a-81a0-6432-efb0527f2ad2-84b7870a"
+                class="form-field-wrapper">
+                <label for="widths" class="field-label">szerokość</label>
+                <select
+                  id="widths"
+                  name="widths"
+                  data-name="Widths"
+                  required=""
+                  wized="filter_tire_width_select"
+                  class="select-field is-left w-select"></select>
+              </div>
+              <div wized="filter_field_profile" class="form-field-wrapper">
+                <label for="profile" class="field-label">profil</label>
+                <select
+                  id="profile"
+                  name="profile"
+                  data-name="Profile"
+                  required=""
+                  wized="filter_tire_profile_select"
+                  class="select-field is-middle w-select"></select>
+              </div>
+              <div wized="filter_field_diameter" class="form-field-wrapper">
+                <label for="tire-diameter" class="field-label">średnica</label>
+                <select
+                  id="tire-diameter"
+                  name="tire-diameter"
+                  data-name="Tire Diameter"
+                  wized="filter_tire_diameter_select"
+                  class="select-field is-middle w-select"></select>
+              </div>
+              <div class="form-field-wrapper">
+                <label for="season-tire" class="field-label">Sezon</label>
+                <select
+                  id="season-tire"
+                  name="season-tire"
+                  data-name="Season Tire"
+                  required=""
+                  wized="filter_tire_season_select"
+                  class="select-field is-right w-select">
+                  <option value="Letnie">Letnie</option>
+                  <option value="Zimowe">Zimowe</option>
+                  <option value="Całoroczne">Całoroczne</option>
+                </select>
+              </div>
+            </div><input
+              type="submit"
+              data-wait="Please wait..."
+              wized="filter_tire_submit_trigger"
+              id="w-node-_5e6c1e57-437a-81a0-6432-efb0527f2ae6-84b7870a"
+              class="button w-button"
+              value="Szukaj {{ section.settings.nazwa-producenta }}"></form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="header_manufacturer-category_background-image-wrapper">
+  <div class="image-overlay-layer-dark"></div>
+  {{ section.settings.zdjecie-w-tle | image_url: height: 1080 | image_tag: class: "header_manufacturer-category_background-image" }}
+</div>
+
+
+{% schema %}
+  {
+    "name": "Producent Opon Header",
+    "tag": "header",
+    "class": "section_header_manufacturer-category",
+    "limit": 1,
+    "presets": [
+      {
+        "name": "Producent Opon Header"
+      }
+    ],
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "zdjecie-w-tle",
+        "label": "Zdjęcie w tle"
+      }, {
+        "type": "image_picker",
+        "id": "zdjecie-producenta",
+        "label": "Logo producenta"
+      }, {
+        "type": "text",
+        "id": "nazwa-producenta",
+        "label": "Nazwa Producenta",
+        "default": "Nazwa Producenta"
+      }, {
+        "type": "text",
+        "id": "krotki-opis-producenta",
+        "label": "Krótki opis Producenta",
+        "default": "Krótki opis Producenta"
+      }
+    ]
+  }
+{% endschema %}
+
+
+{% javascript %}
+
+{% endjavascript %}
+
+
+{% stylesheet %}
+
+{% endstylesheet %}
