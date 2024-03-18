@@ -4,7 +4,51 @@
       {% case block.type %}
         {% when 'tires-models' %}
           <div class="padding-section-{{ section.settings.padding }}">
-            <div class="white-container shadow-small">Modele</div>
+            <div class="white-container shadow-small">
+              <div class="margin-bottom margin-medium">
+                <h4>Polecane modele opon {{ metaobject.name }}</h4>
+              </div>
+              <div class="grid-3">
+                  {% assign recommended_ids = metaobject.summer_recommended | split: ',' %}
+                  {% for id in recommended_ids %}
+                    {% assign recommended_metaobject = shop.metaobjects.modele_opon[id] %}
+                    {% if recommended_metaobject %}
+                      <!-- Tutaj wyświetlasz potrzebne dane z recommended_metaobject, na przykład: -->
+                      <p>{{ recommended_metaobject.model }}</p>
+                      <!-- Dodaj więcej pól z recommended_metaobject, które chcesz wyświetlić -->
+                    {% endif %}
+                  {% endfor %}
+              <!-- {% assign counter = 0 %}}    <div class="product-square shadow-xsmall">      <div class="product_content-wrapper">
+                      <div class="product_tittle-wrapper">
+                        <div class="text-size-large text-weight-semibold">
+                          {{ metaobject.marka.value.name }}</div>
+                        <div class="heading-style-h4">
+                          {{ metaobject.model }}</div>
+                      </div>
+                      <div class="margin-top margin-xsmall">
+                        <div class="product_pictures-wrapper">
+                          <div class="product_season-wrapper"></div>
+                          <div class="product_badge-wrapper">
+                            <div class="text-size-small text-weight-bold text-color-white">{{ metaobject.class }}</div>
+                          </div>
+                          <div class="product_image-wrapper">
+                            {{ metaobject.summer_recommended.value.zdjecie | image_url: height: 800 | image_tag: class: "image-2" }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="product-square_info-wrapper">
+                      <a href="{{ metaobject.system.url }}" class="button is-small is-icon">
+                        <div>Zobacz oferty</div>
+                        <div class="icon-embed-xsmall"></div>
+                      </a>
+                    </div>
+                  </div>
+                  {% assign counter = counter | plus: 1 %}
+                {% endif %}
+              {% endfor %} -->
+              </div>
+            </div>
           </div>
         {% when 'tires-season' %}
           <div class="padding-section-{{ section.settings.padding }}">
