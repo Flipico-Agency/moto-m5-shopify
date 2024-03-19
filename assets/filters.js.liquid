@@ -5,6 +5,37 @@ document.addEventListener('DOMContentLoaded', function() {
     const widthsSelect = document.getElementById('widths');
     const profilesSelect = document.getElementById('profile');
     const diametersSelect = document.getElementById('tire-diameter');
+    const submitButton = document.getElementById('submit_tire');
+
+    // Helper function to check if all selections are made
+    function checkAllSelected() {
+        return widthsSelect.value && profilesSelect.value && diametersSelect.value;
+    }
+
+    // Update the availability of the submit button
+    function updateSubmitButtonAvailability() {
+        if (checkAllSelected()) {
+            submitButton.disabled = false;
+            submitButton.style.pointerEvents = 'auto';
+            submitButton.style.opacity = '1';
+        } else {
+            submitButton.disabled = true;
+            submitButton.style.pointerEvents = 'none';
+            submitButton.style.opacity = '0.5';
+        }
+    }
+
+    // Function to handle form submission
+    function handleFormSubmission(event) {
+        event.preventDefault();
+        if (checkAllSelected()) {
+            const manufacturer = submitButton.value.replace('Szukaj Opony ', '');
+            const seasonTire = document.getElementById('season-tire').value;
+            const query = `manufacturer=${encodeURIComponent(manufacturer)}&widths=${widthsSelect.value}&profile=${profilesSelect.value}&tire-diameter=${diametersSelect.value}&season-tire=${seasonTire}`;
+            const url = `https://moto-m5.myshopify.com/collections/opony?${query}`;
+            window.location.href = url;
+        }
+    }
 
     // Helper function to enable or disable a select element
     function setSelectAvailability(selectElement, isEnabled) {
@@ -72,6 +103,15 @@ document.addEventListener('DOMContentLoaded', function() {
         fetchAndPopulateDiameters(widthsSelect.value, this.value);
         setSelectAvailability(diametersSelect, false);
     });
+
+    // Event listener for when a diameter is selected
+    diametersSelect.addEventListener('change', updateSubmitButtonAvailability);
+
+    // Add event listener to the form's submit event
+    document.getElementById('submit-tire-form').addEventListener('submit', handleFormSubmission);
+
+    // Disable the submit button on load
+    updateSubmitButtonAvailability();
 
     fetchAndPopulateTireWidths();
 });
