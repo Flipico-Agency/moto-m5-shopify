@@ -1,19 +1,25 @@
 <div class="padding-global {{ section.settings.background }}">
   <div class="container-large">
     <div class="padding-section-{{ section.settings.padding }}">
-      <div class="grid-3">
-        {% for block in section.blocks %}
-          {% case block.type %}
-            {% when 'model_opony' %}
-              {% assign counter = 0 %}
-              {% for metaobject in shop.metaobjects.modele_opon.values %}
-                {% if block.settings.model == metaobject.model %}
-                  {% if counter < 1 %}
+      <div class="{%- if section.settings.container_check -%}white-container{%- endif -%}">
+        {%- if section.settings.header_check -%}
+          <div class="margin-bottom margin-medium">
+            <h4>
+              {{ section.settings.header }}
+            </h4>
+          </div>
+        {%- endif -%}
+        <div class="grid-3">
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'model_opony' %}
+                {% for metaobject in shop.metaobjects.modele_opon.values %}
+                  {% if block.settings.model == metaobject.model %}
                     <div class="product-square shadow-xsmall">
                       <div class="product_content-wrapper">
                         <div class="product_tittle-wrapper">
                           <div class="text-size-large text-weight-semibold">
-                            {{ metaobject.markavalue..name }}</div>
+                            {{ metaobject.marka.value.name }}</div>
                           <div class="heading-style-h4">
                             {{ metaobject.model }}</div>
                         </div>
@@ -24,7 +30,7 @@
                               <div class="text-size-small text-weight-bold text-color-white">{{ metaobject.marka.value.class }}</div>
                             </div>
                             <div class="product_image-wrapper">
-                              {{ metaobject.zdjecie | image_url: height: 800 | image_tag: class: "image-2" }}
+                              {{ metaobject.zdjecie | image_url: width: 400 | image_tag: class: "product-image" }}
                             </div>
                           </div>
                         </div>
@@ -32,16 +38,18 @@
                       <div class="product-square_info-wrapper">
                         <a href="{{ metaobject.system.url }}" class="button is-small is-icon">
                           <div>Zobacz oferty</div>
-                          <div class="icon-embed-xsmall"></div>
+                          <div class="icon-embed-xsmall">
+                            <img src="{{ 'IcRoundLocalOffer.svg' | asset_url }}" />
+                          </div>
                         </a>
                       </div>
                     </div>
                     {% assign counter = counter | plus: 1 %}
                   {% endif %}
-                {% endif %}
-              {% endfor %}
-          {% endcase %}
-        {% endfor %}
+                {% endfor %}
+            {% endcase %}
+          {% endfor %}
+        </div>
       </div>
     </div>
   </div>
@@ -71,7 +79,8 @@
           }
         ],
         "default": "large"
-      }, {
+      },
+      {
         "id": "background",
         "type": "select",
         "label": "Kolor tła",
@@ -85,6 +94,23 @@
           }
         ],
         "default": "background-color-white"
+      },
+      {
+        "type": "checkbox",
+        "id": "header_check",
+        "label": "Pokaż tytuł",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "header",
+        "label": "Tytuł",
+        "default": "Polecane Modele Opon"
+      }, {
+        "type": "checkbox",
+        "id": "container_check",
+        "label": "Pokaż w kontenerze",
+        "default": true
       }
     ],
     "presets": [
@@ -107,3 +133,83 @@
     ]
   }
 {% endschema %}
+
+{% stylesheet %}
+  .product-square {
+    grid-column-gap: 2rem;
+    grid-row-gap: 2rem;
+    background-color: var(--color--white);
+    border-radius: 0.5rem;
+    grid-template-rows: auto;
+    grid-template-columns: 2fr;
+    grid-auto-columns: 1fr;
+    padding: 1.5rem;
+    display: grid;
+    overflow: hidden;
+  }
+
+  .product-square_info-wrapper {
+    border-top: 2px solid var(--color-red--red600);
+    background-color: var(--color-grayiron--grayiron50);
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch;
+    margin: -0.5rem -1.5rem -1.5rem;
+    padding: 1rem 1.5rem 1.5rem;
+    display: flex;
+  }
+
+  .product_content-wrapper {
+    grid-column-gap: 0.5rem;
+    grid-row-gap: 0.5rem;
+    color: var(--color--black);
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    text-decoration: none;
+    display: flex;
+  }
+
+  .product_pictures-wrapper {
+    max-width: 25rem;
+    aspect-ratio: 2.39 / 1;
+    margin-bottom: -1.5rem;
+    position: relative;
+    overflow: visible;
+  }
+
+  .product_tittle-wrapper {
+
+    justify-content: flex-start;
+    align-items: flex-end;
+    display: block;
+  }
+
+  .product-image {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    object-position: 50% 0;
+  }
+
+  @media screen and (max-width: 991px) {}
+@media screen and (max-width: 767px) {
+  .product-square {
+    border-radius: 0;
+    margin-left: -1rem;
+    margin-right: -1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .product-square_info-wrapper {
+    width: 100vw;
+    margin-left: -1rem;
+    margin-right: -1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+@media screen and (max-width: 479px) {
+}
+{% endstylesheet %}
