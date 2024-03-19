@@ -1,4 +1,24 @@
 document.addEventListener('DOMContentLoaded', function() {
+    const baseURL = 'https://api.wheel-size.com/v2';
+    const userKey = '8608442fd845888bda065b97c8d141d9';
+
+    const widthsSelect = document.getElementById('widths');
+    const profilesSelect = document.getElementById('profile');
+    const diametersSelect = document.getElementById('tire-diameter');
+
+    // Helper function to enable or disable a select element
+    function setSelectAvailability(selectElement, isEnabled) {
+        const parentDiv = selectElement.parentElement;
+        if (isEnabled) {
+            parentDiv.style.pointerEvents = 'auto';
+            parentDiv.style.opacity = '1';
+        } else {
+            parentDiv.style.pointerEvents = 'none';
+            parentDiv.style.opacity = '0.5';
+            selectElement.selectedIndex = -1; // No item selected
+            selectElement.innerHTML = ''; // Clear all options
+        }
+    }
 
     async function fetchData(url) {
         try {
@@ -13,21 +33,45 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function populateSelect(selectElement, optionsArray) {
-        selectElement.innerHTML = optionsArray.map(option =>
-            `<option value="${option.value}">${option.value}</option>`
-        ).join('');
-        selectElement.selectedIndex = 0;
+        selectElement.innerHTML = optionsArray.map(option => `<option value="${option.value}">${option.value}</option>`).join('');
+        selectElement.selectedIndex = -1;
+        setSelectAvailability(selectElement, true);
     }
 
     async function fetchAndPopulateTireWidths() {
-        const tireWidthsResponse = await fetchData('https://api.wheel-size.com/v2/by_tire/sw/?user_key=8608442fd845888bda065b97c8d141d9');
-        if (tireWidthsResponse && tireWidthsResponse.data) {
-            populateSelect(document.getElementById('widths'), tireWidthsResponse.data.map(tw => ({ value: tw.value })));
+        const tireWidths = await fetchData(`${baseURL}/by_tire/sw/?user_key=${userKey}`);
+        if (tireWidths && tireWidths.data) {
+            populateSelect(widthsSelect, tireWidths.data);
+            // Initially disable profiles and diameters until a width is selected
+            setSelectAvailability(profilesSelect, false);
+            setSelectAvailability(diametersSelect, false);
         }
     }
 
-    document.getElementById('widths').addEventListener('click', function() {
-        fetchAndPopulateTireWidths();
+    async function fetchAndPopulateProfiles(selectedWidth) {
+        const profiles = await fetchData(`${baseURL}/by_tire/ar/?section_width=${selectedWidth}&region=eudm&user_key=${userKey}`);
+        if (profiles && profiles.data) {
+            populateSelect(profilesSelect, profiles.data);
+        }
+    }
+
+    async function fetchAndPopulateDiameters(selectedWidth, selectedProfile) {
+        const diameters = await fetchData(`${baseURL}/by_tire/rd/?section_width=${selectedWidth}&aspect_ratio=${selectedProfile}&region=eudm&user_key=${userKey}`);
+        if (diameters && diameters.data) {
+            populateSelect(diametersSelect, diameters.data);
+        }
+    }
+
+    widthsSelect.addEventListener('change', function() {
+        fetchAndPopulateProfiles(this.value);
+        setSelectAvailability(profilesSelect, false);
+        setSelectAvailability(diametersSelect, false);
     });
 
+    profilesSelect.addEventListener('change', function() {
+        fetchAndPopulateDiameters(widthsSelect.value, this.value);
+        setSelectAvailability(diametersSelect, false);
+    });
+
+    fetchAndPopulateTireWidths();
 });
