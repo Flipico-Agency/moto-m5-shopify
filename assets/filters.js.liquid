@@ -2,57 +2,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const baseURL = 'https://api.wheel-size.com/v2';
     const userKey = '8608442fd845888bda065b97c8d141d9';
 
-    const widthsSelect = document.getElementById('widths');
-    const profilesSelect = document.getElementById('profile');
-    const diametersSelect = document.getElementById('tire-diameter');
-    const submitButton = document.getElementById('submit_tire');
+    const formElements = {
+        widths: document.getElementById('widths'),
+        profiles: document.getElementById('profile'),
+        diameters: document.getElementById('tire-diameter'),
+        submitButton: document.getElementById('submit_tire')
+    };
 
-    // Helper function to check if all selections are made
-    function checkAllSelected() {
-        return widthsSelect.value && profilesSelect.value && diametersSelect.value;
-    }
+    // Uniwersalna funkcja do fetchowania danych
+    async function fetchData(endpoint, params) {
+        const url = new URL(`${baseURL}/${endpoint}`);
+        url.search = new URLSearchParams(Object.assign({ user_key: userKey }, params)).toString();
 
-    // Update the availability of the submit button
-    function updateSubmitButtonAvailability() {
-        if (checkAllSelected()) {
-            submitButton.disabled = false;
-            submitButton.style.pointerEvents = 'auto';
-            submitButton.style.opacity = '1';
-        } else {
-            submitButton.disabled = true;
-            submitButton.style.pointerEvents = 'none';
-            submitButton.style.opacity = '0.5';
-        }
-    }
-
-    // Function to handle form submission
-    function handleFormSubmission(event) {
-        event.preventDefault();
-        if (checkAllSelected()) {
-            {% comment %}const manufacturer = submitButton.value.replace('Szukaj Opony ', '');{% endcomment %}
-            const manufacturer = event.target.getAttribute('data-manufacturer-gid');
-            const seasonTire = document.getElementById('season-tire').value;
-            const query = `filter.p.m.tires.manufacturer=${encodeURIComponent(manufacturer)}&filter.p.m.tires.width=${widthsSelect.value}&filter.p.m.tires.profile=${profilesSelect.value}&filter.p.m.tires.diameter=${diametersSelect.value}&filter.p.m.tires.season=${seasonTire}`;
-            const url = `https://moto-m5.myshopify.com/collections/opony?${query}`;
-            window.location.href = url;
-        }
-    }
-
-    // Helper function to enable or disable a select element
-    function setSelectAvailability(selectElement, isEnabled) {
-        const parentDiv = selectElement.parentElement;
-        if (isEnabled) {
-            parentDiv.style.pointerEvents = 'auto';
-            parentDiv.style.opacity = '1';
-        } else {
-            parentDiv.style.pointerEvents = 'none';
-            parentDiv.style.opacity = '0.5';
-            selectElement.selectedIndex = -1; // No item selected
-            selectElement.innerHTML = ''; // Clear all options
-        }
-    }
-
-    async function fetchData(url) {
         try {
             const response = await fetch(url);
             if (!response.ok) {
@@ -64,55 +25,80 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function populateSelect(selectElement, optionsArray) {
-        selectElement.innerHTML = optionsArray.map(option => `<option value="${option.value}">${option.value}</option>`).join('');
-        selectElement.selectedIndex = -1;
-        setSelectAvailability(selectElement, true);
+    // Uniwersalna funkcja do aktualizacji selectów
+    function populateSelect(element, data, clear = true) {
+        if (clear) element.innerHTML = '';
+        data.forEach(item => {
+            const option = new Option(item.value, item.value);
+            element.add(option);
+        });
+        updateFormState();
     }
 
-    async function fetchAndPopulateTireWidths() {
-        const tireWidths = await fetchData(`${baseURL}/by_tire/sw/?user_key=${userKey}`);
-        if (tireWidths && tireWidths.data) {
-            populateSelect(widthsSelect, tireWidths.data);
-            // Initially disable profiles and diameters until a width is selected
-            setSelectAvailability(profilesSelect, false);
-            setSelectAvailability(diametersSelect, false);
+    // Zarządzanie stanem formularza
+    function updateFormState() {
+        const allSelected = Object.values(formElements).slice(0, 3).every(select => select.value);
+        setElementAvailability(formElements.submitButton, allSelected);
+
+        if (!formElements.widths.value) {
+            setElementAvailability(formElements.profiles, false);
+            setElementAvailability(formElements.diameters, false);
         }
     }
 
-    async function fetchAndPopulateProfiles(selectedWidth) {
-        const profiles = await fetchData(`${baseURL}/by_tire/ar/?section_width=${selectedWidth}&region=eudm&user_key=${userKey}`);
-        if (profiles && profiles.data) {
-            populateSelect(profilesSelect, profiles.data);
-        }
+    // Ustawianie dostępności elementu
+    function setElementAvailability(element, isEnabled) {
+        element.disabled = !isEnabled;
+        element.parentElement.style.pointerEvents = isEnabled ? 'auto' : 'none';
+        element.parentElement.style.opacity = isEnabled ? '1' : '0.5';
+        if (!isEnabled) element.innerHTML = '';
     }
 
-    async function fetchAndPopulateDiameters(selectedWidth, selectedProfile) {
-        const diameters = await fetchData(`${baseURL}/by_tire/rd/?section_width=${selectedWidth}&aspect_ratio=${selectedProfile}&region=eudm&user_key=${userKey}`);
-        if (diameters && diameters.data) {
-            populateSelect(diametersSelect, diameters.data);
+    // Obsługa zmian w selectach
+    function handleSelectChange() {
+        const { widths, profiles, diameters } = formElements;
+        if (this === widths && widths.value) {
+            fetchData('by_tire/ar', { section_width: widths.value, region: 'eudm' })
+                .then(data => populateSelect(profiles, data.data));
+        } else if (this === profiles && profiles.value) {
+            fetchData('by_tire/rd', { section_width: widths.value, aspect_ratio: profiles.value, region: 'eudm' })
+                .then(data => populateSelect(diameters, data.data));
         }
+        updateFormState();
     }
 
-    widthsSelect.addEventListener('change', function() {
-        fetchAndPopulateProfiles(this.value);
-        setSelectAvailability(profilesSelect, false);
-        setSelectAvailability(diametersSelect, false);
+    // Inicjalizacja selectów
+    fetchData('by_tire/sw', {})
+        .then(data => populateSelect(formElements.widths, data.data, false));
+
+    // Przypisanie nasłuchiwaczy zdarzeń
+    Object.values(formElements).slice(0, 3).forEach(select => {
+        select.addEventListener('change', handleSelectChange);
     });
 
-    profilesSelect.addEventListener('change', function() {
-        fetchAndPopulateDiameters(widthsSelect.value, this.value);
-        setSelectAvailability(diametersSelect, false);
+    // Obsługa wysyłania formularza
+    formElements.submitButton.form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        if (updateFormState()) {
+            const manufacturerGID = formElements.submitButton.getAttribute('data-manufacturer-gid');
+            const seasonTire = document.getElementById('season-tire').value;
+            const queryParameters = {
+                'filter.p.m.tires.manufacturer': encodeURIComponent(manufacturerGID),
+                'filter.p.m.tires.width': formElements.widths.value,
+                'filter.p.m.tires.profile': formElements.profiles.value,
+                'filter.p.m.tires.diameter': formElements.diameters.value,
+                'filter.p.m.tires.season': seasonTire
+            };
+            const queryString = Object.keys(queryParameters)
+                .map(key => `${key}=${queryParameters[key]}`).join('&');
+            window.location.href = `https://moto-m5.myshopify.com/collections/opony?${queryString}`;
+        }
     });
 
-    // Event listener for when a diameter is selected
-    diametersSelect.addEventListener('change', updateSubmitButtonAvailability);
-
-    // Add event listener to the form's submit event
-    document.getElementById('submit-tire-form').addEventListener('submit', handleFormSubmission);
-
-    // Disable the submit button on load
-    updateSubmitButtonAvailability();
-
-    fetchAndPopulateTireWidths();
+    setElementAvailability(formElements.profiles, false);
+    setElementAvailability(formElements.diameters, false);
+    updateFormState();
 });
+
+
+
