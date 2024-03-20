@@ -1,53 +1,76 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Selecting top level tabs and their content areas.
     const topTabs = document.querySelectorAll('.tab-link-top-search');
-    const sideTabs = document.querySelectorAll('.tab-link-left-search');
-    const topTabContents = document.querySelectorAll('.tab-pane-tab-1, .tab-pane-tab-2');
-    const sideTabPanes = document.querySelectorAll('.w-tab-pane[data-w-tab]');
+    const topTabContents = document.querySelectorAll('.w-tab-pane');
 
+    // Function to clear all active states.
     function clearActiveStates(elements) {
-        elements.forEach(el => el.classList.remove('w--current'));
+        elements.forEach(element => {
+            element.classList.remove('w--current');
+        });
     }
 
-    function hideAll(elements) {
-        elements.forEach(el => el.style.display = 'none');
+    // Function to hide all tab content areas.
+    function hideAllTabContents(contents) {
+        contents.forEach(content => {
+            content.style.display = 'none';
+        });
     }
 
-    function showTabContent(tab) {
-        const tabId = tab.getAttribute('data-w-tab');
-        hideAll(topTabContents);
+    // Function to show the selected tab's content and make the tab active.
+    function activateTab(tab) {
+        const targetTab = tab.getAttribute('data-w-tab');
+        const targetContent = document.querySelector(`.tab-pane-tab-${targetTab}`);
+
         clearActiveStates(topTabs);
+        hideAllTabContents(topTabContents);
 
-        document.querySelector(`.tab-pane-tab-${tabId}`).style.display = 'block';
         tab.classList.add('w--current');
+        if (targetContent) {
+            targetContent.style.display = 'block';
 
-        // Dla głównych zakładek, pokazujemy także pierwszą zagnieżdżoną zakładkę i jej zawartość
-        if (tabId === "1") {
-            showTabPane(sideTabs[0]);
-        } else {
-            // Dla innych głównych zakładek, ukrywamy wszystkie zagnieżdżone zakładki
-            hideAll(sideTabPanes);
-            clearActiveStates(sideTabs);
+            // Activating the first sub-tab and its content for the selected top-level tab.
+            const firstSubTab = targetContent.querySelector('.tab-link-left-search');
+            const firstSubTabContent = targetContent.querySelector('.w-tab-pane');
+
+            if (firstSubTab && firstSubTabContent) {
+                clearActiveStates(targetContent.querySelectorAll('.tab-link-left-search'));
+                hideAllTabContents(targetContent.querySelectorAll('.w-tab-pane'));
+
+                firstSubTab.classList.add('w--current');
+                firstSubTabContent.style.display = 'block';
+            }
         }
     }
 
-    function showTabPane(tab) {
-        const tabId = tab.getAttribute('data-w-tab');
-        hideAll(sideTabPanes);
-        clearActiveStates(sideTabs);
+    // Event listeners for top level tabs.
+    topTabs.forEach(tab => {
+        tab.addEventListener('click', () => activateTab(tab));
+    });
 
-        document.querySelector(`.w-tab-pane[data-w-tab="${tabId}"]`).style.display = 'block';
-        tab.classList.add('w--current');
+    // Activating the first top level tab and its content on page load.
+    if (topTabs.length > 0) {
+        activateTab(topTabs[0]);
     }
 
-    topTabs.forEach(tab => {
-        tab.addEventListener('click', () => showTabContent(tab));
-    });
+    // Selecting and managing sub-tabs within each top level tab.
+    topTabContents.forEach(tabContent => {
+        const subTabs = tabContent.querySelectorAll('.tab-link-left-search');
+        const subTabContents = tabContent.querySelectorAll('.w-tab-pane');
 
-    sideTabs.forEach(tab => {
-        tab.addEventListener('click', () => showTabPane(tab));
-    });
+        subTabs.forEach(subTab => {
+            subTab.addEventListener('click', () => {
+                clearActiveStates(subTabs);
+                hideAllTabContents(subTabContents);
 
-    // Aktywacja pierwszej głównej zakładki i pierwszej zagnieżdżonej zakładki domyślnie
-    showTabContent(topTabs[0]);
+                const subTargetTab = subTab.getAttribute('data-w-tab');
+                const subTargetContent = tabContent.querySelector(`[data-w-tab="${subTargetTab}"]`);
+
+                subTab.classList.add('w--current');
+                if (subTargetContent) {
+                    subTargetContent.style.display = 'block';
+                }
+            });
+        });
+    });
 });
-
