@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     const baseURL = 'https://api.wheel-size.com/v2';
     const userKey = '8608442fd845888bda065b97c8d141d9';
 
@@ -9,44 +9,28 @@ document.addEventListener('DOMContentLoaded', function() {
         submitButton: document.getElementById('tire-submit')
     };
 
-    // Uniwersalna funkcja do fetchowania danych
     async function fetchData(endpoint, params) {
         const url = new URL(`${baseURL}/${endpoint}`);
-        url.search = new URLSearchParams(Object.assign({ user_key: userKey }, params)).toString();
-
-        try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return await response.json();
-        } catch (error) {
-            console.error('Fetch error: ', error);
-        }
+        url.search = new URLSearchParams({ user_key: userKey, ...params }).toString();
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        return await response.json();
     }
 
-    // Uniwersalna funkcja do aktualizacji selectów
-    function populateSelect(element, data, clear = true) {
-        if (clear) element.innerHTML = '';
+    function populateSelect(element, data, placeholder = false) {
+        element.innerHTML = placeholder ? `<option value="">Wybierz...</option>` : '';
         data.forEach(item => {
             const option = new Option(item.value, item.value);
             element.add(option);
         });
-        updateFormState();
     }
 
-    // Zarządzanie stanem formularza
     function updateFormState() {
         const allSelected = Object.values(formElements).slice(0, 3).every(select => select.value);
         setElementAvailability(formElements.submitButton, allSelected);
-
-        if (!formElements.widths.value) {
-            setElementAvailability(formElements.profiles, false);
-            setElementAvailability(formElements.diameters, false);
-        }
+        return allSelected;
     }
 
-// Ustawianie dostępności elementu
     function setElementAvailability(element, isEnabled) {
         element.disabled = !isEnabled;
 
@@ -67,29 +51,37 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Obsługa zmian w selectach
-    function handleSelectChange() {
-        const { widths, profiles, diameters } = formElements;
-        if (this === widths && widths.value) {
-            fetchData('by_tire/ar/', { section_width: widths.value, region: 'eudm' })
-                .then(data => populateSelect(profiles, data.data));
-        } else if (this === profiles && profiles.value) {
-            fetchData('by_tire/rd/', { section_width: widths.value, aspect_ratio: profiles.value, region: 'eudm' })
-                .then(data => populateSelect(diameters, data.data));
-        }
+    async function initializeSelects() {
+        const widthsData = await fetchData('by_tire/sw/', { region: 'eudm' });
+        populateSelect(formElements.widths, widthsData.data);
+        const profilesData = await fetchData('by_tire/ar/', { section_width: formElements.widths.value, region: 'eudm' });
+        populateSelect(formElements.profiles, profilesData.data);
+        const diametersData = await fetchData('by_tire/rd/', { section_width: formElements.widths.value, aspect_ratio: formElements.profiles.value, region: 'eudm' });
+        populateSelect(formElements.diameters, diametersData.data);
         updateFormState();
     }
 
-    // Inicjalizacja selectów
-    fetchData('by_tire/sw/', {region: 'eudm'})
-        .then(data => populateSelect(formElements.widths, data.data, false));
-
-    // Przypisanie nasłuchiwaczy zdarzeń
-    Object.values(formElements).slice(0, 3).forEach(select => {
-        select.addEventListener('change', handleSelectChange);
+    formElements.widths.addEventListener('change', async () => {
+        if (formElements.widths.value) {
+            const data = await fetchData('by_tire/ar/', { section_width: formElements.widths.value, region: 'eudm' });
+            populateSelect(formElements.profiles, data.data, true);
+            setElementAvailability(formElements.profiles, true);
+            setElementAvailability(formElements.diameters, false);
+        }
+        updateFormState();
     });
 
-    // Obsługa wysyłania formularza
+    formElements.profiles.addEventListener('change', async () => {
+        if (formElements.profiles.value) {
+            const data = await fetchData('by_tire/rd/', { section_width: formElements.widths.value, aspect_ratio: formElements.profiles.value, region: 'eudm' });
+            populateSelect(formElements.diameters, data.data, true);
+            setElementAvailability(formElements.diameters, true);
+        }
+        updateFormState();
+    });
+
+    formElements.diameters.addEventListener('change', updateFormState);
+
     formElements.submitButton.form.addEventListener('submit', function(event) {
         event.preventDefault();
         if (updateFormState()) {
@@ -102,16 +94,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 'filter.p.m.tires.diameter': formElements.diameters.value,
                 'filter.p.m.tires.season': seasonTire
             };
-            const queryString = Object.keys(queryParameters)
-                .map(key => `${key}=${queryParameters[key]}`).join('&');
+            const queryString = Object.keys(queryParameters).map(key => `${key}=${queryParameters[key]}`).join('&');
             window.location.href = `https://moto-m5.myshopify.com/collections/opony?${queryString}`;
         }
     });
 
-    setElementAvailability(formElements.profiles, false);
-    setElementAvailability(formElements.diameters, false);
-    updateFormState();
+    await initializeSelects();
 });
-
-
-
