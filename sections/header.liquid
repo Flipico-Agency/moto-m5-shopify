@@ -1,0 +1,65 @@
+<div class="navbar7_container">
+  {{ shop.brand.logo | image_url: width: 300 | image_tag: class: navbar7_logo-link }}
+</div>
+
+{% schema %}
+  {
+    "name": "Nawigacja",
+    "tag": "header",
+    "class": "navbar7_component w-nav",
+    "settings": [
+      {
+        "id": "copyright",
+        "label": "Copyright",
+        "type": "text"
+      }, {
+        "id": "company-data",
+        "label": "Dane Firmy",
+        "type": "text"
+      }
+    ],
+    "max_blocks": 4,
+    "blocks": [
+      {
+        "name": "Kolumna Nawigacji",
+        "type": "navigation",
+        "settings": [
+          {
+            "type": "link_list",
+            "id": "link-list",
+            "label": "Menu Nawigacji"
+          }
+        ]
+      }, {
+        "name": "Kolumna Firmowa",
+        "type": "brand-info",
+        "settings": [
+          {
+            "type": "text",
+            "id": "heading",
+            "label": "tytuł"
+          }, {
+            "type": "richtext",
+            "id": "open-hours",
+            "label": "Godziny otwarcia"
+          }, {
+            "type": "richtext",
+            "id": "adress",
+            "label": "Adres"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Stopka"
+      }
+    ]
+  }
+
+{% endschema %}
+
+
+{% stylesheet %}
+
+{% endstylesheet %}

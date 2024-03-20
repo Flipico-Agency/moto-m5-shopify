@@ -1,0 +1,12 @@
+{
+    "type": "header",
+    "name": "Nawigacja",
+    "sections": {
+        "header": {
+            "type": "header"
+        }
+    },
+    "order": [
+        "header"
+    ]
+}
