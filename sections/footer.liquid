@@ -1,0 +1,239 @@
+<div class="padding-global">
+  <div class="container-large">
+    <div class="padding-section-medium">
+      <div class="footer5_newsletter-wrapper">
+        <div class="footer5_newsletter-text-wrapper">
+          <div class="text-size-large text-weight-bold">Masz pytania? Chcesz zamówić przez telefon?</div>
+          <a href="tel:{{ shop.phone }}" class="text-size-large text-weight-bold">
+            {{ shop.phone }}</a>
+        </div>
+      </div>
+      <div class="padding-bottom padding-xxlarge">
+        <div class="footer5_top-wrapper">
+          {% for block in section.blocks %}
+            {% if block.type == 'navigation' %}
+              <div class="footer5_link-list">
+                <div class="margin-bottom margin-xsmall">
+                  <div class="text-weight-semibold">{{ block.settings.link-list.title }}</div>
+                </div>
+                {% for link in block.settings.link-list.links %}
+                  <a href="{{ link.url }}" class="footer5_link">{{ link.title }}</a>
+                {% endfor %}
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      <div class="line-divider"></div>
+      <div class="padding-top padding-medium">
+        <div class="footer5_bottom-wrapper">
+          <div class="footer5_legal-list">
+            <div class="footer5_credit-text">{{ section.settings.copyright }}</div>
+            <div class="footer5_credit-text">{{ section.settings.company-data }}</div>
+          </div>
+          <a href="https://flipico.agency/" class="footer5_legal-link">Projekt, wykonanie i obsługa informatyczna realizowana przez flipico.agency</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+
+  {
+    "name": "Stopka",
+    "tag": "footer",
+    "class": "footer5_component background-color-grayiron100",
+    "settings": [
+      {
+        "id": "copyright",
+        "label": "Copyright",
+        "type": "text"
+      }, {
+        "id": "company-data",
+        "label": "Dane Firmy",
+        "type": "text"
+      }
+    ],
+    "max_blocks": 4,
+    "blocks": [
+      {
+        "name": "Kolumna",
+        "type": "navigation",
+        "settings": [
+          {
+            "type": "link_list",
+            "id": "link-list",
+            "label": "Nawigacja"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Stopka"
+      }
+    ]
+  }
+
+
+{% endschema %}
+
+
+{% stylesheet %}
+
+  .footer5_newsletter-text-wrapper {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 0.5rem;
+  }
+
+  .footer5_bottom-wrapper {
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+  }
+
+  .footer5_link-list {
+    flex-direction: column;
+    grid-template-rows: auto;
+    grid-template-columns: 100%;
+    grid-auto-columns: 100%;
+    align-items: flex-start;
+    justify-items: start;
+    display: flex;
+  }
+
+  .footer5_legal-link {
+    font-size: 0.875rem;
+    text-decoration: underline;
+  }
+
+  .footer5_social-link {
+    align-items: center;
+    font-size: 14px;
+    text-decoration: none;
+    display: flex;
+  }
+
+  .footer5_credit-text {
+    font-size: 0.875rem;
+  }
+
+  .footer5_logo-link {
+    padding-left: 0;
+  }
+
+  .footer5_legal-list {
+    gap: 0.5rem;
+    white-space: normal;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-flow: column;
+  }
+
+  .footer5_link {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    font-size: 0.875rem;
+    text-decoration: none;
+  }
+
+  .footer5_top-wrapper {
+    grid-column-gap: 2rem;
+    grid-row-gap: 1rem;
+    grid-template-rows: auto;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    align-items: start;
+    grid-auto-columns: 1fr;
+    display: grid;
+    grid-auto-flow: row;
+  }
+
+  .footer5_social-icons {
+    grid-column-gap: 0.75rem;
+    grid-row-gap: 0;
+    white-space: normal;
+    grid-template-rows: auto;
+    grid-template-columns: max-content;
+    grid-auto-columns: max-content;
+    grid-auto-flow: column;
+    align-items: start;
+    justify-items: start;
+    display: grid;
+  }
+
+  .footer5_newsletter-wrapper {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 5rem;
+    display: flex;
+  }
+
+  @media screen and (max-width: 991px) {
+
+    .footer5_bottom-wrapper {
+      flex-direction: column-reverse;
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+
+    .footer5_newsletter-text-wrapper {
+      margin-bottom: 1.5rem;
+    }
+
+    .footer5_top-wrapper {
+      grid-row-gap: 3rem;
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .footer5_social-icons {
+      margin-bottom: 2rem;
+    }
+
+    .footer5_newsletter-wrapper {
+      justify-content: flex-start;
+      margin-bottom: 4.5rem;
+      display: block;
+    }
+  }
+  @media screen and (max-width: 767px) {
+
+    .footer5_bottom-wrapper {
+      flex-direction: column-reverse;
+      align-items: flex-start;
+      padding-bottom: 1rem;
+    }
+
+    .footer5_credit-text {
+      margin-top: 1rem;
+    }
+
+    .footer5_legal-list {
+      grid-column-gap: 0;
+      grid-row-gap: 1rem;
+      grid-auto-flow: row;
+    }
+
+    .footer5_top-wrapper {
+      grid-row-gap: 2.5rem;
+    }
+
+    .footer5_newsletter-wrapper {
+      flex-direction: column;
+      align-items: flex-start;
+      margin-bottom: 3rem;
+    }
+  }
+  @media screen and (max-width: 479px) {
+
+    .footer5_top-wrapper {
+      grid-row-gap: 2.5rem;
+      grid-template-columns: 1fr;
+    }
+  }
+
+{% endstylesheet %}

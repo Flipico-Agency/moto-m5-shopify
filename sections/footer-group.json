@@ -1,0 +1,12 @@
+{
+    "type": "footer",
+    "name": "Stopka",
+    "sections": {
+        "footer": {
+            "type": "footer"
+        }
+    },
+    "order": [
+        "footer"
+    ]
+}
