@@ -1,0 +1,53 @@
+document.addEventListener('DOMContentLoaded', function() {
+    const topTabs = document.querySelectorAll('.tab-link-top-search');
+    const sideTabs = document.querySelectorAll('.tab-link-left-search');
+    const topTabContents = document.querySelectorAll('.tab-pane-tab-1, .tab-pane-tab-2');
+    const sideTabPanes = document.querySelectorAll('.w-tab-pane[data-w-tab]');
+
+    function clearActiveStates(elements) {
+        elements.forEach(el => el.classList.remove('w--current'));
+    }
+
+    function hideAll(elements) {
+        elements.forEach(el => el.style.display = 'none');
+    }
+
+    function showTabContent(tab) {
+        const tabId = tab.getAttribute('data-w-tab');
+        hideAll(topTabContents);
+        clearActiveStates(topTabs);
+
+        document.querySelector(`.tab-pane-tab-${tabId}`).style.display = 'block';
+        tab.classList.add('w--current');
+
+        // Dla głównych zakładek, pokazujemy także pierwszą zagnieżdżoną zakładkę i jej zawartość
+        if (tabId === "1") {
+            showTabPane(sideTabs[0]);
+        } else {
+            // Dla innych głównych zakładek, ukrywamy wszystkie zagnieżdżone zakładki
+            hideAll(sideTabPanes);
+            clearActiveStates(sideTabs);
+        }
+    }
+
+    function showTabPane(tab) {
+        const tabId = tab.getAttribute('data-w-tab');
+        hideAll(sideTabPanes);
+        clearActiveStates(sideTabs);
+
+        document.querySelector(`.w-tab-pane[data-w-tab="${tabId}"]`).style.display = 'block';
+        tab.classList.add('w--current');
+    }
+
+    topTabs.forEach(tab => {
+        tab.addEventListener('click', () => showTabContent(tab));
+    });
+
+    sideTabs.forEach(tab => {
+        tab.addEventListener('click', () => showTabPane(tab));
+    });
+
+    // Aktywacja pierwszej głównej zakładki i pierwszej zagnieżdżonej zakładki domyślnie
+    showTabContent(topTabs[0]);
+});
+
