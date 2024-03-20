@@ -1,5 +1,28 @@
 <div class="navbar7_container">
-  <a class="navbar7_logo-link" href="{{ shop.secure_url}}">{{ shop.brand.logo | image_url: width: 400 | image_tag: class: navbar7_logo-link }}</a>
+  <a class="navbar7_logo-link w-nav-brand" href="{{ shop.secure_url}}">{{ shop.brand.logo | image_url: height: 125 | image_tag: class: "navbar7_logo" }}</a>
+  <nav class="navbar7_menu w-nav-menu">
+    <div class="navbar7_menu-left">
+      <div class="navbar7_menu-dropdown w-dropdown">
+        <div class="navbar7_dropdown-toggle w-dropdown-toggle">
+          <div class="text-weight-semibold">Opony</div>
+        </div>
+        <div class="navbar7_dropdown-list w-dropdown-list">
+          <div class="navbar7_container-dropdown">
+            <div class="navbar7_dropdown-content">
+              <div class="navbar7_dropdown-content-left">
+                <div class="navbar7_dropdown-link-list"></div>
+              </div>
+            </div>
+          </div>
+          <div class="navbar7_bottom-bar">
+            <div class="navbar7_bottom-bar-background-layer"></div>
+            <div class="navbar7_bottom-bar-left"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <form class="search"></form>
+  </nav>
 </div>
 
 {% schema %}
@@ -180,6 +203,7 @@
     grid-row-gap: 0.5rem;
     padding-left: 0;
     display: flex;
+    max-width: 10rem;
   }
 
   .navbar7_menu {
@@ -216,7 +240,7 @@
 
   .navbar7_component {
     width: 100%;
-    min-height: 4.5rem;
+    height: 4.5rem;
     border-bottom: 1px solid var(--color-grayiron--grayiron400);
     background-color: var(--color--white);
     align-items: center;
@@ -226,10 +250,12 @@
     position: -webkit-sticky;
     position: sticky;
     top: 0;
+z-index: 1000;
   }
 
   .navbar7_logo {
     width: 10rem;
+    object-fit: contain;
   }
 
   .navbar7_dropdown-toggle {
