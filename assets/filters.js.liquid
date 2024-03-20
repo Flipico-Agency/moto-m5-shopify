@@ -3,10 +3,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const userKey = '8608442fd845888bda065b97c8d141d9';
 
     const formElements = {
-        widths: document.getElementById('widths'),
-        profiles: document.getElementById('profile'),
+        widths: document.getElementById('tire-width'),
+        profiles: document.getElementById('tire-profile'),
         diameters: document.getElementById('tire-diameter'),
-        submitButton: document.getElementById('submit_tire')
+        submitButton: document.getElementById('tire-submit')
     };
 
     // Uniwersalna funkcja do fetchowania danych
@@ -46,29 +46,42 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Ustawianie dostępności elementu
+// Ustawianie dostępności elementu
     function setElementAvailability(element, isEnabled) {
         element.disabled = !isEnabled;
-        element.parentElement.style.pointerEvents = isEnabled ? 'auto' : 'none';
-        element.parentElement.style.opacity = isEnabled ? '1' : '0.5';
-        if (!isEnabled) element.innerHTML = '';
+
+        // Ustawianie stylów tylko dla przycisku submit
+        if (element === formElements.submitButton) {
+            element.style.pointerEvents = isEnabled ? 'auto' : 'none';
+            element.style.opacity = isEnabled ? '1' : '0.5';
+        }
+        // Ustawianie stylów dla pozostałych elementów formularza
+        else {
+            const parentDiv = element.parentElement;
+            if (parentDiv) {
+                parentDiv.style.pointerEvents = isEnabled ? 'auto' : 'none';
+                parentDiv.style.opacity = isEnabled ? '1' : '0.5';
+            }
+            // Czyść zawartość selecta jeśli jest wyłączony
+            if (!isEnabled) element.innerHTML = '';
+        }
     }
 
     // Obsługa zmian w selectach
     function handleSelectChange() {
         const { widths, profiles, diameters } = formElements;
         if (this === widths && widths.value) {
-            fetchData('by_tire/ar', { section_width: widths.value, region: 'eudm' })
+            fetchData('by_tire/ar/', { section_width: widths.value, region: 'eudm' })
                 .then(data => populateSelect(profiles, data.data));
         } else if (this === profiles && profiles.value) {
-            fetchData('by_tire/rd', { section_width: widths.value, aspect_ratio: profiles.value, region: 'eudm' })
+            fetchData('by_tire/rd/', { section_width: widths.value, aspect_ratio: profiles.value, region: 'eudm' })
                 .then(data => populateSelect(diameters, data.data));
         }
         updateFormState();
     }
 
     // Inicjalizacja selectów
-    fetchData('by_tire/sw', {})
+    fetchData('by_tire/sw/', {region: 'eudm'})
         .then(data => populateSelect(formElements.widths, data.data, false));
 
     // Przypisanie nasłuchiwaczy zdarzeń
@@ -81,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault();
         if (updateFormState()) {
             const manufacturerGID = formElements.submitButton.getAttribute('data-manufacturer-gid');
-            const seasonTire = document.getElementById('season-tire').value;
+            const seasonTire = document.getElementById('tire-season').value;
             const queryParameters = {
                 'filter.p.m.tires.manufacturer': encodeURIComponent(manufacturerGID),
                 'filter.p.m.tires.width': formElements.widths.value,

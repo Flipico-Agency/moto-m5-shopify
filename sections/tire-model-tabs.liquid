@@ -2,10 +2,9 @@
     <div class="container-large">
         <div class="header30_content">
             <div class="header30_content-wrapper">
-                {% comment %}<img src="{{ 'tiresearch.png' | asset_url }}" loading="lazy" width="248" alt="" class="image">{% endcomment %}
-                {% comment %}<div data-current="Tab 1" data-easing="ease" data-duration-in="0" data-duration-out="0" class="tabs w-tabs">{% endcomment %}
-                <div data-current="Tab 1" data-easing="ease" data-duration-in="0" data-duration-out="0" class="tabs w-tabs">
-                    <div class="tabs-menu-2 w-tab-menu">
+                <div data-current="Tab 1" data-easing="ease" data-duration-in="0" data-duration-out="0">
+                    <div style="display: flex">
+                        {% comment %}<img src="{{ 'tiresearch.png' | asset_url }}" loading="lazy" width="248" alt="" class="image">{% endcomment %}
                         <a data-w-tab="Tab 1" wized="search_by_size"
                            class="tab-link-top-search w-inline-block w-tab-link w--current">
                             <div>
@@ -19,7 +18,7 @@
                             </div>
                         </a>
                     </div>
-                    <div class="tabs-content w-tab-content">
+                    <div>
                         <div data-w-tab="Tab 1" class="tab-pane-tab-1 w-tab-pane w--tab-active">
                             <div>
                                 <div data-current="Tab 1" data-easing="ease" data-duration-in="0" data-duration-out="0"
@@ -39,8 +38,7 @@
                                             <div>{{ 'Felgi' }}</div>
                                         </a>
                                     </div>
-                                    <div
-                                         class="w-tab-content">
+                                    <div style="">
                                         <div data-w-tab="Tab 1" class="w-tab-pane w--tab-active">
                                             <div class="w-form">
                                                 {%- form "contact", class: "div-block-8-copy" -%}
@@ -130,7 +128,6 @@
                                                     </div>
                                                     <input type="submit"
                                                            data-wait="Please wait..."
-                                                           wized="filter_tire_submit_trigger"
                                                            class="button w-button"
                                                            value="{{ 'Szukaj opon' }}"
                                                     >

@@ -14,24 +14,21 @@
         </div>
       </div>
       <div class="header_manufacturer-category_content-wrapper">
-        <div bind="5e6c1e57-437a-81a0-6432-efb0527f2acf" class="form-block-2 w-form">
+        <div class="form-block-2 w-form">
           <form
-            id="submit-tire-form"
-            name="submit-tire-form"
-            data-name="Submit Tire Form"
+            id="tire-submit-form"
+            name="tire-submit-form"
             method="get"
             class="div-block-8-copy-copyavweva"
             aria-label="Submit Tire Form">
-            <div id="w-node-_5e6c1e57-437a-81a0-6432-efb0527f2ad1-84b7870a" class="cawecawecwace">
+            <div class="cawecawecwace">
               <div
                 wized="filter_field_width"
-                id="w-node-_5e6c1e57-437a-81a0-6432-efb0527f2ad2-84b7870a"
                 class="form-field-wrapper">
-                <label for="widths" class="field-label">szerokość</label>
+                <label for="tire-width" class="field-label">szerokość</label>
                 <select
-                  id="widths"
-                  name="widths"
-                  data-name="Widths"
+                  id="tire-width"
+                  name="tire-width"
                   required=""
                   wized="filter_tire_width_select"
                   class="select-field is-left w-select"></select>
@@ -39,9 +36,8 @@
               <div wized="filter_field_profile" class="form-field-wrapper">
                 <label for="profile" class="field-label">profil</label>
                 <select
-                  id="profile"
-                  name="profile"
-                  data-name="Profile"
+                  id="tire-profile"
+                  name="tire-profile"
                   required=""
                   wized="filter_tire_profile_select"
                   class="select-field is-middle w-select"></select>
@@ -51,16 +47,14 @@
                 <select
                   id="tire-diameter"
                   name="tire-diameter"
-                  data-name="Tire Diameter"
                   wized="filter_tire_diameter_select"
                   class="select-field is-middle w-select"></select>
               </div>
               <div class="form-field-wrapper">
-                <label for="season-tire" class="field-label">Sezon</label>
+                <label for="tire-season" class="field-label">Sezon</label>
                 <select
-                  id="season-tire"
-                  name="season-tire"
-                  data-name="Season Tire"
+                  id="tire-season"
+                  name="tire-season"
                   required=""
                   wized="filter_tire_season_select"
                   class="select-field is-right w-select">
@@ -73,8 +67,8 @@
             <input
               type="submit"
               data-wait="Please wait..."
-              wized="filter_tire_submit_trigger"
-              id="submit_tire"
+              wized="tire_submit_trigger"
+              id="tire-submit"
               class="button w-button"
               data-manufacturer-gid="{{ metaobject.value }}"
               value="Szukaj {{ section.settings.nazwa-producenta }}"
