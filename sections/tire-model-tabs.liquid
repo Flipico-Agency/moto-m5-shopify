@@ -41,7 +41,7 @@
                                     <div style="">
                                         <div data-w-tab="Tab 1" class="w-tab-pane w--tab-active">
                                             <div class="w-form">
-                                                {%- form "contact", class: "div-block-8-copy" -%}
+                                                <form class="div-block-8-copy">
                                                     <div
                                                          class="div-block-21-copy">
                                                         <div wized="filter_field_width"
@@ -126,12 +126,15 @@
                                                             </svg>
                                                         </div>
                                                     </div>
-                                                    <input type="submit"
-                                                           data-wait="Please wait..."
-                                                           class="button w-button"
-                                                           value="{{ 'Szukaj opon' }}"
+                                                    <input
+                                                        type="submit"
+                                                        data-wait="Please wait..."
+                                                        wized="tire_submit_trigger"
+                                                        id="tire-submit"
+                                                        class="button w-button"
+                                                       value="{{ 'Szukaj opon' }}"
                                                     >
-                                                {%- endform -%}
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
