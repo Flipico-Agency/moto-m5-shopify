@@ -26,7 +26,7 @@
                             </div>
 
                             {% for sub_tab_number in (1..3) %}
-                                <div data-w-tab="{{ tab_number }}.{{ sub_tab_number }}"
+                                <div data-sub-tab="{{ tab_number }}.{{ sub_tab_number }}"
                                      class="w-tab-pane{% if sub_tab_number == 1 %} w--tab-active{% endif %}">
                                     <div class="w-form">
                                         <form class="div-block-8-copy">
@@ -87,86 +87,91 @@
 </div>
 
 <script>
-    var currentSection = document.currentScript.closest('.shopify-section');
-    currentSection.setAttribute("class", "section_tire-model_tabs background-color-grayiron100");
+var currentSection = document.currentScript.closest('.shopify-section');
+currentSection.setAttribute("class", "section_tire-model_tabs background-color-grayiron100");
 
-    document.addEventListener('DOMContentLoaded', function() {
-        // Selecting top level tabs and their content areas.
-        const topTabs = document.querySelectorAll('.tab-link-top-search');
-        const topTabContents = document.querySelectorAll('.w-tab-pane');
+document.addEventListener('DOMContentLoaded', function() {
+    const topTabs = document.querySelectorAll('.tab-link-top-search');
+    const topTabContents = document.querySelectorAll('.w-tab-pane');
 
-        // Function to clear all active states.
-        function clearActiveStates(elements) {
-            elements.forEach(element => {
-                element.classList.remove('w--current');
-            });
-        }
+    // We also need to ensure that sub-tab content areas are hidden by default
+    const subTabContents = document.querySelectorAll('.w-tab-pane [data-sub-tab]');
 
-        // Function to hide all tab content areas.
-        function hideAllTabContents(contents) {
-            contents.forEach(content => {
-                content.style.display = 'none';
-            });
-        }
+    function clearActiveStates(elements) {
+        elements.forEach(element => {
+            element.classList.remove('w--current');
+        });
+    }
 
-        // Function to show the selected tab's content and make the tab active.
-        function activateTab(tab) {
-            const targetTab = tab.getAttribute('data-w-tab');
-            const targetContent = document.querySelector(`.tab-pane-tab-${targetTab}`);
+    function hideAllTabContents(contents) {
+        contents.forEach(content => {
+            content.style.display = 'none';
+        });
+    }
 
-            clearActiveStates(topTabs);
-            hideAllTabContents(topTabContents);
+    function activateTab(tab) {
+        const targetTab = tab.getAttribute('data-w-tab');
+        const targetContent = document.querySelector(`.tab-pane-tab-${targetTab}`);
+        const subTabs = targetContent.querySelectorAll('.tab-link-left-search');
 
-            tab.classList.add('w--current');
-            if (targetContent) {
-                targetContent.style.display = 'block';
+        clearActiveStates([...topTabs, ...subTabs]); // Clear both top and sub-tabs
+        hideAllTabContents([...topTabContents, ...subTabContents]); // Hide both top and sub-tab contents
 
-                // Activating the first sub-tab and its content for the selected top-level tab.
-                const firstSubTab = targetContent.querySelector('.tab-link-left-search');
-                const firstSubTabContent = targetContent.querySelector('.w-tab-pane');
+        tab.classList.add('w--current');
+        targetContent.style.display = 'block';
 
-                if (firstSubTab && firstSubTabContent) {
-                    clearActiveStates(targetContent.querySelectorAll('.tab-link-left-search'));
-                    hideAllTabContents(targetContent.querySelectorAll('.w-tab-pane'));
-
-                    firstSubTab.classList.add('w--current');
-                    firstSubTabContent.style.display = 'block';
-                }
+        // Automatically activate the first sub-tab and content
+        if(subTabs.length > 0) {
+            subTabs[0].classList.add('w--current');
+            const firstSubTabContent = targetContent.querySelector(`[data-sub-tab="${subTabs[0].getAttribute('data-w-tab')}"]`);
+            if (firstSubTabContent) {
+                firstSubTabContent.style.display = 'block';
             }
         }
+    }
 
-        // Event listeners for top level tabs.
-        topTabs.forEach(tab => {
-            tab.addEventListener('click', () => activateTab(tab));
-        });
+    topTabs.forEach(tab => {
+        tab.addEventListener('click', () => activateTab(tab));
+    });
 
-        // Activating the first top level tab and its content on page load.
-        if (topTabs.length > 0) {
-            activateTab(topTabs[0]);
-        }
+    // Handling sub-tabs clicks within each tab
+    topTabContents.forEach(tabContent => {
+        const subTabs = tabContent.querySelectorAll('.tab-link-left-search');
 
-        // Selecting and managing sub-tabs within each top level tab.
-        topTabContents.forEach(tabContent => {
-            const subTabs = tabContent.querySelectorAll('.tab-link-left-search');
-            const subTabContents = tabContent.querySelectorAll('.w-tab-pane');
+        subTabs.forEach(subTab => {
+            subTab.addEventListener('click', function() {
+                clearActiveStates(subTabs); // Clear only the sub-tabs
+                hideAllTabContents(subTabContents); // Hide all sub-tab contents
 
-            subTabs.forEach(subTab => {
-                subTab.addEventListener('click', () => {
-                    clearActiveStates(subTabs);
-                    hideAllTabContents(subTabContents);
-
-                    const subTargetTab = subTab.getAttribute('data-w-tab');
-                    const subTargetContent = tabContent.querySelector(`[data-w-tab="${subTargetTab}"]`);
-
-                    subTab.classList.add('w--current');
-                    if (subTargetContent) {
-                        subTargetContent.style.display = 'block';
-                    }
-                });
+                subTab.classList.add('w--current');
+                const targetSubContent = tabContent.querySelector(`[data-sub-tab="${subTab.getAttribute('data-w-tab')}"]`);
+                if (targetSubContent) {
+                    targetSubContent.style.display = 'block';
+                }
             });
         });
     });
+
+    // Activate the first top level tab and its content on page load
+    if (topTabs.length > 0) {
+        activateTab(topTabs[0]);
+    }
+});
 </script>
+
+{% stylesheet %}
+{% comment %}
+
+.w-tab-pane {
+    display: none; /* Domyślnie zakładki są ukryte */
+}
+
+.w-tab-pane.w--tab-active {
+    display: block; /* Pokaż aktywną zakładkę */
+}
+
+{% endcomment %}
+{% endstylesheet %}
 
 {% schema %}
 {
