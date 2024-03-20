@@ -1,0 +1,175 @@
+<div class="padding-global">
+    <div class="container-large">
+        <div class="header30_content">
+            <div class="header30_content-wrapper">
+                {% comment %}<img src="{{ 'tiresearch.png' | asset_url }}" loading="lazy" width="248" alt="" class="image">{% endcomment %}
+                {% comment %}<div data-current="Tab 1" data-easing="ease" data-duration-in="0" data-duration-out="0" class="tabs w-tabs">{% endcomment %}
+                <div data-current="Tab 1" data-easing="ease" data-duration-in="0" data-duration-out="0" class="tabs w-tabs">
+                    <div class="tabs-menu-2 w-tab-menu">
+                        <a data-w-tab="Tab 1" wized="search_by_size"
+                           class="tab-link-top-search w-inline-block w-tab-link w--current">
+                            <div>
+                                <span class="hide-mobile-landscape">{{ '' }}</span>{{ 'Szukaj wg rozmiaru' }}
+                            </div>
+                        </a>
+                        <a data-w-tab="Tab 2" wized="search_by_car"
+                           class="tab-link-top-search w-inline-block w-tab-link">
+                            <div>
+                                <span class="hide-mobile-landscape">{{ '' }}</span>{{ 'Szukaj wg auta' }}
+                            </div>
+                        </a>
+                    </div>
+                    <div class="tabs-content w-tab-content">
+                        <div data-w-tab="Tab 1" class="tab-pane-tab-1 w-tab-pane w--tab-active">
+                            <div>
+                                <div data-current="Tab 1" data-easing="ease" data-duration-in="0" data-duration-out="0"
+                                     class="tabs-2 w-tabs">
+                                    <div
+                                         class="tabs-menu w-tab-menu">
+                                        <a data-w-tab="Tab 1" wized="filter_category_switch_tires"
+                                           class="tab-link-left-search w-inline-block w-tab-link w--current">
+                                            <div>{{ 'Opony' }}</div>
+                                        </a>
+                                        <a data-w-tab="Tab 2" wized="filter_category_switch_wheels"
+                                           class="tab-link-left-search w-inline-block w-tab-link">
+                                            <div>{{ 'Koła' }}</div>
+                                        </a>
+                                        <a data-w-tab="Tab 3" wized="filter_category_switch_rims"
+                                           class="tab-link-left-search w-inline-block w-tab-link">
+                                            <div>{{ 'Felgi' }}</div>
+                                        </a>
+                                    </div>
+                                    <div
+                                         class="w-tab-content">
+                                        <div data-w-tab="Tab 1" class="w-tab-pane w--tab-active">
+                                            <div class="w-form">
+                                                {%- form "contact", class: "div-block-8-copy" -%}
+                                                    <div
+                                                         class="div-block-21-copy">
+                                                        <div wized="filter_field_width"
+                                                             class="form-field-wrapper">
+                                                            <label for="contact[tire_width]"
+                                                                   class="field-label">{{ 'Szerokość' }}</label>
+                                                            <select
+                                                                    id="tire-width" name="contact[tire_width]"
+                                                                    data-name="tire-width" required=""
+                                                                    wized="filter_tire_width_select"
+                                                                    class="select-field is-left w-select">
+
+                                                            </select>
+                                                            <div class="select-arrow w-embed">
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                     aria-hidden="true" role="img"
+                                                                     class="iconify iconify--ic" width="100%"
+                                                                     height="100%" preserveAspectRatio="xMidYMid meet"
+                                                                     viewBox="0 0 24 24">
+                                                                    <path fill="currentColor"
+                                                                          d="m8.71 11.71l2.59 2.59c.39.39 1.02.39 1.41 0l2.59-2.59c.63-.63.18-1.71-.71-1.71H9.41c-.89 0-1.33 1.08-.7 1.71"></path>
+                                                                </svg>
+                                                            </div>
+                                                        </div>
+                                                        <div wized="filter_field_profile" class="form-field-wrapper">
+                                                            <label for="contact[tire_profile]"
+                                                                   class="field-label">{{ 'Profil' }}</label><select
+                                                                    id="tire-profile" name="contact[tire_profile]"
+                                                                    data-name="tire-profile" required=""
+                                                                    wized="filter_tire_profile_select"
+                                                                    class="select-field is-middle w-select"></select>
+                                                            <div class="select-arrow w-embed">
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                     aria-hidden="true" role="img"
+                                                                     class="iconify iconify--ic" width="100%"
+                                                                     height="100%" preserveAspectRatio="xMidYMid meet"
+                                                                     viewBox="0 0 24 24">
+                                                                    <path fill="currentColor"
+                                                                          d="m8.71 11.71l2.59 2.59c.39.39 1.02.39 1.41 0l2.59-2.59c.63-.63.18-1.71-.71-1.71H9.41c-.89 0-1.33 1.08-.7 1.71"></path>
+                                                                </svg>
+                                                            </div>
+                                                        </div>
+                                                        <div wized="filter_field_diameter" class="form-field-wrapper">
+                                                            <label for="contact[tire_diameter]"
+                                                                   class="field-label">{{ 'Średnica' }}</label>
+                                                            <select
+                                                                    id="tire-diameter" name="contact[tire_diameter]"
+                                                                    data-name="tire-diameter"
+                                                                    wized="filter_tire_diameter_select"
+                                                                    class="select-field is-right w-select">
+
+                                                            </select>
+                                                            <div class="select-arrow w-embed">
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                     aria-hidden="true" role="img"
+                                                                     class="iconify iconify--ic" width="100%"
+                                                                     height="100%" preserveAspectRatio="xMidYMid meet"
+                                                                     viewBox="0 0 24 24">
+                                                                    <path fill="currentColor"
+                                                                          d="m8.71 11.71l2.59 2.59c.39.39 1.02.39 1.41 0l2.59-2.59c.63-.63.18-1.71-.71-1.71H9.41c-.89 0-1.33 1.08-.7 1.71"></path>
+                                                                </svg>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-field-wrapper">
+                                                        <label for="tire-season" class="field-label">{{ 'Sezon' }}</label><select
+                                                                id="tire-season" name="contact[season_tire]"
+                                                                data-name="season-tire" required=""
+                                                                wized="filter_tire_season_select"
+                                                                class="select-field w-select">
+                                                            <option value="Letnie">{{ 'Letnie' }}</option>
+                                                            <option value="Zimowe">{{ 'Zimowe' }}</option>
+                                                            <option value="Całoroczne">{{ 'Całoroczne' }}</option>
+                                                        </select>
+                                                        <div class="select-arrow w-embed">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
+                                                                 role="img" class="iconify iconify--ic" width="100%"
+                                                                 height="100%" preserveAspectRatio="xMidYMid meet"
+                                                                 viewBox="0 0 24 24">
+                                                                <path fill="currentColor"
+                                                                      d="m8.71 11.71l2.59 2.59c.39.39 1.02.39 1.41 0l2.59-2.59c.63-.63.18-1.71-.71-1.71H9.41c-.89 0-1.33 1.08-.7 1.71"></path>
+                                                            </svg>
+                                                        </div>
+                                                    </div>
+                                                    <input type="submit"
+                                                           data-wait="Please wait..."
+                                                           wized="filter_tire_submit_trigger"
+                                                           class="button w-button"
+                                                           value="{{ 'Szukaj opon' }}"
+                                                    >
+                                                {%- endform -%}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var currentSection = document.currentScript.closest('.shopify-section');
+    currentSection.setAttribute("class", "section_tire-model_tabs background-color-grayiron100");
+</script>
+
+{% schema %}
+{
+  "name": "Tire Model Tabs",
+  "tag": "header",
+  "class": "section_tire-model_tabs background-color-grayiron100",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "long_description",
+      "label": "Long Description",
+      "default": "<p></p>"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Tabsy model"
+    }
+  ]
+}
+{% endschema %}
