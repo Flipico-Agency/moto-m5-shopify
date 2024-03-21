@@ -26,7 +26,7 @@
                   <span class="text-weight-semibold">{{ product.metafields.tires.width }}/{{ product.metafields.tires.profile }} R{{ product.metafields.tires.diameter }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}</span>
                 </div>
                 {%- if product.metafields.tires.homologation != blank -%}
-                  <div class="text-size-tiny text-weight-bold text-color-grayiron800">Homologacja: {{ product.metafields.tires.homologation | map: 'value' | join: ', ' }}</div>
+                  <div class="text-size-tiny text-weight-bold text-color-grayiron600">Homologacja: {{ product.metafields.tires.homologation | map: 'value' | join: ', ' }}</div>
                 {%- endif -%}
               </a>
               <div class="text-weight-bold">{{ product.metafields.tires.years }}</div>
