@@ -29,7 +29,7 @@
                                 <div data-sub-tab="{{ tab_number }}.{{ sub_tab_number }}"
                                      class="w-tab-pane{% if sub_tab_number == 1 %} w--tab-active{% endif %}">
                                     <div class="w-form">
-                                        <form class="div-block-8-copy">
+                                        <form class="div-block-8">
                                             {% if tab_number == 1 %}
                                                 <div class="div-block-21-copy">
                                                     {% assign form_fields = "Szerokość,Profil,Średnica" | split: "," %}
@@ -96,6 +96,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // We also need to ensure that sub-tab content areas are hidden by default
     const subTabContents = document.querySelectorAll('.w-tab-pane [data-sub-tab]');
+    subTabContents.forEach(content => {
+        content.classList.remove('w--tab-active'); // Ensure all sub-tabs are not active initially
+    });
 
     function clearActiveStates(elements) {
         elements.forEach(element => {
@@ -106,6 +109,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function hideAllTabContents(contents) {
         contents.forEach(content => {
             content.style.display = 'none';
+            content.classList.remove('w--tab-active'); // Also remove w--tab-active when hiding
         });
     }
 
@@ -119,6 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         tab.classList.add('w--current');
         targetContent.style.display = 'block';
+        targetContent.classList.add('w--tab-active'); // Mark the target tab content as active
 
         // Automatically activate the first sub-tab and content
         if(subTabs.length > 0) {
@@ -126,6 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const firstSubTabContent = targetContent.querySelector(`[data-sub-tab="${subTabs[0].getAttribute('data-w-tab')}"]`);
             if (firstSubTabContent) {
                 firstSubTabContent.style.display = 'block';
+                firstSubTabContent.classList.add('w--tab-active'); // Mark the first sub-tab content as active
             }
         }
     }
@@ -147,6 +153,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const targetSubContent = tabContent.querySelector(`[data-sub-tab="${subTab.getAttribute('data-w-tab')}"]`);
                 if (targetSubContent) {
                     targetSubContent.style.display = 'block';
+                    targetSubContent.classList.add('w--tab-active'); // Mark the target sub-tab content as active
                 }
             });
         });
@@ -160,17 +167,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 {% stylesheet %}
-{% comment %}
 
-.w-tab-pane {
-    display: none; /* Domyślnie zakładki są ukryte */
-}
-
-.w-tab-pane.w--tab-active {
-    display: block; /* Pokaż aktywną zakładkę */
-}
-
-{% endcomment %}
 {% endstylesheet %}
 
 {% schema %}
