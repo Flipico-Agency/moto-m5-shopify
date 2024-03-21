@@ -1,0 +1,106 @@
+<div class="padding-global {{ section.settings.background }}">
+  <div class="container-large">
+    <div class="padding-section-{{ section.settings.padding }}">
+      <div class="{%- if section.settings.container_check -%}white-container{%- endif -%} {%- if section.settings.shadow_check -%}shadow-small{%- endif -%}">
+        {%- if section.settings.header_check -%}
+          <div class="margin-bottom margin-medium">
+            <h4>
+              {{ section.settings.header }}
+            </h4>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% schema %}
+  {
+    "name": "Lista Produktów",
+    "tag": "section",
+    "class": "section_tire-model_sizes",
+    "limit": 1,
+    "settings": [
+      {
+        "id": "padding",
+        "type": "select",
+        "label": "Padding",
+        "options": [
+          {
+            "value": "large",
+            "label": "Duży"
+          }, {
+            "value": "medium",
+            "label": "Średni"
+          }, {
+            "value": "small",
+            "label": "Mały"
+          }
+        ],
+        "default": "large"
+      },
+      {
+        "id": "background",
+        "type": "select",
+        "label": "Kolor tła",
+        "options": [
+          {
+            "value": "background-color-white",
+            "label": "Biały"
+          }, {
+            "value": "background-color-grayiron50",
+            "label": "Szary"
+          }
+        ],
+        "default": "background-color-white"
+      },
+      {
+        "type": "checkbox",
+        "id": "header_check",
+        "label": "Pokaż tytuł",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "header",
+        "label": "Tytuł",
+        "default": "Polecane Modele Opon"
+      }, {
+        "type": "checkbox",
+        "id": "container_check",
+        "label": "Pokaż w kontenerze",
+        "default": true
+      }, {
+        "type": "checkbox",
+        "id": "shadow_check",
+        "label": "Cień w kontenerze",
+        "default": true
+      }
+    ],
+    "presets": [
+      {
+        "name": "Lista Produktów"
+      }
+    ],
+    "blocks": [
+      {
+        "name": "Produkt",
+        "type": "product",
+        "settings": [
+          {
+            "type": "text",
+            "id": "model",
+            "label": "Model Opony"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}
+
+
+{% stylesheet %}
+
+
+{% endstylesheet %}
