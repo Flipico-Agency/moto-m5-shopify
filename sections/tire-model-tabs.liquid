@@ -54,7 +54,7 @@
                                                         <option value="Zimowe">Zimowe</option>
                                                         <option value="Całoroczne">Całoroczne</option>
                                                     </select>
-                                                    {% include 'select-arrow' %}
+                                                    {% render 'select-arrow' %}
                                                 </div>
                                             {% else %}
                                                 <div class="div-block-21-copy">
@@ -67,7 +67,7 @@
                                                                     name="contact[car_{{ field | downcase }}]"
                                                                     data-name="car-{{ field | downcase }}" required=""
                                                                     class="select-field w-select"></select>
-                                                            {% include 'select-arrow' %}
+                                                            {% render 'select-arrow' %}
                                                         </div>
                                                     {% endfor %}
                                                 </div>
