@@ -38,8 +38,8 @@
                                                             <label for="contact[tire_{{ field | downcase }}]"
                                                                    class="field-label">{{ field }}</label>
                                                             <select id="tire-{{ field | downcase }}"
-                                                                    name="contact[tire_{{ field | downcase }}]"
-                                                                    data-name="tire-{{ field | downcase }}" required=""
+                                                                    data-name="tire-{{ field | downcase }}"
+                                                                    required="required"
                                                                     class="select-field w-select"></select>
                                                             {% render 'select-arrow' %}
                                                         </div>
@@ -47,8 +47,9 @@
                                                 </div>
                                                 <div class="form-field-wrapper">
                                                     <label for="tire-season" class="field-label">Sezon</label>
-                                                    <select id="tire-season" name="contact[season_tire]"
-                                                            data-name="season-tire" required=""
+                                                    <select id="tire-season"
+                                                            data-name="season-tire"
+                                                            required="required"
                                                             class="select-field w-select">
                                                         <option value="Letnie">Letnie</option>
                                                         <option value="Zimowe">Zimowe</option>
@@ -64,8 +65,8 @@
                                                             <label for="car-{{ field | downcase }}"
                                                                    class="field-label">{{ field }}</label>
                                                             <select id="car-{{ field | downcase }}"
-                                                                    name="contact[car_{{ field | downcase }}]"
-                                                                    data-name="car-{{ field | downcase }}" required=""
+                                                                    data-name="car-{{ field | downcase }}"
+                                                                    required="required"
                                                                     class="select-field w-select"></select>
                                                             {% render 'select-arrow' %}
                                                         </div>

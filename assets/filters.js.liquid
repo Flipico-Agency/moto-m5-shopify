@@ -2,13 +2,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     const baseURL = 'https://api.wheel-size.com/v2';
     const userKey = '8608442fd845888bda065b97c8d141d9';
 
-    const formElements = {
-        widths: document.getElementById('tire-width'),
-        profiles: document.getElementById('tire-profile'),
-        diameters: document.getElementById('tire-diameter'),
-        submitButton: document.getElementById('tire-submit')
-    };
-
     async function fetchData(endpoint, params) {
         const url = new URL(`${baseURL}/${endpoint}`);
         url.search = new URLSearchParams({ user_key: userKey, ...params }).toString();
@@ -17,87 +10,180 @@ document.addEventListener('DOMContentLoaded', async function() {
         return await response.json();
     }
 
-    function populateSelect(element, data, placeholder = false) {
-        element.innerHTML = placeholder ? `<option value="">Wybierz...</option>` : '';
-        data.forEach(item => {
-            const option = new Option(item.value, item.value);
-            element.add(option);
-        });
-    }
+    function manageSelect(element, data = [], isEnabled = true, placeholder = "Wybierz...") {
+        if (!element) return;
 
-    function updateFormState() {
-        const allSelected = Object.values(formElements).slice(0, 3).every(select => select.value);
-        setElementAvailability(formElements.submitButton, allSelected);
-        return allSelected;
-    }
+        // Handle select elements
+        if (element.tagName === 'SELECT') {
+            element.innerHTML = ''; // Clear existing options
+            if (isEnabled) {
+                if (placeholder) {
+                    element.add(new Option(placeholder, ''));
+                }
+                data.forEach(item => element.add(new Option(item.name || item.value, item.value)));
+            }
 
-    function setElementAvailability(element, isEnabled) {
-        element.disabled = !isEnabled;
-
-        // Ustawianie stylów tylko dla przycisku submit
-        if (element === formElements.submitButton) {
-            element.style.pointerEvents = isEnabled ? 'auto' : 'none';
-            element.style.opacity = isEnabled ? '1' : '0.5';
-        }
-        // Ustawianie stylów dla pozostałych elementów formularza
-        else {
-            const parentDiv = element.parentElement;
+            // Adjust parent div styling for select elements
+            const parentDiv = element.closest('.form-field-wrapper');
             if (parentDiv) {
                 parentDiv.style.pointerEvents = isEnabled ? 'auto' : 'none';
                 parentDiv.style.opacity = isEnabled ? '1' : '0.5';
             }
-            // Czyść zawartość selecta jeśli jest wyłączony
-            if (!isEnabled) element.innerHTML = '';
+
+            element.disabled = !isEnabled; // Enable/disable select based on the isEnabled flag
+        }
+
+        // Handle submit buttons
+        else if (element.type === 'submit') {
+            element.style.pointerEvents = isEnabled ? 'auto' : 'none';
+            element.style.opacity = isEnabled ? '1' : '0.5';
+            element.disabled = !isEnabled; // Enable/disable button based on the isEnabled flag
         }
     }
 
-    async function initializeSelects() {
+    function getActiveTabContent() {
+        return document.querySelector('.w-tab-pane.w--tab-active div div.w-tab-pane.w--tab-active');
+    }
+
+    async function initializeTireForm(activeTabContent, formAction) {
+        const widths = activeTabContent.querySelector('select[data-name="tire-szerokość"]');
+        const profiles = activeTabContent.querySelector('select[data-name="tire-profil"]');
+        const diameters = activeTabContent.querySelector('select[data-name="tire-średnica"]');
+        const submitButton = activeTabContent.querySelector('input[type="submit"]');
+
+        submitButton.form.action = formAction;
+
+        // Initially, disable all selects except the first one and the submit button
+        manageSelect(widths);
+        manageSelect(profiles, [], false);
+        manageSelect(diameters, [], false);
+        manageSelect(submitButton, [], false);
+
         const widthsData = await fetchData('by_tire/sw/', { region: 'eudm' });
-        populateSelect(formElements.widths, widthsData.data);
-        const profilesData = await fetchData('by_tire/ar/', { section_width: formElements.widths.value, region: 'eudm' });
-        populateSelect(formElements.profiles, profilesData.data);
-        const diametersData = await fetchData('by_tire/rd/', { section_width: formElements.widths.value, aspect_ratio: formElements.profiles.value, region: 'eudm' });
-        populateSelect(formElements.diameters, diametersData.data);
-        updateFormState();
+        manageSelect(widths, widthsData.data, true); // Enable and populate the first select
+
+        // Set up event listeners for select changes
+        widths.addEventListener('change', async () => {
+            if (widths.value) {
+                const profilesData = await fetchData('by_tire/ar/', { section_width: widths.value, region: 'eudm' });
+                manageSelect(profiles, profilesData.data, true); // Enable and populate the second select based on the first select's choice
+                manageSelect(diameters, [], false); // Disable and clear the third select until the second select is chosen
+            }
+        });
+
+        profiles.addEventListener('change', async () => {
+            if (profiles.value) {
+                const diametersData = await fetchData('by_tire/rd/', { section_width: widths.value, aspect_ratio: profiles.value, region: 'eudm' });
+                manageSelect(diameters, diametersData.data, true); // Enable and populate the third select based on the second select's choice
+            }
+        });
+
+        diameters.addEventListener('change', () => {
+            // Enable the submit button if all selects have a value
+            const isFormComplete = [widths, profiles, diameters].every(select => select && select.value);
+            manageSelect(submitButton, [], isFormComplete);
+        });
     }
 
-    formElements.widths.addEventListener('change', async () => {
-        if (formElements.widths.value) {
-            const data = await fetchData('by_tire/ar/', { section_width: formElements.widths.value, region: 'eudm' });
-            populateSelect(formElements.profiles, data.data, true);
-            setElementAvailability(formElements.profiles, true);
-            setElementAvailability(formElements.diameters, false);
+    async function initializeCarForm(activeTabContent, formAction) {
+        const makes = activeTabContent.querySelector('select[data-name="car-marka"]');
+        const models = activeTabContent.querySelector('select[data-name="car-model"]');
+        const generations = activeTabContent.querySelector('select[data-name="car-generacja"]');
+        const years = activeTabContent.querySelector('select[data-name="car-rok"]');
+        const engines = activeTabContent.querySelector('select[data-name="car-silnik"]');
+        const submitButton = activeTabContent.querySelector('input[type="submit"]');
+
+        submitButton.form.action = formAction;
+
+        // Initially, disable all selects except the first one and the submit button
+        manageSelect(makes);
+        manageSelect(models, [], false);
+        manageSelect(generations, [], false);
+        manageSelect(years, [], false);
+        manageSelect(engines, [], false);
+        manageSelect(submitButton, [], false);
+
+        // Fetch data for the first select and update options
+        const makesData = await fetchData('makes/', { region: 'eudm' });
+        manageSelect(makes, makesData.data.map(make => ({ value: make.slug, name: make.name })), true);
+
+        // Set up event listeners for select changes
+        makes.addEventListener('change', async () => {
+            if (makes.value) {
+                const modelsData = await fetchData('models/', { make: makes.value });
+                manageSelect(models, modelsData.data.map(model => ({ value: model.slug, name: model.name })), true);
+                manageSelect(generations, [], false); // Reset the subsequent selects
+                manageSelect(years, [], false);
+                manageSelect(engines, [], false);
+            }
+        });
+
+        models.addEventListener('change', async () => {
+            if (models.value) {
+                const generationsData = await fetchData('generations/', { make: makes.value, model: models.value });
+                manageSelect(generations, generationsData.data.map(generation => ({ value: generation.slug, name: generation.name })), true);
+                manageSelect(years, [], false); // Further select reset
+                manageSelect(engines, [], false);
+            }
+        });
+
+        generations.addEventListener('change', async () => {
+            if (generations.value) {
+                const generationsData = await fetchData('generations/', { make: makes.value, model: models.value });
+                const selectedGeneration = generationsData.data.find(gen => gen.slug === generations.value);
+                manageSelect(years, selectedGeneration.years.map(year => ({ value: year, name: year.toString() })), true);
+                manageSelect(engines, [], false);
+            }
+        });
+
+        years.addEventListener('change', async () => {
+            if (years.value) {
+                const enginesData = await fetchData('modifications/', { make: makes.value, model: models.value, year: years.value });
+                manageSelect(engines, enginesData.data.map(engine => ({ value: engine.slug, name: engine.name })), true);
+            }
+        });
+
+        [makes, models, generations, years, engines].forEach(select => select.addEventListener('change', () => {
+            // Enable the submit button if all selects have a value
+            const isFormComplete = [makes, models, generations, years, engines].every(select => select && select.value);
+            manageSelect(submitButton, [], isFormComplete);
+        }));
+    }
+
+    function activateFormInitialization() {
+        const activeTabContent = getActiveTabContent();
+        if (!activeTabContent) return;
+
+        const formActionBaseURL = 'https://moto-m5.myshopify.com/collections/';
+        const activeSubTab = document.querySelector('.tab-link-left-search.w--current');
+        const activeSubTabNumber = activeSubTab ? activeSubTab.getAttribute('data-w-tab').split('.')[1] : null;
+
+        let formAction = `${formActionBaseURL}opony`; // Default action
+        switch (activeSubTabNumber) {
+            case '2': formAction = `${formActionBaseURL}kola`; break;
+            case '3': formAction = `${formActionBaseURL}felgi`; break;
         }
-        updateFormState();
+
+        const submitButton = activeTabContent.querySelector('input[type="submit"]');
+        if (submitButton) {
+            manageSelect(submitButton, [], false); // Initially disable the submit button
+        }
+
+        if (document.querySelector('.w-tab-pane.w--tab-active').classList.contains('tab-pane-tab-1')) {
+            // "Search by Tire Size"
+            initializeTireForm(activeTabContent, formAction);
+        } else if (document.querySelector('.w-tab-pane.w--tab-active').classList.contains('tab-pane-tab-2')) {
+            // "Search by Car"
+            initializeCarForm(activeTabContent, formAction);
+        }
+    }
+
+    // Listen for tab changes to re-initialize form for the active tab
+    document.querySelectorAll('.tab-link-top-search, .tab-link-left-search').forEach(tab => {
+        tab.addEventListener('click', () => {
+            setTimeout(activateFormInitialization, 150);
+        });
     });
 
-    formElements.profiles.addEventListener('change', async () => {
-        if (formElements.profiles.value) {
-            const data = await fetchData('by_tire/rd/', { section_width: formElements.widths.value, aspect_ratio: formElements.profiles.value, region: 'eudm' });
-            populateSelect(formElements.diameters, data.data, true);
-            setElementAvailability(formElements.diameters, true);
-        }
-        updateFormState();
-    });
-
-    formElements.diameters.addEventListener('change', updateFormState);
-
-    formElements.submitButton.form.addEventListener('submit', function(event) {
-        event.preventDefault();
-        if (updateFormState()) {
-            const manufacturerGID = formElements.submitButton.getAttribute('data-manufacturer-gid');
-            const seasonTire = document.getElementById('tire-season').value;
-            const queryParameters = {
-                'filter.p.m.tires.manufacturer': encodeURIComponent(manufacturerGID),
-                'filter.p.m.tires.width': formElements.widths.value,
-                'filter.p.m.tires.profile': formElements.profiles.value,
-                'filter.p.m.tires.diameter': formElements.diameters.value,
-                'filter.p.m.tires.season': seasonTire
-            };
-            const queryString = Object.keys(queryParameters).map(key => `${key}=${queryParameters[key]}`).join('&');
-            window.location.href = `https://moto-m5.myshopify.com/collections/opony?${queryString}`;
-        }
-    });
-
-    await initializeSelects();
+    activateFormInitialization(); // Initialize the form for the currently active tab on page load
 });
