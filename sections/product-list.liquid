@@ -2,7 +2,7 @@
   <div class="container-large">
     <div class="padding-section-{{ section.settings.padding }}">
       <div class="{{ section.settings.container }}">
-        {%- if section.settings.header_check -%}
+        {%- if section.settings.header != blank -%}
           <div class="margin-bottom margin-medium">
             <h4>
               {{ section.settings.header }}
@@ -33,7 +33,7 @@
               <div class="text-weight-bold">{{ product.metafields.tires.condition }} | {{ product.metafields.tires.tread }}</div>
               <div>
                 <div class="text-size-large text-weight-bold">{{ product.price | money }}</div>
-                <div class="text-size-small text-weight-bold">/ {{ product.metafields.tires.quantity }}</div>
+                <div>/ {{ product.metafields.tires.quantity }}</div>
               </div>
               <div class="button is-small">Kup Teraz</div>
             </div>
@@ -69,8 +69,7 @@
           }
         ],
         "default": "large"
-      },
-      {
+      }, {
         "id": "background",
         "type": "select",
         "label": "Kolor tła",
@@ -84,14 +83,7 @@
           }
         ],
         "default": "background-color-white"
-      },
-      {
-        "type": "checkbox",
-        "id": "header_check",
-        "label": "Pokaż tytuł",
-        "default": true
-      },
-      {
+      }, {
         "type": "text",
         "id": "header",
         "label": "Tytuł",

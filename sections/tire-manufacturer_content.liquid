@@ -4,7 +4,7 @@
       {% case block.type %}
         {% when 'tires-models' %}
           <div class="padding-section-{{ section.settings.padding }}">
-            <div class="white-container shadow-small">
+            <div class="{{ section.settings.container }}">
               <div class="margin-bottom margin-medium">
                 <h4>Polecane modele opon {{ metaobject.name }}</h4>
               </div>
@@ -12,7 +12,7 @@
           </div>
         {% when 'tires-season' %}
           <div class="padding-section-{{ section.settings.padding }}">
-            <div class="white-container shadow-small">
+            <div class="{{ section.settings.container }}">
               <div class="margin-bottom margin-medium">
                 <h4>
                   Opony {{ metaobject.name }} według sezonu</h4>
@@ -102,8 +102,24 @@
           }
         ],
         "default": "background-color-grayiron50"
+      }, {
+        "type": "select",
+        "id": "container",
+        "label": "Kontener",
+        "options": [
+          {
+            "value": "white-container",
+            "label": "Kontener Biały"
+          }, {
+            "value": "",
+            "label": "Brak Kontenera"
+          }, {
+            "value": "white-container shadow-small",
+            "label": "Kontener z cieniem"
+          }
+        ],
+        "default": "white-container shadow-small"
       }
-
     ],
     "presets": [
       {
@@ -112,9 +128,6 @@
     ],
     "blocks": [
       {
-        "name": "Sezony Opon",
-        "type": "tires-season"
-      }, {
         "name": "Opis SEO",
         "type": "seo-description",
         "settings": [
