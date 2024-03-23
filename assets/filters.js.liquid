@@ -49,11 +49,24 @@ document.addEventListener('DOMContentLoaded', async function() {
         const widths = activeTabContent.querySelector('select[data-name="tire-szerokość"]');
         const profiles = activeTabContent.querySelector('select[data-name="tire-profil"]');
         const diameters = activeTabContent.querySelector('select[data-name="tire-średnica"]');
+        const season = activeTabContent.querySelector('select[data-name="tire-season"]');
         const submitButton = activeTabContent.querySelector('input[type="submit"]');
 
-        submitButton.form.action = formAction;
+        // Define event listener for form submission
+        submitButton.form.addEventListener('submit', function(event) {
+            event.preventDefault();
 
-        // Initially, disable all selects except the first one and the submit button
+            const queryParameters = {
+                'filter.p.m.tires.width': widths.value,
+                'filter.p.m.tires.profile': profiles.value,
+                'filter.p.m.tires.diameter': diameters.value,
+                'filter.p.m.tires.season': season.value
+            };
+
+            const queryString = Object.entries(queryParameters).map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&');
+            window.location.href = `${formAction}?${queryString}`;
+        });
+
         manageSelect(widths);
         manageSelect(profiles, [], false);
         manageSelect(diameters, [], false);
@@ -66,7 +79,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         widths.addEventListener('change', async () => {
             if (widths.value) {
                 const profilesData = await fetchData('by_tire/ar/', { section_width: widths.value, region: 'eudm' });
-                manageSelect(profiles, profilesData.data, true); // Enable and populate the second select based on the first select's choice
+                manageSelect(profiles, profilesData.data, true); // Enable and populate the second select based on the first selects choice
                 manageSelect(diameters, [], false); // Disable and clear the third select until the second select is chosen
             }
         });
@@ -74,7 +87,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         profiles.addEventListener('change', async () => {
             if (profiles.value) {
                 const diametersData = await fetchData('by_tire/rd/', { section_width: widths.value, aspect_ratio: profiles.value, region: 'eudm' });
-                manageSelect(diameters, diametersData.data, true); // Enable and populate the third select based on the second select's choice
+                manageSelect(diameters, diametersData.data, true); // Enable and populate the third select based on the second selects choice
             }
         });
 
@@ -93,9 +106,22 @@ document.addEventListener('DOMContentLoaded', async function() {
         const engines = activeTabContent.querySelector('select[data-name="car-silnik"]');
         const submitButton = activeTabContent.querySelector('input[type="submit"]');
 
-        submitButton.form.action = formAction;
+        // Define event listener for form submission
+        submitButton.form.addEventListener('submit', function(event) {
+            event.preventDefault();
 
-        // Initially, disable all selects except the first one and the submit button
+            const queryParameters = {
+                'filter.p.car.make': makes.value,
+                'filter.p.car.model': models.value,
+                'filter.p.car.generation': generations.value,
+                'filter.p.car.year': years.value,
+                'filter.p.car.engine': engines.value
+            };
+
+            const queryString = Object.entries(queryParameters).map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&');
+            window.location.href = `${formAction}?${queryString}`;
+        });
+
         manageSelect(makes);
         manageSelect(models, [], false);
         manageSelect(generations, [], false);
