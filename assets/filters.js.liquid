@@ -1,10 +1,10 @@
-document.addEventListener('DOMContentLoaded', async function() {
+document.addEventListener('DOMContentLoaded', async function () {
     const baseURL = 'https://api.wheel-size.com/v2';
     const userKey = '8608442fd845888bda065b97c8d141d9';
 
     async function fetchData(endpoint, params) {
         const url = new URL(`${baseURL}/${endpoint}`);
-        url.search = new URLSearchParams({ user_key: userKey, ...params }).toString();
+        url.search = new URLSearchParams({user_key: userKey, ...params}).toString();
         const response = await fetch(url);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         return await response.json();
@@ -56,48 +56,54 @@ document.addEventListener('DOMContentLoaded', async function() {
         const tire_width = activeTabContent.querySelector('select[data-name="tire-width"]');
         const tire_profile = activeTabContent.querySelector('select[data-name="tire-profile"]');
         const tire_diameter = activeTabContent.querySelector('select[data-name="tire-diameter"]');
-        
+
         const rim_bolt = activeTabContent.querySelector('select[data-name="rim-bolt"]');
         const rim_width = activeTabContent.querySelector('select[data-name="rim-width"]');
         const rim_diameter = activeTabContent.querySelector('select[data-name="rim-diameter"]');
         const rim_et = activeTabContent.querySelector('select[data-name="rim-et"]');
-        
+
         const season = activeTabContent.querySelector('select[data-name="tire-season"]');
         const submitButton = activeTabContent.querySelector('input[type="submit"]');
 
         // Define event listener for form submission
-        submitButton.form.addEventListener('submit', function(event) {
+        submitButton.form.addEventListener('submit', function (event) {
             event.preventDefault();
 
             let queryParameters = {};
 
             switch (activeSubTabNumber) {
-                case '1': queryParameters = {
-                    'filter.p.m.tires.width': tire_width.value,
-                    'filter.p.m.tires.profile': tire_profile.value,
-                    'filter.p.m.tires.diameter': tire_diameter.value,
-                    'filter.p.m.tires.season': season.value.toLowerCase()
-                };
+                case '1':
+                    queryParameters = {
+                        'filter.p.m.tires.width': tire_width.value,
+                        'filter.p.m.tires.profile': tire_profile.value,
+                        'filter.p.m.tires.diameter': tire_diameter.value,
+                        'filter.p.m.tires.season': season.value.toLowerCase()
+                    };
 
-                const pathname = window.location.pathname;
-                const manufacturerMatch = pathname.match(/\/pages\/opony\/([^\/]+)/);
-                if (manufacturerMatch && manufacturerMatch[1]) {
-                    queryParameters['filter.p.m.tires.manufacturer'] = manufacturerMatch[1];
-                } break;
-                case '2': queryParameters = {
-                    'filter.p.m.tires.width': tire_width.value,
-                    'filter.p.m.tires.profile': tire_profile.value,
-                    'filter.p.m.tires.diameter': tire_diameter.value,
-                    'filter.p.m.rim.rim_bolt': rim_bolt.value,
-                    'filter.p.m.rim.width': rim_width.value,
-                    'filter.p.m.tires.season': season.value.toLowerCase()
-                }; break;
-                case '3': queryParameters = {
-                    'filter.p.m.rim.diameter': rim_diameter.value,
-                    'filter.p.m.rim.rim_bolt': rim_bolt.value,
-                    'filter.p.m.rim.width': rim_width.value,
-                    'filter.p.m.rim.rim_et': rim_et.value
-                }; break;
+                    const pathname = window.location.pathname;
+                    const manufacturerMatch = pathname.match(/\/pages\/opony\/([^\/]+)/);
+                    if (manufacturerMatch && manufacturerMatch[1]) {
+                        queryParameters['filter.p.m.tires.manufacturer'] = manufacturerMatch[1];
+                    }
+                    break;
+                case '2':
+                    queryParameters = {
+                        'filter.p.m.tires.width': tire_width.value,
+                        'filter.p.m.tires.profile': tire_profile.value,
+                        'filter.p.m.tires.diameter': tire_diameter.value,
+                        'filter.p.m.rim.rim_bolt': rim_bolt.value,
+                        'filter.p.m.rim.width': rim_width.value,
+                        'filter.p.m.tires.season': season.value.toLowerCase()
+                    };
+                    break;
+                case '3':
+                    queryParameters = {
+                        'filter.p.m.rim.diameter': rim_diameter.value,
+                        'filter.p.m.rim.rim_bolt': rim_bolt.value,
+                        'filter.p.m.rim.width': rim_width.value,
+                        'filter.p.m.rim.rim_et': rim_et.value
+                    };
+                    break;
             }
 
             const queryString = Object.entries(queryParameters).map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&');
@@ -112,7 +118,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         switch (activeSubTabNumber) {
             case '1':
-                tire_widthsData = await fetchData('by_tire/sw/', { region: 'eudm' });
+                tire_widthsData = await fetchData('by_tire/sw/', {region: 'eudm'});
                 manageSelect(tire_width, tire_widthsData.data, true); // Enable and populate the first select
 
                 manageSelect(tire_profile, [], false);
@@ -120,7 +126,10 @@ document.addEventListener('DOMContentLoaded', async function() {
 
                 tire_width.addEventListener('change', async () => {
                     if (tire_width.value) {
-                        const tire_profilesData = await fetchData('by_tire/ar/', { section_width: tire_width.value, region: 'eudm' });
+                        const tire_profilesData = await fetchData('by_tire/ar/', {
+                            section_width: tire_width.value,
+                            region: 'eudm'
+                        });
                         manageSelect(tire_profile, tire_profilesData.data, true); // Enable and populate the second select based on the first selects choice
                         manageSelect(tire_diameter, [], false); // Disable and clear the third select until the second select is chosen
                     }
@@ -128,7 +137,11 @@ document.addEventListener('DOMContentLoaded', async function() {
 
                 tire_profile.addEventListener('change', async () => {
                     if (tire_profile.value) {
-                        const tire_diametersData = await fetchData('by_tire/rd/', { section_width: tire_width.value, aspect_ratio: tire_profile.value, region: 'eudm' });
+                        const tire_diametersData = await fetchData('by_tire/rd/', {
+                            section_width: tire_width.value,
+                            aspect_ratio: tire_profile.value,
+                            region: 'eudm'
+                        });
                         manageSelect(tire_diameter, tire_diametersData.data, true); // Enable and populate the third select based on the second selects choice
                     }
                 });
@@ -141,7 +154,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
                 break;
             case '2':
-                tire_widthsData = await fetchData('by_tire/sw/', { region: 'eudm' });
+                tire_widthsData = await fetchData('by_tire/sw/', {region: 'eudm'});
                 manageSelect(tire_width, tire_widthsData.data, true); // Enable and populate the first select
 
                 manageSelect(tire_profile, [], false);
@@ -151,7 +164,10 @@ document.addEventListener('DOMContentLoaded', async function() {
 
                 tire_width.addEventListener('change', async () => {
                     if (tire_width.value) {
-                        const tire_profilesData = await fetchData('by_tire/ar/', { section_width: tire_width.value, region: 'eudm' });
+                        const tire_profilesData = await fetchData('by_tire/ar/', {
+                            section_width: tire_width.value,
+                            region: 'eudm'
+                        });
                         manageSelect(tire_profile, tire_profilesData.data, true); // Enable and populate the second select based on the first selects choice
                         manageSelect(tire_diameter, [], false); // Disable and clear the third select until the second select is chosen
                         manageSelect(rim_bolt, [], false);
@@ -161,7 +177,11 @@ document.addEventListener('DOMContentLoaded', async function() {
 
                 tire_profile.addEventListener('change', async () => {
                     if (tire_profile.value) {
-                        const tire_diametersData = await fetchData('by_tire/rd/', { section_width: tire_width.value, aspect_ratio: tire_profile.value, region: 'eudm' });
+                        const tire_diametersData = await fetchData('by_tire/rd/', {
+                            section_width: tire_width.value,
+                            aspect_ratio: tire_profile.value,
+                            region: 'eudm'
+                        });
                         manageSelect(tire_diameter, tire_diametersData.data, true); // Enable and populate the third select based on the second selects choice
                         manageSelect(rim_bolt, [], false);
                         manageSelect(rim_width, [], false);
@@ -170,7 +190,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
                 tire_diameter.addEventListener('change', async () => {
                     if (tire_diameter.value) {
-                        const rim_boltsData = await fetchData('by_rim/bp/', { region: 'eudm' });
+                        const rim_boltsData = await fetchData('by_rim/bp/', {region: 'eudm'});
                         manageSelect(rim_bolt, rim_boltsData.data, true); // Enable and populate the third select based on the second selects choice
                         manageSelect(rim_width, [], false);
                     }
@@ -178,7 +198,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
                 rim_bolt.addEventListener('change', async () => {
                     if (rim_bolt.value) {
-                        const rim_widthsData = await fetchData('by_rim/rw/', { bolt_pattern: rim_bolt.value });
+                        const rim_widthsData = await fetchData('by_rim/rw/', {bolt_pattern: rim_bolt.value});
                         manageSelect(rim_width, rim_widthsData.data, true); // Enable and populate the third select based on the second selects choice
                     }
                 });
@@ -191,7 +211,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
                 break;
             case '3':
-                rim_diametersData = await fetchData('by_rim/rd/', { region: 'eudm' });
+                rim_diametersData = await fetchData('by_rim/rd/', {region: 'eudm'});
                 manageSelect(rim_diameter, rim_diametersData.data, true); // Enable and populate the first select
 
                 manageSelect(rim_bolt, [], false);
@@ -201,7 +221,10 @@ document.addEventListener('DOMContentLoaded', async function() {
                 // Set up event listeners for select changes
                 rim_diameter.addEventListener('change', async () => {
                     if (rim_diameter.value) {
-                        const rim_boltsData = await fetchData('by_rim/bp/', { rim_diameter: rim_diameter.value, region: 'eudm' });
+                        const rim_boltsData = await fetchData('by_rim/bp/', {
+                            rim_diameter: rim_diameter.value,
+                            region: 'eudm'
+                        });
                         manageSelect(rim_bolt, rim_boltsData.data, true); // Enable and populate the second select based on the first selects choice
                         manageSelect(rim_width, [], false); // Disable and clear the third select until the second select is chosen
                         manageSelect(rim_et, [], false);
@@ -210,7 +233,11 @@ document.addEventListener('DOMContentLoaded', async function() {
 
                 rim_bolt.addEventListener('change', async () => {
                     if (rim_bolt.value) {
-                        const rim_widthsData = await fetchData('by_rim/rw/', { rim_diameter: rim_diameter.value, bolt_pattern: rim_bolt.value, region: 'eudm' });
+                        const rim_widthsData = await fetchData('by_rim/rw/', {
+                            rim_diameter: rim_diameter.value,
+                            bolt_pattern: rim_bolt.value,
+                            region: 'eudm'
+                        });
                         manageSelect(rim_width, rim_widthsData.data, true); // Enable and populate the third select based on the second selects choice
                         manageSelect(rim_et, [], false);
                     }
@@ -218,7 +245,12 @@ document.addEventListener('DOMContentLoaded', async function() {
 
                 rim_width.addEventListener('change', async () => {
                     if (rim_width.value) {
-                        const rim_etsData = await fetchData('by_rim/of/', { rim_diameter: rim_diameter.value, bolt_pattern: rim_bolt.value, rim_width: rim_width.value, region: 'eudm' });
+                        const rim_etsData = await fetchData('by_rim/of/', {
+                            rim_diameter: rim_diameter.value,
+                            bolt_pattern: rim_bolt.value,
+                            rim_width: rim_width.value,
+                            region: 'eudm'
+                        });
                         manageSelect(rim_et, rim_etsData.data, true); // Enable and populate the third select based on the second selects choice
                     }
                 });
@@ -242,7 +274,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         const submitButton = activeTabContent.querySelector('input[type="submit"]');
 
         // Define event listener for form submission
-        submitButton.form.addEventListener('submit', function(event) {
+        submitButton.form.addEventListener('submit', function (event) {
             event.preventDefault();
 
             const queryParameters = {
@@ -265,14 +297,14 @@ document.addEventListener('DOMContentLoaded', async function() {
         manageSelect(submitButton, [], false);
 
         // Fetch data for the first select and update options
-        const makesData = await fetchData('makes/', { region: 'eudm' });
-        manageSelect(makes, makesData.data.map(make => ({ value: make.slug, name: make.name })), true);
+        const makesData = await fetchData('makes/', {region: 'eudm'});
+        manageSelect(makes, makesData.data.map(make => ({value: make.slug, name: make.name})), true);
 
         // Set up event listeners for select changes
         makes.addEventListener('change', async () => {
             if (makes.value) {
-                const modelsData = await fetchData('models/', { make: makes.value });
-                manageSelect(models, modelsData.data.map(model => ({ value: model.slug, name: model.name })), true);
+                const modelsData = await fetchData('models/', {make: makes.value});
+                manageSelect(models, modelsData.data.map(model => ({value: model.slug, name: model.name})), true);
                 manageSelect(generations, [], false); // Reset the subsequent selects
                 manageSelect(years, [], false);
                 manageSelect(engines, [], false);
@@ -281,8 +313,11 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         models.addEventListener('change', async () => {
             if (models.value) {
-                const generationsData = await fetchData('generations/', { make: makes.value, model: models.value });
-                manageSelect(generations, generationsData.data.map(generation => ({ value: generation.slug, name: generation.name })), true);
+                const generationsData = await fetchData('generations/', {make: makes.value, model: models.value});
+                manageSelect(generations, generationsData.data.map(generation => ({
+                    value: generation.slug,
+                    name: generation.name
+                })), true);
                 manageSelect(years, [], false); // Further select reset
                 manageSelect(engines, [], false);
             }
@@ -290,17 +325,21 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         generations.addEventListener('change', async () => {
             if (generations.value) {
-                const generationsData = await fetchData('generations/', { make: makes.value, model: models.value });
+                const generationsData = await fetchData('generations/', {make: makes.value, model: models.value});
                 const selectedGeneration = generationsData.data.find(gen => gen.slug === generations.value);
-                manageSelect(years, selectedGeneration.years.map(year => ({ value: year, name: year.toString() })), true);
+                manageSelect(years, selectedGeneration.years.map(year => ({value: year, name: year.toString()})), true);
                 manageSelect(engines, [], false);
             }
         });
 
         years.addEventListener('change', async () => {
             if (years.value) {
-                const enginesData = await fetchData('modifications/', { make: makes.value, model: models.value, year: years.value });
-                manageSelect(engines, enginesData.data.map(engine => ({ value: engine.slug, name: engine.name })), true);
+                const enginesData = await fetchData('modifications/', {
+                    make: makes.value,
+                    model: models.value,
+                    year: years.value
+                });
+                manageSelect(engines, enginesData.data.map(engine => ({value: engine.slug, name: engine.name})), true);
             }
         });
 
@@ -326,8 +365,12 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         let formAction = `${formActionBaseURL}opony`; // Default action
         switch (activeSubTabNumber) {
-            case '2': formAction = `${formActionBaseURL}kola`; break;
-            case '3': formAction = `${formActionBaseURL}felgi`; break;
+            case '2':
+                formAction = `${formActionBaseURL}kola`;
+                break;
+            case '3':
+                formAction = `${formActionBaseURL}felgi`;
+                break;
         }
 
         const submitButton = activeTabContent.querySelector('input[type="submit"]');

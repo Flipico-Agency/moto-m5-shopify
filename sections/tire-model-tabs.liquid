@@ -49,7 +49,8 @@
                                                                        class="field-label">{{ tire_fields_label[i] }}</label>
                                                                 <select id="{{ tire_fields_data_name[i] | downcase }}"
                                                                         data-name="{{ tire_fields_data_name[i] }}"
-                                                                        required="required" class="select-field w-select">
+                                                                        required="required"
+                                                                        class="select-field w-select">
                                                                 </select>
                                                                 {% render 'select-arrow' %}
                                                             </div>
@@ -63,7 +64,8 @@
                                                                        class="field-label">{{ wheel_fields_label[i] }}</label>
                                                                 <select id="{{ wheel_fields_data_name[i] | downcase }}"
                                                                         data-name="{{ wheel_fields_data_name[i] }}"
-                                                                        required="required" class="select-field w-select">
+                                                                        required="required"
+                                                                        class="select-field w-select">
                                                                 </select>
                                                                 {% render 'select-arrow' %}
                                                             </div>
@@ -130,83 +132,83 @@
 </div>
 
 <script>
-var currentSection = document.currentScript.closest('.shopify-section');
-currentSection.setAttribute("class", "section_tire-model_tabs background-color-grayiron100");
+    var currentSection = document.currentScript.closest('.shopify-section');
+    currentSection.setAttribute("class", "section_tire-model_tabs background-color-grayiron100");
 
-document.addEventListener('DOMContentLoaded', function() {
-    const topTabs = document.querySelectorAll('.tab-link-top-search');
-    const topTabContents = document.querySelectorAll('.w-tab-pane');
+    document.addEventListener('DOMContentLoaded', function () {
+        const topTabs = document.querySelectorAll('.tab-link-top-search');
+        const topTabContents = document.querySelectorAll('.w-tab-pane');
 
-    // We also need to ensure that sub-tab content areas are hidden by default
-    const subTabContents = document.querySelectorAll('.w-tab-pane [data-sub-tab]');
-    subTabContents.forEach(content => {
-        content.classList.remove('w--tab-active'); // Ensure all sub-tabs are not active initially
-    });
-
-    function clearActiveStates(elements) {
-        elements.forEach(element => {
-            element.classList.remove('w--current');
+        // We also need to ensure that sub-tab content areas are hidden by default
+        const subTabContents = document.querySelectorAll('.w-tab-pane [data-sub-tab]');
+        subTabContents.forEach(content => {
+            content.classList.remove('w--tab-active'); // Ensure all sub-tabs are not active initially
         });
-    }
 
-    function hideAllTabContents(contents) {
-        contents.forEach(content => {
-            content.style.display = 'none';
-            content.classList.remove('w--tab-active'); // Also remove w--tab-active when hiding
-        });
-    }
+        function clearActiveStates(elements) {
+            elements.forEach(element => {
+                element.classList.remove('w--current');
+            });
+        }
 
-    function activateTab(tab) {
-        const targetTab = tab.getAttribute('data-w-tab');
-        const targetContent = document.querySelector(`.tab-pane-tab-${targetTab}`);
-        const subTabs = targetContent.querySelectorAll('.tab-link-left-search');
+        function hideAllTabContents(contents) {
+            contents.forEach(content => {
+                content.style.display = 'none';
+                content.classList.remove('w--tab-active'); // Also remove w--tab-active when hiding
+            });
+        }
 
-        clearActiveStates([...topTabs, ...subTabs]); // Clear both top and sub-tabs
-        hideAllTabContents([...topTabContents, ...subTabContents]); // Hide both top and sub-tab contents
+        function activateTab(tab) {
+            const targetTab = tab.getAttribute('data-w-tab');
+            const targetContent = document.querySelector(`.tab-pane-tab-${targetTab}`);
+            const subTabs = targetContent.querySelectorAll('.tab-link-left-search');
 
-        tab.classList.add('w--current');
-        targetContent.style.display = 'block';
-        targetContent.classList.add('w--tab-active'); // Mark the target tab content as active
+            clearActiveStates([...topTabs, ...subTabs]); // Clear both top and sub-tabs
+            hideAllTabContents([...topTabContents, ...subTabContents]); // Hide both top and sub-tab contents
 
-        // Automatically activate the first sub-tab and content
-        if(subTabs.length > 0) {
-            subTabs[0].classList.add('w--current');
-            const firstSubTabContent = targetContent.querySelector(`[data-sub-tab="${subTabs[0].getAttribute('data-w-tab')}"]`);
-            if (firstSubTabContent) {
-                firstSubTabContent.style.display = 'block';
-                firstSubTabContent.classList.add('w--tab-active'); // Mark the first sub-tab content as active
+            tab.classList.add('w--current');
+            targetContent.style.display = 'block';
+            targetContent.classList.add('w--tab-active'); // Mark the target tab content as active
+
+            // Automatically activate the first sub-tab and content
+            if (subTabs.length > 0) {
+                subTabs[0].classList.add('w--current');
+                const firstSubTabContent = targetContent.querySelector(`[data-sub-tab="${subTabs[0].getAttribute('data-w-tab')}"]`);
+                if (firstSubTabContent) {
+                    firstSubTabContent.style.display = 'block';
+                    firstSubTabContent.classList.add('w--tab-active'); // Mark the first sub-tab content as active
+                }
             }
         }
-    }
 
-    topTabs.forEach(tab => {
-        tab.addEventListener('click', () => activateTab(tab));
-    });
+        topTabs.forEach(tab => {
+            tab.addEventListener('click', () => activateTab(tab));
+        });
 
-    // Handling sub-tabs clicks within each tab
-    topTabContents.forEach(tabContent => {
-        const subTabs = tabContent.querySelectorAll('.tab-link-left-search');
+        // Handling sub-tabs clicks within each tab
+        topTabContents.forEach(tabContent => {
+            const subTabs = tabContent.querySelectorAll('.tab-link-left-search');
 
-        subTabs.forEach(subTab => {
-            subTab.addEventListener('click', function() {
-                clearActiveStates(subTabs); // Clear only the sub-tabs
-                hideAllTabContents(subTabContents); // Hide all sub-tab contents
+            subTabs.forEach(subTab => {
+                subTab.addEventListener('click', function () {
+                    clearActiveStates(subTabs); // Clear only the sub-tabs
+                    hideAllTabContents(subTabContents); // Hide all sub-tab contents
 
-                subTab.classList.add('w--current');
-                const targetSubContent = tabContent.querySelector(`[data-sub-tab="${subTab.getAttribute('data-w-tab')}"]`);
-                if (targetSubContent) {
-                    targetSubContent.style.display = 'block';
-                    targetSubContent.classList.add('w--tab-active'); // Mark the target sub-tab content as active
-                }
+                    subTab.classList.add('w--current');
+                    const targetSubContent = tabContent.querySelector(`[data-sub-tab="${subTab.getAttribute('data-w-tab')}"]`);
+                    if (targetSubContent) {
+                        targetSubContent.style.display = 'block';
+                        targetSubContent.classList.add('w--tab-active'); // Mark the target sub-tab content as active
+                    }
+                });
             });
         });
-    });
 
-    // Activate the first top level tab and its content on page load
-    if (topTabs.length > 0) {
-        activateTab(topTabs[0]);
-    }
-});
+        // Activate the first top level tab and its content on page load
+        if (topTabs.length > 0) {
+            activateTab(topTabs[0]);
+        }
+    });
 </script>
 
 {% stylesheet %}
