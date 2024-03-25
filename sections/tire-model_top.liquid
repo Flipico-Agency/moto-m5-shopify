@@ -3,27 +3,36 @@
     <div class="container-large">
       <div class="padding-section-small">
         <div class="tire-model_component">
-          <div class="tire-model_content-top">
-            <div class="tire-model_wrapper">
-              {{ section.settings.zdjecie-opony | image_url: height: 500 | image_tag: class: "tire-model_main-image" }}
-              <div class="tire-model_title-wrapper">
+          <div class="tire-model_wrapper">
+            <div class="tire-model_title-wrapper">
+              <div class="tire-model_tittle">
                 <h2 class="heading-style-h5">
-                  {{ section.settings.nazwa-producenta }}</h2>
+                  {{ section.settings.nazwa-producenta }}
+                </h2>
                 <h1 class="heading-style-h3">
-                  {{ section.settings.nazwa-modelu }}</h1>
-                <div class="margin-top margin-small">
-                  <p>{{ section.settings.krotki-opis-modelu }}</p>
+                  {{ section.settings.nazwa-modelu }}
+                </h1>
+              </div>
+              <div class="margin-top margin-xmall">
+                <p>
+                  {{ section.settings.krotki-opis-modelu }}
+                </p>
+              </div>
+              <div class="margin-top margin-small">
+                <div class="button-group">
+                  <a class="button is-small is-icon">Zobacz rozmiary</a>
+                  <a class="button is-link is-icon">Czytaj dalej</a>
                 </div>
-                <div class="margin-top margin-xsmall">
-                  <a class="button is-link is-icon">Czytaj dalej<svg class="icon-embed-xxsmall" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ic" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2m-.35 12.65l-2.79-2.79c-.32-.32-.1-.86.35-.86h5.59c.45 0 .67.54.35.85l-2.79 2.79c-.2.2-.52.2-.71.01"></path></svg></a>
-                </div>
               </div>
-              <div>
+            </div>
+            <div class="tire-model_image-wrapper">
+              <div class="tire-model_logo-wrapper">
+                {{ section.settings.zdjecie-producenta | image_url: height: 64 | image_tag: class: "tire-model_producer-logo" }}
               </div>
-              {{ section.settings.zdjecie-producenta | image_url: height: 64 | image_tag: class: "tire-model_producer-logo", id: 'w-node-dff49e8a-c49a-8dae-b921-49cd5adce057-5adce040' }}
-              <div id="w-node-dff49e8a-c49a-8dae-b921-49cd5adce058-5adce040" class="tire-model_benefits-wrapper">
-                {% render 'benefits-small' %}
-              </div>
+              {{ section.settings.zdjecie-opony | image_url: height: 500 | image_tag: class: "tire-model_main-image" }}
+            </div>
+            <div class="tire-model_benefits-wrapper">
+              {% render 'benefits-small' %}
             </div>
           </div>
         </div>
@@ -32,96 +41,55 @@
   </div>
 </div>
 
-<div bind="dff49e8a-c49a-8dae-b921-49cd5adce040" class="section_tire-model_top">
-        <div class="padding-global">
-          <div class="container-large">
-            <div class="padding-section-small">
-              <div class="tire-model_component">
-                <div class="tire-model_content-top">
-                  <div bind="dac3cd5a-f0de-4fd5-7e83-f20a67d2be07" class="breadcrumb-wrapper">
-                    <a href="#" class="breadcrumb-link w-inline-block">
-                      <div>OponyKoła</div>
-                    </a>
-                    <div bind="dac3cd5a-f0de-4fd5-7e83-f20a67d2be0b" class="breadcrumb-divider w-embed"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ic" width="100%" height="100%" preserveaspectratio="xMidYMid meet" viewbox="0 0 24 24">
-                        <path fill="currentColor" d="m11.71 15.29l2.59-2.59a.996.996 0 0 0 0-1.41L11.71 8.7c-.63-.62-1.71-.18-1.71.71v5.17c0 .9 1.08 1.34 1.71.71"></path>
-                      </svg></div>
-                    <a href="#" class="breadcrumb-link w-inline-block">
-                      <div>Opony samochodowe</div>
-                    </a>
-                    <div bind="dac3cd5a-f0de-4fd5-7e83-f20a67d2be0f" class="breadcrumb-divider w-embed"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ic" width="100%" height="100%" preserveaspectratio="xMidYMid meet" viewbox="0 0 24 24">
-                        <path fill="currentColor" d="m11.71 15.29l2.59-2.59a.996.996 0 0 0 0-1.41L11.71 8.7c-.63-.62-1.71-.18-1.71.71v5.17c0 .9 1.08 1.34 1.71.71"></path>
-                      </svg></div>
-                    <a href="#" class="breadcrumb-link w-inline-block">
-                      <div>Opony producent</div>
-                    </a>
-                    <div bind="dac3cd5a-f0de-4fd5-7e83-f20a67d2be13" class="breadcrumb-divider w-embed"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ic" width="100%" height="100%" preserveaspectratio="xMidYMid meet" viewbox="0 0 24 24">
-                        <path fill="currentColor" d="m11.71 15.29l2.59-2.59a.996.996 0 0 0 0-1.41L11.71 8.7c-.63-.62-1.71-.18-1.71.71v5.17c0 .9 1.08 1.34 1.71.71"></path>
-                      </svg></div>
-                    <a href="#" class="breadcrumb-link is-active w-inline-block">
-                      <div>Model</div>
-                    </a>
-                  </div>
-                  <div class="tire-model_wrapper">
-                    <div id="w-node-dff49e8a-c49a-8dae-b921-49cd5adce049-5adce040" class="tire-model_title-wrapper">
-                      <div class="tire-model_tittle">
-                        <div id="w-node-_9b5a6211-bf10-4aa6-0899-175ecae22dd1-5adce040">
-                          <div bind="97639ab5-67d8-a9db-a31c-7343d014e264" class="icon-embed-summer-large w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewbox="0 0 32 32" fill="none" preserveaspectratio="xMidYMid meet" aria-hidden="true" role="img">
-                              <path fill-rule="evenodd" clip-rule="evenodd" d="M16 1.33333C16.7364 1.33333 17.3333 1.93029 17.3333 2.66667V5.33333C17.3333 6.06971 16.7364 6.66667 16 6.66667C15.2636 6.66667 14.6667 6.06971 14.6667 5.33333V2.66667C14.6667 1.93029 15.2636 1.33333 16 1.33333ZM26.3708 5.62919C26.8915 6.14989 26.8915 6.99411 26.3708 7.51481L24.4855 9.40014C23.9648 9.92084 23.1206 9.92084 22.5999 9.40014C22.0792 8.87944 22.0792 8.03522 22.5999 7.51452L24.4852 5.62919C25.0059 5.10849 25.8501 5.10849 26.3708 5.62919ZM5.62919 5.62919C6.14989 5.10849 6.99411 5.10849 7.51481 5.62919L9.40014 7.51452C9.92084 8.03522 9.92084 8.87944 9.40014 9.40014C8.87944 9.92084 8.03522 9.92084 7.51452 9.40014L5.62919 7.51481C5.10849 6.99411 5.10849 6.14989 5.62919 5.62919ZM16.0076 9.26805C16.8928 9.26036 17.7707 9.42903 18.59 9.76424C19.4093 10.0994 20.1536 10.5945 20.7796 11.2204C21.4055 11.8464 21.9006 12.5907 22.2358 13.41C22.571 14.2293 22.7396 15.1072 22.732 15.9924C22.7243 16.8776 22.5404 17.7524 22.191 18.5657C21.8416 19.3791 21.3337 20.1147 20.6969 20.7297C19.4396 21.9441 17.7556 22.6161 16.0076 22.6009C14.2596 22.5857 12.5875 21.8846 11.3515 20.6485C10.1154 19.4125 9.41431 17.7404 9.39912 15.9924C9.38393 14.2444 10.0559 12.5604 11.2703 11.3031C11.8853 10.6663 12.6209 10.1584 13.4343 9.80904C14.2476 9.45965 15.1224 9.27574 16.0076 9.26805ZM1.33333 16C1.33333 15.2636 1.93029 14.6667 2.66667 14.6667H5.33333C6.06971 14.6667 6.66667 15.2636 6.66667 16C6.66667 16.7364 6.06971 17.3333 5.33333 17.3333H2.66667C1.93029 17.3333 1.33333 16.7364 1.33333 16ZM25.3333 16C25.3333 15.2636 25.9303 14.6667 26.6667 14.6667H29.3333C30.0697 14.6667 30.6667 15.2636 30.6667 16C30.6667 16.7364 30.0697 17.3333 29.3333 17.3333H26.6667C25.9303 17.3333 25.3333 16.7364 25.3333 16ZM9.40014 22.5999C9.92084 23.1206 9.92084 23.9648 9.40014 24.4855L7.51481 26.3708C6.99411 26.8915 6.14989 26.8915 5.62919 26.3708C5.10849 25.8501 5.10849 25.0059 5.62919 24.4852L7.51452 22.5999C8.03522 22.0792 8.87944 22.0792 9.40014 22.5999ZM22.5999 22.5999C23.1206 22.0792 23.9648 22.0792 24.4855 22.5999L26.3708 24.4852C26.8915 25.0059 26.8915 25.8501 26.3708 26.3708C25.8501 26.8915 25.0059 26.8915 24.4852 26.3708L22.5999 24.4855C22.0792 23.9648 22.0792 23.1206 22.5999 22.5999ZM16 25.3333C16.7364 25.3333 17.3333 25.9303 17.3333 26.6667V29.3333C17.3333 30.0697 16.7364 30.6667 16 30.6667C15.2636 30.6667 14.6667 30.0697 14.6667 29.3333V26.6667C14.6667 25.9303 15.2636 25.3333 16 25.3333Z" fill="currentColor"></path>
-                            </svg></div>
-                        </div>
-                        <h2 class="heading-style-h5">{{ section.settings.nazwa-producenta }}</h2>
-                        <h1 class="heading-style-h3">{{ section.settings.nazwa-modelu }}</h1>
-                      </div>
-                      <div class="margin-top margin-xsmall">
-                        <p>{{ section.settings.krotki-opis-modelu }}</p>
-                      </div>
-                      <div class="margin-top margin-small">
-                        <div class="button-group">
-                          <a href="#sizes" class="button is-small is-icon w-inline-block">
-                            <div>Zobacz rozmiary</div>
-                            <div class="icon-embed-xsmall w-embed"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ic" width="100%" height="100%" preserveaspectratio="xMidYMid meet" viewbox="0 0 24 24">
-                                <path fill="currentColor" d="M5 20h14c.55 0 1 .45 1 1s-.45 1-1 1H5c-.55 0-1-.45-1-1s.45-1 1-1M5 2h14c.55 0 1 .45 1 1s-.45 1-1 1H5c-.55 0-1-.45-1-1s.45-1 1-1m8 7h1.79c.45 0 .67-.54.35-.85l-2.79-2.79c-.2-.2-.51-.2-.71 0L8.85 8.15a.5.5 0 0 0 .36.85H11v6H9.21c-.45 0-.67.54-.35.85l2.79 2.79c.2.2.51.2.71 0l2.79-2.79a.5.5 0 0 0-.35-.85H13z"></path>
-                              </svg></div>
-                          </a>
-                          <a href="#description" class="button is-secondary is-small is-icon w-inline-block">
-                            <div>Czytaj dalej</div>
-                            <div bind="dff49e8a-c49a-8dae-b921-49cd5adce055" class="icon-embed-xsmall w-embed"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ic" width="100%" height="100%" preserveaspectratio="xMidYMid meet" viewbox="0 0 24 24">
-                                <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2m-.35 12.65l-2.79-2.79c-.32-.32-.1-.86.35-.86h5.59c.45 0 .67.54.35.85l-2.79 2.79c-.2.2-.52.2-.71.01"></path>
-                              </svg></div>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                    <div id="w-node-abeeac27-d672-16b5-ab2c-bebbb9aa9078-5adce040" class="tire-model_image-wrapper">
-                      <div id="w-node-d16ac00d-01aa-c180-0bb7-1cb0def174d2-5adce040" class="tire-model_logo-wrapper">{{ section.settings.zdjecie-producenta | image_url: height: 32 | image_tag: class: "tire-model_producer-logo", id: "w-node-dff49e8a-c49a-8dae-b921-49cd5adce057-5adce040"}}</div>{{ section.settings.zdjecie-opony | image_url: height: 1000 | image_tag: class: "tire-model_main-image", id: "w-node-dff49e8a-c49a-8dae-b921-49cd5adce048-5adce040"}}
-                    </div>
-                    <div id="w-node-dff49e8a-c49a-8dae-b921-49cd5adce058-5adce040" class="tire-model_benefits-wrapper">
-                      <div bind="36676afb-16b6-8b46-4377-4a699c564f6a" class="benefitts-wrapper shadow-small">
-                        <div id="w-node-_36676afb-16b6-8b46-4377-4a699c564f6b-9c564f6a" class="benefits_feature">
-                          <div class="icon-1x1-medium" data-w-id="36676afb-16b6-8b46-4377-4a699c564f6c" data-animation-type="lottie" data-src="documents/wired-outline-757-delivery.json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.5" data-duration="0"></div>
-                          <div id="w-node-_36676afb-16b6-8b46-4377-4a699c564f6d-9c564f6a">Darmowa Dostawa</div>
-                        </div>
-                        <div id="w-node-_36676afb-16b6-8b46-4377-4a699c564f6f-9c564f6a" class="benefits_feature is-second">
-                          <div class="icon-1x1-medium" data-w-id="36676afb-16b6-8b46-4377-4a699c564f70" data-animation-type="lottie" data-src="documents/wired-outline-2367-loan.json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-duration="0"></div>
-                          <div id="w-node-_36676afb-16b6-8b46-4377-4a699c564f71-9c564f6a">30 dni na zwrot</div>
-                        </div>
-                        <div id="w-node-_36676afb-16b6-8b46-4377-4a699c564f73-9c564f6a" class="benefits_feature">
-                          <div class="icon-1x1-medium" data-w-id="36676afb-16b6-8b46-4377-4a699c564f74" data-animation-type="lottie" data-src="documents/wired-outline-46-timer-stopwatch.json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-duration="0"></div>
-                          <div id="w-node-_36676afb-16b6-8b46-4377-4a699c564f75-9c564f6a">Wysyłka w 24h</div>
-                        </div>
-                        <div id="w-node-_36676afb-16b6-8b46-4377-4a699c564f77-9c564f6a" class="benefits_feature is-last">
-                          <div class="icon-1x1-medium" data-w-id="36676afb-16b6-8b46-4377-4a699c564f78" data-animation-type="lottie" data-src="documents/wired-outline-852-wheel.json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-duration="0"></div>
-                          <div id="w-node-_36676afb-16b6-8b46-4377-4a699c564f79-9c564f6a">Sprawdzone przez<br>specjalistów</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+
+{% stylesheet %}
+  .tire-model_wrapper {
+    grid-column-gap: 4rem;
+    grid-row-gap: 0;
+    grid-template-rows: auto;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-auto-columns: 1fr;
+    display: grid;
+    position: relative;
+  }
+
+  .tire-model_title-wrapper {
+    flex-flow: column;
+    align-items: flex-start;
+    display: flex;
+    grid-area: span 1 / span 3 / span 1 / span 3;
+  }
+
+  .tire-model_image-wrapper {
+    position: relative;
+    grid-area: span 1 / span 3 / span 1 / span 3;
+  }
+  .tire-model_logo-wrapper {
+    background-color: var(--color--white);
+    border-radius: 0 0.25rem 0.25rem 0;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-right: 1rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .tire-model_main-image {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 2 / 1;
+    object-fit: cover;
+    object-position: 50% 0;
+    border-radius: 1rem;
+  }
+  .tire-model_benefits-wrapper {
+    grid-area: span 1 / span 6 / span 1 / span 6;
+  }
+
+
+{% endstylesheet %}
+
 
 {% schema %}
   {
@@ -131,16 +99,19 @@
         "type": "image_picker",
         "id": "zdjecie-opony",
         "label": "Zdjęcie opony"
-      }, {
+      },
+      {
         "type": "image_picker",
         "id": "zdjecie-producenta",
         "label": "Zdjęcie producenta"
-      }, {
+      },
+      {
         "type": "text",
         "id": "nazwa-modelu",
         "label": "Nazwa modelu",
         "default": "Nazwa Modelu"
-      }, {
+      },
+      {
         "type": "text",
         "id": "nazwa-producenta",
         "label": "Nazwa producenta",

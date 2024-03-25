@@ -1,8 +1,8 @@
 <div class="padding-global {{ section.settings.background }}">
   <div class="container-large">
     <div class="padding-section-{{ section.settings.padding }}">
-      <div class="{%- if section.settings.container_check -%}white-container{%- endif -%}">
-        {%- if section.settings.header_check -%}
+      <div class="{{ section.settings.container }}">
+        {%- if section.settings.header != blank -%}
           <div class="margin-bottom margin-small">
             <h4>
               {{ section.settings.header }}
@@ -44,7 +44,6 @@
                         </a>
                       </div>
                     </div>
-                    {% assign counter = counter | plus: 1 %}
                   {% endif %}
                 {% endfor %}
             {% endcase %}
@@ -79,8 +78,7 @@
           }
         ],
         "default": "large"
-      },
-      {
+      }, {
         "id": "background",
         "type": "select",
         "label": "Kolor tła",
@@ -94,23 +92,28 @@
           }
         ],
         "default": "background-color-white"
-      },
-      {
-        "type": "checkbox",
-        "id": "header_check",
-        "label": "Pokaż tytuł",
-        "default": true
-      },
-      {
+      }, {
         "type": "text",
         "id": "header",
         "label": "Tytuł",
         "default": "Polecane Modele Opon"
       }, {
-        "type": "checkbox",
-        "id": "container_check",
-        "label": "Pokaż w kontenerze",
-        "default": true
+        "type": "select",
+        "id": "container",
+        "label": "Kontener",
+        "options": [
+          {
+            "value": "white-container",
+            "label": "Kontener Biały"
+          }, {
+            "value": "",
+            "label": "Brak Kontenera"
+          }, {
+            "value": "white-container shadow-small",
+            "label": "Kontener z cieniem"
+          }
+        ],
+        "default": "white-container shadow-small"
       }
     ],
     "presets": [
@@ -210,6 +213,5 @@
     padding-right: 1rem;
   }
 }
-@media screen and (max-width: 479px) {
-}
+@media screen and (max-width: 479px) {}
 {% endstylesheet %}
