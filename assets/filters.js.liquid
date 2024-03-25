@@ -42,7 +42,14 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     function getActiveTabContent() {
-        return document.querySelector('.w-tab-pane.w--tab-active div div.w-tab-pane.w--tab-active');
+        let activeTabContent = document.querySelector('.w-tab-pane.w--tab-active div div.w-tab-pane.w--tab-active');
+
+        {% comment %} ActiveTabContent for manufacturer subpage {% endcomment %}
+        if (activeTabContent === null) {
+            activeTabContent = document.getElementById('tire-manufacturer-form');
+        }
+
+        return activeTabContent;
     }
 
     async function initializeSizeForm(activeTabContent, activeSubTabNumber, formAction) {
@@ -69,15 +76,21 @@ document.addEventListener('DOMContentLoaded', async function() {
                     'filter.p.m.tires.width': tire_width.value,
                     'filter.p.m.tires.profile': tire_profile.value,
                     'filter.p.m.tires.diameter': tire_diameter.value,
-                    'filter.p.m.tires.season': season.value
-                }; break;
+                    'filter.p.m.tires.season': season.value.toLowerCase()
+                };
+
+                const pathname = window.location.pathname;
+                const manufacturerMatch = pathname.match(/\/pages\/opony\/([^\/]+)/);
+                if (manufacturerMatch && manufacturerMatch[1]) {
+                    queryParameters['filter.p.m.tires.manufacturer'] = manufacturerMatch[1];
+                } break;
                 case '2': queryParameters = {
                     'filter.p.m.tires.width': tire_width.value,
                     'filter.p.m.tires.profile': tire_profile.value,
                     'filter.p.m.tires.diameter': tire_diameter.value,
                     'filter.p.m.rim.rim_bolt': rim_bolt.value,
                     'filter.p.m.rim.width': rim_width.value,
-                    'filter.p.m.tires.season': season.value
+                    'filter.p.m.tires.season': season.value.toLowerCase()
                 }; break;
                 case '3': queryParameters = {
                     'filter.p.m.rim.diameter': rim_diameter.value,
@@ -303,7 +316,12 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (!activeTabContent) return;
 
         const formActionBaseURL = 'https://moto-m5.myshopify.com/collections/';
-        const activeSubTab = document.querySelector('.tab-link-left-search.w--current');
+
+        let activeSubTab = document.querySelector('.tab-link-left-search.w--current');
+
+        {% comment %} ActiveSubTab for manufacturer subpage {% endcomment %}
+        if (!activeSubTab) activeSubTab = document.querySelector('[data-w-tab="1.1"]');
+
         const activeSubTabNumber = activeSubTab ? activeSubTab.getAttribute('data-w-tab').split('.')[1] : null;
 
         let formAction = `${formActionBaseURL}opony`; // Default action
