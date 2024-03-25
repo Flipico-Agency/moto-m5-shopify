@@ -31,6 +31,7 @@
                                     <div class="w-form">
                                         <form class="div-block-8">
                                             {% if tab_number == 1 %}
+
                                                 <div class="div-block-21-copy">
                                                     {% assign form_fields = "Szerokość,Profil,Średnica" | split: "," %}
                                                     {% for field in form_fields %}
@@ -40,23 +41,62 @@
                                                             <select id="tire-{{ field | downcase }}"
                                                                     data-name="tire-{{ field | downcase }}"
                                                                     required="required"
-                                                                    class="select-field w-select"></select>
+                                                                    class="select-field w-select">
+
+                                                            </select>
                                                             {% render 'select-arrow' %}
                                                         </div>
                                                     {% endfor %}
                                                 </div>
-                                                <div class="form-field-wrapper">
-                                                    <label for="tire-season" class="field-label">Sezon</label>
-                                                    <select id="tire-season"
-                                                            data-name="tire-season"
-                                                            required="required"
-                                                            class="select-field w-select">
-                                                        <option value="Letnie">Letnie</option>
-                                                        <option value="Zimowe">Zimowe</option>
-                                                        <option value="Całoroczne">Całoroczne</option>
-                                                    </select>
-                                                    {% render 'select-arrow' %}
-                                                </div>
+
+                                                {% if sub_tab_number == 2%}
+                                                    <div class="form-field-wrapper">
+                                                        <label for="rim-bolt" class="field-label">Rozstaw śrub</label>
+                                                        <select id="rim-bolt"
+                                                                data-name="rim-bolt"
+                                                                required="required"
+                                                                class="select-field w-select">
+                                                        </select>
+                                                        {% render 'select-arrow' %}
+                                                    </div>
+                                                    <div class="form-field-wrapper">
+                                                        <label for="rim-width" class="field-label">Szerokość felgi</label>
+                                                        <select id="rim-width"
+                                                                data-name="rim-width"
+                                                                required="required"
+                                                                class="select-field w-select">
+                                                        </select>
+                                                        {% render 'select-arrow' %}
+                                                    </div>
+                                                {% endif %}
+
+                                                {% if sub_tab_number == 3%}
+                                                    <div class="form-field-wrapper">
+                                                        <label for="rim-et" class="field-label">ET</label>
+                                                        <select id="rim-et"
+                                                                data-name="rim-et"
+                                                                required="required"
+                                                                class="select-field w-select">
+                                                        </select>
+                                                        {% render 'select-arrow' %}
+                                                    </div>
+                                                {% endif %}
+
+                                                {% if sub_tab_number != 3%}
+                                                    <div class="form-field-wrapper">
+                                                        <label for="tire-season" class="field-label">Sezon</label>
+                                                        <select id="tire-season"
+                                                                data-name="tire-season"
+                                                                required="required"
+                                                                class="select-field w-select">
+                                                            <option value="Letnie">Letnie</option>
+                                                            <option value="Zimowe">Zimowe</option>
+                                                            <option value="Całoroczne">Całoroczne</option>
+                                                        </select>
+                                                        {% render 'select-arrow' %}
+                                                    </div>
+                                                {% endif %}
+
                                             {% else %}
                                                 <div class="div-block-21-copy">
                                                     {% assign form_fields = "Marka,Model,Generacja,Rok,Silnik" | split: "," %}
