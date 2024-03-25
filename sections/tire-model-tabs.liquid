@@ -1,105 +1,96 @@
 <div class="padding-global">
-  <div class="container-large">
-    <div class="header30_content">
-      <div class="header30_content-wrapper">
-        <div style="display: flex">
-          {% assign tab_titles = "Szukaj wg rozmiaru,Szukaj wg auta" | split: "," %}
-          {% for tab_title in tab_titles %}
-            <a data-w-tab="{{ forloop.index }}" class="tab-link-top-search w-inline-block w-tab-link{% if forloop.first %} w--current{% endif %}">
-              {{ tab_title }}
-            </a>
-          {% endfor %}
-        </div>
-
-        {% for tab_number in (1..2) %}
-          <div class="tab-pane-tab-{{ tab_number }} w-tab-pane{% if tab_number == 1 %} w--tab-active{% endif %}">
-            <div class="tabs-2 w-tabs">
-              <div class="tabs-menu w-tab-menu">
-                {% assign sub_tab_titles = "Opony,Koła,Felgi" | split: "," %}
-                {% for sub_tab_title in sub_tab_titles %}
-                  <a data-w-tab="{{ tab_number }}.{{ forloop.index }}" class="tab-link-left-search w-inline-block w-tab-link{% if forloop.first %} w--current{% endif %}">
-                    {{ sub_tab_title }}
-                  </a>
-                {% endfor %}
-              </div>
-
-              {% for sub_tab_number in (1..3) %}
-                <div data-sub-tab="{{ tab_number }}.{{ sub_tab_number }}" class="w-tab-pane{% if sub_tab_number == 1 %} w--tab-active{% endif %}">
-                  <div class="w-form">
-                    <form class="div-block-8-copy">
-                      {% if tab_number == 1 %}
-                        <div class="div-block-21-copy">
-                          {% assign form_fields = "Szerokość,Profil,Średnica" | split: "," %}
-                          {% for field in form_fields %}
-                            <div class="form-field-wrapper">
-                              <label for="contact[tire_{{ field | downcase }}]" class="field-label">{{ field }}</label>
-                              <select
-                                id="tire-{{ field | downcase }}"
-                                name="contact[tire_{{ field | downcase }}]"
-                                data-name="tire-{{ field | downcase }}"
-                                required=""
-                                class="select-field w-select"></select>
-                              {% render 'select-arrow' %}
-                            </div>
-                          {% endfor %}
-                        </div>
-                        <div class="form-field-wrapper">
-                          <label for="tire-season" class="field-label">Sezon</label>
-                          <select
-                            id="tire-season"
-                            name="contact[season_tire]"
-                            data-name="season-tire"
-                            required=""
-                            class="select-field w-select">
-                            <option value="Letnie">Letnie</option>
-                            <option value="Zimowe">Zimowe</option>
-                            <option value="Całoroczne">Całoroczne</option>
-                          </select>
-                          {% include 'select-arrow' %}
-                        </div>
-                      {% else %}
-                        <div class="div-block-21-copy">
-                          {% assign form_fields = "Marka,Model,Generacja,Rok,Silnik" | split: "," %}
-                          {% for field in form_fields %}
-                            <div class="form-field-wrapper">
-                              <label for="car-{{ field | downcase }}" class="field-label">{{ field }}</label>
-                              <select
-                                id="car-{{ field | downcase }}"
-                                name="contact[car_{{ field | downcase }}]"
-                                data-name="car-{{ field | downcase }}"
-                                required=""
-                                class="select-field w-select"></select>
-                              {% include 'select-arrow' %}
-                            </div>
-                          {% endfor %}
-                        </div>
-                      {% endif %}
-                      <input
-                        type="submit"
-                        data-wait="Zaczekaj..."
-                        class="button w-button"
-                        value="{% case tab_number %}{% when 1 %}{% case sub_tab_number %}{% when 1 %}Szukaj opon{% when 2 %}Szukaj kół{% when 3 %}Szukaj felg{% endcase %}{% when 2 %}{% case sub_tab_number %}{% when 1 %}Szukaj opon{% when 2 %}Szukaj kół{% when 3 %}Szukaj felg{% endcase %}{% endcase %}">
-                    </form>
-                  </div>
+    <div class="container-large">
+        <div class="header30_content">
+            <div class="header30_content-wrapper">
+                <div style="display: flex">
+                    {% assign tab_titles = "Szukaj wg rozmiaru,Szukaj wg auta" | split: "," %}
+                    {% for tab_title in tab_titles %}
+                        <a data-w-tab="{{ forloop.index }}"
+                           class="tab-link-top-search w-inline-block w-tab-link{% if forloop.first %} w--current{% endif %}">
+                            {{ tab_title }}
+                        </a>
+                    {% endfor %}
                 </div>
-              {% endfor %}
+
+                {% for tab_number in (1..2) %}
+                    <div class="tab-pane-tab-{{ tab_number }} w-tab-pane{% if tab_number == 1 %} w--tab-active{% endif %}">
+                        <div class="tabs-2 w-tabs">
+                            <div class="tabs-menu w-tab-menu">
+                                {% assign sub_tab_titles = "Opony,Koła,Felgi" | split: "," %}
+                                {% for sub_tab_title in sub_tab_titles %}
+                                    <a data-w-tab="{{ tab_number }}.{{ forloop.index }}"
+                                       class="tab-link-left-search w-inline-block w-tab-link{% if forloop.first %} w--current{% endif %}">
+                                        {{ sub_tab_title }}
+                                    </a>
+                                {% endfor %}
+                            </div>
+
+                            {% for sub_tab_number in (1..3) %}
+                                <div data-sub-tab="{{ tab_number }}.{{ sub_tab_number }}"
+                                     class="w-tab-pane{% if sub_tab_number == 1 %} w--tab-active{% endif %}">
+                                    <div class="w-form">
+                                        <form class="div-block-8-copy">
+                                            {% if tab_number == 1 %}
+                                                <div class="div-block-21-copy">
+                                                    {% assign form_fields = "Szerokość,Profil,Średnica" | split: "," %}
+                                                    {% for field in form_fields %}
+                                                        <div class="form-field-wrapper">
+                                                            <label for="contact[tire_{{ field | downcase }}]"
+                                                                   class="field-label">{{ field }}</label>
+                                                            <select id="tire-{{ field | downcase }}"
+                                                                    name="contact[tire_{{ field | downcase }}]"
+                                                                    data-name="tire-{{ field | downcase }}" required=""
+                                                                    class="select-field w-select"></select>
+                                                            {% render 'select-arrow' %}
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                                <div class="form-field-wrapper">
+                                                    <label for="tire-season" class="field-label">Sezon</label>
+                                                    <select id="tire-season" name="contact[season_tire]"
+                                                            data-name="season-tire" required=""
+                                                            class="select-field w-select">
+                                                        <option value="Letnie">Letnie</option>
+                                                        <option value="Zimowe">Zimowe</option>
+                                                        <option value="Całoroczne">Całoroczne</option>
+                                                    </select>
+                                                    {% include 'select-arrow' %}
+                                                </div>
+                                            {% else %}
+                                                <div class="div-block-21-copy">
+                                                    {% assign form_fields = "Marka,Model,Generacja,Rok,Silnik" | split: "," %}
+                                                    {% for field in form_fields %}
+                                                        <div class="form-field-wrapper">
+                                                            <label for="car-{{ field | downcase }}"
+                                                                   class="field-label">{{ field }}</label>
+                                                            <select id="car-{{ field | downcase }}"
+                                                                    name="contact[car_{{ field | downcase }}]"
+                                                                    data-name="car-{{ field | downcase }}" required=""
+                                                                    class="select-field w-select"></select>
+                                                            {% include 'select-arrow' %}
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            {% endif %}
+                                            <input type="submit" data-wait="Zaczekaj..." class="button w-button"
+                                                   value="{% case tab_number %}{% when 1 %}{% case sub_tab_number %}{% when 1 %}Szukaj opon{% when 2 %}Szukaj kół{% when 3 %}Szukaj felg{% endcase %}{% when 2 %}{% case sub_tab_number %}{% when 1 %}Szukaj opon{% when 2 %}Szukaj kół{% when 3 %}Szukaj felg{% endcase %}{% endcase %}">
+                                        </form>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
-          </div>
-        {% endfor %}
-      </div>
+        </div>
     </div>
-  </div>
-</div>
-<div class="header-search-big_background-image-wrapper">
-  <div class="image-overlay-layer"></div>
-  <img src="{{ section.settings.background_image }}" class="header30_background-image" />
 </div>
 
 <script>
-  var currentSection = document.currentScript.closest('.shopify-section');
-  currentSection.setAttribute("class", "section_tire-model_tabs background-color-grayiron100");
+var currentSection = document.currentScript.closest('.shopify-section');
+currentSection.setAttribute("class", "section_tire-model_tabs background-color-grayiron100");
 
-  document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
     const topTabs = document.querySelectorAll('.tab-link-top-search');
     const topTabContents = document.querySelectorAll('.w-tab-pane');
 
@@ -165,46 +156,40 @@
     if (topTabs.length > 0) {
         activateTab(topTabs[0]);
     }
-  });
+});
 </script>
 
 {% stylesheet %}
-  {% comment %}
+{% comment %}
 
-    .w-tab-pane {
-      display: none;
-      /* Domyślnie zakładki są ukryte */
-    }
+.w-tab-pane {
+    display: none; /* Domyślnie zakładki są ukryte */
+}
 
-    .w-tab-pane.w--tab-active {
-      display: block;
-      /* Pokaż aktywną zakładkę */
-    }
+.w-tab-pane.w--tab-active {
+    display: block; /* Pokaż aktywną zakładkę */
+}
 
-  {% endcomment %}
+{% endcomment %}
 {% endstylesheet %}
 
 {% schema %}
-  {
-    "name": "Tire Model Tabs",
-    "tag": "header",
-    "class": "section_tire-model_tabs background-color-grayiron100",
-    "settings": [
-      {
-        "type": "richtext",
-        "id": "long_description",
-        "label": "Long Description",
-        "default": "<p></p>"
-      }, {
-        "type": "image_picker",
-        "id": "background_image",
-        "label": "Zdjęcie w tle"
-      }
-    ],
-    "presets": [
-      {
-        "name": "Tabsy model"
-      }
-    ]
-  }
+{
+  "name": "Tire Model Tabs",
+  "tag": "header",
+  "class": "section_tire-model_tabs background-color-grayiron100",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "long_description",
+      "label": "Long Description",
+      "default": "<p></p>"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Tabsy model"
+    }
+  ]
+}
 {% endschema %}
