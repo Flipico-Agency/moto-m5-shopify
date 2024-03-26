@@ -1,0 +1,318 @@
+(function () {
+    // Function to update the shipping bar based on the subtotal
+    const updateShippingBar = () => {
+        const subtotal = parseFloat(calculateSubtotalPrice());
+        const freeShippingThreshold = 1200;
+        const progressPercentage = Math.min((subtotal / freeShippingThreshold) * 100, 100);
+        const shippingBarProgress = document.querySelector(
+            ".shipping-progress-bar"
+        );
+        const remainingAmount = document.querySelector(
+            ".free-shipping-text.remaining-amount"
+        );
+        const defaultText = document.querySelector(".shipping-text");
+        const successText = document.querySelector(".shipping-text.hide-shipping");
+        // Update the width of the progress bar.
+        shippingBarProgress.style.width = `${progressPercentage}%`;
+        // Update remaining amount and decide which text to display.
+        if (subtotal >= 1200) {
+            defaultText.style.display = "none";
+            successText.style.display = "flex";
+        } else {
+            const amountRemaining = (1200 - subtotal).toFixed(2);
+            remainingAmount.textContent = `${amountRemaining} zł`;
+            defaultText.style.display = "flex";
+            successText.style.display = "none";
+        }
+    };
+
+    // Define local storage key for products in cart
+    const LOCAL_STORAGE_KEY = "wized_products_in_cart";
+    const TIMESTAMP_KEY = "wized_cart_timestamp";
+
+    const initializeLocalStorage = () => {
+        if (!localStorage.getItem(LOCAL_STORAGE_KEY)) {
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify([]));
+            console.log("Initialized wized_products_in_cart in localStorage.");
+        } else {
+            console.log("wized_products_in_cart already initialized in localStorage.");
+        }
+
+        if (!localStorage.getItem(TIMESTAMP_KEY)) {
+            localStorage.setItem(TIMESTAMP_KEY, Date.now().toString());
+            console.log("Initialized wized_cart_timestamp in localStorage.");
+        } else {
+            console.log("wized_cart_timestamp already initialized in localStorage.");
+        }
+    };
+
+    // Call the initialization function at the start
+    initializeLocalStorage();
+
+
+    // Function to update the cart empty status
+    const updateCartEmptyStatus = async () => {
+        const storedProducts = JSON.parse(
+            localStorage.getItem(LOCAL_STORAGE_KEY) || "[]"
+        );
+        const isEmpty = storedProducts.length === 0;
+        await Wized.data.setVariable("cartEmpty", isEmpty);
+    };
+
+    const storeProductInLocalStorage = (productDetails) => {
+        try {
+            const products = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || "[]");
+            const existingProduct = products.find((product) => product.id === productDetails.id);
+            if (existingProduct) {
+                existingProduct.quantity = productDetails.quantity;
+                console.log(`Updated quantity for product ID: ${productDetails.id}`);
+            } else {
+                products.push(productDetails);
+                console.log(`Added new product with ID: ${productDetails.id}`);
+            }
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(products));
+            localStorage.setItem(TIMESTAMP_KEY, Date.now().toString());
+            console.log(`Products stored in localStorage: ${JSON.stringify(products)}`);
+        } catch (error) {
+            console.error("Error storing products in localStorage:", error);
+        }
+    };
+
+    // Function to remove product from local storage
+    const removeProductFromLocalStorage = (productId) => {
+        let products = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || "[]");
+        products = products.filter((product) => product.id !== productId);
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(products));
+    };
+    const updateProductQuantityInLocalStorage = (productId, newQuantity) => {
+        const products = JSON.parse(
+            localStorage.getItem(LOCAL_STORAGE_KEY) || "[]"
+        );
+        const productToUpdate = products.find(
+            (product) => product.id === productId
+        );
+        if (productToUpdate) {
+            productToUpdate.quantity = newQuantity;
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(products));
+        }
+    };
+    const getQuantityFromLocalStorage = (productId) => {
+        const products = JSON.parse(
+            localStorage.getItem(LOCAL_STORAGE_KEY) || "[]"
+        );
+        const product = products.find((product) => product.id === productId);
+        return product ? product.quantity : 1;
+    };
+    const updateQuantityInputForProduct = (productId) => {
+        const inputElement = document.querySelector(
+            `[wized="cart_item"][data-attribute-id="${productId}"] [wized="cart_item_quantity"]`
+        );
+        if (inputElement) {
+            const quantity = getQuantityFromLocalStorage(productId);
+            inputElement.value = quantity;
+        } else {
+            console.error(`No input element found for product ID: ${productId}`);
+        }
+    };
+    const calculateTotalQuantity = () => {
+        const products = JSON.parse(
+            localStorage.getItem(LOCAL_STORAGE_KEY) || "[]"
+        );
+        return products.reduce((total, product) => total + product.quantity, 0);
+    };
+    const calculateSubtotalPrice = () => {
+        const products = JSON.parse(
+            localStorage.getItem(LOCAL_STORAGE_KEY) || "[]"
+        );
+        return products
+            .reduce((total, product) => {
+                const priceValue = parseFloat(product.variants.edges[0].node.price.replace("zł", ""));
+                return total + priceValue * product.quantity;
+            }, 0)
+            .toFixed(2);
+    };
+    const updateDisplayedTotals = () => {
+        const totalQuantityElem = document.querySelector(
+            '[wized="item_quantity_total"]'
+        );
+        const subtotalPriceElem = document.querySelector(
+            '[wized="subtotal_price"]'
+        );
+        totalQuantityElem.textContent = calculateTotalQuantity();
+        subtotalPriceElem.textContent = `${calculateSubtotalPrice()} zł`;
+    };
+    const MAX_RETRIES = 10;
+    const RETRY_INTERVAL = 1000;
+    const pollForCartItems = async (storedProducts) => {
+        let retryCount = 0;
+        const pollInterval = setInterval(() => {
+            const storedProductIds = storedProducts.map((product) => product.id);
+            const foundAllItems = storedProductIds.every((productId) => {
+                const inputElement = document.querySelector(
+                    `[wized="cart_item"][data-attribute-id="${productId}"] [wized="cart_item_quantity"]`
+                );
+                return inputElement !== null;
+            });
+            if (foundAllItems || retryCount >= MAX_RETRIES) {
+                clearInterval(pollInterval);
+                if (foundAllItems) {
+                    storedProductIds.forEach(updateQuantityInputForProduct);
+                    updateDisplayedTotals();
+                }
+            } else {
+                retryCount++;
+            }
+        }, RETRY_INTERVAL);
+    };
+    const updateCartAndPollItems = async () => {
+        const storedProducts = JSON.parse(
+            localStorage.getItem(LOCAL_STORAGE_KEY) || "[]"
+        );
+        await updateCartIds(); // Get the product IDs
+        await Wized.request.execute("Fetch Cart Items"); // Fetch cart items
+        await pollForCartItems(storedProducts); // Poll for cart items
+        await updateCartEmptyStatus();
+    };
+
+    const handleCurrentProductDetailsUpdate = async () => {
+        try {
+            const currentProductDetails = await Wized.data.get("v.currentProductDetails");
+            console.log("Current product details fetched:", currentProductDetails);
+
+            if (!currentProductDetails || !currentProductDetails.id) {
+                console.error("Invalid product details:", currentProductDetails);
+                return;
+            }
+
+            const storedProducts = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || "[]");
+            const existingProduct = storedProducts.find((product) => product.id === currentProductDetails.id);
+
+            if (existingProduct) {
+                console.log(`Product ${existingProduct.id} already exists in cart. Skipping add.`);
+                return;
+            }
+
+            // Adding new product to the cart
+            storedProducts.push({
+                ...currentProductDetails,
+                quantity: 1,
+            });
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(storedProducts));
+            console.log(`Product ${currentProductDetails.id} added to the cart.`, storedProducts);
+
+            await updateCartAndPollItems();
+            updateQuantityInputForProduct(currentProductDetails.id);
+            updateDisplayedTotals();
+            updateShippingBar();
+        } catch (error) {
+            console.error("Error handling current product details update:", error);
+        }
+    };
+
+    Wized.data.listen(
+        "v.currentProductDetails",
+        handleCurrentProductDetailsUpdate
+    );
+    const updateCartIds = async () => {
+        const storedProducts = JSON.parse(
+            localStorage.getItem(LOCAL_STORAGE_KEY) || "[]"
+        );
+        const cartIds = storedProducts.map((product) => product.id);
+        await Wized.data.setVariable("cartIds", JSON.stringify(cartIds));
+    };
+    document.addEventListener("DOMContentLoaded", async () => {
+        const timestamp = localStorage.getItem(TIMESTAMP_KEY);
+        const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
+        if (timestamp && Date.now() - timestamp > SEVEN_DAYS) {
+            localStorage.removeItem(LOCAL_STORAGE_KEY);
+            localStorage.removeItem(TIMESTAMP_KEY);
+        }
+        await updateCartAndPollItems();
+        const storedProducts = JSON.parse(
+            localStorage.getItem(LOCAL_STORAGE_KEY) || "[]"
+        );
+        setTimeout(() => {
+            storedProducts.forEach((product) => {
+                updateQuantityInputForProduct(product.id);
+            });
+            updateDisplayedTotals();
+        }, 1000);
+        const subtotalElement = document.querySelector('[wized="subtotal_price"]');
+        if (storedProducts.length === 0 && subtotalElement) {
+            subtotalElement.textContent = "0.00 zł";
+        }
+        updateShippingBar();
+    });
+    document.body.addEventListener("click", async (event) => {
+        const targetElement = event.target;
+        const productDiv = targetElement.closest('[wized="cart_item"]');
+
+        if (!productDiv) return;
+
+        const inputElement = productDiv.querySelector(
+            '[wized="cart_item_quantity"]'
+        );
+        const productId = productDiv.getAttribute("data-attribute-id");
+
+        if (targetElement.closest('[wized="cart_decreament"]')) {
+            let currentQuantity = parseInt(inputElement.value, 10) || 0;
+            if (currentQuantity > 1) {
+                inputElement.value = currentQuantity - 1;
+                updateProductQuantityInLocalStorage(productId, currentQuantity - 1);
+            }
+        } else if (targetElement.closest('[wized="cart_increament"]')) {
+            let currentQuantity = parseInt(inputElement.value, 10);
+            inputElement.value = currentQuantity + 1;
+            updateProductQuantityInLocalStorage(productId, currentQuantity + 1);
+        } else if (targetElement.closest('[wized="cart_remove_item"]')) {
+            removeProductFromLocalStorage(productId);
+            await updateCartIds();
+            // Here, we execute the fetch after updating the cartIds
+            await Wized.request.execute("Fetch Cart Items");
+        }
+
+        await pollForCartItems(
+            JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || "[]")
+        );
+        updateDisplayedTotals();
+        updateShippingBar();
+        await updateCartEmptyStatus();
+    });
+    // Function to handle manual quantity update
+    const handleManualQuantityUpdate = async (inputElement, productId) => {
+        const newQuantity = parseInt(inputElement.value, 10);
+
+        if (isNaN(newQuantity) || newQuantity < 1) {
+            // Reset to the previous quantity if the input is not valid.
+            inputElement.value = getQuantityFromLocalStorage(productId);
+            return;
+        }
+
+        updateProductQuantityInLocalStorage(productId, newQuantity);
+        updateDisplayedTotals();
+        updateShippingBar();
+        await updateCartEmptyStatus();
+    };
+    function getProductDetails() {
+        Wized.request.execute("Get Product Details").then(response => {
+            console.log("Product details fetched:", response);
+        }).catch(error => {
+            console.error("Failed to fetch product details:", error);
+        });
+    }
+
+    // Event listener for input events to handle manual quantity updates
+    document.body.addEventListener("input", (event) => {
+        const inputElement = event.target;
+        if (inputElement.matches('[wized="cart_item_quantity"]')) {
+            const productDiv = inputElement.closest('[wized="cart_item"]');
+            if (!productDiv) return;
+
+            const productId = productDiv.getAttribute("data-attribute-id");
+            handleManualQuantityUpdate(inputElement, productId);
+        }
+    });
+    // Listen for updates to the current product details and call updateCartAndPollItems function
+    Wized.data.listen("v.currentProductDetails", updateCartAndPollItems);
+    Wized.data.listen("v.refItemAddedToCart", getProductDetails);
+})();

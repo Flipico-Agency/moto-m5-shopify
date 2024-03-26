@@ -1,4 +1,4 @@
-<html>
+<html lang="pl-PL">
   <head>
     {{ content_for_header }}
     {{ 'style.css' | asset_url | stylesheet_tag }}
@@ -6,9 +6,11 @@
     {{ 'normalise.css' | asset_url | stylesheet_tag }}
     {{ 'globalstyles.css' | asset_url | stylesheet_tag }}
     {{ 'webflow.css' | asset_url | stylesheet_tag }}
-    {{ 'script.js' | asset_url | script_tag }}
+    {{ 'cart.js' | asset_url | script_tag }}
+    {{ 'checkout.js' | asset_url | script_tag }}
     {{ 'filters.js' | asset_url | script_tag }}
     <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title>OponyKola.pl - Nowe i używane do każdego samochodu w niskiej cenie</title>
   </head>
   <body>
     <div class="page-wrapper">

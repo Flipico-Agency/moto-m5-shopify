@@ -1,0 +1,44 @@
+document.body.addEventListener("click", async (event) => {
+    console.log("Script checkout loaded");
+    const targetElement = event.target;
+
+    if (targetElement.closest('[wized="checkout_button"]')) {
+        console.log("Found click on submit");
+
+        const storedProducts = JSON.parse(
+            localStorage.getItem(window.LOCAL_STORAGE_KEY) || "[]"
+        );
+
+        const lineItems = storedProducts.map((product) => {
+            return {
+                variantId: product.productVariantId,
+                quantity: product.quantity,
+            };
+        });
+
+        // Convert to the GraphQL format
+        const formattedLineItems = lineItems
+            .map(
+                (item) => `{variantId: "${item.variantId}", quantity: ${item.quantity}}`
+            )
+            .join(", ");
+
+        // Set the Wized variable
+        await Wized.data.setVariable("checkoutItems", `[${formattedLineItems}]`);
+
+        // Execute the Wized request
+        await Wized.request.execute("Create Checkout");
+
+        // Get the checkout URL
+        const checkoutURL = await Wized.data.get(
+            "r.9.d.data.data.checkoutCreate.checkout.webUrl"
+        );
+
+        // Redirect the user to the checkout URL
+        if (checkoutURL) {
+            window.location.href = checkoutURL;
+        } else {
+            console.error("Failed to retrieve checkout URL");
+        }
+    }
+});

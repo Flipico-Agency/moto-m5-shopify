@@ -1,123 +1,106 @@
 <div class="padding-global">
-  <div class="container-large">
-    <div class="header_manufacturer-category_content">
-      <div class="margin-bottom margin-large">
-        <div class="max-width-large">
-          <div class="margin-bottom margin-xsmall">
-            <h1 class="text-color-white">
-              {{ section.settings.nazwa-producenta }}
-            </h1>
-          </div>
-          <p class="text-weight-semibold text-color-white">
-            {{ section.settings.krotki-opis-producenta }}
-          </p>
-        </div>
-      </div>
-      <div class="header_manufacturer-category_content-wrapper">
-        <div class="form-block-2 w-form">
-          <form
-            id="tire-submit-form"
-            name="tire-submit-form"
-            method="get"
-            class="div-block-8-copy-copyavweva"
-            aria-label="Submit Tire Form">
-            <div class="cawecawecwace">
-              <div
-                wized="filter_field_width"
-                class="form-field-wrapper">
-                <label for="tire-width" class="field-label">szerokość</label>
-                <select
-                  id="tire-width"
-                  name="tire-width"
-                  required=""
-                  wized="filter_tire_width_select"
-                  class="select-field is-left w-select"></select>
-              </div>
-              <div wized="filter_field_profile" class="form-field-wrapper">
-                <label for="profile" class="field-label">profil</label>
-                <select
-                  id="tire-profile"
-                  name="tire-profile"
-                  required=""
-                  wized="filter_tire_profile_select"
-                  class="select-field is-middle w-select"></select>
-              </div>
-              <div wized="filter_field_diameter" class="form-field-wrapper">
-                <label for="tire-diameter" class="field-label">średnica</label>
-                <select
-                  id="tire-diameter"
-                  name="tire-diameter"
-                  wized="filter_tire_diameter_select"
-                  class="select-field is-middle w-select"></select>
-              </div>
-              <div class="form-field-wrapper">
-                <label for="tire-season" class="field-label">Sezon</label>
-                <select
-                  id="tire-season"
-                  name="tire-season"
-                  required=""
-                  wized="filter_tire_season_select"
-                  class="select-field is-right w-select">
-                  <option value="Letnie">Letnie</option>
-                  <option value="Zimowe">Zimowe</option>
-                  <option value="Całoroczne">Całoroczne</option>
-                </select>
-              </div>
+    <div class="container-large">
+        <div class="header_manufacturer-category_content">
+            <div class="margin-bottom margin-large">
+                <div class="max-width-large">
+                    <div class="margin-bottom margin-xsmall">
+                        <h1 class="text-color-white">
+                            {{ section.settings.nazwa-producenta }}
+                        </h1>
+                    </div>
+                    <p class="text-weight-semibold text-color-white">
+                        {{ section.settings.krotki-opis-producenta }}
+                    </p>
+                </div>
             </div>
-            <input
-              type="submit"
-              data-wait="Please wait..."
-              wized="tire_submit_trigger"
-              id="tire-submit"
-              class="button w-button"
-              data-manufacturer-gid="{{ metaobject.value }}"
-              value="Szukaj {{ section.settings.nazwa-producenta }}"
-            >
-          </form>
+            <div class="header_manufacturer-category_content-wrapper">
+                <div class="form-block-2 w-form">
+                    <form id="tire-manufacturer-form"
+                          class="div-block-8-copy-copyavweva w-tab-pane tab-pane-tab-1 w--tab-active" data-w-tab="1.1"
+                          style="border-top: none">
+                        <div class="cawecawecwace">
+                            {% assign tire_fields_label = "Szerokość,Profil,Średnica" | split: "," %}
+                            {% assign tire_fields_data_name = "tire-width,tire-profile,tire-diameter" | split: "," %}
+
+                            {% assign season_options = "Letnie,Zimowe,Całoroczne" | split: "," %}
+
+                            {% for i in (0..2) %}
+                                <div class="form-field-wrapper">
+                                    <label for="{{ tire_fields_data_name[i] | downcase }}"
+                                           class="field-label">{{ tire_fields_label[i] }}</label>
+                                    <select id="{{ tire_fields_data_name[i] | downcase }}"
+                                            data-name="{{ tire_fields_data_name[i] }}"
+                                            required="required" class="select-field w-select">
+                                    </select>
+                                    {% render 'select-arrow' %}
+                                </div>
+                            {% endfor %}
+                            <div class="form-field-wrapper">
+                                <label for="tire-season" class="field-label">Sezon</label>
+                                <select id="tire-season" data-name="tire-season"
+                                        required="required" class="select-field w-select">
+                                    {% for option in season_options %}
+                                        <option value="{{ option }}">{{ option }}</option>
+                                    {% endfor %}
+                                </select>
+                                {% render 'select-arrow' %}
+                            </div>
+                        </div>
+                        <input
+                                type="submit"
+                                data-wait="Zaczekaj..."
+                                class="button w-button"
+                                data-manufacturer-gid="{{ metaobject.value }}"
+                                value="Szukaj {{ section.settings.nazwa-producenta }}"
+                        >
+                    </form>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 <div class="header_manufacturer-category_background-image-wrapper">
-  <div class="image-overlay-layer-dark"></div>
-  {{ section.settings.zdjecie-w-tle | image_url: height: 1080 | image_tag: class: "header_manufacturer-category_background-image" }}
+    <div class="image-overlay-layer-dark"></div>
+    {{ section.settings.zdjecie-w-tle | image_url: height: 1080 | image_tag: class: "header_manufacturer-category_background-image" }}
 </div>
 
 
 {% schema %}
-  {
-    "name": "Producent Opon Header",
-    "tag": "header",
-    "class": "section_header_manufacturer-category",
-    "limit": 1,
-    "presets": [
-      {
-        "name": "Producent Opon Header"
-      }
-    ],
-    "settings": [
-      {
-        "type": "image_picker",
-        "id": "zdjecie-w-tle",
-        "label": "Zdjęcie w tle"
-      }, {
-        "type": "image_picker",
-        "id": "zdjecie-producenta",
-        "label": "Logo producenta"
-      }, {
-        "type": "text",
-        "id": "nazwa-producenta",
-        "label": "Nazwa Producenta",
-        "default": "Nazwa Producenta"
-      }, {
-        "type": "text",
-        "id": "krotki-opis-producenta",
-        "label": "Krótki opis Producenta",
-        "default": "Krótki opis Producenta"
-      }
-    ]
-  }
+{
+  "name": "Producent Opon Header",
+  "tag": "header",
+  "class": "section_header_manufacturer-category",
+  "limit": 1,
+  "presets": [
+    {
+      "name": "Producent Opon Header"
+    }
+  ],
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "zdjecie-w-tle",
+      "label": "Zdjęcie w tle"
+    },
+    {
+      "type": "image_picker",
+      "id": "zdjecie-producenta",
+      "label": "Logo producenta"
+    },
+    {
+      "type": "text",
+      "id": "nazwa-producenta",
+      "label": "Nazwa Producenta",
+      "default": "Nazwa Producenta"
+    },
+    {
+      "type": "text",
+      "id": "krotki-opis-producenta",
+      "label": "Krótki opis Producenta",
+      "default": "Krótki opis Producenta"
+    }
+  ]
+}
 {% endschema %}
 
 
