@@ -1,0 +1,44 @@
+document.addEventListener("DOMContentLoaded", function() {
+    const dropdownToggles = document.querySelectorAll('.navbar7_dropdown-toggle');
+
+    function toggleDropdown(dropdownList, toggle) {
+        const isOpen = dropdownList.classList.contains('w--open');
+        const allDropdownLists = document.querySelectorAll('.navbar7_dropdown-list.w--open');
+        allDropdownLists.forEach(list => {
+            list.classList.remove('w--open');
+            list.style.transform = '';
+        });
+
+        if (!isOpen) {
+            const rect = toggle.getBoundingClientRect();
+            const screenWidth = window.innerWidth;
+            const toggleCenter = rect.left + rect.width / 2;
+
+            dropdownList.classList.add('w--open');
+            const dropdownWidth = dropdownList.offsetWidth;
+
+            const translateXValue = toggleCenter - (screenWidth / 2) + (dropdownWidth / 2) - (rect.width / 2);
+            dropdownList.style.transform = `translateX(-${translateXValue}px)`;
+        }
+    }
+
+    dropdownToggles.forEach(toggle => {
+        toggle.addEventListener('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const dropdownListId = this.getAttribute('aria-controls');
+            const dropdownList = document.getElementById(dropdownListId);
+            toggleDropdown(dropdownList, this.parentElement);
+        });
+    });
+
+    document.addEventListener('click', function(event) {
+        if (!event.target.closest('.navbar7_menu-dropdown')) {
+            const allDropdownLists = document.querySelectorAll('.navbar7_dropdown-list.w--open');
+            allDropdownLists.forEach(list => {
+                list.classList.remove('w--open');
+                list.style.transform = '';
+            });
+        }
+    });
+});

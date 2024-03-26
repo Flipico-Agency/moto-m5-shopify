@@ -472,53 +472,7 @@
     </div>
 </div>
 
-{% javascript %}
-document.addEventListener("DOMContentLoaded", function() {
-    // Pobierz wszystkie elementy, które powinny służyć jako przełączniki dla rozwijanych menu
-    const dropdownToggles = document.querySelectorAll('.navbar7_dropdown-toggle');
-
-    // Funkcja do przełączania widoczności rozwijanego menu
-    function toggleDropdown(dropdownList) {
-        // Sprawdź, czy lista jest już otwarta
-        const isOpen = dropdownList.classList.contains('w--open');
-
-        // Zamknij wszystkie otwarte listy rozwijane
-        const allDropdownLists = document.querySelectorAll('.navbar7_dropdown-list.w--open');
-        allDropdownLists.forEach(list => {
-            list.classList.remove('w--open');
-        });
-
-        // Otwórz wybraną listę, jeśli nie była otwarta
-        if (!isOpen) {
-            dropdownList.classList.add('w--open');
-        }
-    }
-
-    // Dodaj nasłuchiwacze zdarzeń do przełączników rozwijanych menu
-    dropdownToggles.forEach(toggle => {
-        toggle.addEventListener('click', function(event) {
-            // Zapobiegaj propagacji, aby kliknięcie nie zostało obsłużone przez elementy nadrzędne
-            event.stopPropagation();
-
-            // Pobierz rozwijaną listę skojarzoną z klikniętym przełącznikiem
-            const dropdownListId = this.getAttribute('aria-controls');
-            const dropdownList = document.getElementById(dropdownListId);
-
-            // Przełącz widoczność rozwijanej listy
-            toggleDropdown(dropdownList);
-        });
-    });
-
-    // Dodaj nasłuchiwacze zdarzeń do kliknięcia poza rozwijanymi menu, aby je ukryć
-    document.addEventListener('click', function() {
-        // Zamknij wszystkie otwarte listy rozwijane
-        const allDropdownLists = document.querySelectorAll('.navbar7_dropdown-list.w--open');
-        allDropdownLists.forEach(list => {
-            list.classList.remove('w--open');
-        });
-    });
-});
-{% endjavascript %}
+<script type="text/javascript" src="{{ 'dropdown.js' | asset_url }}"></script>
 
 {% schema %}
 {
