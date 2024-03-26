@@ -31,91 +31,86 @@
                                     <div class="w-form">
                                         <form class="div-block-8">
                                             {% if tab_number == 1 %}
-                                                <div class="div-block-21-copy">
-                                                    {% assign tire_fields_label = "Szerokość,Profil,Średnica" | split: "," %}
-                                                    {% assign wheel_fields_label = "Szerokość opony,Profil opony,Średnica opony,Rozstaw śrub,Szerokość felgi" | split: "," %}
-                                                    {% assign rim_fields_label = "Średnica,Rozstaw śrub,Szerokość,ET" | split: "," %}
+                                                {% assign tire_fields_label = "Szerokość,Profil,Średnica" | split: "," %}
+                                                {% assign wheel_fields_label = "Szerokość opony,Profil opony,Średnica opony,Rozstaw śrub,Szerokość felgi" | split: "," %}
+                                                {% assign rim_fields_label = "Średnica,Rozstaw śrub,Szerokość,ET" | split: "," %}
 
-                                                    {% assign season_options = "Letnie,Zimowe,Całoroczne" | split: "," %}
+                                                {% assign season_options = "Letnie,Zimowe,Całoroczne" | split: "," %}
 
-                                                    {% assign tire_fields_data_name = "tire-width,tire-profile,tire-diameter" | split: "," %}
-                                                    {% assign wheel_fields_data_name = "tire-width,tire-profile,tire-diameter,rim-bolt,rim-width" | split: "," %}
-                                                    {% assign rim_fields_data_name = "rim-diameter,rim-bolt,rim-width,rim-et" | split: "," %}
+                                                {% assign tire_fields_data_name = "tire-width,tire-profile,tire-diameter" | split: "," %}
+                                                {% assign wheel_fields_data_name = "tire-width,tire-profile,tire-diameter,rim-bolt,rim-width" | split: "," %}
+                                                {% assign rim_fields_data_name = "rim-diameter,rim-bolt,rim-width,rim-et" | split: "," %}
 
-                                                    {% if sub_tab_number == 1 %}
-                                                        {% for i in (0..2) %}
-                                                            <div class="form-field-wrapper">
-                                                                <label for="{{ tire_fields_data_name[i] | downcase }}"
-                                                                       class="field-label">{{ tire_fields_label[i] }}</label>
-                                                                <select id="{{ tire_fields_data_name[i] | downcase }}"
-                                                                        data-name="{{ tire_fields_data_name[i] }}"
-                                                                        required="required"
-                                                                        class="select-field w-select">
-                                                                </select>
-                                                                {% render 'select-arrow' %}
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% endif %}
-
-                                                    {% if sub_tab_number == 2 %}
-                                                        {% for i in (0..4) %}
-                                                            <div class="form-field-wrapper">
-                                                                <label for="{{ wheel_fields_data_name[i] | downcase }}"
-                                                                       class="field-label">{{ wheel_fields_label[i] }}</label>
-                                                                <select id="{{ wheel_fields_data_name[i] | downcase }}"
-                                                                        data-name="{{ wheel_fields_data_name[i] }}"
-                                                                        required="required"
-                                                                        class="select-field w-select">
-                                                                </select>
-                                                                {% render 'select-arrow' %}
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% endif %}
-
-                                                    {% if sub_tab_number == 3 %}
-                                                        {% for i in (0..3) %}
-                                                            <div class="form-field-wrapper">
-                                                                <label for="{{ rim_fields_data_name[i] | downcase }}"
-                                                                       class="field-label">{{ rim_fields_label[i] }}</label>
-                                                                <select id="{{ rim_fields_data_name[i] | downcase }}"
-                                                                        data-name="{{ rim_fields_data_name[i] }}"
-                                                                        required="required"
-                                                                        class="select-field w-select">
-                                                                </select>
-                                                                {% render 'select-arrow' %}
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% endif %}
-
-                                                    {% unless sub_tab_number == 3 %}
+                                                {% if sub_tab_number == 1 %}
+                                                    {% for i in (0..2) %}
                                                         <div class="form-field-wrapper">
-                                                            <label for="tire-season" class="field-label">Sezon</label>
-                                                            <select id="tire-season" data-name="tire-season"
-                                                                    required="required" class="select-field w-select">
-                                                                {% for option in season_options %}
-                                                                    <option value="{{ option }}">{{ option }}</option>
-                                                                {% endfor %}
+                                                            <label for="{{ tire_fields_data_name[i] | downcase }}"
+                                                                   class="field-label">{{ tire_fields_label[i] }}</label>
+                                                            <select id="{{ tire_fields_data_name[i] | downcase }}"
+                                                                    data-name="{{ tire_fields_data_name[i] }}"
+                                                                    required="required"
+                                                                    class="select-field w-select">
                                                             </select>
                                                             {% render 'select-arrow' %}
                                                         </div>
-                                                    {% endunless %}
+                                                    {% endfor %}
+                                                {% endif %}
 
-                                                </div>
-                                            {% else %}
-                                                <div class="div-block-21-copy">
-                                                    {% assign form_fields = "Marka,Model,Generacja,Rok,Silnik" | split: "," %}
-                                                    {% for field in form_fields %}
+                                                {% if sub_tab_number == 2 %}
+                                                    {% for i in (0..4) %}
                                                         <div class="form-field-wrapper">
-                                                            <label for="car-{{ field | downcase }}"
-                                                                   class="field-label">{{ field }}</label>
-                                                            <select id="car-{{ field | downcase }}"
-                                                                    data-name="car-{{ field | downcase }}"
+                                                            <label for="{{ wheel_fields_data_name[i] | downcase }}"
+                                                                   class="field-label">{{ wheel_fields_label[i] }}</label>
+                                                            <select id="{{ wheel_fields_data_name[i] | downcase }}"
+                                                                    data-name="{{ wheel_fields_data_name[i] }}"
                                                                     required="required"
-                                                                    class="select-field w-select"></select>
+                                                                    class="select-field w-select">
+                                                            </select>
                                                             {% render 'select-arrow' %}
                                                         </div>
                                                     {% endfor %}
-                                                </div>
+                                                {% endif %}
+
+                                                {% if sub_tab_number == 3 %}
+                                                    {% for i in (0..3) %}
+                                                        <div class="form-field-wrapper">
+                                                            <label for="{{ rim_fields_data_name[i] | downcase }}"
+                                                                   class="field-label">{{ rim_fields_label[i] }}</label>
+                                                            <select id="{{ rim_fields_data_name[i] | downcase }}"
+                                                                    data-name="{{ rim_fields_data_name[i] }}"
+                                                                    required="required"
+                                                                    class="select-field w-select">
+                                                            </select>
+                                                            {% render 'select-arrow' %}
+                                                        </div>
+                                                    {% endfor %}
+                                                {% endif %}
+
+                                                {% unless sub_tab_number == 3 %}
+                                                    <div class="form-field-wrapper">
+                                                        <label for="tire-season" class="field-label">Sezon</label>
+                                                        <select id="tire-season" data-name="tire-season"
+                                                                required="required" class="select-field w-select">
+                                                            {% for option in season_options %}
+                                                                <option value="{{ option }}">{{ option }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        {% render 'select-arrow' %}
+                                                    </div>
+                                                {% endunless %}
+                                            {% else %}
+                                                {% assign form_fields = "Marka,Model,Generacja,Rok,Silnik" | split: "," %}
+                                                {% for field in form_fields %}
+                                                    <div class="form-field-wrapper">
+                                                        <label for="car-{{ field | downcase }}"
+                                                               class="field-label">{{ field }}</label>
+                                                        <select id="car-{{ field | downcase }}"
+                                                                data-name="car-{{ field | downcase }}"
+                                                                required="required"
+                                                                class="select-field w-select"></select>
+                                                        {% render 'select-arrow' %}
+                                                    </div>
+                                                {% endfor %}
                                             {% endif %}
                                             <input type="submit" data-wait="Zaczekaj..." class="button w-button"
                                                    value="{% case tab_number %}{% when 1 %}{% case sub_tab_number %}{% when 1 %}Szukaj opon{% when 2 %}Szukaj kół{% when 3 %}Szukaj felg{% endcase %}{% when 2 %}{% case sub_tab_number %}{% when 1 %}Szukaj opon{% when 2 %}Szukaj kół{% when 3 %}Szukaj felg{% endcase %}{% endcase %}">
