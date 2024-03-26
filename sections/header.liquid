@@ -7,291 +7,122 @@
 
             {% for menu_title in menu_titles %}
                 <div class="navbar7_menu-dropdown w-dropdown" data-hover="true" data-delay="300">
-                    <div class="navbar7_dropdown-toggle w-dropdown-toggle" aria-controls="w-dropdown-list-{{ forloop.index }}"
-                         aria-haspopup="menu" aria-expanded="false">
+                    <div class="navbar7_dropdown-toggle w-dropdown-toggle" aria-controls="w-dropdown-list-{{ forloop.index }}" aria-haspopup="menu" aria-expanded="false">
                         <div class="text-weight-semibold">{{ menu_title }}</div>
-                        <div class="dropdown-chevron w-embed"
-                             style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;">
+                        <div class="dropdown-chevron" style="transform: translate3d(5px, 10px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;">
                             {% render 'select-arrow' %}
                         </div>
                     </div>
-                    <nav class="navbar7_dropdown-list w-dropdown-list w--open" id="w-dropdown-list-{{ forloop.index }}"
-                         aria-labelledby="w-dropdown-toggle-{{ forloop.index }}" style="opacity: 1;">
+                    <nav class="navbar7_dropdown-list w-dropdown-list"
+                         id="w-dropdown-list-{{ forloop.index }}"
+                         aria-labelledby="w-dropdown-toggle-{{ forloop.index }}"
+                         style="opacity: 1;">
                         <div class="navbar7_container-dropdown">
                             <div class="navbar7_dropdown-content">
-                                <div class="navbar7_dropdown-content-left">
-                                    <div class="navbar7_dropdown-link-list">
-                                        <h4 class="heading-style-h6">Opony według pojazdu</h4>
-                                        <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_icon-wrapper">
-                                            </div>
-                                            <div class="navbar7_item-text">
-                                                <div>Opony Samochodowe</div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_icon-wrapper">
-                                            </div>
-                                            <div class="navbar7_item-text">
-                                                <div>Opony SUV</div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_icon-wrapper">
-                                            </div>
-                                            <div class="navbar7_item-text">
-                                                <div>Opony Motocyklowe</div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_icon-wrapper">
-                                            </div>
-                                            <div class="navbar7_item-text">
-                                                <div>Opony Ciężarowe</div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_icon-wrapper">
-                                            </div>
-                                            <div class="navbar7_item-text">
-                                                <div>Opony Dostawcze</div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_icon-wrapper">
-                                            </div>
-                                            <div class="navbar7_item-text">
-                                                <div>Opony Run Flat</div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="navbar7_dropdown-link-list">
-                                        <h4 class="heading-style-h6">Opony Według Sezonu</h4>
-                                        <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_icon-wrapper">
-                                            </div>
-                                            <div class="navbar7_item-text">
-                                                <div>Opony Letnie</div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_icon-wrapper">
-                                            </div>
-                                            <div class="navbar7_item-text">
-                                                <div>Opony Zimowe</div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_icon-wrapper">
-                                            </div>
-                                            <div class="navbar7_item-text">
-                                                <div>Opony Całoroczne</div>
-                                            </div>
-                                        </a>
-                                        <div class="margin-top margin-xsmall">
-                                            <h4 class="heading-style-h6">Popularne Rozmiary Opon</h4>
+                                {% case forloop.index %}
+                                    {% when 1 %}
+                                        <div class="navbar7_dropdown-content-left">
+                                            {% assign vehicle_types = "Samochodowe,SUV,Motocyklowe,Ciężarowe,Dostawcze,Run Flat" | split: "," %}
+                                            {% assign season_types = "Letnie,Zimowe,Całoroczne" | split: "," %}
+                                            {% assign popular_sizes = "175/65 R14,185/65 R15,195/65 R15,205/55 R16,205/60 R16,225/45 R17" | split: "," %}
+                                            {% assign tire_titles = "Opony według pojazdu,Opony Według Sezonu,Popularne Rozmiary Opon, Opony Według Producenta" | split: "," %}
+
+                                            {% assign tire_classes = "Klasa Premium,Klasa Średnia,Klasa Ekonomiczna,Pozostałe" | split: "," %}
+                                            {% assign premium_manufacturers = "Michelin,Continental,Bridgestone,Pirelli,Goodyear" | split: "," %}
+                                            {% assign midrange_manufacturers = "Hankook,Yokohama,Falken,Kumho,Firestone" | split: "," %}
+                                            {% assign economy_manufacturers = "Nankang,Kenda,Debica,Sava,Barum" | split: "," %}
+                                            {% assign other_manufacturers = "Cooper,Tigar,Uniroyal,Fulda,General Tire" | split: "," %}
+                                            {% assign tire_manufacturers = premium_manufacturers | concat: midrange_manufacturers | concat: economy_manufacturers | concat: other_manufacturers %}
+
+                                            {% for tire_title in tire_titles %}
+                                                <div class="navbar7_dropdown-link-list">
+                                                    <h4 class="heading-style-h6">{{ tire_title }}</h4>
+                                                    {% case forloop.index %}
+                                                        {% when 1 %}
+                                                            {% for vehicle_type in vehicle_types %}
+                                                                <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
+                                                                    <div class="navbar7_icon-wrapper"></div>
+                                                                    <div class="navbar7_item-text">
+                                                                        <div>Opony {{ vehicle_type }}</div>
+                                                                    </div>
+                                                                </a>
+                                                            {% endfor %}
+                                                        {% when 2 %}
+                                                            {% for season_type in season_types %}
+                                                                <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
+                                                                    <div class="navbar7_icon-wrapper"></div>
+                                                                    <div class="navbar7_item-text">
+                                                                        <div>Opony {{ season_type }}</div>
+                                                                    </div>
+                                                                </a>
+                                                            {% endfor %}
+                                                        {% when 3 %}
+                                                            {% for size in popular_sizes %}
+                                                                <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
+                                                                    <div class="navbar7_item-text">
+                                                                        <div>Opony {{ size }}</div>
+                                                                    </div>
+                                                                </a>
+                                                            {% endfor %}
+                                                        {% when 4 %}
+                                                            {% for i in (0..tire_classes.size) %}
+                                                                {% assign class = tire_classes[i] %}
+                                                                {% assign start_index = i | times: 5 %}
+                                                                {% assign manufacturers = tire_manufacturers | slice: start_index, 5 %}
+                                                                <h4 class="heading-style-h6 text-size-regular">{{ class }}</h4>
+                                                                {% for manufacturer in manufacturers %}
+                                                                    <a href="/opony/{{ manufacturer | slugify }}" class="navbar7_dropdown-link w-inline-block" tabindex="0">
+                                                                        <div class="navbar7_item-text">
+                                                                            <div>{{ manufacturer }}</div>
+                                                                        </div>
+                                                                    </a>
+                                                                {% endfor %}
+                                                            {% endfor %}
+
+                                                    {% endcase %}
+                                                </div>
+                                            {% endfor %}
                                         </div>
-                                        <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Opony 175/65 R14</div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Opony 185/65 R15</div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Opony 195/65 R15</div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Opony 205/55 R16</div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Opony 205/60 R16</div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Opony 225/45 R17</div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="navbar7_dropdown-link-list-wide"><h4 class="heading-style-h6">Opony Według Producenta</h4>
-                                        <div class="margin-top margin-xxsmall"><h4 class="heading-style-h6 text-size-regular">Klasa Premium</h4></div>
-                                        <div class="margin-top margin-xxsmall"><h4 class="heading-style-h6 text-size-regular">Klasa Ekonomiczna</h4>
+                                    {% when 2 %}
+                                        <div class="navbar7_dropdown-content-rims">
+                                            {% assign rims_titles = "Felgi Alumioniowe,Felgi Stalowe,Felgi Motocyklowe" | split: "," %}
+
+                                            {% for rim_title in rims_titles %}
+                                                {% assign href_slug = rim_title | slugify %}
+                                                <a href="/{{ href_slug }}" class="link-block-2 w-inline-block" tabindex="0">
+                                                    <div class="div-block-26">
+                                                        {% comment %}
+                                                        <img
+                                                            src="https://assets-global.website-files.com/65945aac2ee770034538c7f4/65b3c68ab329b571e66b8e98_FelgiAluminiowe.webp"
+                                                            loading="lazy" sizes="100vw"
+                                                            srcset="https://assets-global.website-files.com/65945aac2ee770034538c7f4/65b3c68ab329b571e66b8e98_FelgiAluminiowe-p-500.webp 500w, https://assets-global.website-files.com/65945aac2ee770034538c7f4/65b3c68ab329b571e66b8e98_FelgiAluminiowe.webp 720w"
+                                                            alt="" class="image-3">
+                                                        {% endcomment %}
+                                                    </div>
+                                                    <div class="heading-style-h5 text-align-center">{{ rim_title }}</div>
+                                                </a>
+                                            {% endfor %}
                                         </div>
-                                        <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Michelin</div>
-                                            </div>
-                                        </a><a id="w-node-_182d56f7-ba34-a789-4233-4c04a4db7387-a4db730d" href="#"
-                                               class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Bridgestone</div>
-                                            </div>
-                                        </a><a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Lorem</div>
-                                            </div>
-                                        </a><a id="w-node-_182d56f7-ba34-a789-4233-4c04a4db738f-a4db730d" href="#"
-                                               class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Lorem</div>
-                                            </div>
-                                        </a><a id="w-node-_182d56f7-ba34-a789-4233-4c04a4db7393-a4db730d" href="#"
-                                               class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Dunlop</div>
-                                            </div>
-                                        </a><a id="w-node-_182d56f7-ba34-a789-4233-4c04a4db7397-a4db730d" href="#"
-                                               class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Continental</div>
-                                            </div>
-                                        </a><a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Lorem</div>
-                                            </div>
-                                        </a><a id="w-node-_182d56f7-ba34-a789-4233-4c04a4db739f-a4db730d" href="#"
-                                               class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Lorem</div>
-                                            </div>
-                                        </a><a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Pirelli</div>
-                                            </div>
-                                        </a><a id="w-node-_182d56f7-ba34-a789-4233-4c04a4db73a7-a4db730d" href="#"
-                                               class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Nokian Tyres</div>
-                                            </div>
-                                        </a><a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Lorem</div>
-                                            </div>
-                                        </a><a id="w-node-_182d56f7-ba34-a789-4233-4c04a4db73af-a4db730d" href="#"
-                                               class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Lorem</div>
-                                            </div>
-                                        </a><a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Goodyear</div>
-                                            </div>
-                                        </a><a id="w-node-_182d56f7-ba34-a789-4233-4c04a4db73b7-a4db730d" href="#"
-                                               class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Vredestein</div>
-                                            </div>
-                                        </a><a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Lorem</div>
-                                            </div>
-                                        </a><a id="w-node-_182d56f7-ba34-a789-4233-4c04a4db73bf-a4db730d" href="#"
-                                               class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Lorem</div>
-                                            </div>
-                                        </a>
-                                        <div class="margin-top margin-small"><h4 class="heading-style-h6 text-size-regular">Klasa Średnia</h4></div>
-                                        <div class="margin-top margin-small"><h4 class="heading-style-h6 text-size-regular">Pozostałe</h4></div>
-                                        <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Apollo</div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Kleber</div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Lorem</div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Lorem</div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Cooper</div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Matador</div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Lorem</div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Lorem</div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Fulda</div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Falken</div>
-                                            </div>
-                                        </a><a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Lorem</div>
-                                            </div>
-                                        </a><a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Lorem</div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Nexen</div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Firestone</div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Lorem</div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="navbar7_dropdown-link w-inline-block" tabindex="0">
-                                            <div class="navbar7_item-text">
-                                                <div>Lorem</div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
+                                    {% when 3 %}
+                                        {% comment %} Case for Wheels {% endcomment %}
+                                {% endcase %}
                             </div>
                         </div>
                         <div class="navbar7_bottom-bar">
                             <div class="navbar7_bottom-bar-background-layer"></div>
                             <div class="navbar7_bottom-bar-left">
-                                <p class="text-weight-semibold">Polecamy</p>
-                                <a href="#" class="text-style-link" tabindex="0">Artykuły</a>
-                                <a href="#" class="text-style-link" tabindex="0">Testy Opon</a>
-                                <a href="#" class="text-style-link" tabindex="0">Producenci Opon</a>
-                                <a href="#" class="text-style-link" tabindex="0">Dobór Opon Do Pojazdu</a>
+                                {% case forloop.index %}
+                                    {% when 1 %}
+                                        <p class="text-weight-semibold">Polecamy</p>
+                                        <a href="#" class="text-style-link" tabindex="0">Artykuły</a>
+                                        <a href="#" class="text-style-link" tabindex="0">Testy Opon</a>
+                                        <a href="#" class="text-style-link" tabindex="0">Producenci Opon</a>
+                                        <a href="#" class="text-style-link" tabindex="0">Dobór Opon Do Pojazdu</a>
+                                    {% when 2 %}
+                                        <a href="#" class="text-style-link" tabindex="0">Dobór Felg Do Pojazdu</a>
+                                    {% when 3 %}
+                                        <a href="#" class="text-style-link" tabindex="0">Dobór Kół Do Pojazdu</a>
+                                {% endcase %}
                             </div>
                         </div>
                     </nav>
@@ -301,11 +132,8 @@
         <form class="search"></form>
     </nav>
     <div class="navbar7_menu-right">
-        <div data-hover="false" data-delay="200"
-             class="navbar-dropdown8_component w-dropdown">
-            <div class="navbar-dropdown8_dropdown-toggle w-dropdown-toggle" id="w-dropdown-toggle-3"
-                 aria-controls="w-dropdown-list-3" aria-haspopup="menu" aria-expanded="false" role="button"
-                 tabindex="0">
+        <div data-hover="false" data-delay="200" class="navbar-dropdown8_component w-dropdown">
+            <div class="navbar-dropdown8_dropdown-toggle w-dropdown-toggle" id="w-dropdown-toggle-3" aria-controls="w-dropdown-list-3" aria-haspopup="menu" aria-expanded="false" role="button" tabindex="0">
                 <div class="icon-1x1-nav" data-animation-type="lottie"
                      data-src="https://assets-global.website-files.com/65945aac2ee770034538c7f4/65947fe688623868099d5062_wired-outline-140-earphone-telephone.json"
                      data-loop="0" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg"
@@ -368,7 +196,7 @@
                     <a href="#" class="button is-secondary is-small w-button" tabindex="0">sklep@motom5.pl</a></div>
             </nav>
         </div>
-        <div data-hover="false" data-delay="200" data-w-id="182d56f7-ba34-a789-4233-4c04a4db757a"
+        <div data-hover="false" data-delay="200"
              class="navbar-dropdown8_component w-dropdown">
             <div class="navbar-dropdown8_dropdown-toggle w-dropdown-toggle" id="w-dropdown-toggle-4"
                  aria-controls="w-dropdown-list-4" aria-haspopup="menu" aria-expanded="false" role="button"
@@ -423,9 +251,9 @@
                     <a href="#" class="button is-secondary is-small w-button" tabindex="0">Zarejestruj się</a></div>
             </nav>
         </div>
-        <div class="div-block-5"><a data-w-id="182d56f7-ba34-a789-4233-4c04a4db7587" href="#"
-                                    class="button is-small is-icon w-inline-block">
-                <div class="icon-1x1-nav" data-w-id="182d56f7-ba34-a789-4233-4c04a4db7588" data-animation-type="lottie"
+        <div class="div-block-5">
+            <a href="#" class="button is-small is-icon w-inline-block">
+                <div class="icon-1x1-nav" data-animation-type="lottie"
                      data-src="https://assets-global.website-files.com/65945aac2ee770034538c7f4/65947bf296737d016b6cadbe_wired-outline-146-trolley.json"
                      data-loop="0" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg"
                      data-default-duration="1.05" data-duration="0">
@@ -644,6 +472,54 @@
     </div>
 </div>
 
+{% javascript %}
+document.addEventListener("DOMContentLoaded", function() {
+    // Pobierz wszystkie elementy, które powinny służyć jako przełączniki dla rozwijanych menu
+    const dropdownToggles = document.querySelectorAll('.navbar7_dropdown-toggle');
+
+    // Funkcja do przełączania widoczności rozwijanego menu
+    function toggleDropdown(dropdownList) {
+        // Sprawdź, czy lista jest już otwarta
+        const isOpen = dropdownList.classList.contains('w--open');
+
+        // Zamknij wszystkie otwarte listy rozwijane
+        const allDropdownLists = document.querySelectorAll('.navbar7_dropdown-list.w--open');
+        allDropdownLists.forEach(list => {
+            list.classList.remove('w--open');
+        });
+
+        // Otwórz wybraną listę, jeśli nie była otwarta
+        if (!isOpen) {
+            dropdownList.classList.add('w--open');
+        }
+    }
+
+    // Dodaj nasłuchiwacze zdarzeń do przełączników rozwijanych menu
+    dropdownToggles.forEach(toggle => {
+        toggle.addEventListener('click', function(event) {
+            // Zapobiegaj propagacji, aby kliknięcie nie zostało obsłużone przez elementy nadrzędne
+            event.stopPropagation();
+
+            // Pobierz rozwijaną listę skojarzoną z klikniętym przełącznikiem
+            const dropdownListId = this.getAttribute('aria-controls');
+            const dropdownList = document.getElementById(dropdownListId);
+
+            // Przełącz widoczność rozwijanej listy
+            toggleDropdown(dropdownList);
+        });
+    });
+
+    // Dodaj nasłuchiwacze zdarzeń do kliknięcia poza rozwijanymi menu, aby je ukryć
+    document.addEventListener('click', function() {
+        // Zamknij wszystkie otwarte listy rozwijane
+        const allDropdownLists = document.querySelectorAll('.navbar7_dropdown-list.w--open');
+        allDropdownLists.forEach(list => {
+            list.classList.remove('w--open');
+        });
+    });
+});
+{% endjavascript %}
+
 {% schema %}
 {
   "name": "Nawigacja",
@@ -782,7 +658,7 @@
 
   .navbar7_dropdown-list.w--open {
     width: 100vw;
-    max-width: 100%;
+    {% comment %}max-width: 100%;{% endcomment %}
     background-color: #fff;
     border-bottom: 1px solid #000;
     padding-left: 2rem;
@@ -792,6 +668,7 @@
     left: 0;
     right: 0;
     overflow: hidden;
+    display: block;
   }
 
   .navbar7_dropdown-content-left {
@@ -873,7 +750,7 @@
     position: -webkit-sticky;
     position: sticky;
     top: 0;
-z-index: 1000;
+    z-index: 1000;
   }
 
   .navbar7_logo {
