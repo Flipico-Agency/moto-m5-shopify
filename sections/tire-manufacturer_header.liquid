@@ -64,6 +64,7 @@
     {{ section.settings.zdjecie-w-tle | image_url: height: 1080 | image_tag: class: "header_manufacturer-category_background-image" }}
 </div>
 
+<script type="text/javascript" src="{{ 'filters.js' | asset_url }}"></script>
 
 {% schema %}
 {
@@ -102,13 +103,3 @@
   ]
 }
 {% endschema %}
-
-
-{% javascript %}
-
-{% endjavascript %}
-
-
-{% stylesheet %}
-
-{% endstylesheet %}
