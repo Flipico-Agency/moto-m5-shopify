@@ -208,11 +208,12 @@
             console.error("Error handling current product details update:", error);
         }
     };
-
+    {% comment %}
     Wized.data.listen(
         "v.currentProductDetails",
         handleCurrentProductDetailsUpdate
     );
+    {% endcomment %}
     const updateCartIds = async () => {
         const storedProducts = JSON.parse(
             localStorage.getItem(LOCAL_STORAGE_KEY) || "[]"
@@ -221,6 +222,28 @@
         await Wized.data.setVariable("cartIds", JSON.stringify(cartIds));
     };
     document.addEventListener("DOMContentLoaded", async () => {
+        const cartButton = document.getElementById('cart-button');
+        const modal = document.querySelector('.modal2_component');
+
+        function showModal() {
+            modal.style.display = 'flex';
+        }
+
+        function hideModal(event) {
+            if (!event.target.closest('.modal2_content-wrapper')) {
+                modal.style.display = 'none';
+            }
+        }
+
+        cartButton.addEventListener('click', function(event) {
+            event.stopPropagation();
+            showModal();
+        });
+
+        document.addEventListener('click', function(event) {
+            hideModal(event);
+        });
+
         const timestamp = localStorage.getItem(TIMESTAMP_KEY);
         const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
         if (timestamp && Date.now() - timestamp > SEVEN_DAYS) {

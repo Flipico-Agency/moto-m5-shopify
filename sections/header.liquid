@@ -2,7 +2,7 @@
     <a class="navbar7_logo-link w-nav-brand"
        href="{{ shop.secure_url }}">{{ shop.brand.logo | image_url: height: 125 | image_tag: class: "navbar7_logo" }}</a>
     <nav role="navigation" class="navbar7_menu w-nav-menu">
-        <div class="navbar7_menu-left">
+        <div class="navbar7_menu-left" style="display: flex">
             {% assign menu_titles = "Opony,Felgi,Koła" | split: "," %}
 
             {% for menu_title in menu_titles %}
@@ -129,11 +129,21 @@
                 </div>
             {% endfor %}
         </div>
-        <form class="search"></form>
+        <form action="/search" class="search w-form">
+            <input class="form-input w-input"
+                   maxlength="256"
+                   name="query"
+                   placeholder="Czego szukasz?"
+                   type="search" id="search"
+                   required="">
+            <input type="submit" class="button is-small w-button" value="Szukaj">
+        </form>
     </nav>
     <div class="navbar7_menu-right">
         <div data-hover="false" data-delay="200" class="navbar-dropdown8_component w-dropdown">
-            <div class="navbar-dropdown8_dropdown-toggle w-dropdown-toggle" id="w-dropdown-toggle-3" aria-controls="w-dropdown-list-3" aria-haspopup="menu" aria-expanded="false" role="button" tabindex="0">
+            <div class="navbar-dropdown8_dropdown-toggle w-dropdown-toggle" id="w-dropdown-toggle-3"
+                 aria-controls="w-dropdown-list-3" aria-haspopup="menu" aria-expanded="false" role="button"
+                 tabindex="0">
                 <div class="icon-1x1-nav" data-animation-type="lottie"
                      data-src="https://assets-global.website-files.com/65945aac2ee770034538c7f4/65947fe688623868099d5062_wired-outline-140-earphone-telephone.json"
                      data-loop="0" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg"
@@ -186,7 +196,8 @@
             </div>
             <nav class="navbar-dropdown8_dropdown-list w-dropdown-list" id="w-dropdown-list-3"
                  aria-labelledby="w-dropdown-toggle-3"
-                 style="transform: translate3d(0px, 3rem, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; opacity: 0;">
+                    {% comment %}style="transform: translate3d(0px, 3rem, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; opacity: 0;"{% endcomment %}
+            >
                 <div class="navbar-dropdown8_dropdown-wrapper">
                     <div class="text-weight-bold">W&nbsp;czym możemy pomóc?</div>
                     <a href="#" class="button is-small w-button" tabindex="0">+48 74 872 32 61</a>
@@ -201,7 +212,7 @@
             <div class="navbar-dropdown8_dropdown-toggle w-dropdown-toggle" id="w-dropdown-toggle-4"
                  aria-controls="w-dropdown-list-4" aria-haspopup="menu" aria-expanded="false" role="button"
                  tabindex="0">
-                <div class="icon-1x1-nav" data-w-id="182d56f7-ba34-a789-4233-4c04a4db757c" data-animation-type="lottie"
+                <div class="icon-1x1-nav" data-animation-type="lottie"
                      data-src="https://assets-global.website-files.com/65945aac2ee770034538c7f4/65947a1802fe8f66b6f3d0dd_wired-outline-21-avatar%20(1).json"
                      data-loop="0" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg"
                      data-default-duration="2" data-duration="0">
@@ -243,16 +254,16 @@
             <nav class="navbar-dropdown8_dropdown-list w-dropdown-list" id="w-dropdown-list-4"
                  aria-labelledby="w-dropdown-toggle-4"
                  style="transform: translate3d(0px, 3rem, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; opacity: 0;">
-                <div class="navbar-dropdown8_dropdown-wrapper"><a href="#" class="button is-small w-button"
-                                                                  tabindex="0">Zaloguj się</a>
+                <div class="navbar-dropdown8_dropdown-wrapper">
+                    <a href="/logowanie" class="button is-small w-button" tabindex="0">Zaloguj się</a>
                     <div class="margin-top margin-xsmall">
                         <div class="text-align-center">Nie masz konta?</div>
                     </div>
-                    <a href="#" class="button is-secondary is-small w-button" tabindex="0">Zarejestruj się</a></div>
+                    <a href="/rejestracja" class="button is-secondary is-small w-button" tabindex="0">Zarejestruj się</a></div>
             </nav>
         </div>
         <div class="div-block-5">
-            <a href="#" class="button is-small is-icon w-inline-block">
+            <button id="cart-button" class="button is-small is-icon w-inline-block">
                 <div class="icon-1x1-nav" data-animation-type="lottie"
                      data-src="https://assets-global.website-files.com/65945aac2ee770034538c7f4/65947bf296737d016b6cadbe_wired-outline-146-trolley.json"
                      data-loop="0" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg"
@@ -309,14 +320,17 @@
                 <div class="cart-button-counter">
                     <div wized="item_quantity_total" class="text-block-2">1</div>
                 </div>
-            </a>
+            </button>
             <div class="modal2_component" style="display: none;">
                 <div class="modal2_content-wrapper"
-                     style="transform: translate3d(100%, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;">
+                     {% comment %}style="transform: translate3d(100%, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;"{% endcomment %}
+                >
                     <div class="margin-bottom margin-large">
                         <div class="text-align-center">
                             <div class="max-width-large align-center">
-                                <div class="margin-bottom margin-xsmall"><h2>Koszyk</h2></div>
+                                <div class="margin-bottom margin-xsmall">
+                                    <h2>Koszyk</h2>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -345,12 +359,10 @@
                             <div class="loader-icon"></div>
                         </div>
                     </div>
-                    <div wized="cart_empty" fs-scrolldisable-element="preserve" class="empty-cart_wrapper"
-                         w-el-visibility="flex" style="display: none;">
+                    <div wized="cart_empty" fs-scrolldisable-element="preserve" class="empty-cart_wrapper" w-el-visibility="flex" style="display: none;">
                         <div class="heading-style-h6">Twój koszyk jest pusty!</div>
-                        <p>Przejdź do sklepu i znajdź opony dla siebie, a następnie dodaj je do tego koszyka i kup je
-                            <strong>szybko i wygodnie!</strong></p><a href="/szukaj"
-                                                                      class="button is-icon w-inline-block">
+                        <p>Przejdź do sklepu i znajdź opony dla siebie, a następnie dodaj je do tego koszyka i kup je <strong>szybko i wygodnie!</strong></p>
+                        <a href="/szukaj" class="button is-icon w-inline-block">
                             <div class="icon-embed-xsmall w-embed">
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                                      aria-hidden="true" role="img" class="iconify iconify--ic" width="100%"
@@ -361,55 +373,30 @@
                             </div>
                             <div>Wróć do sklepu</div>
                         </a>
-                        <div class="editors-picks_wrapper">
-                            <div class="label-large">Editor's picks</div>
-                            <div class="editors-picks_products-wrapper"><a wized="cart_editor_item" href="#"
-                                                                           class="editors-picks_product w-inline-block"
-                                                                           w-el-onclick-0-0="3dd1cbad-d690-4a8e-9b45-4a42340ed4ef-0-0"
-                                                                           w-el-list-display="flex"
-                                                                           style="display: none;"><img
-                                            class="editors-picks_product-image" src="undefined"
-                                            wized="cart_editor_item_image" alt="" sizes="100vw" loading="lazy"
-                                            srcset="undefined"
-                                            w-el-src="https://assets-global.website-files.com/65945aac2ee770034538c7f4/65988365e5c7559a6c2dcbbf_pexels-aliona-zueva-10903300.jpg"
-                                            w-el-srcset="https://assets-global.website-files.com/65945aac2ee770034538c7f4/65988365e5c7559a6c2dcbbf_pexels-aliona-zueva-10903300-p-500.jpg 500w, https://assets-global.website-files.com/65945aac2ee770034538c7f4/65988365e5c7559a6c2dcbbf_pexels-aliona-zueva-10903300-p-800.jpg 800w, https://assets-global.website-files.com/65945aac2ee770034538c7f4/65988365e5c7559a6c2dcbbf_pexels-aliona-zueva-10903300-p-1080.jpg 1080w, https://assets-global.website-files.com/65945aac2ee770034538c7f4/65988365e5c7559a6c2dcbbf_pexels-aliona-zueva-10903300-p-1600.jpg 1600w, https://assets-global.website-files.com/65945aac2ee770034538c7f4/65988365e5c7559a6c2dcbbf_pexels-aliona-zueva-10903300-p-2000.jpg 2000w, https://assets-global.website-files.com/65945aac2ee770034538c7f4/65988365e5c7559a6c2dcbbf_pexels-aliona-zueva-10903300-p-2600.jpg 2600w, https://assets-global.website-files.com/65945aac2ee770034538c7f4/65988365e5c7559a6c2dcbbf_pexels-aliona-zueva-10903300-p-3200.jpg 3200w, https://assets-global.website-files.com/65945aac2ee770034538c7f4/65988365e5c7559a6c2dcbbf_pexels-aliona-zueva-10903300.jpg 3294w">
-                                    <div class="editors-picks_product-details">
-                                        <div wized="cart_editor_item_name" class="editors-picks_product-header"
-                                             w-el-text="Monstera Deliciosa"></div>
-                                        <div wized="cart_editor_item_price" w-el-text="zł35.00">£undefined</div>
-                                    </div>
-                                    <div class="editors-picks_add-product">
-                                        <div class="editors-picks_add-product-icon">
-                                            <div class="editors-picks_icon-embed w-embed">
-                                                <svg width="100%" height="100%" viewBox="0 0 16 16" fill="none"
-                                                     xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M12.6668 8.66667H8.66683V12.6667H7.3335V8.66667H3.3335V7.33333H7.3335V3.33333H8.66683V7.33333H12.6668V8.66667Z"
-                                                          fill="currentColor"></path>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a></div>
-                        </div>
                     </div>
-                    <a data-w-id="182d56f7-ba34-a789-4233-4c04a4db7596" href="#"
-                       class="modal2_close-button w-inline-block"><img
-                                src="https://assets-global.website-files.com/624380709031623bfe4aee60/624380709031623afe4aee7e_icon_close-modal.svg"
-                                loading="lazy" alt=""></a>
-                    <div data-lenis-prevent="" fs-scrolldisable-element="preserve" wized="cart_filled"
-                         class="cart_form w-form" w-el-visibility="block" style="display: block;">
-                        <form id="email-form" name="email-form" data-name="Email Form" method="get"
-                              class="cart_products-wrapper" data-wf-page-id="659c6585517e0e442120814a"
-                              data-wf-element-id="ed5cd5ef-9802-c60c-623b-ea8f2a6fd16d" aria-label="Email Form">
+                    <div id="cart-button-close" class="modal2_close-button w-inline-block">
+                        <img src="https://assets-global.website-files.com/624380709031623bfe4aee60/624380709031623afe4aee7e_icon_close-modal.svg" loading="lazy" alt="">
+                    </div>
+                    <div data-lenis-prevent=""
+                         fs-scrolldisable-element="preserve"
+                         wized="cart_filled"
+                         class="cart_form w-form"
+                         w-el-visibility="block"
+                         style="display: block;">
+                        <form class="cart_products-wrapper">
                             <div wized="cart_item" class="cart_product"
-                                 data-attribute-id="gid://shopify/Product/7953690165415" w-el-list-display="flex"
-                                 w-list-index-variable="index" w-list-index-value="0" w-el-data-attribute-id="undefined"
-                                 style="display: flex;"><img class="cart_product-image"
-                                                             src="https://cdn.shopify.com/s/files/1/0625/1783/7991/files/65a69051fa9a5f9b2328b106_PrzykladowaOpona_1ebed3ba-58f8-45c5-9bef-dbd39b077ae0.webp?v=1709658827"
-                                                             wized="cart_item_image" alt="" sizes="100vw" loading="lazy"
-                                                             srcset="https://cdn.shopify.com/s/files/1/0625/1783/7991/files/65a69051fa9a5f9b2328b106_PrzykladowaOpona_1ebed3ba-58f8-45c5-9bef-dbd39b077ae0.webp?v=1709658827"
-                                                             w-el-src="https://assets-global.website-files.com/65945aac2ee770034538c7f4/65988365e5c7559a6c2dcbbf_pexels-aliona-zueva-10903300.jpg"
-                                                             w-el-srcset="https://assets-global.website-files.com/65945aac2ee770034538c7f4/65988365e5c7559a6c2dcbbf_pexels-aliona-zueva-10903300-p-500.jpg 500w, https://assets-global.website-files.com/65945aac2ee770034538c7f4/65988365e5c7559a6c2dcbbf_pexels-aliona-zueva-10903300-p-800.jpg 800w, https://assets-global.website-files.com/65945aac2ee770034538c7f4/65988365e5c7559a6c2dcbbf_pexels-aliona-zueva-10903300-p-1080.jpg 1080w, https://assets-global.website-files.com/65945aac2ee770034538c7f4/65988365e5c7559a6c2dcbbf_pexels-aliona-zueva-10903300-p-1600.jpg 1600w, https://assets-global.website-files.com/65945aac2ee770034538c7f4/65988365e5c7559a6c2dcbbf_pexels-aliona-zueva-10903300-p-2000.jpg 2000w, https://assets-global.website-files.com/65945aac2ee770034538c7f4/65988365e5c7559a6c2dcbbf_pexels-aliona-zueva-10903300-p-2600.jpg 2600w, https://assets-global.website-files.com/65945aac2ee770034538c7f4/65988365e5c7559a6c2dcbbf_pexels-aliona-zueva-10903300-p-3200.jpg 3200w, https://assets-global.website-files.com/65945aac2ee770034538c7f4/65988365e5c7559a6c2dcbbf_pexels-aliona-zueva-10903300.jpg 3294w">
+                                 data-attribute-id="gid://shopify/Product/7953690165415"
+                                 w-el-list-display="flex"
+                                 w-list-index-variable="index"
+                                 w-list-index-value="0"
+                                 w-el-data-attribute-id="undefined"
+                                 style="display: flex;">
+                                <img class="cart_product-image"
+                                     src="https://cdn.shopify.com/s/files/1/0625/1783/7991/files/65a69051fa9a5f9b2328b106_PrzykladowaOpona_1ebed3ba-58f8-45c5-9bef-dbd39b077ae0.webp?v=1709658827"
+                                     wized="cart_item_image" alt="" sizes="100vw" loading="lazy"
+                                     srcset="https://cdn.shopify.com/s/files/1/0625/1783/7991/files/65a69051fa9a5f9b2328b106_PrzykladowaOpona_1ebed3ba-58f8-45c5-9bef-dbd39b077ae0.webp?v=1709658827"
+                                     w-el-src="https://assets-global.website-files.com/65945aac2ee770034538c7f4/65988365e5c7559a6c2dcbbf_pexels-aliona-zueva-10903300.jpg"
+                                     w-el-srcset="https://assets-global.website-files.com/65945aac2ee770034538c7f4/65988365e5c7559a6c2dcbbf_pexels-aliona-zueva-10903300-p-500.jpg 500w, https://assets-global.website-files.com/65945aac2ee770034538c7f4/65988365e5c7559a6c2dcbbf_pexels-aliona-zueva-10903300-p-800.jpg 800w, https://assets-global.website-files.com/65945aac2ee770034538c7f4/65988365e5c7559a6c2dcbbf_pexels-aliona-zueva-10903300-p-1080.jpg 1080w, https://assets-global.website-files.com/65945aac2ee770034538c7f4/65988365e5c7559a6c2dcbbf_pexels-aliona-zueva-10903300-p-1600.jpg 1600w, https://assets-global.website-files.com/65945aac2ee770034538c7f4/65988365e5c7559a6c2dcbbf_pexels-aliona-zueva-10903300-p-2000.jpg 2000w, https://assets-global.website-files.com/65945aac2ee770034538c7f4/65988365e5c7559a6c2dcbbf_pexels-aliona-zueva-10903300-p-2600.jpg 2600w, https://assets-global.website-files.com/65945aac2ee770034538c7f4/65988365e5c7559a6c2dcbbf_pexels-aliona-zueva-10903300-p-3200.jpg 3200w, https://assets-global.website-files.com/65945aac2ee770034538c7f4/65988365e5c7559a6c2dcbbf_pexels-aliona-zueva-10903300.jpg 3294w">
                                 <div class="cart_product-details">
                                     <div wized="cart_item_name" class="cart_product-name"
                                          w-el-text="Monstera Deliciosa">Opony zimowe 255/40 Pirelli Sottozero
@@ -429,9 +416,7 @@
                                         </div>
                                         <a wized="cart_remove_item" href="#" class="cart_remove-product">USUŃ</a></div>
                                 </div>
-                                <div wized="cart_item_total" class="heading-style-h6 text-color-red600"
-                                     w-el-text="zł35.00">540 zł
-                                </div>
+                                <div wized="cart_item_total" class="heading-style-h6 text-color-red600" w-el-text="zł35.00">540 zł</div>
                                 <div class="cart_product-loader">
                                     <div class="loader_icon w-embed">
                                         <div class="loader-icon"></div>
@@ -456,17 +441,11 @@
                                      style="display: none;">
                                     <div class="loader-icon"></div>
                                 </div>
-                            </a></div>
-                        <div class="w-form-done" tabindex="-1" role="region" aria-label="Email Form success">
-                            <div>Thank you! Your submission has been received!</div>
-                        </div>
-                        <div class="w-form-fail" tabindex="-1" role="region" aria-label="Email Form failure">
-                            <div>Oops! Something went wrong while submitting the form.</div>
+                            </a>
                         </div>
                     </div>
                 </div>
-                <div data-w-id="182d56f7-ba34-a789-4233-4c04a4db7598" class="modal2_background-overlay div-block-7"
-                     style="opacity: 0;"></div>
+                <div class="modal2_background-overlay div-block-7" style="opacity: 0;"></div>
             </div>
         </div>
     </div>
