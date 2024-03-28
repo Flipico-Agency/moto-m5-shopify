@@ -1,0 +1,219 @@
+<div class="padding-global">
+  <div class="container-large">
+    <div class="padding-section-medium">
+      <div class="product-header_component">
+        <div class="product-header_tittle">
+          <img src="" class="product-header_tittle-image" />
+          <h1 class="heading-style-h3">
+            {{ section.settings.model }}<span class="text-weight-normal">
+              {{ product.metafields.tires.width }}/{{ product.metafields.tires.profile }} R{{ product.metafields.tires.diameter }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}</span>
+          </h1>
+        </div>
+        <div class="product-header_gallery">
+          <div class="product-header_gallery-images-wrapper">
+            <div class="product-header_gallery-image-wrapper">
+              {{ product.images[0] | image_url: height: 1000 | image_tag: class: 'product-header_gallery-image' }}
+            </div>
+          </div>
+          <div class="product-header_gallery_main-image_wrapper">
+            {{ product.metafields.tires.model.value.zdjecie.value | image_url: height: 1000 | image_tag: class: 'product-header_gallery_main-image' }}</div>
+        </div>
+        <div class="product-header_info">
+          <div class="product-header_info-top">
+            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Stan</p>
+            <p class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.condition }}</p>
+            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Bieżnik</p>
+            <p class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.tread }}</p>
+            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Data produkcji</p>
+            <p class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.years }}</p>
+            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Sezon</p>
+            <p class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.season }}</p>
+            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Rozmiar</p>
+            <p class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.width }}/{{ product.metafields.tires.profile }} R{{ product.metafields.tires.diameter }}</p>
+            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Indeks nośności</p>
+            <p class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.load_index }}</p>
+            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Indeks prędkości</p>
+            <p class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.speed_index }}</p>
+          </div>
+          <div class="product-header_info-bottom">
+            <div class="product-header_info-bottom_item-wrapper">
+              <div class="product-header_info-bottom_item">
+                {{ IcArrowSmallRight.svg | image_tag: class: 'icon-embed-xsmall' | image_url: width: 24 }}
+                <div class="text-size-small">Dane techniczne</div>
+              </div>
+            </div>
+            <div class="product-header_info-bottom_item-wrapper">
+              <div class="product-header_info-bottom_item">
+                <div class="text-size-small">Opis</div>
+              </div>
+            </div>
+            <div class="product-header_info-bottom_item-wrapper">
+              <div class="product-header_info-bottom_item">
+                <div class="text-size-small">Dostawa i zwroty</div>
+              </div>
+            </div>
+            <div class="product-header_info-bottom_item-wrapper">
+              <div class="product-header_info-bottom_item">
+                <div class="text-size-small">Gwarancja</div>
+              </div>
+            </div>
+            <div class="product-header_info-bottom_item-wrapper">
+              <div class="product-header_info-bottom_item">
+                <div class="text-size-small">Opinie</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="product-header_buy"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% stylesheet %}
+  .product-header_component {
+    grid-column-gap: 1rem;
+    grid-row-gap: 1.5rem;
+    grid-template-rows: auto auto;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-auto-columns: 1fr;
+    padding-bottom: 3rem;
+    display: grid;
+  }
+
+  .product-header_tittle {
+    grid-column-gap: 0.5rem;
+    grid-row-gap: 0.5rem;
+    grid-template-rows: auto auto;
+    grid-template-columns: max-content 1fr;
+    grid-auto-columns: 1fr;
+    display: grid;
+    grid-area: span 1 / span 12 / span 1 / span 12;
+  }
+
+  .product-header_tittle-image {
+    aspect-ratio: 4;
+    max-height: 2rem;
+    grid-area: span 1 / span 2 / span 1 / span 2;
+  }
+
+  .product-header_gallery {
+    grid-column-gap: 1rem;
+    grid-row-gap: 1rem;
+    grid-template-rows: auto;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-auto-columns: 1fr;
+    display: grid;
+    grid-area: span 1 / span 5 / span 1 / span 5;
+  }
+
+  .product-header_gallery-images_wrapper {
+    grid-column-gap: 1rem;
+    grid-row-gap: 1rem;
+    flex-flow: column;
+    align-items: stretch;
+    display: flex;
+  }
+
+  .product-header_gallery-image-wrapper {
+    padding: 0.5rem;
+    aspect-ratio: 1;
+    background-color: var(--color--white);
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+
+  .product-header_gallery-image {
+    aspect-ratio: 1;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
+
+  .product-header_gallery_main-image_wrapper {
+    padding: 2rem;
+    aspect-ratio: 1;
+    background-color: var(--color--white);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    grid-area: span 1 / span 4 / span 1 / span 4;
+  }
+
+  .product-header_gallery_main-image {
+    aspect-ratio: 1;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
+
+  .product-header_info {
+    flex-flow: column;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    display: flex;
+    grid-area: span 1 / span 3 / span 1 / span 3;
+  }
+
+  .product-header_info-top {
+    grid-column-gap: 1rem;
+    grid-row-gap: 0.5rem;
+    grid-template-rows: auto auto;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-columns: 1fr;
+    display: grid;
+  }
+
+  .product-header_info-bottom {
+    flex-flow: column;
+    justify-content: flex-end;
+    display: flex;
+  }
+
+  .product-header_info-bottom_item-wrapper {
+    border-bottom: 1px solid var(--color-grayiron--grayiron400);
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    display: flex;
+  }
+
+  .product-header_info-bottom_item {
+    grid-column-gap: 0.5rem;
+    grid-row-gap: 0.5rem;
+    align-items: center;
+    display: flex;
+  }
+
+  .product-header_buy {
+    background-color: var(--color--white);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    grid-area: span 1 / span 4 / span 1 / span 4;
+  }
+{% endstylesheet %}
+
+
+{% schema %}
+  {
+    "name": "Product Header",
+    "tag": "section",
+    "class": "section_logo background-color-grayiron100",
+    "limit": 1,
+    "settings": [
+      {
+        "type": "text",
+        "id": "model",
+        "label": "Model Opony",
+        "default": "Model opony"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Produkt Header"
+      }
+    ]
+  }
+
+{% endschema %}
