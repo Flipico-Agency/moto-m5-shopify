@@ -263,7 +263,7 @@
             </nav>
         </div>
         <div class="div-block-5">
-            <button id="cart-button" class="button is-small is-icon w-inline-block">
+            <a href="/cart" id="cart-button" class="button is-small is-icon w-inline-block">
                 <div class="icon-1x1-nav" data-animation-type="lottie"
                      data-src="https://assets-global.website-files.com/65945aac2ee770034538c7f4/65947bf296737d016b6cadbe_wired-outline-146-trolley.json"
                      data-loop="0" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg"
@@ -318,9 +318,10 @@
                 </div>
                 <div class="hide-mobile-portrait">Koszyk</div>
                 <div class="cart-button-counter">
-                    <div wized="item_quantity_total" class="text-block-2">1</div>
+                    <div class="text-block-2">{{ cart.item_count }}</div>
                 </div>
-            </button>
+            </a>
+            {% comment %} MODAL CART CONTINUE SHOPPING OR GO TO CART {% endcomment %}
             <div class="modal2_component" style="display: none;">
                 <div class="modal2_content-wrapper"
                      {% comment %}style="transform: translate3d(100%, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;"{% endcomment %}

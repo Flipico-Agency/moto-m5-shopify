@@ -35,7 +35,13 @@
                 <div class="text-size-large text-weight-bold">{{ product.price | money }}</div>
                 <div>/ {{ product.metafields.tires.quantity }}</div>
               </div>
-              <div class="button is-small">Kup Teraz</div>
+              <form method="post" action="/cart/add">
+                {% comment %} Prevent default action to href /cart {% endcomment %}
+                <input type="hidden" name="id" value="{{ product.variants.first.id }}" />
+                <input min="1" type="number" id="quantity" name="quantity" value="1"/>
+                <input type="submit" value="Kup teraz" class="button is-small" />
+                {% comment %} Display modal {% endcomment %}
+              </form>
             </div>
           {% endif %}
         {% endfor %}
