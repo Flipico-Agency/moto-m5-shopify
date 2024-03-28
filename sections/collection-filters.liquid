@@ -22,103 +22,121 @@
                                                 Szukaj {{ collection.title }}
                                             </div>
                                         </div>
-                                        <div class="w-tabs">
-                                            <div class="tabs-menu-3 w-tab-menu" role="tablist">
-                                                <a data-w-tab="Tab 1"
-                                                   class="tab-link-tab-2 w-inline-block w-tab-link w--current"
-                                                   id="w-tabs-0-data-w-tab-0"
-                                                   role="tab"
-                                                   aria-controls="w-tabs-0-data-w-pane-0"
-                                                   aria-selected="true">
-                                                    <div>wg rozmiaru</div>
+                                        {% comment %} MENU {% endcomment %}
+                                        <div style="display: flex">
+                                            {% assign tab_titles = "wg rozmiaru,wg auta" | split: "," %}
+                                            {% for tab_title in tab_titles %}
+                                                <a data-w-tab="{{ forloop.index }}"
+                                                   class="tab-link-top-search w-inline-block w-tab-link{% if forloop.first %} w--current{% endif %}">
+                                                    {{ tab_title }}
                                                 </a>
-                                                <a data-w-tab="Tab 2"
-                                                   class="tab-link-tab-2 w-inline-block w-tab-link" tabindex="-1"
-                                                   id="w-tabs-0-data-w-tab-1"
-                                                   role="tab"
-                                                   aria-controls="w-tabs-0-data-w-pane-1"
-                                                   aria-selected="false">
-                                                    <div>wg auta</div>
-                                                </a>
-                                            </div>
-                                            <div class="w-tab-content">
-                                                <div data-w-tab="Tab 1" class="tab-pane-tab-1 w-tab-pane w--tab-active"
-                                                     id="w-tabs-0-data-w-pane-0" role="tabpanel"
-                                                     aria-labelledby="w-tabs-0-data-w-tab-0">
-                                                    <div class="ifselectedcar">
-                                                        <div class="div-block-21-copy">
-                                                            <div class="form-field-wrapper">
-                                                                <label for="tire-width" class="field-label is-small">szerokość</label>
-                                                                <select
-                                                                        id="tire-width"
-                                                                        name="tire-width"
-                                                                        data-name="Tire Width"
-                                                                        required=""
-                                                                        class="select-field is-left w-select">
-                                                                </select>
-                                                                <div class="select-arrow w-embed">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                         xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                                         aria-hidden="true" role="img"
-                                                                         class="iconify iconify--ic" width="100%"
-                                                                         height="100%"
-                                                                         preserveAspectRatio="xMidYMid meet"
-                                                                         viewBox="0 0 24 24">
-                                                                        <path fill="currentColor"
-                                                                              d="m8.71 11.71l2.59 2.59c.39.39 1.02.39 1.41 0l2.59-2.59c.63-.63.18-1.71-.71-1.71H9.41c-.89 0-1.33 1.08-.7 1.71"></path>
-                                                                    </svg>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-field-wrapper"
-                                                                 style="pointer-events: auto;
-                                                                 opacity: inherit;">
-                                                                <label for="tire-profile" class="field-label is-small">profil</label>
-                                                                <select
-                                                                        id="tire-profile" name="tire-profile"
-                                                                        data-name="Tire Profile" required=""
-                                                                        class="select-field is-middle w-select"
-                                                                        style="pointer-events: auto; opacity: inherit;">
-                                                                </select>
-                                                                <div class="select-arrow w-embed">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                         xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                                         aria-hidden="true" role="img"
-                                                                         class="iconify iconify--ic" width="100%"
-                                                                         height="100%"
-                                                                         preserveAspectRatio="xMidYMid meet"
-                                                                         viewBox="0 0 24 24">
-                                                                        <path fill="currentColor"
-                                                                              d="m8.71 11.71l2.59 2.59c.39.39 1.02.39 1.41 0l2.59-2.59c.63-.63.18-1.71-.71-1.71H9.41c-.89 0-1.33 1.08-.7 1.71"></path>
-                                                                    </svg>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-field-wrapper"
-                                                                 style="pointer-events: auto; opacity: inherit;"><label
-                                                                        for="tire-diameter"
-                                                                        class="field-label is-small">średnica</label><select
-                                                                        id="tire-diameter" name="tire-diameter"
-                                                                        data-name="Tire Diameter"
-                                                                        class="select-field is-right w-select"
-                                                                        style="pointer-events: auto; opacity: inherit;">
-                                                                </select>
-                                                                <div class="select-arrow w-embed">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                         xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                                         aria-hidden="true" role="img"
-                                                                         class="iconify iconify--ic" width="100%"
-                                                                         height="100%"
-                                                                         preserveAspectRatio="xMidYMid meet"
-                                                                         viewBox="0 0 24 24">
-                                                                        <path fill="currentColor"
-                                                                              d="m8.71 11.71l2.59 2.59c.39.39 1.02.39 1.41 0l2.59-2.59c.63-.63.18-1.71-.71-1.71H9.41c-.89 0-1.33 1.08-.7 1.71"></path>
-                                                                    </svg>
-                                                                </div>
+                                            {% endfor %}
+                                        </div>
+
+                                        {% comment %} CONTENT {% endcomment %}
+                                        {% for tab_number in (1..2) %}
+                                            <div class="tab-pane-tab-{{ tab_number }} w-tab-pane{% if tab_number == 1 %} w--tab-active{% endif %}">
+                                                <div class="tabs-2 w-tabs">
+                                                    {% for sub_tab_number in (1..1) %}
+                                                        <div data-sub-tab="{{ tab_number }}.{{ sub_tab_number }}"
+                                                             class="w-tab-pane{% if sub_tab_number == 1 %} w--tab-active{% endif %}">
+                                                            <div class="w-form">
+                                                                <form class="div-block-8">
+                                                                    {% if tab_number == 1 %}
+                                                                        {% assign tire_fields_label = "Szerokość,Profil,Średnica" | split: "," %}
+                                                                        {% assign wheel_fields_label = "Szerokość opony,Profil opony,Średnica opony,Rozstaw śrub,Szerokość felgi" | split: "," %}
+                                                                        {% assign rim_fields_label = "Średnica,Rozstaw śrub,Szerokość,ET" | split: "," %}
+
+                                                                        {% assign season_options = "Letnie,Zimowe,Całoroczne" | split: "," %}
+
+                                                                        {% assign tire_fields_data_name = "tire-width,tire-profile,tire-diameter" | split: "," %}
+                                                                        {% assign wheel_fields_data_name = "tire-width,tire-profile,tire-diameter,rim-bolt,rim-width" | split: "," %}
+                                                                        {% assign rim_fields_data_name = "rim-diameter,rim-bolt,rim-width,rim-et" | split: "," %}
+
+                                                                        {% case collection.title %}
+                                                                            {% when 'Opony' %}
+                                                                                {% for i in (0..2) %}
+                                                                                    <div class="form-field-wrapper">
+                                                                                        <label for="{{ tire_fields_data_name[i] | downcase }}"
+                                                                                               class="field-label">{{ tire_fields_label[i] }}</label>
+                                                                                        <select id="{{ tire_fields_data_name[i] | downcase }}"
+                                                                                                data-name="{{ tire_fields_data_name[i] }}"
+                                                                                                required="required"
+                                                                                                class="select-field w-select">
+                                                                                        </select>
+                                                                                        {% render 'select-arrow' %}
+                                                                                    </div>
+                                                                                {% endfor %}
+                                                                                <div class="form-field-wrapper">
+                                                                                    <label for="tire-season" class="field-label">Sezon</label>
+                                                                                    <select id="tire-season" data-name="tire-season"
+                                                                                            required="required" class="select-field w-select">
+                                                                                        {% for option in season_options %}
+                                                                                            <option value="{{ option }}">{{ option }}</option>
+                                                                                        {% endfor %}
+                                                                                    </select>
+                                                                                    {% render 'select-arrow' %}
+                                                                                </div>
+                                                                            {% when 'Koła' %}
+                                                                                {% for i in (0..4) %}
+                                                                                    <div class="form-field-wrapper">
+                                                                                        <label for="{{ wheel_fields_data_name[i] | downcase }}"
+                                                                                               class="field-label">{{ wheel_fields_label[i] }}</label>
+                                                                                        <select id="{{ wheel_fields_data_name[i] | downcase }}"
+                                                                                                data-name="{{ wheel_fields_data_name[i] }}"
+                                                                                                required="required"
+                                                                                                class="select-field w-select">
+                                                                                        </select>
+                                                                                        {% render 'select-arrow' %}
+                                                                                    </div>
+                                                                                {% endfor %}
+                                                                                <div class="form-field-wrapper">
+                                                                                    <label for="tire-season" class="field-label">Sezon</label>
+                                                                                    <select id="tire-season" data-name="tire-season"
+                                                                                            required="required" class="select-field w-select">
+                                                                                        {% for option in season_options %}
+                                                                                            <option value="{{ option }}">{{ option }}</option>
+                                                                                        {% endfor %}
+                                                                                    </select>
+                                                                                    {% render 'select-arrow' %}
+                                                                                </div>
+                                                                            {% when 'Felgi' %}
+                                                                                {% for i in (0..3) %}
+                                                                                    <div class="form-field-wrapper">
+                                                                                        <label for="{{ rim_fields_data_name[i] | downcase }}"
+                                                                                               class="field-label">{{ rim_fields_label[i] }}</label>
+                                                                                        <select id="{{ rim_fields_data_name[i] | downcase }}"
+                                                                                                data-name="{{ rim_fields_data_name[i] }}"
+                                                                                                required="required"
+                                                                                                class="select-field w-select">
+                                                                                        </select>
+                                                                                        {% render 'select-arrow' %}
+                                                                                    </div>
+                                                                                {% endfor %}
+                                                                        {% endcase %}
+                                                                    {% else %}
+                                                                        {% assign form_fields = "Marka,Model,Generacja,Rok,Silnik" | split: "," %}
+                                                                        {% for field in form_fields %}
+                                                                            <div class="form-field-wrapper">
+                                                                                <label for="car-{{ field | downcase }}"
+                                                                                       class="field-label">{{ field }}</label>
+                                                                                <select id="car-{{ field | downcase }}"
+                                                                                        data-name="car-{{ field | downcase }}"
+                                                                                        required="required"
+                                                                                        class="select-field w-select"></select>
+                                                                                {% render 'select-arrow' %}
+                                                                            </div>
+                                                                        {% endfor %}
+                                                                    {% endif %}
+                                                                    <input type="submit" data-wait="Zaczekaj..." class="button w-button"
+                                                                           value="{% case tab_number %}{% when 1 %}{% case collection.title %}{% when 'Opony' %}Szukaj opon{% when 'Koła' %}Szukaj kół{% when 'Felgi' %}Szukaj felg{% endcase %}{% when 2 %}{% case collection.title %}{% when 'Opony' %}Szukaj opon{% when 'Koła' %}Szukaj kół{% when 'Felgi' %}Szukaj felg{% endcase %}{% endcase %}">
+                                                                </form>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    {% endfor %}
                                                 </div>
                                             </div>
-                                        </div>
+                                        {% endfor %}
                                     </div>
 
                                     {%- for filter in collection.filters -%}
@@ -308,6 +326,89 @@
 
 <script type="text/javascript" src="{{ 'filters.js' | asset_url }}"></script>
 
+{% comment %}
+<script>
+    var currentSection = document.currentScript.closest('.shopify-section');
+    currentSection.setAttribute("class", "section_tire-model_tabs background-color-grayiron100");
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const topTabs = document.querySelectorAll('.tab-link-top-search');
+        const topTabContents = document.querySelectorAll('.w-tab-pane');
+
+        // We also need to ensure that sub-tab content areas are hidden by default
+        const subTabContents = document.querySelectorAll('.w-tab-pane [data-sub-tab]');
+        subTabContents.forEach(content => {
+            content.classList.remove('w--tab-active'); // Ensure all sub-tabs are not active initially
+        });
+
+        function clearActiveStates(elements) {
+            elements.forEach(element => {
+                element.classList.remove('w--current');
+            });
+        }
+
+        function hideAllTabContents(contents) {
+            contents.forEach(content => {
+                content.style.display = 'none';
+                content.classList.remove('w--tab-active'); // Also remove w--tab-active when hiding
+            });
+        }
+
+        function activateTab(tab) {
+            const targetTab = tab.getAttribute('data-w-tab');
+            const targetContent = document.querySelector(`.tab-pane-tab-${targetTab}`);
+            const subTabs = targetContent.querySelectorAll('.tab-link-left-search');
+
+            clearActiveStates([...topTabs, ...subTabs]); // Clear both top and sub-tabs
+            hideAllTabContents([...topTabContents, ...subTabContents]); // Hide both top and sub-tab contents
+
+            tab.classList.add('w--current');
+            targetContent.style.display = 'block';
+            targetContent.classList.add('w--tab-active'); // Mark the target tab content as active
+
+            // Automatically activate the first sub-tab and content
+            if (subTabs.length > 0) {
+                subTabs[0].classList.add('w--current');
+                const firstSubTabContent = targetContent.querySelector(`[data-sub-tab="${subTabs[0].getAttribute('data-w-tab')}"]`);
+                if (firstSubTabContent) {
+                    firstSubTabContent.style.display = 'block';
+                    firstSubTabContent.classList.add('w--tab-active'); // Mark the first sub-tab content as active
+                }
+            }
+        }
+
+        topTabs.forEach(tab => {
+            tab.addEventListener('click', () => activateTab(tab));
+        });
+
+        // Handling sub-tabs clicks within each tab
+        topTabContents.forEach(tabContent => {
+            const subTabs = tabContent.querySelectorAll('.tab-link-left-search');
+
+            subTabs.forEach(subTab => {
+                subTab.addEventListener('click', function () {
+                    clearActiveStates(subTabs); // Clear only the sub-tabs
+                    hideAllTabContents(subTabContents); // Hide all sub-tab contents
+
+                    subTab.classList.add('w--current');
+                    const targetSubContent = tabContent.querySelector(`[data-sub-tab="${subTab.getAttribute('data-w-tab')}"]`);
+                    if (targetSubContent) {
+                        targetSubContent.style.display = 'block';
+                        targetSubContent.classList.add('w--tab-active'); // Mark the target sub-tab content as active
+                    }
+                });
+            });
+        });
+
+        // Activate the first top level tab and its content on page load
+        if (topTabs.length > 0) {
+            activateTab(topTabs[0]);
+        }
+    });
+</script>
+{% endcomment %}
+
+{% comment %}
 <script>
 (async function () {
     // Helper function to format tire size correctly
@@ -426,6 +527,7 @@
 
 })();
 </script>
+{% endcomment %}
 
 {% stylesheet %}
 .filters-list {
