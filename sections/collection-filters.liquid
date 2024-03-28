@@ -6,34 +6,37 @@
                     <div class="filters2_layout">
                         <div class="filters2_filters-wrapper">
                             <div class="filters2_form-block w-form">
-                                <form>
-                                    <div>
-                                        <p>
-                                            <a href="{{ collection.url }}?sort_by={{ collection.sort_by }}">Wyczyść wszystko</a>
-                                        </p>
+                                <form class="filters2_form">
+                                    <div class="filters2_form-header">
+                                        <div class="filters2_heading">Filtry</div>
 
-                                        {%- for filter in collection.filters -%}
-                                            {%- if filter.type == "price_range" -%}
-                                                {%- if filter.min_value.value != null or filter.max_value.value != null -%}
-                                                    <p>
-                                                        <a href="{{ filter.url_to_remove }}">
-                                                            {%- assign min_value = filter.min_value.value | default: 0 -%}
-                                                            {%- assign max_value = filter.max_value.value | default: filter.range_max -%}
-                                                            {{ min_value | money }} - {{ max_value | money }} X
-                                                        </a>
-                                                    </p>
-                                                {%- endif -%}
-                                            {%- else -%}
-                                                {%- for filter_value in filter.active_values -%}
-                                                    <p>
-                                                        <a href="{{ filter_value.url_to_remove }}">
-                                                            {{ filter.label }}: {{ filter_value.label }} X
-                                                        </a>
-                                                    </p>
-                                                {%- endfor -%}
-                                            {%- endif -%}
-                                        {%- endfor -%}
+                                        <div class="button is-link hide-tablet w-inline-block">
+                                            <a class="text-clear-filters" href="{{ collection.url }}?sort_by={{ collection.sort_by }}">WYCZYŚĆ WSZYSTKIE</a>
+                                        </div>
+
                                     </div>
+
+                                    {%- for filter in collection.filters -%}
+                                        {%- if filter.type == "price_range" -%}
+                                            {%- if filter.min_value.value != null or filter.max_value.value != null -%}
+                                                <p>
+                                                    <a href="{{ filter.url_to_remove }}">
+                                                        {%- assign min_value = filter.min_value.value | default: 0 -%}
+                                                        {%- assign max_value = filter.max_value.value | default: filter.range_max -%}
+                                                        {{ min_value | money }} - {{ max_value | money }} X
+                                                    </a>
+                                                </p>
+                                            {%- endif -%}
+                                        {%- else -%}
+                                            {%- for filter_value in filter.active_values -%}
+                                                <p>
+                                                    <a href="{{ filter_value.url_to_remove }}">
+                                                        {{ filter.label }}: {{ filter_value.label }} X
+                                                    </a>
+                                                </p>
+                                            {%- endfor -%}
+                                        {%- endif -%}
+                                    {%- endfor -%}
 
                                     {%- for filter in collection.filters -%}
                                         <details open class="filters2_filter-group">
@@ -49,14 +52,14 @@
 
                                             <div class="filters2_filter-options">
                                                 <div>
-                                                    <p>{{ filter.active_values.size }} selected</p>
+                                                    <p>{{ filter.active_values.size }} Wybrano</p>
                                                     {%- if filter.active_values.size > 0 -%}
                                                         <p><a href="{{ filter.url_to_remove }}">Zresetuj</a></p>
                                                     {%- endif -%}
                                                 </div>
                                                 {%- case filter.type -%}
                                                     {%- when 'boolean' -%}
-                                                        <ul>
+                                                        <ul class="filters-list">
                                                             <li>
                                                                 <label for="Filter-{{ filter.param_name }}-{{ filter.true_value.value }}" class="w-checkbox filters2_form-checkbox1">
                                                                     <input type="checkbox"
@@ -83,7 +86,7 @@
                                                             <input type="submit" value="Zastosuj">
                                                         </div>
                                                     {%- when 'list' -%}
-                                                        <ul>
+                                                        <ul class="filters-list">
                                                             {%- for filter_value in filter.values -%}
                                                                 <li>
                                                                     <label for="Filter-{{ filter.param_name }}-{{ forloop.index }}">
@@ -194,11 +197,139 @@
     </div>
 </section>
 
-<script>
+<script type="text/javascript" src="{{ 'filters.js' | asset_url }}"></script>
 
+<script>
+(async function () {
+    // Helper function to format tire size correctly
+    const formatTireSize = (tireSize) => {
+        return tireSize.replace(/(\d+)\/(\d+)[A-Z]*/g, '$1/$2/R');
+    };
+
+    // Helper function to create option element
+    const createOption = (tireData, prefix = '') => {
+        let { tire, rim } = tireData;
+        tire = formatTireSize(tire);
+        const option = document.createElement("option");
+        option.text = `${prefix} ${tire} (${rim})`;
+        return option;
+    };
+
+    // Generic function to update select options
+    const updateSelectOptions = async (dataKey, filterKey) => {
+        const currentData = await Wized.data.get(dataKey);
+
+        const selectElements = document.querySelectorAll(`select[wized="${filterKey}"]`);
+
+        if (!selectElements || !selectElements.length) {
+            console.error(`No select elements found with wized attribute "${filterKey}".`);
+            return;
+        }
+
+        selectElements.forEach(selectElement => {
+            selectElement.innerHTML = "";
+
+            if (currentData && Array.isArray(currentData)) {
+                //console.log(`Updating select options for filter_${filterKey}: `, currentData);
+
+                // Create a set to store unique tire sizes
+                const uniqueTireSizes = new Set();
+
+                // First add single tire options (not part of a pair)
+                currentData[0].wheels.forEach(item => {
+                    const { front, rear } = item;
+                    const normalizedFrontTire = front.tire ? formatTireSize(front.tire) : '';
+                    const normalizedRearTire = rear.tire ? formatTireSize(rear.tire) : '';
+
+                    if (front.tire && !rear.tire && !uniqueTireSizes.has(normalizedFrontTire)) {
+                        selectElement.add(createOption(front));
+                        uniqueTireSizes.add(normalizedFrontTire);
+                    }
+                    if (rear.tire && !front.tire && !uniqueTireSizes.has(normalizedRearTire)) {
+                        selectElement.add(createOption(rear));
+                        uniqueTireSizes.add(normalizedRearTire);
+                    }
+                });
+
+                // Then add tire pairs, checking for duplicates
+                let pairIndex = 1;
+                currentData[0].wheels.forEach(item => {
+                    const { front, rear } = item;
+                    if (front.tire && rear.tire) {
+                        const normalizedFrontTire = formatTireSize(front.tire);
+                        const normalizedRearTire = formatTireSize(rear.tire);
+                        if (!uniqueTireSizes.has(normalizedFrontTire)) {
+                            selectElement.add(createOption(front, `Para ${pairIndex}: Przód`));
+                            uniqueTireSizes.add(normalizedFrontTire);
+                        }
+                        if (!uniqueTireSizes.has(normalizedRearTire)) {
+                            selectElement.add(createOption(rear, `Para ${pairIndex}: Tył`));
+                            uniqueTireSizes.add(normalizedRearTire);
+                        }
+                        pairIndex++;
+                    }
+                });
+
+                selectElement.selectedIndex = 0;
+                Wized.data.setVariable('matching_sizes', selectElement.value.replace(/.*(\b\d{3}\/\d{2}\/R\d{2}\b).*/, '$1'));
+                console.log(`Updated HTML select options for filter_${filterKey}.`);
+            } else {
+                // If currentData is not an array or empty, remove all options from the select element
+                selectElement.innerHTML = "";
+                console.error(`Invalid or empty data for filter_${filterKey}.`);
+            }
+        });
+    };
+
+    function toggleTab(searchByValue) {
+        // Select tab elements
+        const tabSize = document.querySelector('a[data-w-tab="Tab 1"]');
+        const tabCar = document.querySelector('a[data-w-tab="Tab 2"]');
+        const tabContentBySize = document.querySelector('div[data-w-tab="Tab 1"]');
+        const tabContentByCar = document.querySelector('div[data-w-tab="Tab 2"]');
+
+        // Check the value of c.searchBy and toggle classes accordingly
+        if (searchByValue === 'bySize') {
+            tabSize.classList.add('w--current');
+            tabSize.setAttribute('aria-selected', 'true');
+            tabContentBySize.classList.add('w--tab-active');
+
+            tabCar.classList.remove('w--current');
+            tabCar.setAttribute('aria-selected', 'false');
+            tabContentByCar.classList.remove('w--tab-active');
+        } else if (searchByValue === 'byCar') {
+            tabCar.classList.add('w--current');
+            tabCar.setAttribute('aria-selected', 'true');
+            tabContentByCar.classList.add('w--tab-active');
+
+            tabSize.classList.remove('w--current');
+            tabSize.setAttribute('aria-selected', 'false');
+            tabContentBySize.classList.remove('w--tab-active');
+        }
+    }
+
+    // Search by car (tab 2 - search_by_car)
+    Wized.data.listen("v.searchByModel", () => updateSelectOptions("v.searchByModel", "matching_sizes"));
+    window.onload = async () => {
+        const searchByValue = await Wized.data.get('c.searchBy');
+        toggleTab(searchByValue);
+    };
+
+})();
 </script>
 
-<script type="text/javascript" src="{{ 'filters.js' | asset_url }}"></script>
+{% stylesheet %}
+.filters-list {
+    list-style: none;
+    align-items: center;
+    margin-bottom: 0;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    padding-left: 1.25rem;
+    display: flex;
+    flex-direction: column;
+}
+{% endstylesheet %}
 
 {% schema %}
 {
