@@ -1,0 +1,49 @@
+<div class="cart-page">
+    {% if cart.items.size > 0 %}
+        <form action="/cart" method="post" novalidate>
+            <table>
+                <thead>
+                <tr>
+                    <th>Produkt</th>
+                    <th>Zdjęcie</th>
+                    <th>Cena</th>
+                    <th>Ilość</th>
+                    <th>Suma</th>
+                    <th></th> <!-- Kolumna na przyciski do usuwania -->
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in cart.items %}
+                    <tr>
+                        <td>
+                            <a href="{{ item.url }}">{{ item.product.title }}</a>
+                            {% if item.variant.title != 'Default Title' %} - {{ item.variant.title }}{% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ item.url }}">
+                                <img src="{{ item.image | img_url: 'medium' }}" alt="{{ item.product.title | escape }}">
+                            </a>
+                        </td>
+                        <td>{{ item.price | money }}</td>
+                        <td>
+                            <input type="number" name="updates[]" id="updates_{{ item.id }}" value="{{ item.quantity }}" min="1">
+                        </td>
+                        <td>{{ item.line_price | money }}</td>
+                        <td><a href="/cart/change?line={{ forloop.index }}&quantity=0">Usuń</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <strong>Suma: </strong>{{ cart.total_price | money }}
+                </div>
+                <input type="submit" name="update" value="Aktualizuj koszyk">
+                <input type="submit" name="checkout" value="Realizuj zakup" class="btn-checkout">
+            </div>
+        </form>
+    {% else %}
+        <p>Twój koszyk jest pusty.</p>
+    {% endif %}
+</div>
