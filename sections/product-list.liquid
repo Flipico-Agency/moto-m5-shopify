@@ -1,49 +1,93 @@
-<div class="padding-global {{ section.settings.background }}">
-  <div class="container-large">
-    <div class="padding-section-{{ section.settings.padding }}">
-      <div class="{{ section.settings.container }}">
-        {%- if section.settings.header != blank -%}
-          <div class="margin-bottom margin-medium">
-            <h4>
-              {{ section.settings.header }}
-            </h4>
-          </div>
-        {%- endif -%}
-        <div class="tire-model_sizes-parameters hide-tablet">
-          <p class="text-size-small text-weight-semibold">Rozmiar</p>
-          <p class="text-size-small text-weight-semibold">Rocznik</p>
-          <p class="text-size-small text-weight-semibold">Stan i Bieżnik</p>
-          <p class="text-size-small text-weight-semibold">Cena i Ilość</p>
-        </div>
-        {% assign model_name = metaobject.model.value %}
-        {% for product in collections.opony.products %}
-          {% assign product_model = product.metafields.tires.model.value.model %}
-          {% if product_model == model_name %}
-            <div class="tire-model_sizes-product_wrapper">
-              <a href="{{ product.url }}" class="tire-model_sizes-product_tittle-wrapper">
-                <div class="text-size-large text-weight-bold">{{ product.metafields.tires.manufacturer.value.name }}</div>
-                <div>{{ product.metafields.tires.model.value.model }}
-                  <span class="text-weight-semibold">{{ product.metafields.tires.width }}/{{ product.metafields.tires.profile }} R{{ product.metafields.tires.diameter }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}</span>
+{% for block in section.blocks %}
+  {% case block.type %}
+    {% when 'list' %}
+      <div class="padding-global {{ section.settings.background }}">
+        <div class="container-large">
+          <div class="padding-section-{{ section.settings.padding }}">
+            <div class="{{ section.settings.container }}">
+              {%- if block.settings.header != blank -%}
+                <div class="margin-bottom margin-medium">
+                  <h4>
+                    {{ block.settings.header }}
+                  </h4>
                 </div>
-                {%- if product.metafields.tires.homologation != blank -%}
-                  <div class="text-size-tiny text-weight-bold text-color-grayiron600">Homologacja: {{ product.metafields.tires.homologation | map: 'value' | join: ', ' }}</div>
-                {%- endif -%}
-              </a>
-              <div class="text-weight-bold">{{ product.metafields.tires.years }}</div>
-              <div class="text-weight-bold">{{ product.metafields.tires.condition }} | {{ product.metafields.tires.tread }}</div>
-              <div>
-                <div class="text-size-large text-weight-bold">{{ product.price | money }}</div>
-                <div>/ {{ product.metafields.tires.quantity }}</div>
-              </div>
-              <div class="button is-small">Kup Teraz</div>
-            </div>
-          {% endif %}
-        {% endfor %}
-      </div>
-    </div>
-  </div>
-</div>
+              {%- endif -%}
+              {% if block.settings.type == "opony" %}
+                <div class="tire-model_sizes-parameters hide-tablet">
+                  <p class="text-size-small text-weight-semibold">Rozmiar</p>
+                  <p class="text-size-small text-weight-semibold">Rocznik</p>
+                  <p class="text-size-small text-weight-semibold">Stan i Bieżnik</p>
+                  <p class="text-size-small text-weight-semibold">Cena i Ilość</p>
+                </div>
+                {% assign model_name = metaobject.model.value %}
+                {% for product in collections.opony.products %}
+                  {% assign product_model = product.metafields.tires.model.value.model %}
+                  {% if product_model == model_name %}
+                    <div class="tire-model_sizes-product_wrapper">
+                      <a href="{{ product.url }}" class="tire-model_sizes-product_tittle-wrapper">
+                        <div class="text-size-large text-weight-bold">{{ product.metafields.tires.manufacturer.value.name }}</div>
+                        <div>{{ product.metafields.tires.model.value.model }}
+                          <span class="text-weight-semibold">{{ product.metafields.tires.width }}/{{ product.metafields.tires.profile }} R{{ product.metafields.tires.diameter }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}</span>
+                        </div>
+                        {%- if product.metafields.tires.homologation != blank -%}
+                          <div class="text-size-tiny text-weight-bold text-color-grayiron600">Homologacja: {{ product.metafields.tires.homologation | map: 'value' | join: ', ' }}</div>
+                        {%- endif -%}
+                      </a>
+                      <div class="text-weight-bold">{{ product.metafields.tires.years }}</div>
+                      <div class="text-weight-bold">{{ product.metafields.tires.condition }} | {{ product.metafields.tires.tread }}</div>
+                      <div>
+                        <div class="text-size-large text-weight-bold">{{ product.price | money }}</div>
+                        <div>/ {{ product.metafields.tires.quantity }}</div>
+                      </div>
+                      <div class="button is-small">Kup Teraz</div>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
 
+
+
+
+
+
+              {% if block.settings.type == "kola" %}
+                <div class="tire-model_sizes-parameters hide-tablet">
+                  <p class="text-size-small text-weight-semibold">Rozmiar</p>
+                  <p class="text-size-small text-weight-semibold">Rocznik</p>
+                  <p class="text-size-small text-weight-semibold">Stan i Bieżnik</p>
+                  <p class="text-size-small text-weight-semibold">Cena i Ilość</p>
+                </div>
+                {% assign model_name = metaobject.model.value %}
+                {% for product in collections.kola-i-felgi-samochodowe.products %}
+                  {% assign product_model = product.metafields.tires.model.value.model %}
+                  {% if product_model == model_name %}
+                    <div class="tire-model_sizes-product_wrapper">
+                      <a href="{{ product.url }}" class="tire-model_sizes-product_tittle-wrapper">
+                        <div class="text-size-large text-weight-bold">{{ product.metafields.tires.manufacturer.value.name }}</div>
+                        <div>{{ product.metafields.tires.model.value.model }}
+                          <span class="text-weight-semibold">{{ product.metafields.tires.width }}/{{ product.metafields.tires.profile }} R{{ product.metafields.tires.diameter }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}</span>
+                        </div>
+                        {%- if product.metafields.tires.homologation != blank -%}
+                          <div class="text-size-tiny text-weight-bold text-color-grayiron600">Homologacja: {{ product.metafields.tires.homologation | map: 'value' | join: ', ' }}</div>
+                        {%- endif -%}
+                      </a>
+                      <div class="text-weight-bold">{{ product.metafields.tires.years }}</div>
+                      <div class="text-weight-bold">{{ product.metafields.tires.condition }} | {{ product.metafields.tires.tread }}</div>
+                      <div>
+                        <div class="text-size-large text-weight-bold">{{ product.price | money }}</div>
+                        <div>/ {{ product.metafields.tires.quantity }}</div>
+                      </div>
+                      <div class="button is-small">Kup Teraz</div>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+  {% endcase %}
+{% endfor %}
 
 {% schema %}
   {
@@ -114,13 +158,32 @@
     ],
     "blocks": [
       {
-        "name": "Produkt",
-        "type": "product",
+        "name": "Lista",
+        "type": "list",
+        "limit": 2,
         "settings": [
           {
             "type": "text",
-            "id": "model",
-            "label": "Model Opony"
+            "id": "header",
+            "label": "Tytuł",
+            "default": "Dostępne rozmiary opon {model}"
+          }, {
+            "type": "select",
+            "id": "type",
+            "label": "Rodzaj produktu",
+            "options": [
+              {
+                "label": "Opony",
+                "value": "opony"
+              }, {
+                "label": "Felgi",
+                "value": "felgi"
+              }, {
+                "label": "Koła",
+                "value": "kola"
+              }
+            ],
+            "default": "opony"
           }
         ]
       }
