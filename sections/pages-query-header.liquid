@@ -1,33 +1,31 @@
-<div class="section_breadcrumbs">
-    <div class="padding-global">
-        <div class="container-large">
-            <div class="padding-section-xxsmall">
-                <div class="breadcrumb_component">
-                    <a href="/" class="breadcrumb-link w-inline-block">
-                        <div>Strona główna</div>
-                    </a>
-                    <div class="breadcrumb-divider w-embed">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                             aria-hidden="true" role="img" class="iconify iconify--ic" width="100%" height="100%"
-                             preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
-                            <path fill="currentColor"
-                                  d="m11.71 15.29l2.59-2.59a.996.996 0 0 0 0-1.41L11.71 8.7c-.63-.62-1.71-.18-1.71.71v5.17c0 .9 1.08 1.34 1.71.71"></path>
-                        </svg>
-                    </div>
-                    <a href="/collections" class="breadcrumb-link w-inline-block">
-                        <div>Kategoria</div>
-                    </a>
-                    <div class="breadcrumb-divider w-embed">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                             aria-hidden="true" role="img" class="iconify iconify--ic" width="100%" height="100%"
-                             preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
-                            <path fill="currentColor"
-                                  d="m11.71 15.29l2.59-2.59a.996.996 0 0 0 0-1.41L11.71 8.7c-.63-.62-1.71-.18-1.71.71v5.17c0 .9 1.08 1.34 1.71.71"></path>
-                        </svg>
-                    </div>
-                    <div class="breadcrumb-link is-active w-inline-block">
-                        <div class="text-block-3">{{ collection.title }}</div>
-                    </div>
+<div class="padding-global">
+    <div class="container-large">
+        <div class="padding-section-xxsmall">
+            <div class="breadcrumb_component">
+                <a href="/" class="breadcrumb-link w-inline-block">
+                    <div>Strona główna</div>
+                </a>
+                <div class="breadcrumb-divider w-embed">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                         aria-hidden="true" role="img" class="iconify iconify--ic" width="100%" height="100%"
+                         preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                        <path fill="currentColor"
+                              d="m11.71 15.29l2.59-2.59a.996.996 0 0 0 0-1.41L11.71 8.7c-.63-.62-1.71-.18-1.71.71v5.17c0 .9 1.08 1.34 1.71.71"></path>
+                    </svg>
+                </div>
+                <a href="/collections" class="breadcrumb-link w-inline-block">
+                    <div>Kategoria</div>
+                </a>
+                <div class="breadcrumb-divider w-embed">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                         aria-hidden="true" role="img" class="iconify iconify--ic" width="100%" height="100%"
+                         preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                        <path fill="currentColor"
+                              d="m11.71 15.29l2.59-2.59a.996.996 0 0 0 0-1.41L11.71 8.7c-.63-.62-1.71-.18-1.71.71v5.17c0 .9 1.08 1.34 1.71.71"></path>
+                    </svg>
+                </div>
+                <div class="breadcrumb-link is-active w-inline-block">
+                    <div class="text-block-3">{{ collection.title }}</div>
                 </div>
             </div>
         </div>
@@ -37,6 +35,9 @@
 {% schema %}
 {
   "name": "Nawigacja podstron",
+  "tag": "section",
+  "class": "section_breadcrumbs",
+  "limit": 1,
   "settings": [
     {
       "type": "richtext",

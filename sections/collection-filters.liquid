@@ -57,3 +57,21 @@
 </script>
 
 <script type="text/javascript" src="{{ 'filters.js' | asset_url }}"></script>
+
+{% schema %}
+{
+  "name": "Filtry kolekcji",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "naglowek-kolekcji",
+      "label": "Nagłówek kolekcji"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Filtry kolekcji"
+    }
+  ]
+}
+{% endschema %}
