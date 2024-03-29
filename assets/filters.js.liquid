@@ -42,11 +42,17 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     function getActiveTabContent() {
+        {% comment %} ActiveTabContent for home page {% endcomment %}
         let activeTabContent = document.querySelector('.w-tab-pane.w--tab-active div div.w-tab-pane.w--tab-active');
 
         {% comment %} ActiveTabContent for manufacturer subpage {% endcomment %}
         if (activeTabContent === null) {
             activeTabContent = document.getElementById('tire-manufacturer-form');
+        }
+
+        {% comment %} ActiveTabContent for collection page {% endcomment %}
+        if (activeTabContent === null) {
+            activeTabContent = document.querySelector('div[data-sub-tab].w-tab-pane.w--tab-active');
         }
 
         return activeTabContent;
@@ -68,6 +74,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Define event listener for form submission
         submitButton.form.addEventListener('submit', function (event) {
             event.preventDefault();
+
+            localStorage.setItem('searchBy', 'bySize');
 
             let queryParameters = {};
 
@@ -277,6 +285,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         submitButton.form.addEventListener('submit', function (event) {
             event.preventDefault();
 
+            localStorage.setItem('searchBy', 'byCar');
+
             const queryParameters = {
                 'filter.p.car.make': makes.value,
                 'filter.p.car.model': models.value,
@@ -356,12 +366,25 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         const formActionBaseURL = 'https://moto-m5.myshopify.com/collections/';
 
+        {% comment %} ActiveTabContent for home page {% endcomment %}
         let activeSubTab = document.querySelector('.tab-link-left-search.w--current');
+        let activeSubTabNumber;
 
-        {% comment %} ActiveSubTab for manufacturer subpage {% endcomment %}
-        if (!activeSubTab) activeSubTab = document.querySelector('[data-w-tab="1.1"]');
-
-        const activeSubTabNumber = activeSubTab ? activeSubTab.getAttribute('data-w-tab').split('.')[1] : null;
+        if (activeSubTab) {
+            activeSubTabNumber = activeSubTab.getAttribute('data-w-tab').split('.')[1];
+        } else {
+            {% comment %} ActiveTabContent for manufacturer subpage {% endcomment %}
+            activeSubTab = document.querySelector('[data-w-tab="1.1"]');
+            if (activeSubTab) {
+                activeSubTabNumber = activeSubTab.getAttribute('data-w-tab').split('.')[1];
+            } else {
+                {% comment %} ActiveTabContent for collection page {% endcomment %}
+                activeSubTab = document.querySelector('div[data-sub-tab].w-tab-pane.w--tab-active');
+                if (activeSubTab) {
+                    activeSubTabNumber = activeSubTab.getAttribute('data-sub-tab').split('.')[1];
+                }
+            }
+        }
 
         let formAction = `${formActionBaseURL}opony`; // Default action
         switch (activeSubTabNumber) {

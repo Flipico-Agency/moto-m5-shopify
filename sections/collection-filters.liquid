@@ -324,91 +324,7 @@
     </div>
 </section>
 
-<script type="text/javascript" src="{{ 'filters.js' | asset_url }}"></script>
 
-{% comment %}
-<script>
-    var currentSection = document.currentScript.closest('.shopify-section');
-    currentSection.setAttribute("class", "section_tire-model_tabs background-color-grayiron100");
-
-    document.addEventListener('DOMContentLoaded', function () {
-        const topTabs = document.querySelectorAll('.tab-link-top-search');
-        const topTabContents = document.querySelectorAll('.w-tab-pane');
-
-        // We also need to ensure that sub-tab content areas are hidden by default
-        const subTabContents = document.querySelectorAll('.w-tab-pane [data-sub-tab]');
-        subTabContents.forEach(content => {
-            content.classList.remove('w--tab-active'); // Ensure all sub-tabs are not active initially
-        });
-
-        function clearActiveStates(elements) {
-            elements.forEach(element => {
-                element.classList.remove('w--current');
-            });
-        }
-
-        function hideAllTabContents(contents) {
-            contents.forEach(content => {
-                content.style.display = 'none';
-                content.classList.remove('w--tab-active'); // Also remove w--tab-active when hiding
-            });
-        }
-
-        function activateTab(tab) {
-            const targetTab = tab.getAttribute('data-w-tab');
-            const targetContent = document.querySelector(`.tab-pane-tab-${targetTab}`);
-            const subTabs = targetContent.querySelectorAll('.tab-link-left-search');
-
-            clearActiveStates([...topTabs, ...subTabs]); // Clear both top and sub-tabs
-            hideAllTabContents([...topTabContents, ...subTabContents]); // Hide both top and sub-tab contents
-
-            tab.classList.add('w--current');
-            targetContent.style.display = 'block';
-            targetContent.classList.add('w--tab-active'); // Mark the target tab content as active
-
-            // Automatically activate the first sub-tab and content
-            if (subTabs.length > 0) {
-                subTabs[0].classList.add('w--current');
-                const firstSubTabContent = targetContent.querySelector(`[data-sub-tab="${subTabs[0].getAttribute('data-w-tab')}"]`);
-                if (firstSubTabContent) {
-                    firstSubTabContent.style.display = 'block';
-                    firstSubTabContent.classList.add('w--tab-active'); // Mark the first sub-tab content as active
-                }
-            }
-        }
-
-        topTabs.forEach(tab => {
-            tab.addEventListener('click', () => activateTab(tab));
-        });
-
-        // Handling sub-tabs clicks within each tab
-        topTabContents.forEach(tabContent => {
-            const subTabs = tabContent.querySelectorAll('.tab-link-left-search');
-
-            subTabs.forEach(subTab => {
-                subTab.addEventListener('click', function () {
-                    clearActiveStates(subTabs); // Clear only the sub-tabs
-                    hideAllTabContents(subTabContents); // Hide all sub-tab contents
-
-                    subTab.classList.add('w--current');
-                    const targetSubContent = tabContent.querySelector(`[data-sub-tab="${subTab.getAttribute('data-w-tab')}"]`);
-                    if (targetSubContent) {
-                        targetSubContent.style.display = 'block';
-                        targetSubContent.classList.add('w--tab-active'); // Mark the target sub-tab content as active
-                    }
-                });
-            });
-        });
-
-        // Activate the first top level tab and its content on page load
-        if (topTabs.length > 0) {
-            activateTab(topTabs[0]);
-        }
-    });
-</script>
-{% endcomment %}
-
-{% comment %}
 <script>
 (async function () {
     // Helper function to format tire size correctly
@@ -429,7 +345,7 @@
     const updateSelectOptions = async (dataKey, filterKey) => {
         const currentData = await Wized.data.get(dataKey);
 
-        const selectElements = document.querySelectorAll(`select[wized="${filterKey}"]`);
+        const selectElements = document.querySelectorAll(`select["${filterKey}"]`);
 
         if (!selectElements || !selectElements.length) {
             console.error(`No select elements found with wized attribute "${filterKey}".`);
@@ -493,41 +409,56 @@
 
     function toggleTab(searchByValue) {
         // Select tab elements
-        const tabSize = document.querySelector('a[data-w-tab="Tab 1"]');
-        const tabCar = document.querySelector('a[data-w-tab="Tab 2"]');
-        const tabContentBySize = document.querySelector('div[data-w-tab="Tab 1"]');
-        const tabContentByCar = document.querySelector('div[data-w-tab="Tab 2"]');
+        const tabSize = document.querySelector('a[data-w-tab="1"]');
+        const tabCar = document.querySelector('a[data-w-tab="2"]');
+        const tabContentBySize = document.querySelector('div[data-sub-tab="1.1"]');
+        const tabContentByCar = document.querySelector('div[data-sub-tab="2.1"]');
 
         // Check the value of c.searchBy and toggle classes accordingly
         if (searchByValue === 'bySize') {
             tabSize.classList.add('w--current');
-            tabSize.setAttribute('aria-selected', 'true');
+            tabContentBySize.style.display = "block";
             tabContentBySize.classList.add('w--tab-active');
 
             tabCar.classList.remove('w--current');
-            tabCar.setAttribute('aria-selected', 'false');
+            tabContentByCar.style.display = "none";
             tabContentByCar.classList.remove('w--tab-active');
         } else if (searchByValue === 'byCar') {
             tabCar.classList.add('w--current');
-            tabCar.setAttribute('aria-selected', 'true');
+            tabContentByCar.style.display = "block";
             tabContentByCar.classList.add('w--tab-active');
 
             tabSize.classList.remove('w--current');
-            tabSize.setAttribute('aria-selected', 'false');
+            tabContentBySize.style.display = "none";
             tabContentBySize.classList.remove('w--tab-active');
         }
     }
 
     // Search by car (tab 2 - search_by_car)
-    Wized.data.listen("v.searchByModel", () => updateSelectOptions("v.searchByModel", "matching_sizes"));
-    window.onload = async () => {
-        const searchByValue = await Wized.data.get('c.searchBy');
-        toggleTab(searchByValue);
-    };
+    // Wized.data.listen("v.searchByModel", () => updateSelectOptions("v.searchByModel", "matching_sizes"));
+    // Add event listeners to the tabs for click events
+    document.addEventListener('DOMContentLoaded', function() {
+        const tabSize = document.querySelector('a[data-w-tab="1"]');
+        const tabCar = document.querySelector('a[data-w-tab="2"]');
 
+        if (tabSize && tabCar) {
+            tabSize.addEventListener('click', function() {
+                toggleTab('bySize');
+            });
+
+            tabCar.addEventListener('click', function() {
+                toggleTab('byCar');
+            });
+        }
+
+        // Initialize tabs based on saved searchByValue or default to 'bySize'
+        const searchByValue = localStorage.getItem('searchBy') || 'bySize';
+        toggleTab(searchByValue);
+    });
 })();
 </script>
-{% endcomment %}
+
+<script type="text/javascript" src="{{ 'filters.js' | asset_url }}"></script>
 
 {% stylesheet %}
 .filters-list {
