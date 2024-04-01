@@ -23,11 +23,11 @@
                                             </div>
                                         </div>
                                         {% comment %} MENU {% endcomment %}
-                                        <div style="display: flex">
+                                        <div class="tabs-menu-3 w-tab-menu">
                                             {% assign tab_titles = "wg rozmiaru,wg auta" | split: "," %}
                                             {% for tab_title in tab_titles %}
                                                 <a data-w-tab="{{ forloop.index }}"
-                                                   class="tab-link-top-search w-inline-block w-tab-link{% if forloop.first %} w--current{% endif %}">
+                                                   class="tab-link-tab-2 w-inline-block w-tab-link{% if forloop.first %} w--current{% endif %}">
                                                     {{ tab_title }}
                                                 </a>
                                             {% endfor %}
@@ -36,12 +36,14 @@
                                         {% comment %} CONTENT {% endcomment %}
                                         {% for tab_number in (1..2) %}
                                             <div class="tab-pane-tab-{{ tab_number }} w-tab-pane{% if tab_number == 1 %} w--tab-active{% endif %}">
-                                                <div class="tabs-2 w-tabs">
+                                                {% comment %} CHECK CLASS {% endcomment %}
+                                                <div class="">
                                                     {% for sub_tab_number in (1..1) %}
                                                         <div data-sub-tab="{{ tab_number }}.{{ sub_tab_number }}"
                                                              class="w-tab-pane{% if sub_tab_number == 1 %} w--tab-active{% endif %}">
                                                             <div class="w-form">
-                                                                <form class="div-block-8">
+                                                                {% comment %} CHECK CLASS {% endcomment %}
+                                                                <form class="">
                                                                     {% if tab_number == 1 %}
                                                                         {% assign tire_fields_label = "Szerokość,Profil,Średnica" | split: "," %}
                                                                         {% assign wheel_fields_label = "Szerokość opony,Profil opony,Średnica opony,Rozstaw śrub,Szerokość felgi" | split: "," %}
@@ -408,34 +410,45 @@
     };
 
     function toggleTab(searchByValue) {
-        // Select tab elements
+        // Menu
         const tabSize = document.querySelector('a[data-w-tab="1"]');
         const tabCar = document.querySelector('a[data-w-tab="2"]');
-        const tabContentBySize = document.querySelector('div[data-sub-tab="1.1"]');
-        const tabContentByCar = document.querySelector('div[data-sub-tab="2.1"]');
+
+        // Panels
+        const tabContentBySize = document.querySelector('.tab-pane-tab-1');
+        const tabContentByCar = document.querySelector('.tab-pane-tab-2');
+
+        // Sub tabs
+        const subTabContentBySize = document.querySelector('div[data-sub-tab="1.1"]');
+        const subTabContentByCar = document.querySelector('div[data-sub-tab="2.1"]');
 
         // Check the value of c.searchBy and toggle classes accordingly
         if (searchByValue === 'bySize') {
             tabSize.classList.add('w--current');
             tabContentBySize.style.display = "block";
             tabContentBySize.classList.add('w--tab-active');
+            subTabContentBySize.classList.add('w--tab-active');
 
             tabCar.classList.remove('w--current');
             tabContentByCar.style.display = "none";
             tabContentByCar.classList.remove('w--tab-active');
+            subTabContentByCar.classList.remove('w--tab-active');
         } else if (searchByValue === 'byCar') {
             tabCar.classList.add('w--current');
             tabContentByCar.style.display = "block";
             tabContentByCar.classList.add('w--tab-active');
+            subTabContentByCar.classList.add('w--tab-active');
 
             tabSize.classList.remove('w--current');
             tabContentBySize.style.display = "none";
             tabContentBySize.classList.remove('w--tab-active');
+            subTabContentBySize.classList.remove('w--tab-active');
         }
     }
 
     // Search by car (tab 2 - search_by_car)
     // Wized.data.listen("v.searchByModel", () => updateSelectOptions("v.searchByModel", "matching_sizes"));
+
     // Add event listeners to the tabs for click events
     document.addEventListener('DOMContentLoaded', function() {
         const tabSize = document.querySelector('a[data-w-tab="1"]');

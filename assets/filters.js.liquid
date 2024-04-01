@@ -411,7 +411,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     // Listen for tab changes to re-initialize form for the active tab
-    document.querySelectorAll('.tab-link-top-search, .tab-link-left-search').forEach(tab => {
+    document.querySelectorAll('.tab-link-top-search, .tab-link-left-search, .tab-link-tab-2').forEach(tab => {
         tab.addEventListener('click', () => {
             setTimeout(activateFormInitialization, 150);
         });
