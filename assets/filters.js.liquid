@@ -41,23 +41,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     }
 
-    function getActiveTabContent() {
-        {% comment %} ActiveTabContent for home page {% endcomment %}
-        let activeTabContent = document.querySelector('.w-tab-pane.w--tab-active div div.w-tab-pane.w--tab-active');
-
-        {% comment %} ActiveTabContent for manufacturer subpage {% endcomment %}
-        if (activeTabContent === null) {
-            activeTabContent = document.getElementById('tire-manufacturer-form');
-        }
-
-        {% comment %} ActiveTabContent for collection page {% endcomment %}
-        if (activeTabContent === null) {
-            activeTabContent = document.querySelector('div[data-sub-tab].w-tab-pane.w--tab-active');
-        }
-
-        return activeTabContent;
-    }
-
     async function initializeSizeForm(activeTabContent, activeSubTabNumber, formAction) {
         const tire_width = activeTabContent.querySelector('select[data-name="tire-width"]');
         const tire_profile = activeTabContent.querySelector('select[data-name="tire-profile"]');
@@ -360,31 +343,58 @@ document.addEventListener('DOMContentLoaded', async function () {
         }));
     }
 
-    function activateFormInitialization() {
-        const activeTabContent = getActiveTabContent();
-        if (!activeTabContent) return;
+    function getActiveTabContent() {
+        let activePage = window.location.pathname;
+        let activeTabContent;
 
-        const formActionBaseURL = 'https://moto-m5.myshopify.com/collections/';
+        switch (true) {
+            case activePage === '/':
+                activeTabContent = document.querySelector('.w-tab-pane.w--tab-active > div > div.w-tab-pane.w--tab-active');
+                break;
 
+            default:
+                if (activePage.includes('/pages/opony/')) {
+                    activeTabContent = document.getElementById('tire-manufacturer-form');
+                } else if (activePage.includes('/collections/')) {
+                    activeTabContent = document.querySelector('div[data-sub-tab].w-tab-pane.w--tab-active');
+                }
+                break;
+        }
+
+        return activeTabContent;
+    }
+
+    function getActiveSubTabNumber() {
         {% comment %} ActiveTabContent for home page {% endcomment %}
         let activeSubTab = document.querySelector('.tab-link-left-search.w--current');
-        let activeSubTabNumber;
-
         if (activeSubTab) {
-            activeSubTabNumber = activeSubTab.getAttribute('data-w-tab').split('.')[1];
-        } else {
-            {% comment %} ActiveTabContent for manufacturer subpage {% endcomment %}
-            activeSubTab = document.querySelector('[data-w-tab="1.1"]');
-            if (activeSubTab) {
-                activeSubTabNumber = activeSubTab.getAttribute('data-w-tab').split('.')[1];
-            } else {
-                {% comment %} ActiveTabContent for collection page {% endcomment %}
-                activeSubTab = document.querySelector('div[data-sub-tab].w-tab-pane.w--tab-active');
-                if (activeSubTab) {
-                    activeSubTabNumber = activeSubTab.getAttribute('data-sub-tab').split('.')[1];
-                }
-            }
+            return activeSubTab.getAttribute('data-w-tab').split('.')[1];
         }
+
+        {% comment %} ActiveTabContent for manufacturer subpage {% endcomment %}
+        activeSubTab = document.querySelector('[data-w-tab="1.1"]');
+        if (activeSubTab) {
+            return activeSubTab.getAttribute('data-w-tab').split('.')[1];
+        }
+
+        {% comment %} ActiveTabContent for collection page {% endcomment %}
+        activeSubTab = document.querySelector('div[data-sub-tab].w-tab-pane.w--tab-active');
+        if (activeSubTab) {
+            return activeSubTab.getAttribute('data-sub-tab').split('.')[1];
+        }
+
+        return null; // Zwraca null, jeśli żadna z podzakładek nie jest aktywna
+    }
+
+    function activateFormInitialization() {
+        const activeTabContent = getActiveTabContent();
+        if (!activeTabContent) {
+            console.log('Active tab content not found.');
+            return
+        }
+
+        const formActionBaseURL = 'https://moto-m5.myshopify.com/collections/';
+        let activeSubTabNumber = getActiveSubTabNumber();
 
         let formAction = `${formActionBaseURL}opony`; // Default action
         switch (activeSubTabNumber) {
@@ -402,7 +412,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
 
         if (document.querySelector('.w-tab-pane.w--tab-active').classList.contains('tab-pane-tab-1')) {
-            // "Search by Tire Size"
+            // "Search by Size"
             initializeSizeForm(activeTabContent, activeSubTabNumber, formAction);
         } else if (document.querySelector('.w-tab-pane.w--tab-active').classList.contains('tab-pane-tab-2')) {
             // "Search by Car"
