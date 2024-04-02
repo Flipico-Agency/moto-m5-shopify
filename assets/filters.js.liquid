@@ -343,58 +343,49 @@ document.addEventListener('DOMContentLoaded', async function () {
         }));
     }
 
-    function getActiveTabContent() {
+    function getActiveTabInfo() {
         let activePage = window.location.pathname;
         let activeTabContent;
+        let activeSubTab;
+        let activeSubTabNumber = null;
 
         switch (true) {
             case activePage === '/':
                 activeTabContent = document.querySelector('.w-tab-pane.w--tab-active > div > div.w-tab-pane.w--tab-active');
+                activeSubTab = document.querySelector('.tab-link-left-search.w--current');
+                if (activeSubTab) {
+                    activeSubTabNumber = activeSubTab.getAttribute('data-w-tab').split('.')[1];
+                }
                 break;
 
             default:
                 if (activePage.includes('/pages/opony/')) {
                     activeTabContent = document.getElementById('tire-manufacturer-form');
+                    activeSubTab = document.querySelector('[data-w-tab="1.1"]');
+                    if (activeSubTab) {
+                        activeSubTabNumber = activeSubTab.getAttribute('data-w-tab').split('.')[1];
+                    }
                 } else if (activePage.includes('/collections/')) {
                     activeTabContent = document.querySelector('div[data-sub-tab].w-tab-pane.w--tab-active');
+                    activeSubTab = document.querySelector('div[data-sub-tab].w-tab-pane.w--tab-active');
+                    if (activeSubTab) {
+                        activeSubTabNumber = activeSubTab.getAttribute('data-sub-tab').split('.')[1];
+                    }
                 }
                 break;
         }
 
-        return activeTabContent;
-    }
-
-    function getActiveSubTabNumber() {
-        {% comment %} ActiveTabContent for home page {% endcomment %}
-        let activeSubTab = document.querySelector('.tab-link-left-search.w--current');
-        if (activeSubTab) {
-            return activeSubTab.getAttribute('data-w-tab').split('.')[1];
-        }
-
-        {% comment %} ActiveTabContent for manufacturer subpage {% endcomment %}
-        activeSubTab = document.querySelector('[data-w-tab="1.1"]');
-        if (activeSubTab) {
-            return activeSubTab.getAttribute('data-w-tab').split('.')[1];
-        }
-
-        {% comment %} ActiveTabContent for collection page {% endcomment %}
-        activeSubTab = document.querySelector('div[data-sub-tab].w-tab-pane.w--tab-active');
-        if (activeSubTab) {
-            return activeSubTab.getAttribute('data-sub-tab').split('.')[1];
-        }
-
-        return null; // Zwraca null, jeśli żadna z podzakładek nie jest aktywna
+        return { activeTabContent, activeSubTabNumber };
     }
 
     function activateFormInitialization() {
-        const activeTabContent = getActiveTabContent();
+        const { activeTabContent, activeSubTabNumber } = getActiveTabInfo();
         if (!activeTabContent) {
             console.log('Active tab content not found.');
             return
         }
 
         const formActionBaseURL = 'https://moto-m5.myshopify.com/collections/';
-        let activeSubTabNumber = getActiveSubTabNumber();
 
         let formAction = `${formActionBaseURL}opony`; // Default action
         switch (activeSubTabNumber) {
