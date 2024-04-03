@@ -111,9 +111,9 @@ document.addEventListener('DOMContentLoaded', async function () {
         let tire_profilesData;
         let tire_diametersData;
 
-        if (window.location.pathname.includes('/collections/opony') && hasTireParams) {
-            const sectionWidth = urlParams.get('filter.p.m.tires.width');
-            const aspectRatio = urlParams.get('filter.p.m.tires.profile');
+        if (window.location.pathname.includes('/collections/opony') && hasTireParams && !hasWheelParams && !hasRimParams) {
+            const tireWidth = urlParams.get('filter.p.m.tires.width');
+            const tireProfile = urlParams.get('filter.p.m.tires.profile');
             const rimDiameter = urlParams.get('filter.p.m.tires.diameter');
 
             if (searchBy === 'bySize' && sectionWidth && aspectRatio && rimDiameter) {
@@ -146,6 +146,46 @@ document.addEventListener('DOMContentLoaded', async function () {
                 });
                 manageSelect(tire_diameter, tire_diametersData.data, true, "Średnica");
                 tire_diameter.value = rimDiameter;
+
+                manageSelect(submitButton, [], tire_width.value && tire_profile.value && tire_diameter.value);
+            }
+        } else if (window.location.pathname.includes('/collections/kola') && !hasTireParams && hasWheelParams  && !hasRimParams) {
+            const tireWidth = urlParams.get('filter.p.m.tires.width');
+            const tireProfile = urlParams.get('filter.p.m.tires.profile');
+            const tireDiameter = urlParams.get('filter.p.m.tires.diameter');
+            const rimBolt = urlParams.get('filter.p.m.rim.rim_bolt');
+            const rimWidth = urlParams.get('filter.p.m.rim.rim_bolt');
+
+            if (searchBy === 'bySize' && tireWidth && tireProfile && tireDiameter && rimBolt && rimWidth) {
+                const searchByTireData = await fetchData('by_tire/search/', {
+                    section_width: tireWidth,
+                    aspect_ratio: tireProfile,
+                    rim_diameter: tireDiameter
+                });
+
+                console.log(searchByTireData);
+
+                const matchingSizes = `${tireWidth}/${tireProfile}/R${tireDiameter}`;
+                console.log(matchingSizes);
+
+                tire_widthsData = await fetchData('by_tire/sw/', {region: 'eudm'});
+                manageSelect(tire_width, tire_widthsData.data, true, "Szerokość opony");
+                tire_width.value = tireWidth;
+
+                tire_profilesData = await fetchData('by_tire/ar/', {
+                    section_width: tireWidth,
+                    region: 'eudm'
+                });
+                manageSelect(tire_profile, tire_profilesData.data, true, "Profil opony");
+                tire_profile.value = tireProfile;
+
+                tire_diametersData = await fetchData('by_tire/rd/', {
+                    section_width: tireWidth,
+                    aspect_ratio: tireProfile,
+                    region: 'eudm'
+                });
+                manageSelect(tire_diameter, tire_diametersData.data, true, "Średnica felgi");
+                tire_diameter.value = tireDiameter;
 
                 manageSelect(submitButton, [], tire_width.value && tire_profile.value && tire_diameter.value);
             }
