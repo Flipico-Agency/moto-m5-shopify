@@ -13,31 +13,24 @@ document.addEventListener('DOMContentLoaded', async function () {
     function manageSelect(element, data = [], isEnabled = true, placeholder = "Wybierz...") {
         if (!element) return;
 
-        // Handle select elements
-        if (element.tagName === 'SELECT') {
-            element.innerHTML = ''; // Clear existing options
-            if (isEnabled) {
-                if (placeholder) {
-                    element.add(new Option(placeholder, ''));
-                }
-                data.forEach(item => element.add(new Option(item.name || item.value, item.value)));
-            }
+        const isSelect = element.tagName === 'SELECT';
+        const isSubmit = element.type === 'submit';
+        const parentDiv = isSelect ? element.closest('.form-field-wrapper') : null;
 
-            // Adjust parent div styling for select elements
-            const parentDiv = element.closest('.form-field-wrapper');
-            if (parentDiv) {
-                parentDiv.style.pointerEvents = isEnabled ? 'auto' : 'none';
-                parentDiv.style.opacity = isEnabled ? '1' : '0.5';
-            }
-
-            element.disabled = !isEnabled; // Enable/disable select based on the isEnabled flag
+        if (isSelect) {
+            element.innerHTML = isEnabled && placeholder ? `<option value="">${placeholder}</option>` : '';
+            data.forEach(item => element.add(new Option(item.name || item.value, item.value)));
         }
 
-        // Handle submit buttons
-        else if (element.type === 'submit') {
+        if (parentDiv) {
+            parentDiv.style.pointerEvents = isEnabled ? 'auto' : 'none';
+            parentDiv.style.opacity = isEnabled ? '1' : '0.5';
+        }
+
+        if (isSelect || isSubmit) {
+            element.disabled = !isEnabled;
             element.style.pointerEvents = isEnabled ? 'auto' : 'none';
             element.style.opacity = isEnabled ? '1' : '0.5';
-            element.disabled = !isEnabled; // Enable/disable button based on the isEnabled flag
         }
     }
 
@@ -54,51 +47,57 @@ document.addEventListener('DOMContentLoaded', async function () {
         const season = activeTabContent.querySelector('select[data-name="tire-season"]');
         const submitButton = activeTabContent.querySelector('input[type="submit"]');
 
-        // Define event listener for form submission
-        submitButton.form.addEventListener('submit', function (event) {
+        submitButton.form.addEventListener('submit', function(event) {
             event.preventDefault();
-
             localStorage.setItem('searchBy', 'bySize');
+            const queryParameters = buildQueryParameters();
+            window.location.href = `${formAction}?${new URLSearchParams(queryParameters).toString()}`;
 
-            let queryParameters = {};
+            function buildQueryParameters() {
+                switch (activeSubTabNumber) {
+                    case '1': {
+                        const baseParams = {
+                            'filter.p.m.tires.width': tire_width.value,
+                            'filter.p.m.tires.profile': tire_profile.value,
+                            'filter.p.m.tires.diameter': tire_diameter.value,
+                            'filter.p.m.tires.season': season.value
+                        };
 
-            switch (activeSubTabNumber) {
-                case '1':
-                    queryParameters = {
-                        'filter.p.m.tires.width': tire_width.value,
-                        'filter.p.m.tires.profile': tire_profile.value,
-                        'filter.p.m.tires.diameter': tire_diameter.value,
-                        'filter.p.m.tires.season': season.value
-                    };
+                        const pathname = window.location.pathname;
+                        const manufacturerMatch = pathname.match(/\/pages\/opony\/([^\/]+)/);
+                        if (manufacturerMatch && manufacturerMatch[1]) {
+                            baseParams['filter.p.m.tires.manufacturer'] = manufacturerMatch[1];
+                        }
 
-                    const pathname = window.location.pathname;
-                    const manufacturerMatch = pathname.match(/\/pages\/opony\/([^\/]+)/);
-                    if (manufacturerMatch && manufacturerMatch[1]) {
-                        queryParameters['filter.p.m.tires.manufacturer'] = manufacturerMatch[1];
+                        return baseParams;
                     }
-                    break;
-                case '2':
-                    queryParameters = {
-                        'filter.p.m.tires.width': tire_width.value,
-                        'filter.p.m.tires.profile': tire_profile.value,
-                        'filter.p.m.tires.diameter': tire_diameter.value,
-                        'filter.p.m.rim.rim_bolt': rim_bolt.value,
-                        'filter.p.m.rim.width': rim_width.value,
-                        'filter.p.m.tires.season': season.value
-                    };
-                    break;
-                case '3':
-                    queryParameters = {
-                        'filter.p.m.rim.diameter': rim_diameter.value,
-                        'filter.p.m.rim.rim_bolt': rim_bolt.value,
-                        'filter.p.m.rim.width': rim_width.value,
-                        'filter.p.m.rim.rim_et': rim_et.value
-                    };
-                    break;
-            }
+                    case '2': {
+                        const baseParams = {
+                            'filter.p.m.tires.width': tire_width.value,
+                            'filter.p.m.tires.profile': tire_profile.value,
+                            'filter.p.m.tires.diameter': tire_diameter.value,
+                            'filter.p.m.tires.season': season.value
+                        };
 
-            const queryString = Object.entries(queryParameters).map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&');
-            window.location.href = `${formAction}?${queryString}`;
+                        const rimParams = {
+                            'filter.p.m.rim.rim_bolt': rim_bolt.value,
+                            'filter.p.m.rim.width': rim_width.value
+                        };
+
+                        return { ...baseParams, ...rimParams };
+                    }
+                    case '3': {
+                       return {
+                            'filter.p.m.rim.diameter': rim_diameter.value,
+                            'filter.p.m.rim.rim_bolt': rim_bolt.value,
+                            'filter.p.m.rim.width': rim_width.value,
+                            'filter.p.m.rim.rim_et': rim_et.value
+                       };
+                    }
+                    default:
+                        return {};
+                }
+            }
         });
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -116,32 +115,32 @@ document.addEventListener('DOMContentLoaded', async function () {
             const tireProfile = urlParams.get('filter.p.m.tires.profile');
             const rimDiameter = urlParams.get('filter.p.m.tires.diameter');
 
-            if (searchBy === 'bySize' && sectionWidth && aspectRatio && rimDiameter) {
+            if (searchBy === 'bySize' && tireWidth && tireProfile && rimDiameter) {
                 const searchByTireData = await fetchData('by_tire/search/', {
-                    section_width: sectionWidth,
-                    aspect_ratio: aspectRatio,
+                    section_width: tireWidth,
+                    aspect_ratio: tireProfile,
                     rim_diameter: rimDiameter
                 });
 
                 console.log(searchByTireData);
 
-                const matchingSizes = `${sectionWidth}/${aspectRatio}/R${rimDiameter}`;
+                const matchingSizes = `${tireWidth}/${tireProfile}/R${rimDiameter}`;
                 console.log(matchingSizes);
 
                 tire_widthsData = await fetchData('by_tire/sw/', {region: 'eudm'});
                 manageSelect(tire_width, tire_widthsData.data, true, "Szerokość");
-                tire_width.value = sectionWidth;
+                tire_width.value = tireWidth;
 
                 tire_profilesData = await fetchData('by_tire/ar/', {
-                    section_width: sectionWidth,
+                    section_width: tireWidth,
                     region: 'eudm'
                 });
                 manageSelect(tire_profile, tire_profilesData.data, true, "Profil");
-                tire_profile.value = aspectRatio;
+                tire_profile.value = tireProfile;
 
                 tire_diametersData = await fetchData('by_tire/rd/', {
-                    section_width: sectionWidth,
-                    aspect_ratio: aspectRatio,
+                    section_width: tireWidth,
+                    aspect_ratio: tireProfile,
                     region: 'eudm'
                 });
                 manageSelect(tire_diameter, tire_diametersData.data, true, "Średnica");
