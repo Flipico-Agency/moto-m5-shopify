@@ -320,7 +320,37 @@
                                 </div>
                             </div>
                         </div>
-                        <div> PRODUKTY</div>
+                        <div class="products-wrapper">
+                            {% for product in collection.products %}
+                                <div class="product-single">
+                                    <a href="{{ product.url }}" class="product-single__link">
+                                        <div class="product-single__image-wrapper">
+                                            {% if product.featured_image %}
+                                                <img src="{{ product.featured_image | img_url: '300x300' }}" alt="{{ product.title }}" class="product-single__image">
+                                            {% endif %}
+                                        </div>
+                                        <div class="product-single__info">
+                                            <h2 class="product-single__title">{{ product.title }}</h2>
+                                            <span class="product-single__price">
+                                                {% if product.compare_at_price_min > product.price_min %}
+                                                    <span class="product-single__discounted-price">{{ product.price | money }}</span>
+                                                    <span class="product-single__original-price">{{ product.compare_at_price_min | money }}</span>
+                                                {% else %}
+                                                    {{ product.price | money }}
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    </a>
+                                    <form method="post" action="/cart/add">
+                                        <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+                                        <input type="submit" value="Dodaj do koszyka" class="button add-to-cart-button">
+                                    </form>
+                                    <button onclick="window.location='{{ product.url | within: collection }}?variant={{ product.variants.first.id }}&checkout=direct'" class="button buy-now-button">Kup teraz</button>
+                                </div>
+                            {% else %}
+                                <p>Brak produktów w tej kolekcji.</p>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
             </div>
