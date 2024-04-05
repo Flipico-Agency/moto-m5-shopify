@@ -1,49 +1,196 @@
-<div class="cart-page">
-    {% if cart.items.size > 0 %}
-        <form action="/cart" method="post" novalidate>
-            <table>
-                <thead>
-                <tr>
-                    <th>Produkt</th>
-                    <th>Zdjęcie</th>
-                    <th>Cena</th>
-                    <th>Ilość</th>
-                    <th>Suma</th>
-                    <th></th> <!-- Kolumna na przyciski do usuwania -->
-                </tr>
-                </thead>
-                <tbody>
-                {% for item in cart.items %}
-                    <tr>
-                        <td>
-                            <a href="{{ item.url }}">{{ item.product.title }}</a>
-                            {% if item.variant.title != 'Default Title' %} - {{ item.variant.title }}{% endif %}
-                        </td>
-                        <td>
-                            <a href="{{ item.url }}">
-                                <img src="{{ item.image | img_url: 'medium' }}" alt="{{ item.product.title | escape }}">
-                            </a>
-                        </td>
-                        <td>{{ item.price | money }}</td>
-                        <td>
-                            <input type="number" name="updates[]" id="updates_{{ item.id }}" value="{{ item.quantity }}" min="1">
-                        </td>
-                        <td>{{ item.line_price | money }}</td>
-                        <td><a href="/cart/change?line={{ forloop.index }}&quantity=0">Usuń</a></td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+{{ 'cart.css' | asset_url | stylesheet_tag }}
 
-            <div class="cart-footer">
-                <div class="cart-total">
-                    <strong>Suma: </strong>{{ cart.total_price | money }}
-                </div>
-                <input type="submit" name="update" value="Aktualizuj koszyk">
-                <input type="submit" name="checkout" value="Realizuj zakup" class="btn-checkout">
+<div class="section-cart">
+  <div class="padding-global">
+    <div class="container-large">
+      <div class="padding-section-small">
+        {% if cart.items.size > 0 %}
+          {% if cart.total_price <= 20000 %}
+            <div class="cart_free-delivery">
+              <img src="{{ 'IcRoundWarning.svg' | asset_url}}" class="icon-embed-xsmall">
+              <div class="text-weight-medium">Dodaj akcesoria za {{ 20000 | minus: cart.total_price | money }} lub opony / felgi / koła, aby mieć
+                <span class="text-weight-bold">darmową dostawę</span>
+              </div>
             </div>
-        </form>
-    {% else %}
-        <p>Twój koszyk jest pusty.</p>
-    {% endif %}
+          {% endif %}
+          <div class="cart-wrapper">
+            <div class="cart-column cart-column-left">
+              <form
+                action="/cart"
+                method="post"
+                novalidate>
+                <div class="white-container-border">
+                  <div class="cart_heading-wrapper">
+                    <div class="text-weight-bold">Koszyk ({{ cart.item_count }})</div>
+                  </div>
+                  <div class="cart_product-list">
+                    {% for item in cart.items %}
+                      <div class="cart_product-wrapper">
+                        <img
+                          class="cart_product-photo"
+                          src="{{ item.image | image_url: width: 300 }}"
+                          alt="{{ item.title.alt | escape }}">
+                        <div class="cart_product-content">
+                          {% for collection in item.product.collections %}
+                            {% if collection.title == 'Opony' %}
+                              <a
+                                class="cart_product-title"
+                                href="{{ item.url }}"
+                                id="w-node-a3fc45f6-3394-d351-49d3-241dece435d1-65612e35">
+                                <div class="text-weight-bold">
+                                  {% if item.quantity > 1 %}
+                                    {{ item.quantity }} x
+                                  {% endif %}
+                                  {{ item.product.metafields.tires.quantity }}
+                                  {{ item.product.metafields.tires.manufacturer.value.name.value }}</div>
+                                <div>{{ item.product.metafields.tires.model.value.model.value }} {{ item.product.metafields.tires.width }}/{{ item.product.metafields.tires.profile }} R{{ item.product.metafields.tires.diameter }} {{ item.product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ item.product.metafields.tires.speed_index | slice: 0 }}</div>
+                              </a>
+                              <div id="w-node-a0529447-4ac9-eaf6-02fc-ea15f2186713-65612e35">
+                                <div class="text-size-tiny">
+                                  <span class="text-color-grayiron600">Data produkcji:</span>
+                                  <span class="text-weight-bold">{{ item.product.metafields.tires.years }}</span>
+                                </div>
+                                <div class="text-size-tiny">
+                                  <span class="text-color-grayiron600">Stan i bieżnik:</span>
+                                  <span class="text-weight-bold">{{ item.product.metafields.tires.condition }} | {{ item.product.metafields.tires.tread }}</span>
+                                </div>
+                              </div>
+                            {% elsif collection.title == 'Akcesoria' %}
+                              <a
+                                class="cart_product-title"
+                                href="{{ item.url }}"
+                                id="w-node-a3fc45f6-3394-d351-49d3-241dece435d1-65612e35">
+                                <div class="text-weight-bold">
+                                  {% if item.quantity > 1 %}
+                                    {{ item.quantity }} x
+                                  {% endif %}
+                                  {{ item.product.title }}</div>
+                                <div class="text-size-tiny text-color-grayiron600">
+                                  Otrzymasz ze swoim zamówieniem
+                                </div>
+                              </a>
+                              <div id="w-node-a0529447-4ac9-eaf6-02fc-ea15f2186713-65612e35"></div>
+                            {% endif %}
+                          {% endfor %}
+                          <div id="w-node-f37ffad2-1e5e-42e0-2327-78b9991e8a10-65612e35">
+                            <a href="/cart/change?line={{ forloop.index }}&quantity=0"><img class="icon-embed-xxsmall" src="{{ 'IcRoundDelete.svg' | asset_url }}"></a>
+                          </div>
+                          <div id="w-node-cfb9a4ab-e3fd-2276-ebc0-b72fc1ea1637-65612e35" style="text-align: right;">
+                            <div class="text-color-red600 text-weight-bold">
+                              {{ item.price | times: item.quantity | money }}
+                              {% if item.quantity > 1 %}
+                                <div class="text-size-tiny text-weight-medium text-color-grayiron600">
+                                  {{ item.quantity }} x {{ item.price | money }}
+                                </div>
+                              {% endif %}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </form>
+              <div class="white-container-border">
+                <div class="cart_heading-wrapper">
+                  <div class="text-weight-bold">Polecane dla Ciebie</div>
+                </div>
+                <div class="cart_add-product-list">
+                  {% for product in collections.akcesoria.products %}
+                    <div class="cart_add-product">
+                      <div class="cart_add-product_image-wrapper">
+                        <img src="{{ product.featured_image | image_url: width: 600 }}" class="cart_add-product_image">
+                        <div class="cart_add-product_price-wrapper">
+                          <div class="text-weight-bold text-color-red600">{{ product.price | money }}</div>
+                        </div>
+                      </div>
+                      <div class="text-weight-medium">{{ product.title }}</div>
+                      <form method="post" action="/cart/add">
+                        <input
+                          type="hidden"
+                          name="id"
+                          value="{{ product.variants.first.id }}" />
+                        <input
+                          type="hidden"
+                          min="1"
+                          type="number"
+                          id="quantity"
+                          name="quantity"
+                          value="1" />
+                        <input
+                          type="submit"
+                          value="Dodaj"
+                          class="button is-secondary is-small max-width-full" />
+                      </form>
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+            <div class="cart-column">
+              <form
+                action="/cart"
+                method="post"
+                novalidate>
+                <div class="white-container-border">
+                  <div class="cart_heading-wrapper">
+                    <div class="text-weight-bold">Podsumowanie</div>
+                  </div>
+                  <div class="cart_price-list">
+                    <div class="cart_price-item">
+                      <div class="text-size-small">Wartość produktów:</div>
+                      <div class="text-size-small">{{ cart.total_price | money }}</div>
+                    </div>
+                    <div class="cart_price-item">
+                      <div class="text-size-small">Dostawa:</div>
+                      {% if cart.total_price >= 20000 %}
+                        <div class="text-size-small text-weight-bold text-color-green">Gratis!</div>
+                      {% else %}
+                        <div class="text-size-small">19,90 zł</div>
+                      {% endif %}
+                    </div>
+                    <div class="cart_price-item">
+                      <div class="text-size-small text-weight-bold">Do zapłaty:</div>
+                      {% if cart.total_price >= 20000 %}
+                        <div class="text-size-small text-weight-bold">{{ cart.total_price | money }}</div>
+                      {% else %}
+                        <div class="text-size-small text-weight-bold">{{ cart.total_price | plus: 1990 | money }}</div>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="cart_list">
+                    <div class="text-size-small text-weight-bold text-color-green">Zamów przed {{ settings.delivery-hour }} - wyślemy dzisiaj</div>
+                  </div>
+                  <div class="cart_list">
+                    <div class="text-size-small">Oczekiwana dostawa 1-2 dni robocze</div>
+                  </div>
+                  <div class="margin-bottom margin-xsmall">
+                    <div class="cart_list">
+                      <div class="text-size-small">Masz kod rabatowy?</div>
+                    </div>
+                  </div>
+                  <input
+                    type="submit"
+                    name="checkout"
+                    value="Przejdź do kasy"
+                    class="button max-width-full">
+                </div>
+              </form>
+              <div class="white-container-border">
+                <img src="{{ 'Payments.svg' | asset_url }}">
+              </div>
+            </div>
+          </div>
+        {% else %}
+          <div class="white-container-border">
+            <div class="cart_empty">
+              <img src="{{ 'IcRoundEmptyCart.svg' | asset_url }}" class="icon-embed-medium">
+              <div class="heading-style-h5">Twój koszyk jest pusty</div>
+              <a class="button" href="{{ shop.url }}">Wróć do sklepu</a>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
 </div>

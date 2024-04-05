@@ -6,7 +6,7 @@
     "theme_documentation_url": "https:\/\/flipico.agency",
     "theme_support_email": "kontakt@flipico.agency"
 }, {
-    "name": "Seo Settings",
+    "name": "Ustawienia SEO",
     "settings": [{
             "type": "image_picker",
             "id": "favicon",
@@ -38,7 +38,7 @@
         }
     ]
 }, {
-    "name": "Colors Settings",
+    "name": "Kolory",
     "settings": [{
             "type": "color",
             "id": "color_color_grayiron_grayiron600",
@@ -203,20 +203,11 @@
         }
     ]
 }, {
-    "name": "Products Collection Settings",
+    "name": "Ustawienia sklepu",
     "settings": [{
-            "type": "collection",
-            "id": "collection_categories_template",
-            "label": "Collection Categories Template"
-        },
-        {
-            "type": "range",
-            "id": "collection_categories_template_limit",
-            "label": "Collection Categories Template limit",
-            "min": 1,
-            "max": 50,
-            "step": 1,
-            "default": 3
-        }
-    ]
+        "type": "text",
+        "id": "delivery-hour",
+        "label": "Godzina wysyłki tego samego dnia",
+        "default": "15:00"
+    }]
 }]
