@@ -117,18 +117,41 @@
                                                                                 {% endfor %}
                                                                         {% endcase %}
                                                                     {% else %}
-                                                                        {% assign form_fields = "Marka,Model,Generacja,Rok,Silnik" | split: "," %}
-                                                                        {% for field in form_fields %}
-                                                                            <div class="form-field-wrapper">
-                                                                                <label for="car-{{ field | downcase }}"
-                                                                                       class="field-label">{{ field }}</label>
-                                                                                <select id="car-{{ field | downcase }}"
-                                                                                        data-name="car-{{ field | downcase }}"
-                                                                                        required="required"
-                                                                                        class="select-field w-select"></select>
-                                                                                {% render 'select-arrow' %}
+                                                                        <div class="ifnotselectedcar">
+                                                                            {% assign form_fields = "Marka,Model,Generacja,Rok,Silnik" | split: "," %}
+                                                                            {% for field in form_fields %}
+                                                                                <div class="form-field-wrapper">
+                                                                                    <label for="car-{{ field | downcase }}"
+                                                                                           class="field-label">{{ field }}</label>
+                                                                                    <select id="car-{{ field | downcase }}"
+                                                                                            data-name="car-{{ field | downcase }}"
+                                                                                            required="required"
+                                                                                            class="select-field w-select"></select>
+                                                                                    {% render 'select-arrow' %}
+                                                                                </div>
+                                                                            {% endfor %}
+                                                                        </div>
+                                                                        <div class="ifselectedcar is-right" style="display: none">
+                                                                            <div class="div-block-41">
+                                                                                <div class="text-size-small">
+                                                                                    Twoje auto:
+                                                                                </div>
+                                                                                <div wized="selected_car" class="text-size-small text-weight-bold">
+                                                                                    BMW 3 Series V (E90/E91/E92/E93) LCI
+                                                                                    320d (177, 130 kW) (2008-2010)
+                                                                                </div>
+                                                                                <a wized="change_car" href="#" class="text-size-small">Zmień auto</a>
                                                                             </div>
-                                                                        {% endfor %}
+                                                                            <div class="form-field-wrapper">
+                                                                                <label for="field-8" class="field-label">Pasujące rozmiary</label>
+                                                                                <select id="field-8"
+                                                                                    data-name=""
+                                                                                    wized="matching_sizes"
+                                                                                    class="select-field is-left w-select"
+                                                                                >
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
                                                                     {% endif %}
                                                                     <input type="submit" data-wait="Zaczekaj..." class="button w-button"
                                                                            value="{% case tab_number %}{% when 1 %}{% case collection.title %}{% when 'Opony' %}Szukaj opon{% when 'Koła' %}Szukaj kół{% when 'Felgi' %}Szukaj felg{% endcase %}{% when 2 %}{% case collection.title %}{% when 'Opony' %}Szukaj opon{% when 'Koła' %}Szukaj kół{% when 'Felgi' %}Szukaj felg{% endcase %}{% endcase %}">
