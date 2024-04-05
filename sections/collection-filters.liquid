@@ -343,32 +343,71 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="products-wrapper">
+                        <div class="product-wide_list">
                             {% for product in collection.products %}
-                                <div class="product-single">
-                                    <a href="{{ product.url }}" class="product-single__link">
-                                        <div class="product-single__image-wrapper">
-                                            {% if product.featured_image %}
-                                                <img src="{{ product.featured_image | img_url: '300x300' }}" alt="{{ product.title }}" class="product-single__image">
-                                            {% endif %}
-                                        </div>
-                                        <div class="product-single__info">
-                                            <h2 class="product-single__title">{{ product.title }}</h2>
-                                            <span class="product-single__price">
-                                                {% if product.compare_at_price_min > product.price_min %}
-                                                    <span class="product-single__discounted-price">{{ product.price | money }}</span>
-                                                    <span class="product-single__original-price">{{ product.compare_at_price_min | money }}</span>
-                                                {% else %}
-                                                    {{ product.price | money }}
+                                <div class="product-wide shadow-xsmall">
+                                    <a href="{{ product.url }}" class="product_content-wrapper w-inline-block">
+                                        <div class="heading-style-h4">{{ product.title }}</div>
+                                        {% if collection.handle == "opony" %}
+                                            <div class="div-block-47">
+                                                <div class="heading-style-h4">Producent</div>
+                                                <div class="div-block-46">
+                                                    <div class="text-size-large text-weight-semibold">Model Opony</div>
+                                                    <div class="text-size-large text-weight-semibold">Rozmiar Opony undefined/undefined/Rundefined</div>
+                                                </div>
+                                                <div class="product_parameters-wrapper"></div>
+                                                <div class="product_parameters-wrapper"></div>
+                                            </div>
+                                        {% endif %}
+                                        <div class="margin-top margin-xsmall">
+                                            <div class="product_pictures-wrapper">
+                                                <div class="product_season-wrapper"></div>
+                                                <div class="product_badge-wrapper"></div>
+                                                {% if product.featured_image %}
+                                                    <div class="product_image-wrapper">
+                                                        <img src="{{ product.featured_image | img_url: '300x300' }}" alt="{{ product.title }}" class="image-2">
+                                                    </div>
                                                 {% endif %}
-                                            </span>
+                                            </div>
                                         </div>
                                     </a>
-                                    <form method="post" action="/cart/add">
-                                        <input type="hidden" name="id" value="{{ product.variants.first.id }}">
-                                        <input type="submit" value="Dodaj do koszyka" class="button add-to-cart-button">
-                                    </form>
-                                    <button onclick="window.location='{{ product.url | within: collection }}?variant={{ product.variants.first.id }}&checkout=direct'" class="button buy-now-button">Kup teraz</button>
+                                    <div class="product_info-wrapper">
+                                        <div class="product_price-wrapper">
+                                            <div class="div-block-39">
+                                                <div class="div-block-45">
+                                                    <div class="text-weight-bold">zł / undefined</div>
+                                                </div>
+                                                <span class="heading-style-h2 text-color-red600">
+                                                    {% if product.compare_at_price_min > product.price_min %}
+                                                        <span class="product-single__discounted-price">{{ product.price | money_without_currency }}</span>
+                                                        <span class="product-single__original-price">{{ product.compare_at_price_min | money_without_currency }}</span>
+                                                    {% else %}
+                                                        {{ product.price | money_without_currency }}
+                                                    {% endif %}
+                                                </span>
+                                            </div>
+                                            <div class="text-size-small text-weight-bold hide-mobile-portrait">brutto (zawiera VAT)</div>
+                                            <div class="margin-top margin-xsmall">
+                                                <div class="text-size-large text-weight-bold text-color-red600">+&nbsp;Darmowa Dostawa</div>
+                                            </div>
+                                            <div class="product_green-wrapper">
+                                                <p class="text-size-small text-color-green">Możliwość montażu <span class="text-weight-semibold">w serwisie</span></p>
+                                            </div>
+                                            <div class="product_green-wrapper">
+                                                <p class="text-size-small text-color-green">Możliwość zakupu <span class="text-weight-semibold">na raty</span></p>
+                                            </div>
+                                        </div>
+                                        <div class="product-header1_add-to-cart w-form">
+                                            <button onclick="window.location='{{ product.url | within: collection }}?variant={{ product.variants.first.id }}&checkout=direct'"
+                                                    class="button is-icon is-buy-now-button w-inline-block">
+                                                Kup teraz
+                                            </button>
+                                            <form method="post" action="/cart/add">
+                                                <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+                                                <input type="submit" value="Dodaj do koszyka" class="button is-secondary is-icon is-add-to-cart-button w-inline-block">
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                             {% else %}
                                 <p>Brak produktów w tej kolekcji.</p>
