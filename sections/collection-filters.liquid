@@ -347,14 +347,28 @@
                             {% for product in collection.products %}
                                 <div class="product-wide shadow-xsmall">
                                     <a href="{{ product.url }}" class="product_content-wrapper w-inline-block">
-                                        <div class="product_pictures-wrapper">
-                                            <div class="product_season-wrapper"></div>
-                                            <div class="product_badge-wrapper"></div>
-                                            {% if product.featured_image %}
-                                                <div class="product_image-wrapper">
-                                                    <img src="{{ product.featured_image | img_url: '300x300' }}" alt="{{ product.title }}" class="image-2">
+                                        <div class="heading-style-h4">{{ product.title }}</div>
+                                        {% if collection.handle == "opony" %}
+                                            <div class="div-block-47">
+                                                <div class="heading-style-h4">Producent</div>
+                                                <div class="div-block-46">
+                                                    <div class="text-size-large text-weight-semibold">Model Opony</div>
+                                                    <div class="text-size-large text-weight-semibold">Rozmiar Opony undefined/undefined/Rundefined</div>
                                                 </div>
-                                            {% endif %}
+                                                <div class="product_parameters-wrapper"></div>
+                                                <div class="product_parameters-wrapper"></div>
+                                            </div>
+                                        {% endif %}
+                                        <div class="margin-top margin-xsmall">
+                                            <div class="product_pictures-wrapper">
+                                                <div class="product_season-wrapper"></div>
+                                                <div class="product_badge-wrapper"></div>
+                                                {% if product.featured_image %}
+                                                    <div class="product_image-wrapper">
+                                                        <img src="{{ product.featured_image | img_url: '300x300' }}" alt="{{ product.title }}" class="image-2">
+                                                    </div>
+                                                {% endif %}
+                                            </div>
                                         </div>
                                     </a>
                                     <div class="product_info-wrapper">
