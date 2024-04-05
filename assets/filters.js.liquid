@@ -3,266 +3,216 @@ document.addEventListener('DOMContentLoaded', async function () {
     const userKey = '8608442fd845888bda065b97c8d141d9';
 
     async function fetchData(endpoint, params) {
-        const url = new URL(`${baseURL}/${endpoint}`);
-        url.search = new URLSearchParams({user_key: userKey, ...params}).toString();
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        return await response.json();
+        try {
+            const url = new URL(`${baseURL}/${endpoint}`); // Ensure baseURL is defined and correct
+            url.search = new URLSearchParams({ user_key: userKey, ...params }).toString();
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            return await response.json();
+        } catch (error) {
+            console.error('Fetch Error:', error);
+            // Return a default object or handle the error as needed
+            {% comment %}return { data: [] };{% endcomment %}
+        }
     }
 
-    function manageSelect(element, data = [], isEnabled = true, placeholder = "Wybierz...") {
+    function manageSelect(element, options = [], isEnabled = true, placeholder = "Wybierz...") {
         if (!element) return;
 
-        // Handle select elements
-        if (element.tagName === 'SELECT') {
-            element.innerHTML = ''; // Clear existing options
-            if (isEnabled) {
-                if (placeholder) {
-                    element.add(new Option(placeholder, ''));
-                }
-                data.forEach(item => element.add(new Option(item.name || item.value, item.value)));
-            }
-
-            // Adjust parent div styling for select elements
-            const parentDiv = element.closest('.form-field-wrapper');
-            if (parentDiv) {
-                parentDiv.style.pointerEvents = isEnabled ? 'auto' : 'none';
-                parentDiv.style.opacity = isEnabled ? '1' : '0.5';
-            }
-
-            element.disabled = !isEnabled; // Enable/disable select based on the isEnabled flag
+        element.innerHTML = isEnabled && placeholder ? `<option value="">${placeholder}</option>` : '';
+        if (isEnabled) {
+            options.forEach(({ name, value }) => element.add(new Option(name || value, value)));
         }
 
-        // Handle submit buttons
-        else if (element.type === 'submit') {
-            element.style.pointerEvents = isEnabled ? 'auto' : 'none';
-            element.style.opacity = isEnabled ? '1' : '0.5';
-            element.disabled = !isEnabled; // Enable/disable button based on the isEnabled flag
+        element.disabled = !isEnabled;
+        const styleProps = { pointerEvents: isEnabled ? 'auto' : 'none', opacity: isEnabled ? '1' : '0.5' };
+        Object.assign(element.style, styleProps);
+
+        const parentDiv = element.closest('.form-field-wrapper');
+        if (parentDiv) Object.assign(parentDiv.style, styleProps);
+    }
+
+    function mapSelectNameToApiParam(selectName) {
+        const mapping = {
+            'tire-width': 'section_width',
+            'tire-profile': 'aspect_ratio',
+            'tire-diameter': 'rim_diameter',
+            'rim-bolt': 'bolt_pattern',
+            'rim-width': 'rim_width',
+            'rim-diameter': 'rim_diameter'
+        };
+        return mapping[selectName] || selectName;
+    }
+
+    async function initializeSelects(activeTabContent, elements, fetchDataEndpoints, urlParams) {
+        let previousSelectValue = null;
+
+        for (let i = 0; i < elements.length; i++) {
+            const elementName = elements[i];
+            const selectElement = activeTabContent.querySelector(`select[data-name="${elementName}"]`);
+            if (!selectElement) continue;
+
+            let urlParamName;
+            // Adjust the parameter name based on whether it's a tire-related select
+            if (elementName.includes('tire')) {
+                urlParamName = `filter.p.m.${elementName.replace('-', 's.')}`;
+            } else {
+                urlParamName = `filter.p.m.rim.${elementName.replace('rim-', '')}`;
+            }
+
+            const urlParamValue = urlParams.get(urlParamName);
+            const fetchDataParams = { region: 'eudm' };
+
+            if (previousSelectValue && i > 0) {
+                const previousSelectApiParam = mapSelectNameToApiParam(elements[i - 1]);
+                fetchDataParams[previousSelectApiParam] = previousSelectValue;
+            }
+
+            if (urlParamValue) {
+                const currentApiParam = mapSelectNameToApiParam(elementName);
+                fetchDataParams[currentApiParam] = urlParamValue;
+            }
+
+            const data = await fetchData(fetchDataEndpoints[elementName], fetchDataParams);
+
+            if (data && data.data) {
+                manageSelect(selectElement, data.data, true);
+                if (!selectElement.value && data.data.length > 0 && urlParamValue === null) {
+                    selectElement.value = data.data[0].value; // Default to the first option if no URL parameter value is provided
+                } else if (urlParamValue) {
+                    selectElement.value = urlParamValue;
+                }
+                previousSelectValue = selectElement.value; // Update previousSelectValue for the next iteration
+            }
         }
     }
 
-    function getActiveTabContent() {
-        let activeTabContent = document.querySelector('.w-tab-pane.w--tab-active div div.w-tab-pane.w--tab-active');
+    function setupEventListeners(activeTabContent, elements, fetchDataEndpoints) {
+        elements.forEach((elementName, index) => {
+            const selectElement = activeTabContent.querySelector(`select[data-name="${elementName}"]`);
 
-        {% comment %} ActiveTabContent for manufacturer subpage {% endcomment %}
-        if (activeTabContent === null) {
-            activeTabContent = document.getElementById('tire-manufacturer-form');
+            selectElement.addEventListener('change', async () => {
+                checkFormCompleteAndManageSubmitButton(activeTabContent, elements);
+
+                if (elementName === 'tire-season') return;
+
+                if (index < elements.length) {
+                    const nextElementName = elements[index + 1];
+                    const nextSelectElement = activeTabContent.querySelector(`select[data-name="${nextElementName}"]`);
+
+                    if (selectElement.value && elementName !== 'tire-season' && nextElementName !== 'tire-season') {
+                        const apiParam = mapSelectNameToApiParam(elementName);
+                        const data = await fetchData(fetchDataEndpoints[nextElementName], { region: 'eudm', [apiParam]: selectElement.value });
+                        manageSelect(nextSelectElement, data.data, true);
+                    } else {
+                        if (nextElementName !== 'tire-season') {
+                            manageSelect(nextSelectElement, [], false);
+                        }
+                    }
+
+                    elements.slice(index + 2).forEach(name => {
+                        if (name !== 'tire-season') {
+                            const elementToDisable = activeTabContent.querySelector(`select[data-name="${name}"]`);
+                            manageSelect(elementToDisable, [], false);
+                        }
+                    });
+                }
+            });
+        });
+    }
+
+    function buildQueryParameters(activeSubTabNumber, tire, rim, urlParams) {
+        let queryParams = {};
+
+        // Base parameters for tires are always included in subtabs 1 and 2
+        if (activeSubTabNumber === '1' || activeSubTabNumber === '2') {
+            queryParams = {
+                'filter.p.m.tires.width': tire.width.value,
+                'filter.p.m.tires.profile': tire.profile.value,
+                'filter.p.m.tires.diameter': tire.diameter.value,
+                'filter.p.m.tires.season': tire.season.value
+            };
         }
 
-        return activeTabContent;
+        // Include manufacturer if present in the URL (applicable only to subtab 1)
+        if (activeSubTabNumber === '1') {
+            const manufacturer = urlParams.get('filter.p.m.tires.manufacturer');
+            if (manufacturer) {
+                queryParams['filter.p.m.tires.manufacturer'] = manufacturer;
+            }
+        }
+
+        // For subtab 2, include rim parameters along with base tire parameters
+        if (activeSubTabNumber === '2') {
+            Object.assign(queryParams, {
+                'filter.p.m.rim.rim_bolt': rim.bolt.value,
+                'filter.p.m.rim.width': rim.width.value
+            });
+        }
+
+        // For subtab 3, only include rim parameters
+        if (activeSubTabNumber === '3') {
+            queryParams = {
+                'filter.p.m.rim.diameter': rim.diameter.value,
+                'filter.p.m.rim.rim_bolt': rim.bolt.value,
+                'filter.p.m.rim.width': rim.width.value,
+                'filter.p.m.rim.rim_et': rim.et.value
+            };
+        }
+
+        return queryParams;
+    }
+
+    function checkFormCompleteAndManageSubmitButton(activeTabContent, elements) {
+        const allSelected = elements.every(elementName => {
+            const selectElement = activeTabContent.querySelector(`select[data-name="${elementName}"]`);
+            return selectElement && selectElement.value;
+        });
+        const submitButton = activeTabContent.querySelector('input[type="submit"]');
+        manageSelect(submitButton, [], allSelected);
     }
 
     async function initializeSizeForm(activeTabContent, activeSubTabNumber, formAction) {
-        const tire_width = activeTabContent.querySelector('select[data-name="tire-width"]');
-        const tire_profile = activeTabContent.querySelector('select[data-name="tire-profile"]');
-        const tire_diameter = activeTabContent.querySelector('select[data-name="tire-diameter"]');
-
-        const rim_bolt = activeTabContent.querySelector('select[data-name="rim-bolt"]');
-        const rim_width = activeTabContent.querySelector('select[data-name="rim-width"]');
-        const rim_diameter = activeTabContent.querySelector('select[data-name="rim-diameter"]');
-        const rim_et = activeTabContent.querySelector('select[data-name="rim-et"]');
-
-        const season = activeTabContent.querySelector('select[data-name="tire-season"]');
         const submitButton = activeTabContent.querySelector('input[type="submit"]');
+        const urlParams = new URLSearchParams(window.location.search);
 
-        // Define event listener for form submission
-        submitButton.form.addEventListener('submit', function (event) {
+        const tireElements = ['tire-width', 'tire-profile', 'tire-diameter', 'tire-season'];
+        const rimElements = ['rim-diameter', 'rim-bolt', 'rim-width', 'rim-et'];
+        const wheelElements = ['tire-width', 'tire-profile', 'tire-diameter', 'rim-bolt', 'rim-width', 'tire-season'];
+        const fetchDataEndpoints = {
+            'tire-width': 'by_tire/sw/', 'tire-profile': 'by_tire/ar/', 'tire-diameter': 'by_tire/rd/',
+            'rim-diameter': 'by_rim/rd/', 'rim-bolt': 'by_rim/bp/', 'rim-width': 'by_rim/rw/', 'rim-et': 'by_rim/of/'
+        };
+
+        // Construct tire and rim objects with corresponding select elements
+        const tire = {
+            width: activeTabContent.querySelector(`select[data-name="tire-width"]`),
+            profile: activeTabContent.querySelector(`select[data-name="tire-profile"]`),
+            diameter: activeTabContent.querySelector(`select[data-name="tire-diameter"]`),
+            season: activeTabContent.querySelector(`select[data-name="tire-season"]`)
+        };
+        const rim = {
+            diameter: activeTabContent.querySelector(`select[data-name="rim-diameter"]`),
+            bolt: activeTabContent.querySelector(`select[data-name="rim-bolt"]`),
+            width: activeTabContent.querySelector(`select[data-name="rim-width"]`),
+            et: activeTabContent.querySelector(`select[data-name="rim-et"]`)
+        };
+
+        // Initialize select elements based on the active sub-tab
+        const elementsToInitialize = activeSubTabNumber === '1' ? tireElements : activeSubTabNumber === '2' ? wheelElements : rimElements;
+        setupEventListeners(activeTabContent, elementsToInitialize, fetchDataEndpoints);
+        await initializeSelects(activeTabContent, elementsToInitialize, fetchDataEndpoints, urlParams);
+        checkFormCompleteAndManageSubmitButton(activeTabContent, elementsToInitialize);
+
+        const form = submitButton.form;
+        form.addEventListener('submit', event => {
             event.preventDefault();
+            localStorage.setItem('searchBy', 'bySize');
 
-            let queryParameters = {};
-
-            switch (activeSubTabNumber) {
-                case '1':
-                    queryParameters = {
-                        'filter.p.m.tires.width': tire_width.value,
-                        'filter.p.m.tires.profile': tire_profile.value,
-                        'filter.p.m.tires.diameter': tire_diameter.value,
-                        'filter.p.m.tires.season': season.value.toLowerCase()
-                    };
-
-                    const pathname = window.location.pathname;
-                    const manufacturerMatch = pathname.match(/\/pages\/opony\/([^\/]+)/);
-                    if (manufacturerMatch && manufacturerMatch[1]) {
-                        queryParameters['filter.p.m.tires.manufacturer'] = manufacturerMatch[1];
-                    }
-                    break;
-                case '2':
-                    queryParameters = {
-                        'filter.p.m.tires.width': tire_width.value,
-                        'filter.p.m.tires.profile': tire_profile.value,
-                        'filter.p.m.tires.diameter': tire_diameter.value,
-                        'filter.p.m.rim.rim_bolt': rim_bolt.value,
-                        'filter.p.m.rim.width': rim_width.value,
-                        'filter.p.m.tires.season': season.value.toLowerCase()
-                    };
-                    break;
-                case '3':
-                    queryParameters = {
-                        'filter.p.m.rim.diameter': rim_diameter.value,
-                        'filter.p.m.rim.rim_bolt': rim_bolt.value,
-                        'filter.p.m.rim.width': rim_width.value,
-                        'filter.p.m.rim.rim_et': rim_et.value
-                    };
-                    break;
-            }
-
-            const queryString = Object.entries(queryParameters).map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&');
-            window.location.href = `${formAction}?${queryString}`;
+            // Build query parameters based on the active sub-tab and selected options
+            const queryParams = buildQueryParameters(activeSubTabNumber, tire, rim, urlParams);
+            window.location.href = `${formAction}?${new URLSearchParams(queryParams).toString()}`;
         });
-
-        {% comment %} INITIAL {% endcomment %}
-        manageSelect(submitButton, [], false);
-
-        let tire_widthsData;
-        let rim_diametersData;
-
-        switch (activeSubTabNumber) {
-            case '1':
-                tire_widthsData = await fetchData('by_tire/sw/', {region: 'eudm'});
-                manageSelect(tire_width, tire_widthsData.data, true); // Enable and populate the first select
-
-                manageSelect(tire_profile, [], false);
-                manageSelect(tire_diameter, [], false);
-
-                tire_width.addEventListener('change', async () => {
-                    if (tire_width.value) {
-                        const tire_profilesData = await fetchData('by_tire/ar/', {
-                            section_width: tire_width.value,
-                            region: 'eudm'
-                        });
-                        manageSelect(tire_profile, tire_profilesData.data, true); // Enable and populate the second select based on the first selects choice
-                        manageSelect(tire_diameter, [], false); // Disable and clear the third select until the second select is chosen
-                    }
-                });
-
-                tire_profile.addEventListener('change', async () => {
-                    if (tire_profile.value) {
-                        const tire_diametersData = await fetchData('by_tire/rd/', {
-                            section_width: tire_width.value,
-                            aspect_ratio: tire_profile.value,
-                            region: 'eudm'
-                        });
-                        manageSelect(tire_diameter, tire_diametersData.data, true); // Enable and populate the third select based on the second selects choice
-                    }
-                });
-
-                tire_diameter.addEventListener('change', () => {
-                    // Enable the submit button if all selects have a value
-                    const isFormComplete = [tire_width, tire_profile, tire_diameter].every(select => select && select.value);
-                    manageSelect(submitButton, [], isFormComplete);
-                });
-
-                break;
-            case '2':
-                tire_widthsData = await fetchData('by_tire/sw/', {region: 'eudm'});
-                manageSelect(tire_width, tire_widthsData.data, true); // Enable and populate the first select
-
-                manageSelect(tire_profile, [], false);
-                manageSelect(tire_diameter, [], false);
-                manageSelect(rim_bolt, [], false);
-                manageSelect(rim_width, [], false);
-
-                tire_width.addEventListener('change', async () => {
-                    if (tire_width.value) {
-                        const tire_profilesData = await fetchData('by_tire/ar/', {
-                            section_width: tire_width.value,
-                            region: 'eudm'
-                        });
-                        manageSelect(tire_profile, tire_profilesData.data, true); // Enable and populate the second select based on the first selects choice
-                        manageSelect(tire_diameter, [], false); // Disable and clear the third select until the second select is chosen
-                        manageSelect(rim_bolt, [], false);
-                        manageSelect(rim_width, [], false);
-                    }
-                });
-
-                tire_profile.addEventListener('change', async () => {
-                    if (tire_profile.value) {
-                        const tire_diametersData = await fetchData('by_tire/rd/', {
-                            section_width: tire_width.value,
-                            aspect_ratio: tire_profile.value,
-                            region: 'eudm'
-                        });
-                        manageSelect(tire_diameter, tire_diametersData.data, true); // Enable and populate the third select based on the second selects choice
-                        manageSelect(rim_bolt, [], false);
-                        manageSelect(rim_width, [], false);
-                    }
-                });
-
-                tire_diameter.addEventListener('change', async () => {
-                    if (tire_diameter.value) {
-                        const rim_boltsData = await fetchData('by_rim/bp/', {region: 'eudm'});
-                        manageSelect(rim_bolt, rim_boltsData.data, true); // Enable and populate the third select based on the second selects choice
-                        manageSelect(rim_width, [], false);
-                    }
-                });
-
-                rim_bolt.addEventListener('change', async () => {
-                    if (rim_bolt.value) {
-                        const rim_widthsData = await fetchData('by_rim/rw/', {bolt_pattern: rim_bolt.value});
-                        manageSelect(rim_width, rim_widthsData.data, true); // Enable and populate the third select based on the second selects choice
-                    }
-                });
-
-                rim_width.addEventListener('change', () => {
-                    // Enable the submit button if all selects have a value
-                    const isFormComplete = [tire_width, tire_profile, tire_diameter, rim_bolt, rim_width].every(select => select && select.value);
-                    manageSelect(submitButton, [], isFormComplete);
-                });
-
-                break;
-            case '3':
-                rim_diametersData = await fetchData('by_rim/rd/', {region: 'eudm'});
-                manageSelect(rim_diameter, rim_diametersData.data, true); // Enable and populate the first select
-
-                manageSelect(rim_bolt, [], false);
-                manageSelect(rim_width, [], false);
-                manageSelect(rim_et, [], false);
-
-                // Set up event listeners for select changes
-                rim_diameter.addEventListener('change', async () => {
-                    if (rim_diameter.value) {
-                        const rim_boltsData = await fetchData('by_rim/bp/', {
-                            rim_diameter: rim_diameter.value,
-                            region: 'eudm'
-                        });
-                        manageSelect(rim_bolt, rim_boltsData.data, true); // Enable and populate the second select based on the first selects choice
-                        manageSelect(rim_width, [], false); // Disable and clear the third select until the second select is chosen
-                        manageSelect(rim_et, [], false);
-                    }
-                });
-
-                rim_bolt.addEventListener('change', async () => {
-                    if (rim_bolt.value) {
-                        const rim_widthsData = await fetchData('by_rim/rw/', {
-                            rim_diameter: rim_diameter.value,
-                            bolt_pattern: rim_bolt.value,
-                            region: 'eudm'
-                        });
-                        manageSelect(rim_width, rim_widthsData.data, true); // Enable and populate the third select based on the second selects choice
-                        manageSelect(rim_et, [], false);
-                    }
-                });
-
-                rim_width.addEventListener('change', async () => {
-                    if (rim_width.value) {
-                        const rim_etsData = await fetchData('by_rim/of/', {
-                            rim_diameter: rim_diameter.value,
-                            bolt_pattern: rim_bolt.value,
-                            rim_width: rim_width.value,
-                            region: 'eudm'
-                        });
-                        manageSelect(rim_et, rim_etsData.data, true); // Enable and populate the third select based on the second selects choice
-                    }
-                });
-
-                rim_et.addEventListener('change', () => {
-                    // Enable the submit button if all selects have a value
-                    const isFormComplete = [rim_diameter, rim_bolt, rim_width, rim_et].every(select => select && select.value);
-                    manageSelect(submitButton, [], isFormComplete);
-                });
-
-                break;
-        }
     }
 
     async function initializeCarForm(activeTabContent, formAction) {
@@ -276,6 +226,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Define event listener for form submission
         submitButton.form.addEventListener('submit', function (event) {
             event.preventDefault();
+
+            localStorage.setItem('searchBy', 'byCar');
 
             const queryParameters = {
                 'filter.p.car.make': makes.value,
@@ -350,18 +302,46 @@ document.addEventListener('DOMContentLoaded', async function () {
         }));
     }
 
+    function getActiveTabInfo() {
+        const activePage = window.location.pathname;
+        let activeTabContent;
+        let activeSubTabNumber = null;
+
+        const pathToSubTabNumber = {
+            '/collections/opony': '1',
+            '/collections/kola': '2',
+            '/collections/felgi': '3'
+        };
+
+        if (activePage === '/') {
+            activeTabContent = document.querySelector('.w-tab-pane.w--tab-active > div > div.w-tab-pane.w--tab-active');
+            const activeSubTab = document.querySelector('.tab-link-left-search.w--current');
+            if (activeSubTab) {
+                activeSubTabNumber = activeSubTab.getAttribute('data-w-tab').split('.')[1];
+            }
+        } else {
+            if (activePage.includes('/pages/opony/')) {
+                activeTabContent = document.getElementById('tire-manufacturer-form');
+                activeSubTabNumber = '1';
+            } else if (activePage.includes('/collections/')) {
+                activeTabContent = document.querySelector('div[data-sub-tab].w-tab-pane.w--tab-active');
+                activeSubTabNumber = pathToSubTabNumber[activePage] || null;
+            }
+        }
+
+        return { activeTabContent, activeSubTabNumber };
+    }
+
     function activateFormInitialization() {
-        const activeTabContent = getActiveTabContent();
-        if (!activeTabContent) return;
+        const { activeTabContent, activeSubTabNumber } = getActiveTabInfo();
+        if (!activeTabContent) {
+            console.log('Active tab content not found.');
+            return
+        }
+
+        const searchBy = localStorage.getItem('searchBy');
 
         const formActionBaseURL = 'https://moto-m5.myshopify.com/collections/';
-
-        let activeSubTab = document.querySelector('.tab-link-left-search.w--current');
-
-        {% comment %} ActiveSubTab for manufacturer subpage {% endcomment %}
-        if (!activeSubTab) activeSubTab = document.querySelector('[data-w-tab="1.1"]');
-
-        const activeSubTabNumber = activeSubTab ? activeSubTab.getAttribute('data-w-tab').split('.')[1] : null;
 
         let formAction = `${formActionBaseURL}opony`; // Default action
         switch (activeSubTabNumber) {
@@ -379,8 +359,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
 
         if (document.querySelector('.w-tab-pane.w--tab-active').classList.contains('tab-pane-tab-1')) {
-            // "Search by Tire Size"
-            initializeSizeForm(activeTabContent, activeSubTabNumber, formAction);
+            // "Search by Size"
+            initializeSizeForm(activeTabContent, activeSubTabNumber, formAction, searchBy);
         } else if (document.querySelector('.w-tab-pane.w--tab-active').classList.contains('tab-pane-tab-2')) {
             // "Search by Car"
             initializeCarForm(activeTabContent, formAction);
@@ -388,7 +368,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     // Listen for tab changes to re-initialize form for the active tab
-    document.querySelectorAll('.tab-link-top-search, .tab-link-left-search').forEach(tab => {
+    document.querySelectorAll('.tab-link-top-search, .tab-link-left-search, .tab-link-tab-2').forEach(tab => {
         tab.addEventListener('click', () => {
             setTimeout(activateFormInitialization, 150);
         });
