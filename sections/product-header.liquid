@@ -5,10 +5,11 @@
         <div class="product-header_tittle">
           <img src="{{ product.metafields.tires.manufacturer.value.logo.value |  image_url: width: 400 }}" class="product-header_tittle-image">
           {% if product.metafields.tires.season.value == 'Letnie' %}
-            Opony Letnie
-          {% endif %}
-          {% if product.metafields.tires.season.value == 'Zimowe' %}
-            Opony Zimowe
+            <img src="{{ 'IcRoundSun.svg' | asset_url }}" class="icon-embed-medium">
+          {% elsif product.metafields.tires.season.value == 'Zimowe' %}
+            <img src="{{ 'IcRoundWinter.svg' | asset_url }}" class="icon-embed-medium">
+          {% elsif product.metafields.tires.season.value == 'Całoroczne' %}
+            Opony Całoroczne
           {% endif %}
           <h1 class="heading-style-h3">
             {{ section.settings.model }}<span class="text-weight-normal">
@@ -94,17 +95,195 @@
                 <div class="text-size-small">Opinie</div>
               </div>
               <div class="icon-embed-xsmall"><img src="{{ 'IcArrowSmallRight.svg' | asset_url }}" /></div>
-            </div>ń
+            </div>
           </div>
         </div>
-        <div class="product-header_buy"></div>
+        <div class="product-header_buy">
+          <div class="heading-style-h4 text-color-red600">{{ product.price | money }}<span class="text-size-regular">
+              / {{ product.metafields.tires.quantity }}</span>
+          </div>
+          <div class="text-size-tiny text-weight-semibold text-color-green">Darmowa Dostawa</div>
+          <div class="product-buy_divider"></div>
+          <div class="text-size-small text-weight-bold text-color-green">Zamów przed {{ settings.delivery-hour }} - wyślemy dzisiaj</div>
+          {% if product.available %}
+            <form
+              method="post"
+              action="/cart/add"
+              class="margin-top margin-xsmall">
+              <input
+                type="hidden"
+                name="id"
+                value="{{ product.variants.first.id }}" />
+              <input
+                type="hidden"
+                min="1"
+                type="number"
+                id="quantity"
+                name="quantity"
+                value="1" />
+              <div class="button-group-add-with-size">
+                <select id="size-selector" class="form-select_size">
+                  <option selected="selected">{{ product.metafields.tires.width }}/{{ product.metafields.tires.profile }} R{{ product.metafields.tires.diameter }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}</option>
+                  {% assign model_name = product.metafields.tires.model.value.model.value %}
+                  {% assign model_url = product.url %}
+                  {% for product in collections.opony.products %}
+                    {% assign product_model = product.metafields.tires.model.value.model %}
+                    {% if product_model == model_name and model_url != product.url %}
+                      <option value="{{ product.url}}">{{ product.metafields.tires.width }}/{{ product.metafields.tires.profile }} R{{ product.metafields.tires.diameter }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}</option>
+                    {% endif %}
+                  {% endfor %}
+                </select>
+                <input
+                  type="submit"
+                  value="Dodaj do koszyka"
+                  class="button is-small is-add-to-cart" /></div>
+              <div class="size-help-wrapper">
+                <img src="{{ 'IcRoundHelp.svg' | asset_url }}">
+                <div class="text-size-tiny text-weight-medium">Jak dobrać rozmiar opony?</div>
+              </div>
+              {% assign accesories_list = product.metafields.tires.accesories.value %}
+              {% if accesories_list %}
+                <div class="product-accesories-wrapper">
+                  <div class="product-accesories-tittle">
+                    <div class="text-size-tiny text-weight-medium">Kup przy okazji</div>
+                    <a href="{{ collections.akcesoria.url }}" class="text-size-tiny text-weight-semibold">Więcej akcesoriów</a>
+                  </div>
+                  {% for accesories in accesories_list %}
+                    <label class="form-checkbox-green">
+                      <input type="checkbox" class="form-checkbox-icon-green">
+                      {{ accesories.featured_image | image_url: height: 128 | image_tag: class: 'product-accesories-image' }}
+                      <div class="product-accesories_tittle-wrapper">
+                        <div class="text-size-small text-weight-medium">{{ accesories.title }}</div>
+                        <div class="text-size-small text-weight-semibold text-color-red600">{{ accesories.price | money }}</div>
+                      </div>
+                    </label>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </form>
+          {% else %}
+            <div class="button is-secondary max-width-full">Produkt niedostępny</div>
+          {% endif %}
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 
+{% javascript %}
+  document.addEventListener('DOMContentLoaded', function() {
+    var selectElement = document.getElementById('size-selector');
+
+    selectElement.addEventListener('change', function() {
+      var selectedValue = this.value;
+
+// Assuming you want to change the window's location to the selected value
+      window.location.href = selectedValue;
+
+// If you need to do something else with the selected value, you can replace the above line
+    });
+  });
+{% endjavascript %}
+
 {% stylesheet %}
+  .product-accesories_tittle-wrapper {
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    display: flex;
+  }
+
+  .product-accesories-image {
+    aspect-ratio: 1;
+    object-fit: contain;
+    border-radius: 0.25rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-right: 0.5rem;
+  }
+
+  .form-checkbox-green {
+    align-items: center;
+    width: 100%;
+    margin-bottom: 0;
+    padding-left: 1.25rem;
+    display: flex;
+  }
+
+  .form-checkbox-icon-green {
+    border: 1px solid var(--color-grayiron--grayiron400);
+    cursor: pointer;
+    border-radius: 0.25rem;
+    width: 1.25rem;
+    min-width: 1.25rem;
+    height: 1.25rem;
+    min-height: 1.25rem;
+    margin-top: 0;
+    margin-left: -1.25rem;
+    margin-right: 0.5rem;
+    transition: all 0.2s;
+  }
+
+  .form-checkbox-icon-green:checked {
+    border: 1px solid var(--status-color--green);
+    background-color: var(--status-color--green);
+    box-shadow: none;
+    background-size: 16px 16px;
+    border-radius: 0.25rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-top: 0;
+    margin-left: -1.25rem;
+  }
+  .product-accesories-tittle {
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+  }
+
+  .product-accesories-wrapper {
+    grid-column-gap: 0.5rem;
+    grid-row-gap: 0.5rem;
+    border-top: 1px solid var(--color-grayiron--grayiron400);
+    flex-flow: column;
+    margin-top: 1rem;
+    margin-left: -1rem;
+    margin-right: -1rem;
+    padding-top: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    display: flex;
+  }
+
+  .size-help-wrapper {
+    grid-column-gap: 0.5rem;
+    grid-row-gap: 0.5rem;
+    align-items: center;
+    margin-top: 1rem;
+    display: flex;
+  }
+  .button.is-small.is-add-to-cart {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  .form-select_size {
+    background-color: var(--color-grayiron--grayiron100);
+    color: var(--color--black);
+    text-align: left;
+    text-transform: capitalize;
+    border: 2px solid rgba(0, 0, 0, 0);
+    border-radius: 0.25rem 0 0 0.25rem;
+    height: 100%;
+    margin: 0;
+    padding: 0.75rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: border-color 0.2s ease-in-out
+    , background-color 0.2s ease-in-out;
+  }
+
   .product-header_component {
     grid-column-gap: 1rem;
     grid-row-gap: 1.5rem;
@@ -189,7 +368,7 @@
     grid-column-gap: 1rem;
     grid-row-gap: 0.5rem;
     grid-template-rows: auto auto;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: max-content 1fr;
     grid-auto-columns: 1fr;
     display: grid;
   }
@@ -257,6 +436,24 @@
     bottom: 0;
     left: 0;
     right: 0;
+  }
+
+  .product-buy_divider {
+    background-color: var(--color-grayiron--grayiron300);
+    height: 1px;
+    margin: 1rem -1rem;
+  }
+
+  .button-group-add-with-size {
+    grid-column-gap: 0;
+    grid-row-gap: 0;
+    flex-wrap: wrap;
+    grid-template-rows: auto;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-columns: 1fr;
+    align-items: stretch;
+    justify-items: stretch;
+    display: grid;
   }
 
 {% endstylesheet %}

@@ -56,7 +56,10 @@
                                 </div>
                               </div>
                             {% elsif collection.title == 'Akcesoria' %}
-                              <div id="w-node-a3fc45f6-3394-d351-49d3-241dece435d1-65612e35">
+                              <a
+                                class="cart_product-title"
+                                href="{{ item.url }}"
+                                id="w-node-a3fc45f6-3394-d351-49d3-241dece435d1-65612e35">
                                 <div class="text-weight-bold">
                                   {% if item.quantity > 1 %}
                                     {{ item.quantity }} x
@@ -65,7 +68,7 @@
                                 <div class="text-size-tiny text-color-grayiron600">
                                   Otrzymasz ze swoim zamówieniem
                                 </div>
-                              </div>
+                              </a>
                               <div id="w-node-a0529447-4ac9-eaf6-02fc-ea15f2186713-65612e35"></div>
                             {% endif %}
                           {% endfor %}
@@ -92,36 +95,36 @@
                 <div class="cart_heading-wrapper">
                   <div class="text-weight-bold">Polecane dla Ciebie</div>
                 </div>
-                  <div class="cart_add-product-list">
-                    {% for product in collections.akcesoria.products %}
-                      <div class="cart_add-product">
-                        <div class="cart_add-product_image-wrapper">
-                          <img src="{{ product.featured_image | image_url: width: 600 }}" class="cart_add-product_image">
-                          <div class="cart_add-product_price-wrapper">
-                            <div class="text-weight-bold text-color-red600">{{ product.price | money }}</div>
-                          </div>
+                <div class="cart_add-product-list">
+                  {% for product in collections.akcesoria.products %}
+                    <div class="cart_add-product">
+                      <div class="cart_add-product_image-wrapper">
+                        <img src="{{ product.featured_image | image_url: width: 600 }}" class="cart_add-product_image">
+                        <div class="cart_add-product_price-wrapper">
+                          <div class="text-weight-bold text-color-red600">{{ product.price | money }}</div>
                         </div>
-                        <div class="text-weight-medium">{{ product.title }}</div>
-                        <form method="post" action="/cart/add">
-                          <input
-                            type="hidden"
-                            name="id"
-                            value="{{ product.variants.first.id }}" />
-                          <input
-                            type="hidden"
-                            min="1"
-                            type="number"
-                            id="quantity"
-                            name="quantity"
-                            value="1" />
-                          <input
-                            type="submit"
-                            value="Dodaj"
-                            class="button is-secondary is-small max-width-full" />
-                        </form>
                       </div>
-                    {% endfor %}
-                  </div>
+                      <div class="text-weight-medium">{{ product.title }}</div>
+                      <form method="post" action="/cart/add">
+                        <input
+                          type="hidden"
+                          name="id"
+                          value="{{ product.variants.first.id }}" />
+                        <input
+                          type="hidden"
+                          min="1"
+                          type="number"
+                          id="quantity"
+                          name="quantity"
+                          value="1" />
+                        <input
+                          type="submit"
+                          value="Dodaj"
+                          class="button is-secondary is-small max-width-full" />
+                      </form>
+                    </div>
+                  {% endfor %}
+                </div>
               </div>
             </div>
             <div class="cart-column">
@@ -156,7 +159,7 @@
                     </div>
                   </div>
                   <div class="cart_list">
-                    <div class="text-size-small text-weight-bold text-color-green">Zamów przed 15:00 - wyślemy dzisiaj</div>
+                    <div class="text-size-small text-weight-bold text-color-green">Zamów przed {{ settings.delivery-hour }} - wyślemy dzisiaj</div>
                   </div>
                   <div class="cart_list">
                     <div class="text-size-small">Oczekiwana dostawa 1-2 dni robocze</div>
@@ -179,7 +182,13 @@
             </div>
           </div>
         {% else %}
-          <p>Twój koszyk jest pusty.</p>
+          <div class="white-container-border">
+            <div class="cart_empty">
+              <img src="{{ 'IcRoundEmptyCart.svg' | asset_url }}" class="icon-embed-medium">
+              <div class="heading-style-h5">Twój koszyk jest pusty</div>
+              <a class="button" href="{{ shop.url }}">Wróć do sklepu</a>
+            </div>
+          </div>
         {% endif %}
       </div>
     </div>
