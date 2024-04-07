@@ -137,21 +137,16 @@
                                         <div class="text-size-small">
                                           Twoje auto:
                                         </div>
-                                        <div wized="selected_car" class="text-size-small text-weight-bold">
-                                          BMW 3 Series V (E90/E91/E92/E93) LCI
-                                                                                    320d (177, 130 kW) (2008-2010)
-                                        </div>
+                                        <div data-name="selected_car" class="text-size-small text-weight-bold"></div>
                                         <a
-                                          wized="change_car"
-                                          href="#"
+                                          data-name="change_car"
                                           class="text-size-small">Zmień auto</a>
                                       </div>
                                       <div class="form-field-wrapper">
                                         <label for="field-8" class="field-label">Pasujące rozmiary</label>
                                         <select
                                           id="field-8"
-                                          data-name=""
-                                          wized="matching_sizes"
+                                          data-name="matching_sizes"
                                           class="select-field is-left w-select"></select>
                                       </div>
                                     </div>
@@ -451,86 +446,6 @@
 
 <script>
   (async function () {
-    // Helper function to format tire size correctly
-    const formatTireSize = (tireSize) => {
-        return tireSize.replace(/(\d+)\/(\d+)[A-Z]*/g, '$1/$2/R');
-    };
-
-    // Helper function to create option element
-    const createOption = (tireData, prefix = '') => {
-        let { tire, rim } = tireData;
-        tire = formatTireSize(tire);
-        const option = document.createElement("option");
-        option.text = `${prefix} ${tire} (${rim})`;
-        return option;
-    };
-
-    // Generic function to update select options
-    const updateSelectOptions = async (dataKey, filterKey) => {
-        const currentData = await Wized.data.get(dataKey);
-
-        const selectElements = document.querySelectorAll(`select["${filterKey}"]`);
-
-        if (!selectElements || !selectElements.length) {
-            console.error(`No select elements found with wized attribute "${filterKey}".`);
-            return;
-        }
-
-        selectElements.forEach(selectElement => {
-            selectElement.innerHTML = "";
-
-            if (currentData && Array.isArray(currentData)) {
-                //console.log(`Updating select options for filter_${filterKey}: `, currentData);
-
-                // Create a set to store unique tire sizes
-                const uniqueTireSizes = new Set();
-
-                // First add single tire options (not part of a pair)
-                currentData[0].wheels.forEach(item => {
-                    const { front, rear } = item;
-                    const normalizedFrontTire = front.tire ? formatTireSize(front.tire) : '';
-                    const normalizedRearTire = rear.tire ? formatTireSize(rear.tire) : '';
-
-                    if (front.tire && !rear.tire && !uniqueTireSizes.has(normalizedFrontTire)) {
-                        selectElement.add(createOption(front));
-                        uniqueTireSizes.add(normalizedFrontTire);
-                    }
-                    if (rear.tire && !front.tire && !uniqueTireSizes.has(normalizedRearTire)) {
-                        selectElement.add(createOption(rear));
-                        uniqueTireSizes.add(normalizedRearTire);
-                    }
-                });
-
-                // Then add tire pairs, checking for duplicates
-                let pairIndex = 1;
-                currentData[0].wheels.forEach(item => {
-                    const { front, rear } = item;
-                    if (front.tire && rear.tire) {
-                        const normalizedFrontTire = formatTireSize(front.tire);
-                        const normalizedRearTire = formatTireSize(rear.tire);
-                        if (!uniqueTireSizes.has(normalizedFrontTire)) {
-                            selectElement.add(createOption(front, `Para ${pairIndex}: Przód`));
-                            uniqueTireSizes.add(normalizedFrontTire);
-                        }
-                        if (!uniqueTireSizes.has(normalizedRearTire)) {
-                            selectElement.add(createOption(rear, `Para ${pairIndex}: Tył`));
-                            uniqueTireSizes.add(normalizedRearTire);
-                        }
-                        pairIndex++;
-                    }
-                });
-
-                selectElement.selectedIndex = 0;
-                Wized.data.setVariable('matching_sizes', selectElement.value.replace(/.*(\b\d{3}\/\d{2}\/R\d{2}\b).*/, '$1'));
-                console.log(`Updated HTML select options for filter_${filterKey}.`);
-            } else {
-                // If currentData is not an array or empty, remove all options from the select element
-                selectElement.innerHTML = "";
-                console.error(`Invalid or empty data for filter_${filterKey}.`);
-            }
-        });
-    };
-
     function toggleTab(searchByValue) {
         // Menu
         const tabSize = document.querySelector('a[data-w-tab="1"]');
@@ -567,9 +482,6 @@
             subTabContentBySize.classList.remove('w--tab-active');
         }
     }
-
-    // Search by car (tab 2 - search_by_car)
-    // Wized.data.listen("v.searchByModel", () => updateSelectOptions("v.searchByModel", "matching_sizes"));
 
     // Add event listeners to the tabs for click events
     document.addEventListener('DOMContentLoaded', function() {

@@ -346,12 +346,12 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         // Generic function to update select options
         const updateSelectOptions = async (dataKey, filterKey) => {
-            const currentData = await Wized.data.get(dataKey);
+            const currentData = searchByModel;
 
-            const selectElements = document.querySelectorAll(`select["${filterKey}"]`);
+            const selectElements = document.querySelectorAll(`select[data-name="${filterKey}"]`);
 
             if (!selectElements || !selectElements.length) {
-                console.error(`No select elements found with wized attribute "${filterKey}".`);
+                console.error(`No select elements found with data-name "${filterKey}".`);
                 return;
             }
 
@@ -400,7 +400,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     });
 
                     selectElement.selectedIndex = 0;
-                    Wized.data.setVariable('matching_sizes', selectElement.value.replace(/.*(\b\d{3}\/\d{2}\/R\d{2}\b).*/, '$1'));
+                    matching_sizes = selectElement.value.replace(/.*(\b\d{3}\/\d{2}\/R\d{2}\b).*/, '$1');
                     console.log(`Updated HTML select options for filter_${filterKey}.`);
                 } else {
                     // If currentData is not an array or empty, remove all options from the select element
@@ -410,19 +410,44 @@ document.addEventListener('DOMContentLoaded', async function () {
             });
         };
 
-        // Wized.data.listen("v.searchByModel", () => updateSelectOptions("v.searchByModel", "matching_sizes"));
+        let matching_sizes;
+        let searchByModel;
 
         const form = submitButton.form;
         form.addEventListener('submit', function (event) {
             event.preventDefault();
 
-            localStorage.setItem('searchBy', 'byCar');
+            if(!window.location.pathname.includes('collections')) {
+                localStorage.setItem('searchBy', 'byCar');
 
-            // Build query parameters based on the active sub-tab and selected options
-            const queryParams = buildCarQueryParameters(activeSubTabNumber, elements, new URLSearchParams(window.location.search));
+                // Build query parameters based on the active sub-tab and selected options
+                const queryParams = buildCarQueryParameters(activeSubTabNumber, elements, new URLSearchParams(window.location.search));
 
-            const queryString = Object.entries(queryParams).map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&');
-            window.location.href = `${formAction}?${queryString}`;
+                const queryString = Object.entries(queryParams).map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&');
+                window.location.href = `${formAction}?${queryString}`;
+            } else {
+                {% comment %} Toggle divs{% endcomment %}
+                document.querySelector('.ifnotselectedcar').display = 'none';
+                document.querySelector('.ifselectedcar').display = 'flex';
+
+                {% comment %} Selected car
+                document.getElementById('selected_car').set text {
+                    searchByModel[0].make.name}} {v.searchByModel[0].model.name}} {{v.searchByModel[0].generation.name}} {{v.searchByModel[0].trim}} ({{v.searchByModel[0].engine.power.PS}}, {{v.searchByModel[0].engine.power.kW}} kW) ({{v.searchByModel[0].start_year}}-{{v.searchByModel[0].end_year}})
+                }
+                {% endcomment %}
+
+                {% comment %} Fetch data for all params {% endcomment %}
+                {% comment %}https://api.wheel-size.com/v2/search/by_model/?make=bmw&model=6-series&year=2014&generation=502e4a1693&modification=4bff1e6238&user_key=8608442fd845888bda065b97c8d141d9{% endcomment %}
+                searchByModel = fetchData('search/by_model/').data.data;
+                updateSelectOptions(searchByModel, "matching_sizes");
+
+                document.getElementById('matching_sizes').addEventListener("change", matching_sizes.replace(/.*(\b\d{3}\/\d{2}\/R\d{2}\b).*/, '$1'));
+
+                matching_sizes = `${v.selectedTireWidth}/${v.selectedTireProfile}/${v.selectedTireDiameter}`;
+
+                document.getElementById('change_car').addEventListener("click", searchByModel = undefined);
+
+            }
         });
     }
 
