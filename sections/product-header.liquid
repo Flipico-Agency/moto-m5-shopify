@@ -45,17 +45,56 @@
             <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.speed_index }}</p>
           </div>
           <div class="product-header_info-bottom">
-            <div class="product-header_info-bottom_item-wrapper">
+            <div class="product-header_info-bottom_item-wrapper" id="modal-open-data">
               <div class="product-header_info-bottom_item">
                 <div class="text-size-small">Dane techniczne</div>
               </div>
               <div class="icon-embed-xsmall"><img src="{{ 'IcArrowSmallRight.svg' | asset_url }}" /></div>
             </div>
-            <div class="product-header_info-bottom_item-wrapper">
+            <div class="modal_component" id="modal-component-data">
+              <div class="modal_content-wrapper">
+                <div class="modal_close-button" id="modal-close-data"><img src="{{ 'IcRoundCloseRed.svg' |  asset_url}}" class="icon-embed-small"></div>
+                <div class="margin-bottom margin-large">
+                  <div class="margin-bottom margin-xsmall">
+                    <h4>Dane techniczne</h4>
+                  </div>
+                </div>
+                <div class="product-header_info-modal">
+                  <p class="text-size-small text-weight-semibold text-color-grayiron600">Stan</p>
+                  <p class="text-size-small text-weight-semibold text-color-black">{{ product.metafields.tires.condition }}</p>
+                  <p class="text-size-small text-weight-semibold text-color-grayiron600">Bieżnik</p>
+                  <p class="text-size-small text-weight-semibold text-color-black">{{ product.metafields.tires.tread }}</p>
+                  <p class="text-size-small text-weight-semibold text-color-grayiron600">Data produkcji</p>
+                  <p class="text-size-small text-weight-semibold text-color-black">{{ product.metafields.tires.years }}</p>
+                  <p class="text-size-small text-weight-semibold text-color-grayiron600">Sezon</p>
+                  <p class="text-size-small text-weight-semibold text-color-black">{{ product.metafields.tires.season }}</p>
+                  <p class="text-size-small text-weight-semibold text-color-grayiron600">Rozmiar</p>
+                  <p class="text-size-small text-weight-semibold text-color-black">{{ product.metafields.tires.width }}/{{ product.metafields.tires.profile }} R{{ product.metafields.tires.diameter }}</p>
+                  <p class="text-size-small text-weight-semibold text-color-grayiron600">Indeks nośności</p>
+                  <p class="text-size-small text-weight-semibold text-color-black">{{ product.metafields.tires.load_index }}</p>
+                  <p class="text-size-small text-weight-semibold text-color-grayiron600">Indeks prędkości</p>
+                  <p class="text-size-small text-weight-semibold text-color-black">{{ product.metafields.tires.speed_index }}</p>
+                </div>
+              </div>
+              <div class="modal_background-overlay" id="modal-background-data"></div>
+            </div>
+            <div class="product-header_info-bottom_item-wrapper" id="modal-open-description">
               <div class="product-header_info-bottom_item">
                 <div class="text-size-small">Opis</div>
               </div>
               <div class="icon-embed-xsmall"><img src="{{ 'IcArrowSmallRight.svg' | asset_url }}" /></div>
+            </div>
+            <div class="modal_component" id="modal-component-description">
+              <div class="modal_content-wrapper">
+                <div class="modal_close-button" id="modal-close-description"><img src="{{ 'IcRoundCloseRed.svg' |  asset_url}}" class="icon-embed-small"></div>
+                <div class="margin-bottom margin-large">
+                  <div class="margin-bottom margin-xsmall">
+                    <h4>Opis</h4>
+                  </div>
+                </div>
+                <div class="text-rich-text">{{ product.description }}</div>
+              </div>
+              <div class="modal_background-overlay" id="modal-background-description"></div>
             </div>
             <div class="product-header_info-bottom_item-wrapper">
               <div class="product-header_info-bottom_item">
@@ -73,15 +112,11 @@
               <div class="modal_content-wrapper">
                 <div class="modal_close-button" id="modal-close-guarantee"><img src="{{ 'IcRoundCloseRed.svg' |  asset_url}}" class="icon-embed-small"></div>
                 <div class="margin-bottom margin-large">
-                  <div class="text-align-center">
-                    <div class="max-width-large align-center">
-                      <div class="margin-bottom margin-xsmall">
-                        <h2>Gwarancja</h2>
-                      </div>
-                      <div class="guarantee-content-green">
-                        <p class="text-weight-bold text-color-green">Dożywotnia gwarancja na naprawę</p>
-                      </div>
-                    </div>
+                  <div class="margin-bottom margin-xsmall">
+                    <h4>Gwarancja</h4>
+                  </div>
+                  <div class="guarantee-content-green">
+                    <p class="text-weight-bold text-color-green">Dożywotnia gwarancja na naprawę</p>
                   </div>
                 </div>
                 <div class="text-rich-text">{{ section.settings.guarantee }}</div>
@@ -368,6 +403,16 @@
     display: grid;
   }
 
+  .product-header_info-modal {
+    grid-column-gap: 1rem;
+    grid-row-gap: 1rem;
+    grid-template-rows: auto auto;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-columns: 1fr;
+    display: grid;
+    width: 100%;
+  }
+
   .product-header_info-bottom {
     flex-flow: column;
     justify-content: flex-end;
@@ -415,8 +460,8 @@
 
   .modal_close-button {
     position: absolute;
-    top: 1rem;
-    right: 1rem;
+    top: 2rem;
+    right: 2rem;
   }
 
   .modal_content-wrapper {
@@ -424,7 +469,7 @@
     width: 100%;
     max-width: 40rem;
     height: 100vh;
-    padding: 5rem 2rem 2rem;
+    padding: 2rem;
     position: absolute;
     overflow: scroll;
   }
