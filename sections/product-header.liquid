@@ -137,10 +137,7 @@
                   type="submit"
                   value="Dodaj do koszyka"
                   class="button is-small is-add-to-cart" /></div>
-              <div class="size-help-wrapper">
-                <img src="{{ 'IcRoundHelp.svg' | asset_url }}">
-                <div class="text-size-tiny text-weight-medium">Jak dobrać rozmiar opony?</div>
-              </div>
+              {% render 'tire-help' %}
               {% assign accesories_list = product.metafields.tires.accesories.value %}
               {% if accesories_list %}
                 <div class="product-accesories-wrapper">

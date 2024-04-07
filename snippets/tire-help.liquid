@@ -1,13 +1,16 @@
-{{ include snippets.css | stylesheet_tag }}
-
-<div class="size-help-wrapper">
+<div class="size-help-wrapper" id="modal-open-tirehelp">
   <img src="{{ 'IcRoundHelp.svg' | asset_url }}">
   <div class="text-size-tiny text-weight-medium">Jak dobrać rozmiar opony?</div>
 </div>
 
-<div class="size-help_modal-component">
+<div class="size-help_modal-component" id="modal-component-tirehelp">
   <div class="size-help_modal-content-wrapper">
-    <a class="size-help_modal-close-button" href="#"></a>
+    <a
+      class="size-help_modal-close-button"
+      href="#"
+      id="modal-close-tirehelp">
+      <img src="{{ 'IcRoundCloseRed.svg' |  asset_url }}" class="icon-embed-small">
+    </a>
     <div class="margin-bottom margin-large">
       <div class="text-align-center">
         <div class="max-width-large align-center">
@@ -40,7 +43,7 @@
           <div class="text-size-small">Opony wzmacniane mają podwyższoną nośność. Dzięki temu lepiej spełniają wymagania stawiane przed oponami używanymi w pojazdach np. dostawczych. Zazwyczaj opony wzmacniane oznakowuje się literami XL (ang. extra load), jednak w zależności od producenta można spotkać inne symbole.</div>
         </div>
       </div>
-      <img src="">
+      <img class="size-help-image" src="{{ 'TireInfo.webp' | asset_url }}">
       <div class="size-help_modal-content_bottom">
         <div class="size-help_modal-content_item">
           <div class="text-size-large text-weight-bold">Nośność</div>
@@ -53,5 +56,5 @@
       </div>
     </div>
   </div>
-  <div class="size-help_modal-background"></div>
+  <div class="size-help_modal-background" id="modal-background-tirehelp"></div>
 </div>
