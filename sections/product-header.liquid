@@ -12,7 +12,7 @@
             Opony Całoroczne
           {% endif %}
           <h1 class="heading-style-h3">
-            {{ section.settings.model }}<span class="text-weight-normal">
+            {{ product.metafields.tires.model.value.model.value }}<span class="text-weight-normal">
               {{ product.metafields.tires.width }}/{{ product.metafields.tires.profile }} R{{ product.metafields.tires.diameter }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}</span>
           </h1>
         </div>
@@ -63,17 +63,15 @@
               </div>
               <div class="icon-embed-xsmall"><img src="{{ 'IcArrowSmallRight.svg' | asset_url }}" /></div>
             </div>
-            <div class="product-header_info-bottom_item-wrapper">
+            <div class="product-header_info-bottom_item-wrapper" id="modal-open-guarantee">
               <div class="product-header_info-bottom_item">
                 <div class="text-size-small">Gwarancja</div>
               </div>
               <div class="icon-embed-xsmall"><img src="{{ 'IcArrowSmallRight.svg' | asset_url }}" /></div>
             </div>
-            <div
-              style="display: none;"
-              class="modal_component"
-              id="modal-guarantee">
+            <div class="modal_component" id="modal-component-guarantee">
               <div class="modal_content-wrapper">
+                <div class="modal_close-button" id="modal-close-guarantee"><img src="{{ 'IcRoundCloseRed.svg' |  asset_url}}" class="icon-embed-small"></div>
                 <div class="margin-bottom margin-large">
                   <div class="text-align-center">
                     <div class="max-width-large align-center">
@@ -81,16 +79,16 @@
                         <h2>Gwarancja</h2>
                       </div>
                       <div class="guarantee-content-green">
-                        <p class="text-weight-bold text-color-green">Dożytownia gwarancja na naprawę</p>
+                        <p class="text-weight-bold text-color-green">Dożywotnia gwarancja na naprawę</p>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="text-rich-text">{{ section.settings.guarantee }}</div>
               </div>
-              <div class="modal_background-overlay"></div>
+              <div class="modal_background-overlay" id="modal-background-guarantee"></div>
             </div>
-            <div class="product-header_info-bottom_item-wrapper" id="open-guarantee">
+            <div class="product-header_info-bottom_item-wrapper">
               <div class="product-header_info-bottom_item">
                 <div class="text-size-small">Opinie</div>
               </div>
@@ -406,11 +404,19 @@
     width: 100vw;
     height: 100vh;
     display: none;
+    opacity: 0;
     position: fixed;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
+    transition: opacity 300ms ease-in-out;
+  }
+
+  .modal_close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
   }
 
   .modal_content-wrapper {
@@ -418,21 +424,24 @@
     width: 100%;
     max-width: 40rem;
     height: 100vh;
-    padding: 5rem 2rem;
+    padding: 5rem 2rem 2rem;
     position: absolute;
     overflow: scroll;
   }
 
   .modal_background-overlay {
     z-index: -1;
-    background-color: rgba(0, 0, 0, 0.25);
+    background-color: rgba(0, 0, 0, 0.5);
     width: 100%;
     height: 100%;
     position: absolute;
+    opacity: 0;
+    display: none;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
+    transition: opacity 300ms ease-in-out;
   }
 
   .product-buy_divider {
@@ -464,15 +473,9 @@
     "limit": 1,
     "settings": [
       {
-        "type": "text",
-        "id": "model",
-        "label": "Model Opony",
-        "default": "Model opony"
-      }, {
-        "type": "text",
+        "type": "richtext",
         "id": "guarantee",
-        "label": "Gwarancja",
-        "default": "Informacje o gwarancji"
+        "label": "Gwarancja"
       }
     ],
     "presets": [
