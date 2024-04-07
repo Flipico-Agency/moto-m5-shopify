@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         element.innerHTML = isEnabled && placeholder ? `<option value="">${placeholder}</option>` : '';
         if (isEnabled) {
-            options.forEach(({ name, value }) => element.add(new Option(name || value, value)));
+            options.forEach(({ name, value, slug }) => element.add(new Option(name || value || 'I', value ? value : slug)));
         }
 
         element.disabled = !isEnabled;
@@ -34,55 +34,75 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     function mapSelectNameToApiParam(selectName) {
         const mapping = {
+            // Map for tires and rims
             'tire-width': 'section_width',
             'tire-profile': 'aspect_ratio',
             'tire-diameter': 'rim_diameter',
             'rim-bolt': 'bolt_pattern',
             'rim-width': 'rim_width',
-            'rim-diameter': 'rim_diameter'
+            'rim-diameter': 'rim_diameter',
+
+            // Map for cars
+            'car-marka': 'make',
+            'car-model': 'model',
+            'car-generacja': 'generation',
+            'car-silnik': 'engine'
         };
         return mapping[selectName] || selectName;
     }
 
     async function initializeSelects(activeTabContent, elements, fetchDataEndpoints, urlParams) {
-        let previousSelectValue = null;
+        let selectedValues = {};
 
         for (let i = 0; i < elements.length; i++) {
             const elementName = elements[i];
             const selectElement = activeTabContent.querySelector(`select[data-name="${elementName}"]`);
+            console.log(`Processing selector: ${elementName}`);
+
             if (!selectElement) continue;
 
-            let urlParamName;
-            // Adjust the parameter name based on whether it's a tire-related select
-            if (elementName.includes('tire')) {
-                urlParamName = `filter.p.m.${elementName.replace('-', 's.')}`;
-            } else {
-                urlParamName = `filter.p.m.rim.${elementName.replace('rim-', '')}`;
-            }
-
-            const urlParamValue = urlParams.get(urlParamName);
+            const apiParam = mapSelectNameToApiParam(elementName);
             const fetchDataParams = { region: 'eudm' };
 
-            if (previousSelectValue && i > 0) {
-                const previousSelectApiParam = mapSelectNameToApiParam(elements[i - 1]);
-                fetchDataParams[previousSelectApiParam] = previousSelectValue;
-            }
-
-            if (urlParamValue) {
-                const currentApiParam = mapSelectNameToApiParam(elementName);
-                fetchDataParams[currentApiParam] = urlParamValue;
-            }
-
-            const data = await fetchData(fetchDataEndpoints[elementName], fetchDataParams);
-
-            if (data && data.data) {
-                manageSelect(selectElement, data.data, true);
-                if (!selectElement.value && data.data.length > 0 && urlParamValue === null) {
-                    selectElement.value = data.data[0].value; // Default to the first option if no URL parameter value is provided
-                } else if (urlParamValue) {
-                    selectElement.value = urlParamValue;
+            // Include previous selected values in the fetchDataParams
+            Object.keys(selectedValues).forEach(key => {
+                if (typeof selectedValues[key] === 'string') {
+                    fetchDataParams[key] = selectedValues[key];
                 }
-                previousSelectValue = selectElement.value; // Update previousSelectValue for the next iteration
+            });
+
+            const urlParamValue = urlParams.get(apiParam);
+            if (urlParamValue) fetchDataParams[apiParam] = urlParamValue;
+
+            if (elementName === 'tire-season') {
+                // Assuming you have predefined seasons
+                const seasons = ['Letnie', 'Zimowe', 'Całoroczne'];
+                manageSelect(selectElement, seasons.map(season => ({ name: season, value: season })), true);
+                selectElement.value = 'Letnie'; // Default to 'Letnie' or any other logic you may have
+            } else if (apiParam && fetchDataEndpoints[elementName]) {
+                console.log(`Sending API request for ${elementName} with params:`, fetchDataParams);
+                const data = await fetchData(fetchDataEndpoints[elementName], fetchDataParams);
+                console.log(`Received API data for ${elementName}:`, data);
+
+                if (data && data.data) {
+                    manageSelect(selectElement, data.data, true);
+
+                    if (!selectElement.value && data.data.length > 0) {
+                        selectElement.value = urlParamValue || data.data[0].value || data.data[0].slug;
+                    }
+
+                    selectedValues[apiParam] = elementName === 'car-generacja' ? data.data.find(item => item.slug === selectElement.value) : selectElement.value;
+                }
+            } else if (elementName === 'car-rok' && selectedValues['generation']) {
+                // Handle car-year based on selected generation
+                const generation = selectedValues['generation'];
+                const years = generation.years; // Assuming selected generation object includes years
+                manageSelect(selectElement, years.map(year => ({ name: year, value: year })), true);
+                if (years.length > 0) {
+                    selectElement.value = years[0];
+                }
+            } else {
+                manageSelect(selectElement, [], false); // Disable the select for other cases
             }
         }
     }
@@ -215,16 +235,24 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
     }
 
-    async function initializeCarForm(activeTabContent, formAction) {
-        const makes = activeTabContent.querySelector('select[data-name="car-marka"]');
-        const models = activeTabContent.querySelector('select[data-name="car-model"]');
-        const generations = activeTabContent.querySelector('select[data-name="car-generacja"]');
-        const years = activeTabContent.querySelector('select[data-name="car-rok"]');
-        const engines = activeTabContent.querySelector('select[data-name="car-silnik"]');
+    async function initializeCarForm(activeTabContent, activeSubTabNumber, formAction) {
         const submitButton = activeTabContent.querySelector('input[type="submit"]');
+        const urlParams = new URLSearchParams(window.location.search);
 
-        // Define event listener for form submission
-        submitButton.form.addEventListener('submit', function (event) {
+        const elements = ['car-marka', 'car-model', 'car-generacja', 'car-rok', 'car-silnik'];
+        const fetchDataEndpoints = {
+            'car-marka': 'makes/',
+            'car-model': 'models/',
+            'car-generacja': 'generations/',
+            'car-silnik': 'modifications/'
+        };
+
+        setupEventListeners(activeTabContent, elements, fetchDataEndpoints);
+        await initializeSelects(activeTabContent, elements, fetchDataEndpoints, urlParams);
+        checkFormCompleteAndManageSubmitButton(activeTabContent, elements);
+
+        const form = submitButton.form;
+        form.addEventListener('submit', function (event) {
             event.preventDefault();
 
             localStorage.setItem('searchBy', 'byCar');
@@ -240,66 +268,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             const queryString = Object.entries(queryParameters).map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&');
             window.location.href = `${formAction}?${queryString}`;
         });
-
-        manageSelect(makes);
-        manageSelect(models, [], false);
-        manageSelect(generations, [], false);
-        manageSelect(years, [], false);
-        manageSelect(engines, [], false);
-        manageSelect(submitButton, [], false);
-
-        // Fetch data for the first select and update options
-        const makesData = await fetchData('makes/', {region: 'eudm'});
-        manageSelect(makes, makesData.data.map(make => ({value: make.slug, name: make.name})), true);
-
-        // Set up event listeners for select changes
-        makes.addEventListener('change', async () => {
-            if (makes.value) {
-                const modelsData = await fetchData('models/', {make: makes.value});
-                manageSelect(models, modelsData.data.map(model => ({value: model.slug, name: model.name})), true);
-                manageSelect(generations, [], false); // Reset the subsequent selects
-                manageSelect(years, [], false);
-                manageSelect(engines, [], false);
-            }
-        });
-
-        models.addEventListener('change', async () => {
-            if (models.value) {
-                const generationsData = await fetchData('generations/', {make: makes.value, model: models.value});
-                manageSelect(generations, generationsData.data.map(generation => ({
-                    value: generation.slug,
-                    name: generation.name
-                })), true);
-                manageSelect(years, [], false); // Further select reset
-                manageSelect(engines, [], false);
-            }
-        });
-
-        generations.addEventListener('change', async () => {
-            if (generations.value) {
-                const generationsData = await fetchData('generations/', {make: makes.value, model: models.value});
-                const selectedGeneration = generationsData.data.find(gen => gen.slug === generations.value);
-                manageSelect(years, selectedGeneration.years.map(year => ({value: year, name: year.toString()})), true);
-                manageSelect(engines, [], false);
-            }
-        });
-
-        years.addEventListener('change', async () => {
-            if (years.value) {
-                const enginesData = await fetchData('modifications/', {
-                    make: makes.value,
-                    model: models.value,
-                    year: years.value
-                });
-                manageSelect(engines, enginesData.data.map(engine => ({value: engine.slug, name: engine.name})), true);
-            }
-        });
-
-        [makes, models, generations, years, engines].forEach(select => select.addEventListener('change', () => {
-            // Enable the submit button if all selects have a value
-            const isFormComplete = [makes, models, generations, years, engines].every(select => select && select.value);
-            manageSelect(submitButton, [], isFormComplete);
-        }));
     }
 
     function getActiveTabInfo() {
@@ -339,8 +307,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             return
         }
 
-        const searchBy = localStorage.getItem('searchBy');
-
         const formActionBaseURL = 'https://moto-m5.myshopify.com/collections/';
 
         let formAction = `${formActionBaseURL}opony`; // Default action
@@ -360,10 +326,10 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         if (document.querySelector('.w-tab-pane.w--tab-active').classList.contains('tab-pane-tab-1')) {
             // "Search by Size"
-            initializeSizeForm(activeTabContent, activeSubTabNumber, formAction, searchBy);
+            initializeSizeForm(activeTabContent, activeSubTabNumber, formAction);
         } else if (document.querySelector('.w-tab-pane.w--tab-active').classList.contains('tab-pane-tab-2')) {
             // "Search by Car"
-            initializeCarForm(activeTabContent, formAction);
+            initializeCarForm(activeTabContent, activeSubTabNumber, formAction);
         }
     }
 
