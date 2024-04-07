@@ -1,0 +1,53 @@
+// Funkcja otwierająca modal
+function openModal(modalName) {
+  const modalComponent = document.getElementById(`modal-component-${modalName}`);
+  const modalBackground = document.getElementById(`modal-background-${modalName}`);
+
+  modalComponent.style.display = 'flex';
+  modalBackground.style.display = 'flex';
+
+  // Ustawienie opóźnienia, aby umożliwić przejście CSS
+  setTimeout(() => {
+    modalComponent.style.opacity = '1';
+    modalBackground.style.opacity = '1';
+  }, 10); // Możesz dostosować czas opóźnienia
+}
+
+// Funkcja zamykająca modal
+function closeModal(modalName) {
+  const modalComponent = document.getElementById(`modal-component-${modalName}`);
+  const modalBackground = document.getElementById(`modal-background-${modalName}`);
+
+  modalComponent.style.opacity = '0';
+  modalBackground.style.opacity = '0';
+
+  // Użyj transitionend lub ustaw timeout, aby zaktualizować styl display po zakończeniu przejścia
+  modalComponent.addEventListener('transitionend', function handler() {
+    modalComponent.style.display = 'none';
+    modalBackground.style.display = 'none';
+    modalComponent.removeEventListener('transitionend', handler);
+  });
+}
+
+// Dodanie event listenerów do przycisków otwierających i zamykających modal oraz do tła modalu
+document.addEventListener('DOMContentLoaded', () => {
+  const openButtons = document.querySelectorAll('[id^="modal-open-"]');
+  const closeButtons = document.querySelectorAll('[id^="modal-close-"]');
+  const modalBackgrounds = document.querySelectorAll('[id^="modal-background-"]');
+
+  openButtons.forEach(button => {
+    const modalName = button.id.replace('modal-open-', '');
+    button.addEventListener('click', () => openModal(modalName));
+  });
+
+  closeButtons.forEach(button => {
+    const modalName = button.id.replace('modal-close-', '');
+    button.addEventListener('click', () => closeModal(modalName));
+  });
+
+  // Dodanie obsługi kliknięcia w tło, aby zamknąć modal
+  modalBackgrounds.forEach(background => {
+    const modalName = background.id.replace('modal-background-', '');
+    background.addEventListener('click', () => closeModal(modalName));
+  });
+});
