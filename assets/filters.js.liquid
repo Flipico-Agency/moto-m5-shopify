@@ -21,7 +21,10 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         element.innerHTML = isEnabled && placeholder ? `<option value="">${placeholder}</option>` : '';
         if (isEnabled) {
-            options.forEach(({ name, value, slug }) => element.add(new Option(name || value || 'I', value ? value : slug)));
+            options.forEach((option, index) => {
+                const optionValue = option.value || option.slug || `Option ${index + 1}`;
+                element.add(new Option(option.name || optionValue, optionValue));
+            });
         }
 
         element.disabled = !isEnabled;
@@ -101,6 +104,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 if (years.length > 0) {
                     selectElement.value = years[0];
                 }
+                selectedValues['year'] = selectElement.value;
             } else {
                 manageSelect(selectElement, [], false); // Disable the select for other cases
             }
