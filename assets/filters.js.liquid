@@ -3,17 +3,14 @@ document.addEventListener('DOMContentLoaded', async function () {
     const userKey = '8608442fd845888bda065b97c8d141d9';
 
     async function fetchData(endpoint, params) {
-        try {
-            const url = new URL(`${baseURL}/${endpoint}`); // Ensure baseURL is defined and correct
-            url.search = new URLSearchParams({ user_key: userKey, ...params }).toString();
-            const response = await fetch(url);
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-            return await response.json();
-        } catch (error) {
-            console.error('Fetch Error:', error);
-            // Return a default object or handle the error as needed
-            {% comment %}return { data: [] };{% endcomment %}
+        const url = new URL(`${baseURL}/${endpoint}`);
+        url.search = new URLSearchParams({ user_key: userKey, ...params }).toString();
+
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
+        return await response.json();
     }
 
     function manageSelect(element, options = [], isEnabled = true, placeholder = "Wybierz...") {
