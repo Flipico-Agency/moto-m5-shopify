@@ -377,11 +377,11 @@
                       <div class="product_pictures-wrapper">
                         <div class="product_season-wrapper">
                           {% if product.metafields.tires.season.value == 'Letnie' %}
-                            <img src="{{ 'IcRoundSun.svg' | asset_url }}" class="icon-embed-small">
+                            <img src="{{ 'IcRoundSun.svg' | asset_url }}" class="icon-embed-small" alt="summer-icon">
                           {% elsif product.metafields.tires.season.value == 'Zimowe' %}
-                            <img src="{{ 'IcRoundWinter.svg' | asset_url }}" class="icon-embed-small">
+                            <img src="{{ 'IcRoundWinter.svg' | asset_url }}" class="icon-embed-small" alt="winter-icon">
                           {% elsif product.metafields.tires.season.value == 'Całoroczne' %}
-                            <img src="{{ 'IcRoundAllSeason.svg' | asset_url }}" class="icon-embed-small">
+                            <img src="{{ 'IcRoundAllSeason.svg' | asset_url }}" class="icon-embed-small" alt="year-round-icon">
                           {% endif %}
                         </div>
                         <div class="product_badge-wrapper">
