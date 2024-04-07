@@ -22,8 +22,18 @@ document.addEventListener('DOMContentLoaded', async function () {
         element.innerHTML = isEnabled && placeholder ? `<option value="">${placeholder}</option>` : '';
         if (isEnabled) {
             options.forEach((option, index) => {
-                const optionValue = option.value || option.slug || `Option ${index + 1}`;
-                element.add(new Option(option.name || optionValue, optionValue));
+                let optionDisplayValue;
+                let optionActualValue;
+
+                if (element.dataset.name === 'car-generacja') {
+                    optionDisplayValue = index + 1;
+                    optionActualValue = option.slug;
+                } else {
+                    optionDisplayValue = option.name;
+                    optionActualValue = option.value || option.slug;
+                }
+
+                element.add(new Option(optionDisplayValue, optionActualValue));
             });
         }
 
@@ -54,38 +64,65 @@ document.addEventListener('DOMContentLoaded', async function () {
         return mapping[selectName] || selectName;
     }
 
+    function mapSelectNameToURLParam(selectName) {
+        const mapping = {
+            // Map for tires and rims
+            'tire-width': 'filter.p.m.tires.width',
+            'tire-profile': 'filter.p.m.tires.profile',
+            'tire-diameter': 'filter.p.m.tires.diameter',
+            'tire-season': 'filter.p.m.tires.season',
+            'rim-bolt': 'filter.p.m.rim.rim_bolt',
+            'rim-width': 'filter.p.m.rim.width',
+            'rim-diameter': 'filter.p.m.rim.diameter',
+
+            // Map for cars
+            'car-marka': 'filter.p.m.car.make',
+            'car-model': 'filter.p.m.car.model',
+            'car-generacja': 'filter.p.m.car.generation',
+            'car-silnik': 'filter.p.m.car.engine'
+        };
+        return mapping[selectName] || selectName;
+    }
+
     async function initializeSelects(activeTabContent, elements, fetchDataEndpoints, urlParams) {
         let selectedValues = {};
 
         for (let i = 0; i < elements.length; i++) {
             const elementName = elements[i];
             const selectElement = activeTabContent.querySelector(`select[data-name="${elementName}"]`);
-            console.log(`Processing selector: ${elementName}`);
+            {% comment %}console.log(`Processing selector: ${elementName}`);{% endcomment %}
 
             if (!selectElement) continue;
 
             const apiParam = mapSelectNameToApiParam(elementName);
             const fetchDataParams = { region: 'eudm' };
 
-            // Include previous selected values in the fetchDataParams
+            const urlParamKey = mapSelectNameToURLParam(elementName);
+            const urlParamValue = urlParams.get(urlParamKey);
+
+            if (urlParamValue) {
+                selectedValues[apiParam] = urlParamValue;
+            }
+
+            // W przypadku braku wartości URL, kontynuuj z logiką API
             Object.keys(selectedValues).forEach(key => {
                 if (typeof selectedValues[key] === 'string') {
                     fetchDataParams[key] = selectedValues[key];
                 }
             });
 
-            const urlParamValue = urlParams.get(apiParam);
-            if (urlParamValue) fetchDataParams[apiParam] = urlParamValue;
-
             if (elementName === 'tire-season') {
-                // Assuming you have predefined seasons
                 const seasons = ['Letnie', 'Zimowe', 'Całoroczne'];
                 manageSelect(selectElement, seasons.map(season => ({ name: season, value: season })), true);
-                selectElement.value = 'Letnie'; // Default to 'Letnie' or any other logic you may have
+                if (urlParamValue) {
+                    selectElement.value = urlParamValue;
+                } else {
+                    selectElement.value = 'Letnie'; // Default
+                }
             } else if (apiParam && fetchDataEndpoints[elementName]) {
-                console.log(`Sending API request for ${elementName} with params:`, fetchDataParams);
+                {% comment %}console.log(`Sending API request for ${elementName} with params:`, fetchDataParams);{% endcomment %}
                 const data = await fetchData(fetchDataEndpoints[elementName], fetchDataParams);
-                console.log(`Received API data for ${elementName}:`, data);
+                {% comment %}console.log(`Received API data for ${elementName}:`, data);{% endcomment %}
 
                 if (data && data.data) {
                     manageSelect(selectElement, data.data, true);
@@ -99,7 +136,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             } else if (elementName === 'car-rok' && selectedValues['generation']) {
                 // Handle car-year based on selected generation
                 const generation = selectedValues['generation'];
-                const years = generation.years; // Assuming selected generation object includes years
+                const years = generation.years; // Selected generation object includes years
                 manageSelect(selectElement, years.map(year => ({ name: year, value: year })), true);
                 if (years.length > 0) {
                     selectElement.value = years[0];
@@ -145,7 +182,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
     }
 
-    function buildQueryParameters(activeSubTabNumber, tire, rim, urlParams) {
+    function buildSizeQueryParameters(activeSubTabNumber, tire, rim, urlParams) {
         let queryParams = {};
 
         // Base parameters for tires are always included in subtabs 1 and 2
@@ -182,6 +219,25 @@ document.addEventListener('DOMContentLoaded', async function () {
                 'filter.p.m.rim.width': rim.width.value,
                 'filter.p.m.rim.rim_et': rim.et.value
             };
+        }
+
+        return queryParams;
+    }
+    function buildCarQueryParameters(activeSubTabNumber, elements, urlParams) {
+        let queryParams = {};
+
+        elements.forEach(element => {
+            const selectElement = document.querySelector(`select[data-name="${element}"]`);
+            if (selectElement && selectElement.value) {
+                const urlParamKey = mapSelectNameToURLParam(element);
+                queryParams[urlParamKey] = selectElement.value;
+            }
+        });
+
+        for (const [key, value] of urlParams.entries()) {
+            if (!queryParams.hasOwnProperty(key) && value) {
+                queryParams[key] = value;
+            }
         }
 
         return queryParams;
@@ -234,7 +290,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             localStorage.setItem('searchBy', 'bySize');
 
             // Build query parameters based on the active sub-tab and selected options
-            const queryParams = buildQueryParameters(activeSubTabNumber, tire, rim, urlParams);
+            const queryParams = buildSizeQueryParameters(activeSubTabNumber, tire, rim, urlParams);
             window.location.href = `${formAction}?${new URLSearchParams(queryParams).toString()}`;
         });
     }
@@ -261,15 +317,10 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             localStorage.setItem('searchBy', 'byCar');
 
-            const queryParameters = {
-                'filter.p.car.make': makes.value,
-                'filter.p.car.model': models.value,
-                'filter.p.car.generation': generations.value,
-                'filter.p.car.year': years.value,
-                'filter.p.car.engine': engines.value
-            };
+            // Build query parameters based on the active sub-tab and selected options
+            const queryParams = buildCarQueryParameters(activeSubTabNumber, elements, new URLSearchParams(window.location.search));
 
-            const queryString = Object.entries(queryParameters).map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&');
+            const queryString = Object.entries(queryParams).map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&');
             window.location.href = `${formAction}?${queryString}`;
         });
     }
