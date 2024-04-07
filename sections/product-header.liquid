@@ -25,7 +25,12 @@
             {% endfor %}
           </div>
           <div class="product-header_gallery_main-image_wrapper">
-            {{ product.featured_image | image_url: height: 1000 | image_tag: class: 'product-header_gallery_main-image' }}</div>
+            {% if product.featured_image %}
+              {{ product.featured_image | image_url: height: 1000 | image_tag: class: 'product-header_gallery_main-image' }}
+            {% else %}
+              {{ product.metafields.tires.model.value.zdjecie.value | image_url: height: 1000 | image_tag: class: 'product-header_gallery_main-image' }}
+            {% endif %}
+          </div>
         </div>
         <div class="product-header_info">
           <div class="product-header_info-top">
@@ -95,27 +100,29 @@
               </div>
               <div class="icon-embed-xsmall"><img src="{{ 'IcArrowSmallRight.svg' | asset_url }}" /></div>
             </div>
-            <div class="product-header_info-bottom_item-wrapper" id="modal-open-guarantee">
-              <div class="product-header_info-bottom_item">
-                <div class="text-size-small">Gwarancja</div>
-              </div>
-              <div class="icon-embed-xsmall"><img src="{{ 'IcArrowSmallRight.svg' | asset_url }}" /></div>
-            </div>
-            <div class="modal_component" id="modal-component-guarantee">
-              <div class="modal_content-wrapper">
-                <div class="modal_close-button" id="modal-close-guarantee"><img src="{{ 'IcRoundCloseRed.svg' |  asset_url}}" class="icon-embed-small"></div>
-                <div class="margin-bottom margin-large">
-                  <div class="margin-bottom margin-xsmall">
-                    <h4>Gwarancja</h4>
-                  </div>
-                  <div class="guarantee-content-green">
-                    <p class="text-weight-bold text-color-green">Dożywotnia gwarancja na naprawę</p>
-                  </div>
+            {% if section.settings.guarantee %}
+              <div class="product-header_info-bottom_item-wrapper" id="modal-open-guarantee">
+                <div class="product-header_info-bottom_item">
+                  <div class="text-size-small">Gwarancja</div>
                 </div>
-                <div class="text-rich-text">{{ section.settings.guarantee }}</div>
+                <div class="icon-embed-xsmall"><img src="{{ 'IcArrowSmallRight.svg' | asset_url }}" /></div>
               </div>
-              <div class="modal_background-overlay" id="modal-background-guarantee"></div>
-            </div>
+              <div class="modal_component" id="modal-component-guarantee">
+                <div class="modal_content-wrapper">
+                  <div class="modal_close-button" id="modal-close-guarantee"><img src="{{ 'IcRoundCloseRed.svg' |  asset_url}}" class="icon-embed-small"></div>
+                  <div class="margin-bottom margin-large">
+                    <div class="margin-bottom margin-xsmall">
+                      <h4>Gwarancja</h4>
+                    </div>
+                    <div class="guarantee-content-green">
+                      <p class="text-weight-bold text-color-green">Dożywotnia gwarancja na naprawę</p>
+                    </div>
+                  </div>
+                  <div class="text-rich-text">{{ section.settings.guarantee }}</div>
+                </div>
+                <div class="modal_background-overlay" id="modal-background-guarantee"></div>
+              </div>
+            {% endif %}
             <div class="product-header_info-bottom_item-wrapper">
               <div class="product-header_info-bottom_item">
                 <div class="text-size-small">Opinie</div>
@@ -522,7 +529,7 @@
     ],
     "blocks": [
       {
-        "name": "Parametr",
+        "name": "Parametr dodatkowy",
         "type": "parametr",
         "settings": [
           {
