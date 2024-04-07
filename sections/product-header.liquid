@@ -9,7 +9,7 @@
           {% elsif product.metafields.tires.season.value == 'Zimowe' %}
             <img src="{{ 'IcRoundWinter.svg' | asset_url }}" class="icon-embed-medium">
           {% elsif product.metafields.tires.season.value == 'Całoroczne' %}
-            Opony Całoroczne
+            <img src="{{ 'IcRoundAllSeason.svg' | asset_url }}" class="icon-embed-medium">
           {% endif %}
           <h1 class="heading-style-h3">
             {{ product.metafields.tires.model.value.model.value }}<span class="text-weight-normal">
@@ -25,24 +25,22 @@
             {% endfor %}
           </div>
           <div class="product-header_gallery_main-image_wrapper">
-            {{ product.featured_image | image_url: height: 1000 | image_tag: class: 'product-header_gallery_main-image' }}</div>
+            {% if product.featured_image %}
+              {{ product.featured_image | image_url: height: 1000 | image_tag: class: 'product-header_gallery_main-image' }}
+            {% else %}
+              {{ product.metafields.tires.model.value.zdjecie.value | image_url: height: 1000 | image_tag: class: 'product-header_gallery_main-image' }}
+            {% endif %}
+          </div>
         </div>
         <div class="product-header_info">
           <div class="product-header_info-top">
-            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Stan</p>
-            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.condition }}</p>
-            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Bieżnik</p>
-            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.tread }}</p>
-            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Data produkcji</p>
-            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.years }}</p>
-            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Sezon</p>
-            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.season }}</p>
-            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Rozmiar</p>
-            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.width }}/{{ product.metafields.tires.profile }} R{{ product.metafields.tires.diameter }}</p>
-            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Indeks nośności</p>
-            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.load_index }}</p>
-            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Indeks prędkości</p>
-            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.speed_index }}</p>
+            {% for block in section.blocks %}
+              {% case block.type %}
+                {% when 'parametr_main' %}
+                  <p class="text-size-tiny text-weight-semibold text-color-grayiron600">{{ block.settings.parametr_name }}</p>
+                  <p class="text-size-tiny text-weight-semibold text-color-black">{{ block.settings.parametr_value }}</p>
+              {% endcase %}
+            {% endfor %}
           </div>
           <div class="product-header_info-bottom">
             <div class="product-header_info-bottom_item-wrapper" id="modal-open-data">
@@ -60,20 +58,13 @@
                   </div>
                 </div>
                 <div class="product-header_info-modal">
-                  <p class="text-size-small text-weight-semibold text-color-grayiron600">Stan</p>
-                  <p class="text-size-small text-weight-semibold text-color-black">{{ product.metafields.tires.condition }}</p>
-                  <p class="text-size-small text-weight-semibold text-color-grayiron600">Bieżnik</p>
-                  <p class="text-size-small text-weight-semibold text-color-black">{{ product.metafields.tires.tread }}</p>
-                  <p class="text-size-small text-weight-semibold text-color-grayiron600">Data produkcji</p>
-                  <p class="text-size-small text-weight-semibold text-color-black">{{ product.metafields.tires.years }}</p>
-                  <p class="text-size-small text-weight-semibold text-color-grayiron600">Sezon</p>
-                  <p class="text-size-small text-weight-semibold text-color-black">{{ product.metafields.tires.season }}</p>
-                  <p class="text-size-small text-weight-semibold text-color-grayiron600">Rozmiar</p>
-                  <p class="text-size-small text-weight-semibold text-color-black">{{ product.metafields.tires.width }}/{{ product.metafields.tires.profile }} R{{ product.metafields.tires.diameter }}</p>
-                  <p class="text-size-small text-weight-semibold text-color-grayiron600">Indeks nośności</p>
-                  <p class="text-size-small text-weight-semibold text-color-black">{{ product.metafields.tires.load_index }}</p>
-                  <p class="text-size-small text-weight-semibold text-color-grayiron600">Indeks prędkości</p>
-                  <p class="text-size-small text-weight-semibold text-color-black">{{ product.metafields.tires.speed_index }}</p>
+                  {% for block in section.blocks %}
+                    {% case block.type %}
+                      {% when 'parametr' %}
+                        <p class="text-size-small text-weight-semibold text-color-grayiron600">{{ block.settings.parametr_name }}</p>
+                        <p class="text-size-small text-weight-semibold text-color-black">{{ block.settings.parametr_value }}</p>
+                    {% endcase %}
+                  {% endfor %}
                 </div>
               </div>
               <div class="modal_background-overlay" id="modal-background-data"></div>
@@ -92,7 +83,7 @@
                     <h4>Opis</h4>
                   </div>
                 </div>
-                <div class="text-rich-text">{{ product.description }}</div>
+                <div class="text-rich-text">{{ section.settings.opis }}</div>
               </div>
               <div class="modal_background-overlay" id="modal-background-description"></div>
             </div>
@@ -102,32 +93,46 @@
               </div>
               <div class="icon-embed-xsmall"><img src="{{ 'IcArrowSmallRight.svg' | asset_url }}" /></div>
             </div>
-            <div class="product-header_info-bottom_item-wrapper" id="modal-open-guarantee">
+            {% if section.settings.guarantee %}
+              <div class="product-header_info-bottom_item-wrapper" id="modal-open-guarantee">
+                <div class="product-header_info-bottom_item">
+                  <div class="text-size-small">Gwarancja</div>
+                </div>
+                <div class="icon-embed-xsmall"><img src="{{ 'IcArrowSmallRight.svg' | asset_url }}" /></div>
+              </div>
+              <div class="modal_component" id="modal-component-guarantee">
+                <div class="modal_content-wrapper">
+                  <div class="modal_close-button" id="modal-close-guarantee"><img src="{{ 'IcRoundCloseRed.svg' |  asset_url}}" class="icon-embed-small"></div>
+                  <div class="margin-bottom margin-large">
+                    <div class="margin-bottom margin-xsmall">
+                      <h4>Gwarancja</h4>
+                    </div>
+                    <div class="guarantee-content-green">
+                      <p class="text-weight-bold text-color-green">Dożywotnia gwarancja na naprawę</p>
+                    </div>
+                  </div>
+                  <div class="text-rich-text">{{ section.settings.guarantee }}</div>
+                </div>
+                <div class="modal_background-overlay" id="modal-background-guarantee"></div>
+              </div>
+            {% endif %}
+            <div class="product-header_info-bottom_item-wrapper" id="modal-open-payments">
               <div class="product-header_info-bottom_item">
-                <div class="text-size-small">Gwarancja</div>
+                <div class="text-size-small">Formy płatności</div>
               </div>
               <div class="icon-embed-xsmall"><img src="{{ 'IcArrowSmallRight.svg' | asset_url }}" /></div>
             </div>
-            <div class="modal_component" id="modal-component-guarantee">
+            <div class="modal_component" id="modal-component-payments">
               <div class="modal_content-wrapper">
-                <div class="modal_close-button" id="modal-close-guarantee"><img src="{{ 'IcRoundCloseRed.svg' |  asset_url}}" class="icon-embed-small"></div>
+                <div class="modal_close-button" id="modal-close-payments"><img src="{{ 'IcRoundCloseRed.svg' |  asset_url}}" class="icon-embed-small"></div>
                 <div class="margin-bottom margin-large">
                   <div class="margin-bottom margin-xsmall">
-                    <h4>Gwarancja</h4>
-                  </div>
-                  <div class="guarantee-content-green">
-                    <p class="text-weight-bold text-color-green">Dożywotnia gwarancja na naprawę</p>
+                    <h4>Opis</h4>
                   </div>
                 </div>
-                <div class="text-rich-text">{{ section.settings.guarantee }}</div>
+                {% render 'payments' %}
               </div>
-              <div class="modal_background-overlay" id="modal-background-guarantee"></div>
-            </div>
-            <div class="product-header_info-bottom_item-wrapper">
-              <div class="product-header_info-bottom_item">
-                <div class="text-size-small">Opinie</div>
-              </div>
-              <div class="icon-embed-xsmall"><img src="{{ 'IcArrowSmallRight.svg' | asset_url }}" /></div>
+              <div class="modal_background-overlay" id="modal-background-payments"></div>
             </div>
           </div>
         </div>
@@ -521,6 +526,41 @@
         "type": "richtext",
         "id": "guarantee",
         "label": "Gwarancja"
+      }, {
+        "type": "richtext",
+        "id": "opis",
+        "label": "Opis Modelu"
+      }
+    ],
+    "blocks": [
+      {
+        "name": "Parametr dodatkowy",
+        "type": "parametr",
+        "settings": [
+          {
+            "type": "text",
+            "id": "parametr_name",
+            "label": "Nazwa Parametru"
+          }, {
+            "type": "text",
+            "id": "parametr_value",
+            "label": "Wartość Parametru"
+          }
+        ]
+      }, {
+        "name": "Parametr",
+        "type": "parametr_main",
+        "settings": [
+          {
+            "type": "text",
+            "id": "parametr_name",
+            "label": "Nazwa Parametru"
+          }, {
+            "type": "text",
+            "id": "parametr_value",
+            "label": "Wartość Parametru"
+          }
+        ]
       }
     ],
     "presets": [
