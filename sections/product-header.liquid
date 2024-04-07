@@ -9,7 +9,7 @@
           {% elsif product.metafields.tires.season.value == 'Zimowe' %}
             <img src="{{ 'IcRoundWinter.svg' | asset_url }}" class="icon-embed-medium">
           {% elsif product.metafields.tires.season.value == 'Całoroczne' %}
-            Opony Całoroczne
+            <img src="{{ 'IcRoundAllSeason.svg' | asset_url }}" class="icon-embed-medium">
           {% endif %}
           <h1 class="heading-style-h3">
             {{ product.metafields.tires.model.value.model.value }}<span class="text-weight-normal">
@@ -60,20 +60,13 @@
                   </div>
                 </div>
                 <div class="product-header_info-modal">
-                  <p class="text-size-small text-weight-semibold text-color-grayiron600">Stan</p>
-                  <p class="text-size-small text-weight-semibold text-color-black">{{ product.metafields.tires.condition }}</p>
-                  <p class="text-size-small text-weight-semibold text-color-grayiron600">Bieżnik</p>
-                  <p class="text-size-small text-weight-semibold text-color-black">{{ product.metafields.tires.tread }}</p>
-                  <p class="text-size-small text-weight-semibold text-color-grayiron600">Data produkcji</p>
-                  <p class="text-size-small text-weight-semibold text-color-black">{{ product.metafields.tires.years }}</p>
-                  <p class="text-size-small text-weight-semibold text-color-grayiron600">Sezon</p>
-                  <p class="text-size-small text-weight-semibold text-color-black">{{ product.metafields.tires.season }}</p>
-                  <p class="text-size-small text-weight-semibold text-color-grayiron600">Rozmiar</p>
-                  <p class="text-size-small text-weight-semibold text-color-black">{{ product.metafields.tires.width }}/{{ product.metafields.tires.profile }} R{{ product.metafields.tires.diameter }}</p>
-                  <p class="text-size-small text-weight-semibold text-color-grayiron600">Indeks nośności</p>
-                  <p class="text-size-small text-weight-semibold text-color-black">{{ product.metafields.tires.load_index }}</p>
-                  <p class="text-size-small text-weight-semibold text-color-grayiron600">Indeks prędkości</p>
-                  <p class="text-size-small text-weight-semibold text-color-black">{{ product.metafields.tires.speed_index }}</p>
+                  {% for block in section.blocks %}
+                    {% case block.type %}
+                      {% when 'parametr' %}
+                        <p class="text-size-small text-weight-semibold text-color-grayiron600">{{ block.settings.parametr_name }}</p>
+                        <p class="text-size-small text-weight-semibold text-color-black">{{ block.settings.parametr_value }}</p>
+                    {% endcase %}
+                  {% endfor %}
                 </div>
               </div>
               <div class="modal_background-overlay" id="modal-background-data"></div>
@@ -92,7 +85,7 @@
                     <h4>Opis</h4>
                   </div>
                 </div>
-                <div class="text-rich-text">{{ product.description }}</div>
+                <div class="text-rich-text">{{ section.settings.opis }}</div>
               </div>
               <div class="modal_background-overlay" id="modal-background-description"></div>
             </div>
@@ -521,6 +514,27 @@
         "type": "richtext",
         "id": "guarantee",
         "label": "Gwarancja"
+      }, {
+        "type": "richtext",
+        "id": "opis",
+        "label": "Opis Modelu"
+      }
+    ],
+    "blocks": [
+      {
+        "name": "Parametr",
+        "type": "parametr",
+        "settings": [
+          {
+            "type": "text",
+            "id": "parametr_name",
+            "label": "Nazwa Parametru"
+          }, {
+            "type": "text",
+            "id": "parametr_value",
+            "label": "Wartość Parametru"
+          }
+        ]
       }
     ],
     "presets": [
