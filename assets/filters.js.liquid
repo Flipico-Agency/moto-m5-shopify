@@ -26,10 +26,10 @@ document.addEventListener('DOMContentLoaded', async function () {
                 let optionActualValue;
 
                 if (element.dataset.name === 'car-generacja') {
-                    optionDisplayValue = index + 1;
+                    optionDisplayValue = option.name !== '' ? option.name : index + 1;
                     optionActualValue = option.slug;
                 } else {
-                    optionDisplayValue = option.name;
+                    optionDisplayValue = option.name || option.value;
                     optionActualValue = option.value || option.slug;
                 }
 
@@ -128,9 +128,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                     manageSelect(selectElement, data.data, true);
 
                     if (!selectElement.value && data.data.length > 0) {
-                        selectElement.value = urlParamValue || data.data[0].value || data.data[0].slug;
+                        selectElement.value = urlParamValue ? urlParamValue : data.data[0].value ? data.data[0].value : data.data[0].slug;
                     }
-
                     selectedValues[apiParam] = elementName === 'car-generacja' ? data.data.find(item => item.slug === selectElement.value) : selectElement.value;
                 }
             } else if (elementName === 'car-rok' && selectedValues['generation']) {
@@ -148,6 +147,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     }
 
+    let generationsData = {};
+
     function setupEventListeners(activeTabContent, elements, fetchDataEndpoints) {
         elements.forEach((elementName, index) => {
             const selectElement = activeTabContent.querySelector(`select[data-name="${elementName}"]`);
@@ -155,28 +156,49 @@ document.addEventListener('DOMContentLoaded', async function () {
             selectElement.addEventListener('change', async () => {
                 checkFormCompleteAndManageSubmitButton(activeTabContent, elements);
 
-                if (elementName === 'tire-season') return;
+                // Resetowanie następnych selectów
+                elements.slice(index + 1).forEach(name => {
+                    const nextSelect = activeTabContent.querySelector(`select[data-name="${name}"]`);
+                    manageSelect(nextSelect, [], false);
+                });
 
-                if (index < elements.length) {
+                if (elementName === 'car-generacja') {
+                    // Bezpośrednia aktualizacja selektora roku na podstawie wybranej generacji
+                    const years = generationsData[selectElement.value]; // Pobierz lata na podstawie wybranej generacji
+                    const yearSelectElement = activeTabContent.querySelector(`select[data-name="car-rok"]`);
+                    if (years) {
+                        manageSelect(yearSelectElement, years.map(year => ({ name: year, value: year })), true);
+                    } else {
+                        manageSelect(yearSelectElement, [], false); // W przypadku braku informacji o latach, wyłącz selektor roku
+                    }
+                } else if (index < elements.length - 1) {
                     const nextElementName = elements[index + 1];
                     const nextSelectElement = activeTabContent.querySelector(`select[data-name="${nextElementName}"]`);
 
-                    if (selectElement.value && elementName !== 'tire-season' && nextElementName !== 'tire-season') {
-                        const apiParam = mapSelectNameToApiParam(elementName);
-                        const data = await fetchData(fetchDataEndpoints[nextElementName], { region: 'eudm', [apiParam]: selectElement.value });
-                        manageSelect(nextSelectElement, data.data, true);
-                    } else {
-                        if (nextElementName !== 'tire-season') {
+                    if (nextSelectElement && elementName !== 'tire-season' && nextElementName !== 'tire-season') {
+                        const fetchDataParams = { region: 'eudm' };
+                        // Ustawienie parametrów dla API na podstawie wcześniej wybranych wartości
+                        elements.slice(0, index + 1).forEach(prevName => {
+                            const prevSelect = activeTabContent.querySelector(`select[data-name="${prevName}"]`);
+                            const prevApiParam = mapSelectNameToApiParam(prevName);
+                            if (prevSelect && prevSelect.value) fetchDataParams[prevApiParam] = prevSelect.value;
+                        });
+
+                        // Wywołanie API i aktualizacja selektora
+                        const data = await fetchData(fetchDataEndpoints[nextElementName], fetchDataParams);
+                        if (data && data.data) {
+                            if (elementName === 'car-model') {
+                                // Zapisz informacje o generacjach
+                                generationsData = data.data.reduce((acc, curr) => {
+                                    acc[curr.slug] = curr.years;
+                                    return acc;
+                                }, {});
+                            }
+                            manageSelect(nextSelectElement, data.data, true);
+                        } else {
                             manageSelect(nextSelectElement, [], false);
                         }
                     }
-
-                    elements.slice(index + 2).forEach(name => {
-                        if (name !== 'tire-season') {
-                            const elementToDisable = activeTabContent.querySelector(`select[data-name="${name}"]`);
-                            manageSelect(elementToDisable, [], false);
-                        }
-                    });
                 }
             });
         });
@@ -280,8 +302,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         // Initialize select elements based on the active sub-tab
         const elementsToInitialize = activeSubTabNumber === '1' ? tireElements : activeSubTabNumber === '2' ? wheelElements : rimElements;
-        setupEventListeners(activeTabContent, elementsToInitialize, fetchDataEndpoints);
         await initializeSelects(activeTabContent, elementsToInitialize, fetchDataEndpoints, urlParams);
+        setupEventListeners(activeTabContent, elementsToInitialize, fetchDataEndpoints);
         checkFormCompleteAndManageSubmitButton(activeTabContent, elementsToInitialize);
 
         const form = submitButton.form;
@@ -307,8 +329,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             'car-silnik': 'modifications/'
         };
 
-        setupEventListeners(activeTabContent, elements, fetchDataEndpoints);
         await initializeSelects(activeTabContent, elements, fetchDataEndpoints, urlParams);
+        setupEventListeners(activeTabContent, elements, fetchDataEndpoints);
         checkFormCompleteAndManageSubmitButton(activeTabContent, elements);
 
         const form = submitButton.form;
