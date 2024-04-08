@@ -161,13 +161,13 @@
                 value="1" />
               <div class="button-group-add-with-size">
                 <select id="size-selector" class="form-select_size">
-                  <option selected="selected">{{ product.metafields.tires.width }}/{{ product.metafields.tires.profile }} R{{ product.metafields.tires.diameter }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}</option>
+                  <option selected="selected">{{ product.metafields.tires.quantity | slice: 0 }} x {{ product.metafields.tires.width }}/{{ product.metafields.tires.profile }} R{{ product.metafields.tires.diameter }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}</option>
                   {% assign model_name = product.metafields.tires.model.value.model.value %}
                   {% assign model_url = product.url %}
                   {% for product in collections.opony.products %}
                     {% assign product_model = product.metafields.tires.model.value.model %}
                     {% if product_model == model_name and model_url != product.url %}
-                      <option value="{{ product.url}}">{{ product.metafields.tires.width }}/{{ product.metafields.tires.profile }} R{{ product.metafields.tires.diameter }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}</option>
+                      <option value="{{ product.url}}">{{ product.metafields.tires.quantity | slice: 0 }} x {{ product.metafields.tires.width }}/{{ product.metafields.tires.profile }} R{{ product.metafields.tires.diameter }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}</option>
                     {% endif %}
                   {% endfor %}
                 </select>
