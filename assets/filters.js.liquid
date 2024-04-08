@@ -410,39 +410,54 @@ document.addEventListener('DOMContentLoaded', async function () {
         const form = submitButton.form;
         form.addEventListener('submit', function (event) {
             event.preventDefault();
+            let queryString;
 
+            localStorage.setItem('searchBy', 'byCar');
             if(!window.location.pathname.includes('collections')) {
-                localStorage.setItem('searchBy', 'byCar');
-
                 // Build query parameters based on the active sub-tab and selected options
                 const queryParams = buildCarQueryParameters(activeSubTabNumber, elements, new URLSearchParams(window.location.search));
 
-                const queryString = Object.entries(queryParams).map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&');
+                queryString = Object.entries(queryParams).map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&');
                 window.location.href = `${formAction}?${queryString}`;
             } else {
-                document.querySelector('.ifnotselectedcar').style.display = 'none';
-                document.querySelector('.ifselectedcar').style.display = 'flex';
+                if (searchByModel === undefined) {
+                    document.querySelector('.ifnotselectedcar').style.display = 'none';
+                    document.querySelector('.ifselectedcar').style.display = 'flex';
 
-                let allElementsForFetch = {};
-                elements.forEach(element => {
-                    const selectElement = document.querySelector(`select[data-name="${element}"]`);
-                    if (selectElement && selectElement.value) {
-                        const apiParam = mapSelectNameToApiParam(element);
-                        allElementsForFetch[apiParam] = selectElement.value;
-                    }
-                });
+                    let allElementsForFetch = {};
+                    elements.forEach(element => {
+                        const selectElement = document.querySelector(`select[data-name="${element}"]`);
+                        if (selectElement && selectElement.value) {
+                            const apiParam = mapSelectNameToApiParam(element);
+                            allElementsForFetch[apiParam] = selectElement.value;
+                        }
+                    });
 
-                fetchData('search/by_model/', allElementsForFetch).then(data => {
-                    searchByModel = data.data;
-                    updateMatchingSizeOptions("matching_sizes");
+                    fetchData('search/by_model/', allElementsForFetch).then(data => {
+                        searchByModel = data.data;
+                        updateMatchingSizeOptions("matching_sizes");
 
-                    if (searchByModel && searchByModel.length > 0) {
-                        const carInfo = searchByModel[0];
-                        document.getElementById('selected_car').textContent = `${carInfo.make.name} ${carInfo.model.name} ${carInfo.generation.name} ${carInfo.trim} (${carInfo.engine.power.PS} PS, ${carInfo.engine.power.kW} kW) (${carInfo.start_year}-${carInfo.end_year})`;
-                    }
-                });
+                        if (searchByModel && searchByModel.length > 0) {
+                            const carInfo = searchByModel[0];
+                            document.getElementById('selected_car').textContent = `${carInfo.make.name} ${carInfo.model.name} ${carInfo.generation.name} ${carInfo.trim} (${carInfo.engine.power.PS} PS, ${carInfo.engine.power.kW} kW) (${carInfo.start_year}-${carInfo.end_year})`;
+                        }
+                    });
+                } else {
+                    const [width, profile, rest] = document.getElementById('matching_sizes').value.split('/');
+                    const params = {
+                        'filter.p.m.tires.width': width,
+                        'filter.p.m.tires.profile': profile,
+                        'filter.p.m.tires.diameter': rest.match(/\d+/)[0]
+                    };
 
-                {% comment %}document.getElementById('matching_sizes').addEventListener("change", matching_sizes.replace(/.*(\b\d{3}\/\d{2}\/R\d{2}\b).*/, '$1'));{% endcomment %}
+                    // Convert params object to URL query string
+                    queryString = Object.entries(params)
+                        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+                        .join('&');
+
+                    window.location.href = `${formAction}?${queryString}`;
+                }
+
                 document.getElementById('change_car').addEventListener("click", function() {
                     searchByModel = undefined;
                     document.querySelector('.ifnotselectedcar').style.display = 'block';
