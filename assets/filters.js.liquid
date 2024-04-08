@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             'car-model': 'model',
             'car-generacja': 'generation',
             'car-rok': 'year',
-            'car-silnik': 'engine'
+            'car-silnik': 'modification'
         };
         return mapping[selectName] || selectName;
     }
@@ -346,69 +346,62 @@ document.addEventListener('DOMContentLoaded', async function () {
         };
 
         // Generic function to update select options
-        const updateSelectOptions = async (dataKey, filterKey) => {
+        const updateMatchingSizeOptions = async (filterKey) => {
             const currentData = searchByModel;
 
-            const selectElements = document.querySelectorAll(`select[data-name="${filterKey}"]`);
+            const selectMatchingSize = document.getElementById(`${filterKey}`);
 
-            if (!selectElements || !selectElements.length) {
-                console.error(`No select elements found with data-name "${filterKey}".`);
-                return;
-            }
+            selectMatchingSize.innerHTML = "";
 
-            selectElements.forEach(selectElement => {
-                selectElement.innerHTML = "";
+            if (currentData && Array.isArray(currentData)) {
+                //console.log(`Updating select options for filter_${filterKey}: `, currentData);
 
-                if (currentData && Array.isArray(currentData)) {
-                    //console.log(`Updating select options for filter_${filterKey}: `, currentData);
+                // Create a set to store unique tire sizes
+                const uniqueTireSizes = new Set();
 
-                    // Create a set to store unique tire sizes
-                    const uniqueTireSizes = new Set();
+                // First add single tire options (not part of a pair)
+                currentData[0].wheels.forEach(item => {
+                    const { front, rear } = item;
+                    const normalizedFrontTire = front.tire ? formatTireSize(front.tire) : '';
+                    const normalizedRearTire = rear.tire ? formatTireSize(rear.tire) : '';
 
-                    // First add single tire options (not part of a pair)
-                    currentData[0].wheels.forEach(item => {
-                        const { front, rear } = item;
-                        const normalizedFrontTire = front.tire ? formatTireSize(front.tire) : '';
-                        const normalizedRearTire = rear.tire ? formatTireSize(rear.tire) : '';
+                    if (front.tire && !rear.tire && !uniqueTireSizes.has(normalizedFrontTire)) {
+                        selectMatchingSize.add(createOption(front));
+                        uniqueTireSizes.add(normalizedFrontTire);
+                    }
+                    if (rear.tire && !front.tire && !uniqueTireSizes.has(normalizedRearTire)) {
+                        selectMatchingSize.add(createOption(rear));
+                        uniqueTireSizes.add(normalizedRearTire);
+                    }
+                });
 
-                        if (front.tire && !rear.tire && !uniqueTireSizes.has(normalizedFrontTire)) {
-                            selectElement.add(createOption(front));
+                // Then add tire pairs, checking for duplicates
+                let pairIndex = 1;
+                currentData[0].wheels.forEach(item => {
+                    const { front, rear } = item;
+                    if (front.tire && rear.tire) {
+                        const normalizedFrontTire = formatTireSize(front.tire);
+                        const normalizedRearTire = formatTireSize(rear.tire);
+                        if (!uniqueTireSizes.has(normalizedFrontTire)) {
+                            selectMatchingSize.add(createOption(front, `Para ${pairIndex}: Przód`));
                             uniqueTireSizes.add(normalizedFrontTire);
                         }
-                        if (rear.tire && !front.tire && !uniqueTireSizes.has(normalizedRearTire)) {
-                            selectElement.add(createOption(rear));
+                        if (!uniqueTireSizes.has(normalizedRearTire)) {
+                            selectMatchingSize.add(createOption(rear, `Para ${pairIndex}: Tył`));
                             uniqueTireSizes.add(normalizedRearTire);
                         }
-                    });
+                        pairIndex++;
+                    }
+                });
 
-                    // Then add tire pairs, checking for duplicates
-                    let pairIndex = 1;
-                    currentData[0].wheels.forEach(item => {
-                        const { front, rear } = item;
-                        if (front.tire && rear.tire) {
-                            const normalizedFrontTire = formatTireSize(front.tire);
-                            const normalizedRearTire = formatTireSize(rear.tire);
-                            if (!uniqueTireSizes.has(normalizedFrontTire)) {
-                                selectElement.add(createOption(front, `Para ${pairIndex}: Przód`));
-                                uniqueTireSizes.add(normalizedFrontTire);
-                            }
-                            if (!uniqueTireSizes.has(normalizedRearTire)) {
-                                selectElement.add(createOption(rear, `Para ${pairIndex}: Tył`));
-                                uniqueTireSizes.add(normalizedRearTire);
-                            }
-                            pairIndex++;
-                        }
-                    });
-
-                    selectElement.selectedIndex = 0;
-                    matching_sizes = selectElement.value.replace(/.*(\b\d{3}\/\d{2}\/R\d{2}\b).*/, '$1');
-                    console.log(`Updated HTML select options for filter_${filterKey}.`);
-                } else {
-                    // If currentData is not an array or empty, remove all options from the select element
-                    selectElement.innerHTML = "";
-                    console.error(`Invalid or empty data for filter_${filterKey}.`);
-                }
-            });
+                selectMatchingSize.selectedIndex = 0;
+                matching_sizes = selectMatchingSize.value.replace(/.*(\b\d{3}\/\d{2}\/R\d{2}\b).*/, '$1');
+                console.log(`Updated HTML select options for filter_${filterKey}.`);
+            } else {
+                // If currentData is not an array or empty, remove all options from the select element
+                selectMatchingSize.innerHTML = "";
+                console.error(`Invalid or empty data for filter_${filterKey}.`);
+            }
         };
 
         let matching_sizes;
@@ -427,11 +420,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                 const queryString = Object.entries(queryParams).map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&');
                 window.location.href = `${formAction}?${queryString}`;
             } else {
-                {% comment %} Toggle divs {% endcomment %}
                 document.querySelector('.ifnotselectedcar').style.display = 'none';
                 document.querySelector('.ifselectedcar').style.display = 'flex';
 
-                // Fetch data for all params
                 let allElementsForFetch = {};
                 elements.forEach(element => {
                     const selectElement = document.querySelector(`select[data-name="${element}"]`);
@@ -443,9 +434,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 
                 fetchData('search/by_model/', allElementsForFetch).then(data => {
                     searchByModel = data.data;
-                    updateSelectOptions("matching_sizes", searchByModel);
+                    updateMatchingSizeOptions("matching_sizes");
 
-                    // Selected car
                     if (searchByModel && searchByModel.length > 0) {
                         const carInfo = searchByModel[0];
                         document.getElementById('selected_car').textContent = `${carInfo.make.name} ${carInfo.model.name} ${carInfo.generation.name} ${carInfo.trim} (${carInfo.engine.power.PS} PS, ${carInfo.engine.power.kW} kW) (${carInfo.start_year}-${carInfo.end_year})`;
@@ -458,8 +448,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                     document.querySelector('.ifnotselectedcar').style.display = 'block';
                     document.querySelector('.ifselectedcar').style.display = 'none';
                 });
-
-                {% comment %}matching_sizes = `${v.selectedTireWidth}/${v.selectedTireProfile}/${v.selectedTireDiameter}`;{% endcomment %}
             }
         });
     }
