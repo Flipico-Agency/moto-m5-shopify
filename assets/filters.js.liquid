@@ -317,20 +317,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     async function initializeCarForm(activeTabContent, activeSubTabNumber, formAction) {
-        const submitButton = activeTabContent.querySelector('input[type="submit"]');
-        const urlParams = new URLSearchParams(window.location.search);
-
-        const elements = ['car-marka', 'car-model', 'car-generacja', 'car-rok', 'car-silnik'];
-        const fetchDataEndpoints = {
-            'car-marka': 'makes/',
-            'car-model': 'models/',
-            'car-generacja': 'generations/',
-            'car-silnik': 'modifications/'
-        };
-
-        await initializeSelects(activeTabContent, elements, fetchDataEndpoints, urlParams);
-        setupEventListeners(activeTabContent, elements, fetchDataEndpoints);
-        checkFormCompleteAndManageSubmitButton(activeTabContent, elements);
+        let matching_sizes;
+        let searchByModel;
 
         // Helper function to format tire size correctly
         const formatTireSize = (tireSize) => {
@@ -405,15 +393,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         };
 
-        let matching_sizes;
-        let searchByModel;
-
-        document.getElementById('change_car').addEventListener("click", function() {
-            searchByModel = undefined;
-            document.querySelector('.ifnotselectedcar').style.display = 'block';
-            document.querySelector('.ifselectedcar').style.display = 'none';
-        });
-
         // Selected car logic
         const savedCar = JSON.parse(localStorage.getItem('selectedCar'));
         if (savedCar) {
@@ -427,6 +406,27 @@ document.addEventListener('DOMContentLoaded', async function () {
             document.querySelector('.ifnotselectedcar').style.display = 'block';
             document.querySelector('.ifselectedcar').style.display = 'none';
         }
+
+        const submitButton = activeTabContent.querySelector('input[type="submit"]');
+        const urlParams = new URLSearchParams(window.location.search);
+
+        const elements = ['car-marka', 'car-model', 'car-generacja', 'car-rok', 'car-silnik'];
+        const fetchDataEndpoints = {
+            'car-marka': 'makes/',
+            'car-model': 'models/',
+            'car-generacja': 'generations/',
+            'car-silnik': 'modifications/'
+        };
+
+        await initializeSelects(activeTabContent, elements, fetchDataEndpoints, urlParams);
+        setupEventListeners(activeTabContent, elements, fetchDataEndpoints);
+        checkFormCompleteAndManageSubmitButton(activeTabContent, elements);
+
+        document.getElementById('change_car').addEventListener("click", function() {
+            searchByModel = undefined;
+            document.querySelector('.ifnotselectedcar').style.display = 'block';
+            document.querySelector('.ifselectedcar').style.display = 'none';
+        });
 
         const form = submitButton.form;
         form.addEventListener('submit', function (event) {
