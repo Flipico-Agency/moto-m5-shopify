@@ -444,19 +444,28 @@ document.addEventListener('DOMContentLoaded', async function () {
                         }
                     });
                 } else {
-                    const [width, profile, rest] = document.getElementById('matching_sizes').value.split('/');
-                    const params = {
-                        'filter.p.m.tires.width': width,
-                        'filter.p.m.tires.profile': profile,
-                        'filter.p.m.tires.diameter': rest.match(/\d+/)[0]
-                    };
+                    const selectedSize = document.getElementById('matching_sizes').value;
+                    const sizeRegex = /(\d+)\/(\d+)\/R(\d+)/;
+                    const match = selectedSize.match(sizeRegex);
 
-                    // Convert params object to URL query string
-                    queryString = Object.entries(params)
-                        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-                        .join('&');
+                    if (match && match.length > 3) {
+                        const width = match[1];
+                        const profile = match[2];
+                        const diameter = match[3];
+                        const params = {
+                            'filter.p.m.tires.width': width,
+                            'filter.p.m.tires.profile': profile,
+                            'filter.p.m.tires.diameter': diameter
+                        };
 
-                    window.location.href = `${formAction}?${queryString}`;
+                        queryString = Object.entries(params)
+                            .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+                            .join('&');
+
+                        window.location.href = `${formAction}?${queryString}`;
+                    } else {
+                        console.error('Matching size format is incorrect:', selectedSize);
+                    }
                 }
 
                 document.getElementById('change_car').addEventListener("click", function() {
