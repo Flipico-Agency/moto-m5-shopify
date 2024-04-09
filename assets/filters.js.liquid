@@ -431,82 +431,68 @@ document.addEventListener('DOMContentLoaded', async function () {
         checkFormCompleteAndManageSubmitButton(activeTabContent, elements);
 
         const form = submitButton.form;
-        form.addEventListener('submit', function (event) {
+        form.addEventListener('submit', function(event) {
             event.preventDefault();
-            let queryString;
-
             localStorage.setItem('searchBy', 'byCar');
-            if(!window.location.pathname.includes('collections')) {
-                let allElementsForFetch = {};
-                elements.forEach(element => {
+
+            const fetchAndProcessData = () => {
+                const allElementsForFetch = elements.reduce((acc, element) => {
                     const selectElement = document.querySelector(`select[data-name="${element}"]`);
                     if (selectElement && selectElement.value) {
                         const apiParam = mapSelectNameToApiParam(element);
-                        allElementsForFetch[apiParam] = selectElement.value;
+                        acc[apiParam] = selectElement.value;
                     }
-                });
+                    return acc;
+                }, {});
 
                 fetchData('search/by_model/', allElementsForFetch).then(data => {
                     searchByModel = data.data;
 
                     if (searchByModel && searchByModel.length > 0) {
                         localStorage.setItem('selectedCar', JSON.stringify(searchByModel));
+                        processSearchByModel();
                     }
                 });
+            };
 
-                // Build query parameters based on the active sub-tab and selected options
-                const queryParams = buildCarQueryParameters(activeSubTabNumber, elements, new URLSearchParams(window.location.search));
-
-                queryString = Object.entries(queryParams).map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&');
-                window.location.href = `${formAction}?${queryString}`;
-            } else {
-                if (searchByModel === undefined) {
-                    document.querySelector('.ifnotselectedcar').style.display = 'none';
-                    document.querySelector('.ifselectedcar').style.display = 'flex';
-
-                    let allElementsForFetch = {};
-                    elements.forEach(element => {
-                        const selectElement = document.querySelector(`select[data-name="${element}"]`);
-                        if (selectElement && selectElement.value) {
-                            const apiParam = mapSelectNameToApiParam(element);
-                            allElementsForFetch[apiParam] = selectElement.value;
-                        }
-                    });
-
-                    fetchData('search/by_model/', allElementsForFetch).then(data => {
-                        searchByModel = data.data;
-                        updateMatchingSizeOptions("matching_sizes");
-
-                        if (searchByModel && searchByModel.length > 0) {
-                            localStorage.setItem('selectedCar', JSON.stringify(searchByModel));
-                            const carInfo = searchByModel[0];
-                            document.getElementById('selected_car').textContent = `${carInfo.make.name} ${carInfo.model.name} ${carInfo.generation.name} ${carInfo.trim} (${carInfo.engine.power.PS} PS, ${carInfo.engine.power.kW} kW) (${carInfo.start_year}-${carInfo.end_year})`;
-                        }
-                    });
+            const processSearchByModel = () => {
+                if (!window.location.pathname.includes('collections')) {
+                    const queryParams = buildCarQueryParameters(activeSubTabNumber, elements, new URLSearchParams(window.location.search));
+                    const queryString = new URLSearchParams(queryParams).toString();
+                    window.location.href = `${formAction}?${queryString}`;
                 } else {
-                    const selectedSize = document.getElementById('matching_sizes').value;
-                    const sizeRegex = /(\d+)\/(\d+)\/R(\d+)/;
-                    const match = selectedSize.match(sizeRegex);
-
-                    if (match && match.length > 3) {
-                        const width = match[1];
-                        const profile = match[2];
-                        const diameter = match[3];
-                        const params = {
-                            'filter.p.m.tires.width': width,
-                            'filter.p.m.tires.profile': profile,
-                            'filter.p.m.tires.diameter': diameter
-                        };
-
-                        queryString = Object.entries(params)
-                            .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-                            .join('&');
-
-                        window.location.href = `${formAction}?${queryString}`;
+                    if (searchByModel === undefined) {
+                        document.querySelector('.ifnotselectedcar').style.display = 'none';
+                        document.querySelector('.ifselectedcar').style.display = 'flex';
+                        fetchAndProcessData();
                     } else {
-                        console.error('Matching size format is incorrect:', selectedSize);
+                        updateMatchingSizeAndRedirect();
                     }
                 }
+            };
+
+            const updateMatchingSizeAndRedirect = () => {
+                const selectedSize = document.getElementById('matching_sizes').value;
+                const match = selectedSize.match(/(\d+)\/(\d+)\/R(\d+)/);
+
+                if (match) {
+                    const [width, profile, diameter] = match.slice(1);
+                    const params = {
+                        'filter.p.m.tires.width': width,
+                        'filter.p.m.tires.profile': profile,
+                        'filter.p.m.tires.diameter': diameter
+                    };
+                    const queryString = new URLSearchParams(params).toString();
+                    window.location.href = `${formAction}?${queryString}`;
+                } else {
+                    console.error('Matching size format is incorrect:', selectedSize);
+                }
+            };
+
+            if (!window.location.pathname.includes('collections') || searchByModel === undefined) {
+                fetchAndProcessData();
+            } else {
+                updateMatchingSizeAndRedirect();
             }
         });
     }
