@@ -16,6 +16,7 @@
 
                   </div>
 
+                    {% comment %} header filter tabs wg auta & wg rozmiaru{% endcomment %}
                   <div class="filters2_filter-group">
                     <div class="filters2_filter-group-heading">
                       <div class="text-size-medium text-weight-semibold">
@@ -164,6 +165,7 @@
                     {% endfor %}
                   </div>
 
+                    {% comment %} standard filters{% endcomment %}
                   <form>
                     {%- for filter in collection.filters -%}
                       {%- if filter.type == "price_range" -%}
@@ -215,28 +217,30 @@
                             {%- when 'boolean' -%}
                               <ul class="filters-list">
                                 <li>
-                                  <label for="Filter-{{ filter.param_name }}-{{ filter.true_value.value }}" class="w-checkbox filters2_form-checkbox1">
+                                  <label for="Filter-{{ filter.param_name }}-{{ filter.true_value.value }}">
                                     <input
+                                      class="w-checkbox-input form-checkbox-icon{% if filter_value.active %} w-checkbox-input--inputType-custom w--redirected-checked{% endif %}"
                                       type="checkbox"
                                       name="{{ filter.param_name }}"
                                       value="{{ filter.true_value.value }}"
                                       id="Filter-{{ filter.param_name }}"
-                                      {% if filter.true_value.active -%}
-                                      checked{%- endif %}
-                                      {% if filter.true_value.count == 0 and filter.true_value.active == false -%}
-                                      disabled{%- endif -%}>{{ filter.true_value.label }}</label>
+                                      {% if filter.true_value.active -%}checked{%- endif %}
+                                      {% if filter.true_value.count == 0 and filter.true_value.active == false -%}disabled{%- endif -%}>
+                                      {{ filter.true_value.label }}
+                                  </label>
                                 </li>
                                 <li>
-                                  <label for="Filter-{{ filter.param_name }}-{{ filter.false_value.value }}" class="w-checkbox filters2_form-checkbox1">
+                                  <label for="Filter-{{ filter.param_name }}-{{ filter.false_value.value }}">
                                     <input
+                                      class="w-checkbox-input form-checkbox-icon{% if filter_value.active %} w-checkbox-input--inputType-custom w--redirected-checked{% endif %}"
                                       type="checkbox"
                                       name="{{ filter.param_name }}"
                                       value="{{ filter.false_value.value }}"
                                       id="Filter-{{ filter.param_name }}"
-                                      {% if filter.false_value.active -%}
-                                      checked{%- endif %}
-                                      {% if filter.false_value.count == 0 and filter.false_value.active == false -%}
-                                      disabled{%- endif %}>{{ filter.false_value.label }}</label>
+                                      {% if filter.false_value.active -%}checked{%- endif %}
+                                      {% if filter.false_value.count == 0 and filter.false_value.active == false -%}disabled{%- endif %}>
+                                      {{ filter.false_value.label }}
+                                  </label>
                                 </li>
                               </ul>
 
@@ -252,51 +256,14 @@
                                   <li>
                                     <label for="Filter-{{ filter.param_name }}-{{ forloop.index }}">
                                       <input
+                                        class="w-checkbox-input form-checkbox-icon{% if filter_value.active %} w-checkbox-input--inputType-custom w--redirected-checked{% endif %}"
                                         type="checkbox"
                                         name="{{ filter_value.param_name }}"
                                         value="{{ filter_value.value }}"
                                         id="Filter-{{ filter.param_name }}-{{ forloop.index }}"
-                                        {% if filter_value.active -%}
-                                        checked{%- endif %}
-                                        {% if filter_value.count == 0 and filter_value.active == false -%}
-                                        disabled{%- endif %}>
-                                      <span>
-                                        {%- case filter_value.display.type -%}
-                                          {%- when 'colors' -%}
-                                            {% liquid
-                                              assign size_limit = filter_value.display.value.size | at_most: 4
-                                              assign rotation = '0deg'
-                                              if size_limit == 2
-                                                assign rotation = '45deg'
-                                              endif
-
-                                              assign angle_increment = 360 | divided_by: size_limit
-                                              assign angle = 0
-                                            %}
-                                            {%- capture conic_gradient -%}
-                                                                                        {%- for color in filter_value.display.value limit: size_limit -%}
-                                                                                            {{ color }} {{ angle }}deg{%- assign angle = angle | plus: angle_increment %} {{ angle }}deg{%- unless forloop.last %}, {%- endunless -%}
-                                                                                        {%- endfor -%}
-                                                                                    {%- endcapture -%}
-                                            <span style="
-                                                                                            width: 25px;
-                                                                                            height: 25px;
-                                                                                            border-radius: 50%;
-                                                                                            display: flex;
-                                                                                            justify-content: center;
-                                                                                            align-items: center;
-                                                                                            background: conic-gradient({{ conic_gradient }}); transform: rotateZ({{ rotation }});
-                                                                                            ">
-</span>
-                                          {%- when 'image' -%}
-                                            {{
-                                              filter_value.display.value | image_url: width: 25 | image_tag: alt: filter_value.display.value.alt
-                                            }}
-                                          {%- else -%}
-                                            <span class="visual-display__child"></span>
-                                        {%- endcase -%}
-                                      </span>
-                                      {{ filter_value.label }}
+                                        {% if filter_value.active -%}checked{%- endif %}
+                                        {% if filter_value.count == 0 and filter_value.active == false -%}disabled{%- endif %}>
+                                        {{ filter_value.label }}
                                     </label>
                                   </li>
                                 {%- endfor -%}
@@ -482,8 +449,26 @@
         }
     }
 
-    // Add event listeners to the tabs for click events
     document.addEventListener('DOMContentLoaded', function() {
+        // Add event listeners to the checkboxes
+        const checkboxes = document.querySelectorAll('.form-checkbox-icon');
+
+        function handleCheckboxChange(event) {
+            const checkbox = event.target;
+            if (checkbox.checked) {
+                checkbox.classList.add('w--redirected-checked');
+                checkbox.classList.add('w-checkbox-input--inputType-custom');
+            } else {
+                checkbox.classList.remove('w--redirected-checked');
+                checkbox.classList.remove('w-checkbox-input--inputType-custom');
+            }
+        }
+
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', handleCheckboxChange);
+        });
+
+        // Add event listeners to the tabs for click events
         const tabSize = document.querySelector('a[data-w-tab="1"]');
         const tabCar = document.querySelector('a[data-w-tab="2"]');
 
