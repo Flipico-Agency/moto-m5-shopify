@@ -408,6 +408,26 @@ document.addEventListener('DOMContentLoaded', async function () {
         let matching_sizes;
         let searchByModel;
 
+        document.getElementById('change_car').addEventListener("click", function() {
+            searchByModel = undefined;
+            document.querySelector('.ifnotselectedcar').style.display = 'block';
+            document.querySelector('.ifselectedcar').style.display = 'none';
+        });
+
+        // Selected car logic
+        const savedCar = JSON.parse(localStorage.getItem('selectedCar'));
+        if (savedCar) {
+            searchByModel = savedCar;
+            document.querySelector('.ifnotselectedcar').style.display = 'none';
+            document.querySelector('.ifselectedcar').style.display = 'flex';
+            await updateMatchingSizeOptions("matching_sizes");
+            const carInfo = searchByModel[0];
+            document.getElementById('selected_car').textContent = `${carInfo.make.name} ${carInfo.model.name} ${carInfo.generation.name} ${carInfo.trim} (${carInfo.engine.power.PS} PS, ${carInfo.engine.power.kW} kW) (${carInfo.start_year}-${carInfo.end_year})`;
+        } else {
+            document.querySelector('.ifnotselectedcar').style.display = 'block';
+            document.querySelector('.ifselectedcar').style.display = 'none';
+        }
+
         const form = submitButton.form;
         form.addEventListener('submit', function (event) {
             event.preventDefault();
@@ -439,6 +459,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                         updateMatchingSizeOptions("matching_sizes");
 
                         if (searchByModel && searchByModel.length > 0) {
+                            localStorage.setItem('selectedCar', JSON.stringify(searchByModel));
                             const carInfo = searchByModel[0];
                             document.getElementById('selected_car').textContent = `${carInfo.make.name} ${carInfo.model.name} ${carInfo.generation.name} ${carInfo.trim} (${carInfo.engine.power.PS} PS, ${carInfo.engine.power.kW} kW) (${carInfo.start_year}-${carInfo.end_year})`;
                         }
@@ -467,12 +488,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                         console.error('Matching size format is incorrect:', selectedSize);
                     }
                 }
-
-                document.getElementById('change_car').addEventListener("click", function() {
-                    searchByModel = undefined;
-                    document.querySelector('.ifnotselectedcar').style.display = 'block';
-                    document.querySelector('.ifselectedcar').style.display = 'none';
-                });
             }
         });
     }
