@@ -56,7 +56,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             'car-marka': 'make',
             'car-model': 'model',
             'car-generacja': 'generation',
-            'car-silnik': 'engine'
+            'car-rok': 'year',
+            'car-silnik': 'modification'
         };
         return mapping[selectName] || selectName;
     }
@@ -155,8 +156,10 @@ document.addEventListener('DOMContentLoaded', async function () {
 
                 // Resetowanie następnych selectów
                 elements.slice(index + 1).forEach(name => {
-                    const nextSelect = activeTabContent.querySelector(`select[data-name="${name}"]`);
-                    manageSelect(nextSelect, [], false);
+                    if (name !== 'tire-season') {
+                        const nextSelect = activeTabContent.querySelector(`select[data-name="${name}"]`);
+                        manageSelect(nextSelect, [], false);
+                    }
                 });
 
                 if (elementName === 'car-generacja') {
@@ -201,8 +204,11 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
     }
 
-    function buildSizeQueryParameters(activeSubTabNumber, tire, rim, urlParams) {
+    function buildSizeQueryParameters(activeSubTabNumber, tire, rim) {
         let queryParams = {};
+        const pathSegments = window.location.pathname.split('/');
+        const manufacturerSegmentIndex = pathSegments.indexOf('opony') + 1;
+        const manufacturer = pathSegments.length > manufacturerSegmentIndex ? pathSegments[manufacturerSegmentIndex] : '';
 
         // Base parameters for tires are always included in subtabs 1 and 2
         if (activeSubTabNumber === '1' || activeSubTabNumber === '2') {
@@ -214,12 +220,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             };
         }
 
-        // Include manufacturer if present in the URL (applicable only to subtab 1)
-        if (activeSubTabNumber === '1') {
-            const manufacturer = urlParams.get('filter.p.m.tires.manufacturer');
-            if (manufacturer) {
-                queryParams['filter.p.m.tires.manufacturer'] = manufacturer;
-            }
+        if (manufacturer) {
+            queryParams['filter.p.m.tires.manufacturer'] = manufacturer;
         }
 
         // For subtab 2, include rim parameters along with base tire parameters
@@ -309,26 +311,14 @@ document.addEventListener('DOMContentLoaded', async function () {
             localStorage.setItem('searchBy', 'bySize');
 
             // Build query parameters based on the active sub-tab and selected options
-            const queryParams = buildSizeQueryParameters(activeSubTabNumber, tire, rim, urlParams);
+            const queryParams = buildSizeQueryParameters(activeSubTabNumber, tire, rim);
             window.location.href = `${formAction}?${new URLSearchParams(queryParams).toString()}`;
         });
     }
 
     async function initializeCarForm(activeTabContent, activeSubTabNumber, formAction) {
-        const submitButton = activeTabContent.querySelector('input[type="submit"]');
-        const urlParams = new URLSearchParams(window.location.search);
-
-        const elements = ['car-marka', 'car-model', 'car-generacja', 'car-rok', 'car-silnik'];
-        const fetchDataEndpoints = {
-            'car-marka': 'makes/',
-            'car-model': 'models/',
-            'car-generacja': 'generations/',
-            'car-silnik': 'modifications/'
-        };
-
-        await initializeSelects(activeTabContent, elements, fetchDataEndpoints, urlParams);
-        setupEventListeners(activeTabContent, elements, fetchDataEndpoints);
-        checkFormCompleteAndManageSubmitButton(activeTabContent, elements);
+        let matching_sizes;
+        let searchByModel;
 
         // Helper function to format tire size correctly
         const formatTireSize = (tireSize) => {
@@ -345,84 +335,165 @@ document.addEventListener('DOMContentLoaded', async function () {
         };
 
         // Generic function to update select options
-        const updateSelectOptions = async (dataKey, filterKey) => {
-            const currentData = await Wized.data.get(dataKey);
+        const updateMatchingSizeOptions = async (filterKey) => {
+            const currentData = searchByModel;
 
-            const selectElements = document.querySelectorAll(`select["${filterKey}"]`);
+            const selectMatchingSize = document.getElementById(`${filterKey}`);
 
-            if (!selectElements || !selectElements.length) {
-                console.error(`No select elements found with wized attribute "${filterKey}".`);
-                return;
-            }
+            selectMatchingSize.innerHTML = "";
 
-            selectElements.forEach(selectElement => {
-                selectElement.innerHTML = "";
+            if (currentData && Array.isArray(currentData)) {
+                //console.log(`Updating select options for filter_${filterKey}: `, currentData);
 
-                if (currentData && Array.isArray(currentData)) {
-                    //console.log(`Updating select options for filter_${filterKey}: `, currentData);
+                // Create a set to store unique tire sizes
+                const uniqueTireSizes = new Set();
 
-                    // Create a set to store unique tire sizes
-                    const uniqueTireSizes = new Set();
+                // First add single tire options (not part of a pair)
+                currentData[0].wheels.forEach(item => {
+                    const { front, rear } = item;
+                    const normalizedFrontTire = front.tire ? formatTireSize(front.tire) : '';
+                    const normalizedRearTire = rear.tire ? formatTireSize(rear.tire) : '';
 
-                    // First add single tire options (not part of a pair)
-                    currentData[0].wheels.forEach(item => {
-                        const { front, rear } = item;
-                        const normalizedFrontTire = front.tire ? formatTireSize(front.tire) : '';
-                        const normalizedRearTire = rear.tire ? formatTireSize(rear.tire) : '';
+                    if (front.tire && !rear.tire && !uniqueTireSizes.has(normalizedFrontTire)) {
+                        selectMatchingSize.add(createOption(front));
+                        uniqueTireSizes.add(normalizedFrontTire);
+                    }
+                    if (rear.tire && !front.tire && !uniqueTireSizes.has(normalizedRearTire)) {
+                        selectMatchingSize.add(createOption(rear));
+                        uniqueTireSizes.add(normalizedRearTire);
+                    }
+                });
 
-                        if (front.tire && !rear.tire && !uniqueTireSizes.has(normalizedFrontTire)) {
-                            selectElement.add(createOption(front));
+                // Then add tire pairs, checking for duplicates
+                let pairIndex = 1;
+                currentData[0].wheels.forEach(item => {
+                    const { front, rear } = item;
+                    if (front.tire && rear.tire) {
+                        const normalizedFrontTire = formatTireSize(front.tire);
+                        const normalizedRearTire = formatTireSize(rear.tire);
+                        if (!uniqueTireSizes.has(normalizedFrontTire)) {
+                            selectMatchingSize.add(createOption(front, `Para ${pairIndex}: Przód`));
                             uniqueTireSizes.add(normalizedFrontTire);
                         }
-                        if (rear.tire && !front.tire && !uniqueTireSizes.has(normalizedRearTire)) {
-                            selectElement.add(createOption(rear));
+                        if (!uniqueTireSizes.has(normalizedRearTire)) {
+                            selectMatchingSize.add(createOption(rear, `Para ${pairIndex}: Tył`));
                             uniqueTireSizes.add(normalizedRearTire);
                         }
-                    });
+                        pairIndex++;
+                    }
+                });
 
-                    // Then add tire pairs, checking for duplicates
-                    let pairIndex = 1;
-                    currentData[0].wheels.forEach(item => {
-                        const { front, rear } = item;
-                        if (front.tire && rear.tire) {
-                            const normalizedFrontTire = formatTireSize(front.tire);
-                            const normalizedRearTire = formatTireSize(rear.tire);
-                            if (!uniqueTireSizes.has(normalizedFrontTire)) {
-                                selectElement.add(createOption(front, `Para ${pairIndex}: Przód`));
-                                uniqueTireSizes.add(normalizedFrontTire);
-                            }
-                            if (!uniqueTireSizes.has(normalizedRearTire)) {
-                                selectElement.add(createOption(rear, `Para ${pairIndex}: Tył`));
-                                uniqueTireSizes.add(normalizedRearTire);
-                            }
-                            pairIndex++;
-                        }
-                    });
-
-                    selectElement.selectedIndex = 0;
-                    Wized.data.setVariable('matching_sizes', selectElement.value.replace(/.*(\b\d{3}\/\d{2}\/R\d{2}\b).*/, '$1'));
-                    console.log(`Updated HTML select options for filter_${filterKey}.`);
-                } else {
-                    // If currentData is not an array or empty, remove all options from the select element
-                    selectElement.innerHTML = "";
-                    console.error(`Invalid or empty data for filter_${filterKey}.`);
-                }
-            });
+                selectMatchingSize.selectedIndex = 0;
+                matching_sizes = selectMatchingSize.value.replace(/.*(\b\d{3}\/\d{2}\/R\d{2}\b).*/, '$1');
+                console.log(`Updated HTML select options for filter_${filterKey}.`);
+            } else {
+                // If currentData is not an array or empty, remove all options from the select element
+                selectMatchingSize.innerHTML = "";
+                console.error(`Invalid or empty data for filter_${filterKey}.`);
+            }
         };
 
-        // Wized.data.listen("v.searchByModel", () => updateSelectOptions("v.searchByModel", "matching_sizes"));
+        if(window.location.pathname.includes('collections')) {
+            // Selected car logic
+            const savedCar = JSON.parse(localStorage.getItem('selectedCar'));
+            if (savedCar) {
+                searchByModel = savedCar;
+                document.querySelector('.ifnotselectedcar').style.display = 'none';
+                document.querySelector('.ifselectedcar').style.display = 'flex';
+                await updateMatchingSizeOptions("matching_sizes");
+                const carInfo = searchByModel[0];
+                document.getElementById('selected_car').textContent = `${carInfo.make.name} ${carInfo.model.name} ${carInfo.generation.name} ${carInfo.trim} (${carInfo.engine.power.PS} PS, ${carInfo.engine.power.kW} kW) (${carInfo.start_year}-${carInfo.end_year})`;
+            } else {
+                document.querySelector('.ifnotselectedcar').style.display = 'block';
+                document.querySelector('.ifselectedcar').style.display = 'none';
+            }
+
+            document.getElementById('change_car').addEventListener("click", function() {
+                searchByModel = undefined;
+                document.querySelector('.ifnotselectedcar').style.display = 'block';
+                document.querySelector('.ifselectedcar').style.display = 'none';
+            });
+        }
+
+        const submitButton = activeTabContent.querySelector('input[type="submit"]');
+        const urlParams = new URLSearchParams(window.location.search);
+
+        const elements = ['car-marka', 'car-model', 'car-generacja', 'car-rok', 'car-silnik'];
+        const fetchDataEndpoints = {
+            'car-marka': 'makes/',
+            'car-model': 'models/',
+            'car-generacja': 'generations/',
+            'car-silnik': 'modifications/'
+        };
+
+        await initializeSelects(activeTabContent, elements, fetchDataEndpoints, urlParams);
+        setupEventListeners(activeTabContent, elements, fetchDataEndpoints);
+        checkFormCompleteAndManageSubmitButton(activeTabContent, elements);
 
         const form = submitButton.form;
-        form.addEventListener('submit', function (event) {
+        form.addEventListener('submit', function(event) {
             event.preventDefault();
-
             localStorage.setItem('searchBy', 'byCar');
 
-            // Build query parameters based on the active sub-tab and selected options
-            const queryParams = buildCarQueryParameters(activeSubTabNumber, elements, new URLSearchParams(window.location.search));
+            const fetchAndProcessData = () => {
+                const allElementsForFetch = elements.reduce((acc, element) => {
+                    const selectElement = document.querySelector(`select[data-name="${element}"]`);
+                    if (selectElement && selectElement.value) {
+                        const apiParam = mapSelectNameToApiParam(element);
+                        acc[apiParam] = selectElement.value;
+                    }
+                    return acc;
+                }, {});
 
-            const queryString = Object.entries(queryParams).map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&');
-            window.location.href = `${formAction}?${queryString}`;
+                fetchData('search/by_model/', allElementsForFetch).then(data => {
+                    searchByModel = data.data;
+
+                    if (searchByModel && searchByModel.length > 0) {
+                        localStorage.setItem('selectedCar', JSON.stringify(searchByModel));
+                        processSearchByModel();
+                    }
+                });
+            };
+
+            const processSearchByModel = () => {
+                if (!window.location.pathname.includes('collections')) {
+                    const queryParams = buildCarQueryParameters(activeSubTabNumber, elements, new URLSearchParams(window.location.search));
+                    const queryString = new URLSearchParams(queryParams).toString();
+                    window.location.href = `${formAction}?${queryString}`;
+                } else {
+                    if (searchByModel === undefined) {
+                        document.querySelector('.ifnotselectedcar').style.display = 'none';
+                        document.querySelector('.ifselectedcar').style.display = 'flex';
+                        fetchAndProcessData();
+                    } else {
+                        updateMatchingSizeAndRedirect();
+                    }
+                }
+            };
+
+            const updateMatchingSizeAndRedirect = () => {
+                const selectedSize = document.getElementById('matching_sizes').value;
+                const match = selectedSize.match(/(\d+)\/(\d+)\/R(\d+)/);
+
+                if (match) {
+                    const [width, profile, diameter] = match.slice(1);
+                    const params = {
+                        'filter.p.m.tires.width': width,
+                        'filter.p.m.tires.profile': profile,
+                        'filter.p.m.tires.diameter': diameter
+                    };
+                    const queryString = new URLSearchParams(params).toString();
+                    window.location.href = `${formAction}?${queryString}`;
+                } else {
+                    console.error('Matching size format is incorrect:', selectedSize);
+                }
+            };
+
+            if (!window.location.pathname.includes('collections') || searchByModel === undefined) {
+                fetchAndProcessData();
+            } else {
+                updateMatchingSizeAndRedirect();
+            }
         });
     }
 
