@@ -156,8 +156,10 @@ document.addEventListener('DOMContentLoaded', async function () {
 
                 // Resetowanie następnych selectów
                 elements.slice(index + 1).forEach(name => {
-                    const nextSelect = activeTabContent.querySelector(`select[data-name="${name}"]`);
-                    manageSelect(nextSelect, [], false);
+                    if (name !== 'tire-season') {
+                        const nextSelect = activeTabContent.querySelector(`select[data-name="${name}"]`);
+                        manageSelect(nextSelect, [], false);
+                    }
                 });
 
                 if (elementName === 'car-generacja') {
@@ -202,8 +204,11 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
     }
 
-    function buildSizeQueryParameters(activeSubTabNumber, tire, rim, urlParams) {
+    function buildSizeQueryParameters(activeSubTabNumber, tire, rim) {
         let queryParams = {};
+        const pathSegments = window.location.pathname.split('/');
+        const manufacturerSegmentIndex = pathSegments.indexOf('opony') + 1;
+        const manufacturer = pathSegments.length > manufacturerSegmentIndex ? pathSegments[manufacturerSegmentIndex] : '';
 
         // Base parameters for tires are always included in subtabs 1 and 2
         if (activeSubTabNumber === '1' || activeSubTabNumber === '2') {
@@ -215,12 +220,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             };
         }
 
-        // Include manufacturer if present in the URL (applicable only to subtab 1)
-        if (activeSubTabNumber === '1') {
-            const manufacturer = urlParams.get('filter.p.m.tires.manufacturer');
-            if (manufacturer) {
-                queryParams['filter.p.m.tires.manufacturer'] = manufacturer;
-            }
+        if (manufacturer) {
+            queryParams['filter.p.m.tires.manufacturer'] = manufacturer;
         }
 
         // For subtab 2, include rim parameters along with base tire parameters
@@ -310,7 +311,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             localStorage.setItem('searchBy', 'bySize');
 
             // Build query parameters based on the active sub-tab and selected options
-            const queryParams = buildSizeQueryParameters(activeSubTabNumber, tire, rim, urlParams);
+            const queryParams = buildSizeQueryParameters(activeSubTabNumber, tire, rim);
             window.location.href = `${formAction}?${new URLSearchParams(queryParams).toString()}`;
         });
     }
