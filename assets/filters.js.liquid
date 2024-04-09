@@ -393,18 +393,26 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         };
 
-        // Selected car logic
-        const savedCar = JSON.parse(localStorage.getItem('selectedCar'));
-        if (savedCar) {
-            searchByModel = savedCar;
-            document.querySelector('.ifnotselectedcar').style.display = 'none';
-            document.querySelector('.ifselectedcar').style.display = 'flex';
-            await updateMatchingSizeOptions("matching_sizes");
-            const carInfo = searchByModel[0];
-            document.getElementById('selected_car').textContent = `${carInfo.make.name} ${carInfo.model.name} ${carInfo.generation.name} ${carInfo.trim} (${carInfo.engine.power.PS} PS, ${carInfo.engine.power.kW} kW) (${carInfo.start_year}-${carInfo.end_year})`;
-        } else {
-            document.querySelector('.ifnotselectedcar').style.display = 'block';
-            document.querySelector('.ifselectedcar').style.display = 'none';
+        if(window.location.pathname.includes('collections')) {
+            // Selected car logic
+            const savedCar = JSON.parse(localStorage.getItem('selectedCar'));
+            if (savedCar) {
+                searchByModel = savedCar;
+                document.querySelector('.ifnotselectedcar').style.display = 'none';
+                document.querySelector('.ifselectedcar').style.display = 'flex';
+                await updateMatchingSizeOptions("matching_sizes");
+                const carInfo = searchByModel[0];
+                document.getElementById('selected_car').textContent = `${carInfo.make.name} ${carInfo.model.name} ${carInfo.generation.name} ${carInfo.trim} (${carInfo.engine.power.PS} PS, ${carInfo.engine.power.kW} kW) (${carInfo.start_year}-${carInfo.end_year})`;
+            } else {
+                document.querySelector('.ifnotselectedcar').style.display = 'block';
+                document.querySelector('.ifselectedcar').style.display = 'none';
+            }
+
+            document.getElementById('change_car').addEventListener("click", function() {
+                searchByModel = undefined;
+                document.querySelector('.ifnotselectedcar').style.display = 'block';
+                document.querySelector('.ifselectedcar').style.display = 'none';
+            });
         }
 
         const submitButton = activeTabContent.querySelector('input[type="submit"]');
@@ -422,12 +430,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         setupEventListeners(activeTabContent, elements, fetchDataEndpoints);
         checkFormCompleteAndManageSubmitButton(activeTabContent, elements);
 
-        document.getElementById('change_car').addEventListener("click", function() {
-            searchByModel = undefined;
-            document.querySelector('.ifnotselectedcar').style.display = 'block';
-            document.querySelector('.ifselectedcar').style.display = 'none';
-        });
-
         const form = submitButton.form;
         form.addEventListener('submit', function (event) {
             event.preventDefault();
@@ -435,6 +437,23 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             localStorage.setItem('searchBy', 'byCar');
             if(!window.location.pathname.includes('collections')) {
+                let allElementsForFetch = {};
+                elements.forEach(element => {
+                    const selectElement = document.querySelector(`select[data-name="${element}"]`);
+                    if (selectElement && selectElement.value) {
+                        const apiParam = mapSelectNameToApiParam(element);
+                        allElementsForFetch[apiParam] = selectElement.value;
+                    }
+                });
+
+                fetchData('search/by_model/', allElementsForFetch).then(data => {
+                    searchByModel = data.data;
+
+                    if (searchByModel && searchByModel.length > 0) {
+                        localStorage.setItem('selectedCar', JSON.stringify(searchByModel));
+                    }
+                });
+
                 // Build query parameters based on the active sub-tab and selected options
                 const queryParams = buildCarQueryParameters(activeSubTabNumber, elements, new URLSearchParams(window.location.search));
 
