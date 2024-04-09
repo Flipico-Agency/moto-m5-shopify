@@ -1,58 +1,63 @@
 <header class="section_header46">
-    <div class="padding-global">
-        <div class="container-large">
-            <div class="padding-section-xsmall">
-                <div class="div-block-19">
-                    <div class="margin-bottom margin-xsmall">
-                        <h1 class="heading-style-h3">{{ collection.title }}</h1>
-                    </div>
-                    <div></div>
-                    <p class="text-size-medium">Opony w rozmiarze 205/55 R16 są zdecydowanie najpopularniejsze wśród
-                        kierowców. W szczególności dotyczy to opon zimowych, ponieważ w przypadku letnich właściciele
-                        samochodów bardzo często decydują się na szersze zamienniki, głównie ze względu na aspekt wizualny.
-                    </p>
-                    <div data-hover="false" data-delay="200" class="dropdown1_component w-dropdown">
-                        <div class="dropdown1_toggle"
-                             aria-haspopup="menu"
-                             aria-expanded="false"
-                             role="button">
-                            <label for="SortBy">Sortuj według</label>
-                            <select name="SortBy" id="SortBy" onchange="location = this.value;">
-                                {% assign sort_by = collection.sort_by | default: collection.default_sort_by %}
-                                {% for option in collection.sort_options %}
-                                    <option value="{{ collection.url | append: '?sort_by=' | append: option.value }}" {% if sort_by == option.value %}selected="selected"{% endif %}>{{ option.name }}</option>
-                                {% endfor %}
-                            </select>
-                            {% comment %}<div class="dropdown-chevron w-embed">{% endcomment %}
-                                {% comment %}<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"{% endcomment %}
-                                     {% comment %}aria-hidden="true" role="img" class="iconify iconify--ic" width="100%"{% endcomment %}
-                                     {% comment %}height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">{% endcomment %}
-                                    {% comment %}<path fill="currentColor"{% endcomment %}
-                                          {% comment %}d="m8.71 11.71l2.59 2.59c.39.39 1.02.39 1.41 0l2.59-2.59c.63-.63.18-1.71-.71-1.71H9.41c-.89 0-1.33 1.08-.7 1.71"></path>{% endcomment %}
-                                {% comment %}</svg>{% endcomment %}
-                            {% comment %}</div>{% endcomment %}
-                        </div>
-                    </div>
-                </div>
+  <div class="padding-global">
+    <div class="container-large">
+      <div class="padding-section-xsmall">
+        <div class="div-block-19">
+          <div class="margin-bottom margin-xsmall">
+            <h1 class="heading-style-h5">{{ section.settings.heading }}</h1>
+          </div>
+          <div></div>
+          <p class="text-size-small">{{ section.settings.text }}</p>
+          <div data-hover="false" data-delay="200">
+            <div
+              class="form-field-wrapper"
+              aria-haspopup="menu"
+              aria-expanded="false"
+              role="button">
+              <label for="SortBy" class="text-size-small">Sortowanie</label>
+              <select
+                class="select-field is-select text-size-small"
+                name="SortBy"
+                id="SortBy"
+                onchange="location = this.value;">
+                {% assign sort_by = collection.sort_by | default: collection.default_sort_by %}
+                {% for option in collection.sort_options %}
+                  {% unless option.value contains 'created-ascending' or option.value contains 'created-descending' %}
+                    <option
+                      value="{{ collection.url | append: '?sort_by=' | append: option.value }}"
+                      {% if sort_by == option.value %}
+                      selected="selected"
+                      {% endif %}>{{ option.name }}</option>
+                  {% endunless %}
+                {% endfor %}
+              </select>
+              {% render 'select-arrow' %}
             </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </header>
 
 {% schema %}
-{
-  "name": "Nagłówek kolekcji",
-  "settings": [
-    {
-      "type": "richtext",
-      "id": "naglowek-kolekcji",
-      "label": "Nagłówek kolekcji"
-    }
-  ],
-  "presets": [
-    {
-      "name": "Nagłówek kolekcji"
-    }
-  ]
-}
+  {
+    "name": "Nagłówek kolekcji",
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Nagłówek"
+      }, {
+        "type": "text",
+        "id": "text",
+        "label": "Tekst"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Nagłówek kolekcji"
+      }
+    ]
+  }
 {% endschema %}

@@ -1,54 +1,80 @@
 <div class="padding-global">
-    <div class="container-large">
-        <div class="padding-section-xxsmall">
-            <div class="breadcrumb_component">
-                <a href="/" class="breadcrumb-link w-inline-block">
-                    <div>Strona główna</div>
-                </a>
-                <div class="breadcrumb-divider w-embed">
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                         aria-hidden="true" role="img" class="iconify iconify--ic" width="100%" height="100%"
-                         preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
-                        <path fill="currentColor"
-                              d="m11.71 15.29l2.59-2.59a.996.996 0 0 0 0-1.41L11.71 8.7c-.63-.62-1.71-.18-1.71.71v5.17c0 .9 1.08 1.34 1.71.71"></path>
-                    </svg>
-                </div>
-                <a href="/collections" class="breadcrumb-link w-inline-block">
-                    <div>Kategoria</div>
-                </a>
-                <div class="breadcrumb-divider w-embed">
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                         aria-hidden="true" role="img" class="iconify iconify--ic" width="100%" height="100%"
-                         preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
-                        <path fill="currentColor"
-                              d="m11.71 15.29l2.59-2.59a.996.996 0 0 0 0-1.41L11.71 8.7c-.63-.62-1.71-.18-1.71.71v5.17c0 .9 1.08 1.34 1.71.71"></path>
-                    </svg>
-                </div>
-                <div class="breadcrumb-link is-active w-inline-block">
-                    <div class="text-block-3">{{ collection.title }}</div>
-                </div>
-            </div>
-        </div>
+  <div class="container-large">
+    <div class="padding-section-xxsmall">
+      <div class="breadcrumb_component">
+        <a href="{{ shop.url }}" class="breadcrumb-link">
+          <div>Oponykola.pl</div>
+        </a>
+        {% for block in section.blocks %}
+          {% case block.type %}
+            {% when 'breadcrumb_collection' %}
+              <img class="breadcrumb-divider" src="{{ 'IcRoundBreadcrumbDivider.svg' |  asset_url}}">
+              <a href="{{ block.settings.url }}" class="breadcrumb-link {% if block.settings.is-active %}text-weight-medium text-color-red600{% endif %}">
+                <div>{{ block.settings.name }}</div>
+              </a>
+            {% when 'breadcrumb_product' %}
+              <img class="breadcrumb-divider" src="{{ 'IcRoundBreadcrumbDivider.svg' |  asset_url}}">
+              <a href="{{ block.settings.url }}" class="breadcrumb-link {% if block.settings.is-active %}text-weight-medium text-color-red600{% endif %}">
+                <div>{{ block.settings.name }}</div>
+              </a>
+          {% endcase %}
+        {% endfor %}
+      </div>
     </div>
+  </div>
 </div>
 
+
 {% schema %}
-{
-  "name": "Nawigacja podstron",
-  "tag": "section",
-  "class": "section_breadcrumbs",
-  "limit": 1,
-  "settings": [
-    {
-      "type": "richtext",
-      "id": "opis",
-      "label": "Opis"
-    }
-  ],
-  "presets": [
-    {
-      "name": "Nawigacja podstron"
-    }
-  ]
-}
+  {
+    "name": "Breadcrumbs",
+    "tag": "section",
+    "class": "section_breadcrumbs",
+    "limit": 1,
+    "settings": [],
+    "blocks": [
+      {
+        "name": "Link do kolekcji",
+        "type": "breadcrumb_collection",
+        "settings": [
+          {
+            "type": "text",
+            "id": "name",
+            "label": "Nazwa"
+          }, {
+            "type": "collection",
+            "id": "url",
+            "label": "Link"
+          }, {
+            "type": "checkbox",
+            "id": "is-active",
+            "label": "Aktywny"
+          }
+        ]
+      }, {
+        "name": "Link do Produktu",
+        "type": "breadcrumb_product",
+        "settings": [
+          {
+            "type": "text",
+            "id": "name",
+            "label": "Nazwa"
+          }, {
+            "type": "product",
+            "id": "url",
+            "label": "Link"
+          }, {
+            "type": "checkbox",
+            "id": "is-active",
+            "label": "Aktywny"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Nawigacja podstron"
+      }
+    ]
+  }
 {% endschema %}
