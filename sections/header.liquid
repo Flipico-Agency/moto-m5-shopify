@@ -1,6 +1,16 @@
-<div class="navbar7_container">
+<div class="navbar7_container w-nav" data-animation="default" data-easing2="ease" data-easing="ease" data-collapse="medium">
+    <div class="navbar7_menu-button w-nav-button" style="-webkit-user-select: text;" aria-label="menu" role="button"
+         tabindex="0" aria-controls="w-nav-overlay-0" aria-haspopup="menu" aria-expanded="false">
+        <div class="menu-icon">
+            <div class="menu-icon_line-top"></div>
+            <div class="menu-icon_line-middle">
+                <div class="menu-icon_line-middle-inner"></div>
+            </div>
+            <div class="menu-icon_line-bottom"></div>
+        </div>
+    </div>
     <a class="navbar7_logo-link w-nav-brand"
-       href="{{ shop.secure_url }}">{{ shop.brand.logo | image_url: height: 125 | image_tag: class: "navbar7_logo" }}</a>
+       href="{{ shop.secure_url }}">{{ shop.brand.logo | image_url: height: 70 | image_tag: class: "navbar7_logo" }}</a>
     <nav role="navigation" class="navbar7_menu w-nav-menu">
         <div class="navbar7_menu-left" style="display: flex">
             {% assign menu_titles = "Opony,Felgi,Koła" | split: "," %}
@@ -451,6 +461,7 @@
         </div>
     </div>
 </div>
+<div class="w-nav-overlay" id="w-nav-overlay-0"></div>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -680,7 +691,6 @@
     grid-row-gap: 0.5rem;
     padding-left: 0;
     display: flex;
-    max-width: 10rem;
   }
 
   .navbar7_menu {
@@ -747,10 +757,6 @@
     grid-row-gap: 1.5rem;
     display: flex;
     position: relative;
-  }
-
-  .navbar7_menu-button {
-    padding: 0;
   }
 
   .navbar-dropdown8_component {
