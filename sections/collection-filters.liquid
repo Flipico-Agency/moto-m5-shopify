@@ -9,12 +9,10 @@
                 <div class="filters2_form">
                   <div class="filters2_form-header">
                     <div class="filters2_heading">Filtry</div>
-
                     <div class="button is-link hide-tablet w-inline-block">
                       <a class="text-clear-filters" href="{{ collection.url }}?sort_by={{ collection.sort_by }}">WYCZYŚĆ
                                                 WSZYSTKIE</a>
                     </div>
-
                   </div>
 
                   {% comment %} header filter tabs wg auta & wg rozmiaru{% endcomment %}
@@ -250,37 +248,38 @@
                             {%- when 'price_range' -%}
                               {% comment %} CENA STYLIZUJ {% endcomment %}
                               <div class="filter-group-display__price-range">
-                                <div class="filter-group-display__price-range-from">
-                                  <label for="Filter-{{ filter.min_value.param_name }}">Od</label>
+                                <div class="button-group-add-with-size">
+                                  <div class="filter-group-display__price-range-from">
+                                    <label for="Filter-{{ filter.min_value.param_name }}"></label>
 
-                                  <input
-                                    name="{{ filter.min_value.param_name }}"
-                                    id="Filter-{{ filter.min_value.param_name }}"
-                                    {% if filter.min_value.value -%}
-                                    value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
-                                    {%- endif %}
-                                    type="number"
-                                    placeholder="0"
-                                    min="0"
-                                    max="{{ filter.range_max | money_without_currency | replace: ',', '' }}">
-
-                                  <span>{{ cart.currency.symbol }}</span>
-                                </div>
-                                <div class="filter-group-display__price-range-to">
-                                  <label for="Filter-{{ filter.max_value.param_name }}">Do</label>
-
-                                  <input
-                                    name="{{ filter.max_value.param_name }}"
-                                    id="Filter-{{ filter.max_value.param_name }}"
-                                    {% if filter.max_value.value -%}
-                                    value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
-                                    {%- endif %}
-                                    type="number"
-                                    placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
-                                    min="0"
-                                    max="{{ filter.range_max | money_without_currency | replace: ',', '' }}">
-
-                                  <span>{{ cart.currency.symbol }}</span>
+                                    <input
+                                      name="{{ filter.min_value.param_name }}"
+                                      class="form-input is-left-price"
+                                      style="width:100%"
+                                      id="Filter-{{ filter.min_value.param_name }}"
+                                      {% if filter.min_value.value -%}
+                                      value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
+                                      {%- endif %}
+                                      type="number"
+                                      placeholder="od"
+                                      min="0"
+                                      max="{{ filter.range_max | money_without_currency | replace: ',', '' }}">
+                                  </div>
+                                  <div class="filter-group-display__price-range-to">
+                                    <label for="Filter-{{ filter.max_value.param_name }}"></label>
+                                    <input
+                                      name="{{ filter.max_value.param_name }}"
+                                      id="Filter-{{ filter.max_value.param_name }}"
+                                      class="form-input is-right-price"
+                                      style="width:100%"
+                                      {% if filter.max_value.value -%}
+                                      value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
+                                      {%- endif %}
+                                      type="number"
+                                      placeholder="do"
+                                      min="0"
+                                      max="{{ filter.range_max | money_without_currency | replace: ',', '' }}">
+                                  </div>
                                 </div>
                               </div>
 
@@ -300,24 +299,24 @@
             </div>
             <div class="product-wide_list">
               <div class="filters2_feed-header">
-                <div class="filters2_tags-wrapper">
+                <div class="filters_tags-wrapper">
                   {%- for filter in collection.filters -%}
                     {%- if filter.type == "price_range" -%}
                       {%- if filter.min_value.value != null or filter.max_value.value != null -%}
-                        <div class="filters2_tag">
-                          <a href="{{ filter.url_to_remove }}">
+                        <div class="filters_tag-wrap">
+                          Cena:
+                          <a class="filters_tag" href="{{ filter.url_to_remove }}">
                             {%- assign min_value = filter.min_value.value | default: 0 -%}
                             {%- assign max_value = filter.max_value.value | default: filter.range_max -%}
-                            {{ min_value | money }} - {{ max_value | money }} X
+                            {{ min_value | money }} - {{ max_value | money }} <img src="{{ 'IcRoundCloseBlack.svg' |  asset_url }}" class="icon-embed-xxsmall">
                           </a>
                         </div>
                       {%- endif -%}
                     {%- else -%}
                       {%- for filter_value in filter.active_values -%}
-                        <div class="filters2_tag">
-                          <a href="{{ filter_value.url_to_remove }}">
-                            {{ filter.label }}: {{ filter_value.label }} X
-                          </a>
+                        <div class="filters_tag-wrap text-size-small">
+                          {{ filter.label }}:
+                          <a href="{{ filter_value.url_to_remove }}" class="filters_tag">{{ filter_value.label }} <img src="{{ 'IcRoundCloseBlack.svg' |  asset_url }}" class="icon-embed-xxsmall"></a>
                         </div>
                       {%- endfor -%}
                     {%- endif -%}
@@ -626,6 +625,44 @@
     display: flex;
     flex-direction: column;
   }
+
+  .filters_tag-wrap {
+    align-items: center;
+    display: flex;
+    grid-column-gap: 0.5rem;
+    grid-row-gap: 0.5rem;
+    font-weight: 500;
+  }
+
+  .filters_tag {
+    background-color: var(--color--white);
+    text-decoration: none;
+    color: var(--color-black);
+    border-radius: 0.25rem;
+    align-items: center;
+    padding: 0.5rem 0.75rem 0.5rem 1rem;
+    display: flex;
+    grid-column-gap: 0.25rem;
+    grid-row-gap: 0.25rem;
+  }
+
+  .filters_tags-wrapper {
+    grid-column-gap: 0.5rem;
+    grid-row-gap: 0.5rem;
+    flex-wrap: wrap;
+    flex: 1;
+    align-items: flex-start;
+    margin-right: 2rem;
+    display: flex;
+  }
+
+  .filter-group-display__price-range {
+    margin-top: calc(-1rem - 1px);
+    margin-right: calc(-1rem - 1px);
+    margin-left: calc(-1rem - 1px);
+    
+  }
+
 {% endstylesheet %}
 
 {% schema %}
