@@ -1,6 +1,16 @@
-<div class="navbar7_container">
+<div class="navbar7_container w-nav" data-animation="default" data-easing2="ease" data-easing="ease" data-collapse="medium">
+    <div class="navbar7_menu-button w-nav-button" style="-webkit-user-select: text;" aria-label="menu" role="button"
+         tabindex="0" aria-controls="w-nav-overlay-0" aria-haspopup="menu" aria-expanded="false">
+        <div class="menu-icon">
+            <div class="menu-icon_line-top"></div>
+            <div class="menu-icon_line-middle">
+                <div class="menu-icon_line-middle-inner"></div>
+            </div>
+            <div class="menu-icon_line-bottom"></div>
+        </div>
+    </div>
     <a class="navbar7_logo-link w-nav-brand"
-       href="{{ shop.secure_url }}">{{ shop.brand.logo | image_url: height: 125 | image_tag: class: "navbar7_logo" }}</a>
+       href="{{ shop.secure_url }}">{{ shop.brand.logo | image_url: height: 70 | image_tag: class: "navbar7_logo" }}</a>
     <nav role="navigation" class="navbar7_menu w-nav-menu">
         <div class="navbar7_menu-left" style="display: flex">
             {% assign menu_titles = "Opony,Felgi,Koła" | split: "," %}
@@ -451,7 +461,73 @@
         </div>
     </div>
 </div>
+<div class="w-nav-overlay" id="w-nav-overlay-0" style="display: none">
+    <ul class="menu">
+        {% for link in section.settings.menu.links %}
+            <li class="menu-link">
+                <a href="{{ link.url }}">{{ link.title }}</a>
 
+                {% if link.links.size > 0 %}
+                    <ul class="menu dropdown-child">
+                        {% for child_link in link.links %}
+                            <li class="menu-link">
+                                <a href="{{ child_link.url }}">{{ child_link.title }}</a>
+
+                                {% if child_link.links.size > 0 %}
+                                    <ul class="menu dropdown-grandchild">
+                                        {% for grandchild_link in child_link.links %}
+                                            <li class="menu-link">
+                                                <a href="{{ grandchild_link.url }}">{{ grandchild_link.title }}</a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% comment %} Nav menu {% endcomment %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const menuButton = document.querySelector('.navbar7_menu-button');
+        const navOverlay = document.getElementById('w-nav-overlay-0');
+        const navMenu = document.querySelector('.navbar7_menu');
+        const originalParent = navMenu.parentNode;
+
+        menuButton.addEventListener('click', function() {
+            const isExpanded = menuButton.getAttribute('aria-expanded') === 'true';
+            if (!isExpanded) {
+                // Przenieś menu do overlay i pokaż overlay
+                navOverlay.appendChild(navMenu);
+                navOverlay.style.display = 'block';
+                menuButton.setAttribute('aria-expanded', 'true');
+            } else {
+                // Przywróć menu do pierwotnej lokalizacji i ukryj overlay
+                originalParent.appendChild(navMenu);
+                navOverlay.style.display = 'none';
+                menuButton.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        // Obsługa kliknięcia poza menu, aby zamknąć
+        document.addEventListener('click', function(event) {
+            if (!menuButton.contains(event.target) && !navMenu.contains(event.target)) {
+                if (menuButton.getAttribute('aria-expanded') === 'true') {
+                    originalParent.appendChild(navMenu);
+                    navOverlay.style.display = 'none';
+                    menuButton.setAttribute('aria-expanded', 'false');
+                }
+            }
+        });
+    });
+</script>
+
+{% comment %} Dropdowns {% endcomment %}
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const dropdownToggles = document.querySelectorAll('.navbar7_dropdown-toggle');
@@ -680,7 +756,6 @@
     grid-row-gap: 0.5rem;
     padding-left: 0;
     display: flex;
-    max-width: 10rem;
   }
 
   .navbar7_menu {
@@ -747,10 +822,6 @@
     grid-row-gap: 1.5rem;
     display: flex;
     position: relative;
-  }
-
-  .navbar7_menu-button {
-    padding: 0;
   }
 
   .navbar-dropdown8_component {
