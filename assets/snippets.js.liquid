@@ -6,7 +6,7 @@ function openModal(modalName) {
   modalComponent.style.display = 'flex';
   modalBackground.style.display = 'flex';
 
-  // Ustawienie opóźnienia, aby umożliwić przejście CSS
+// Ustawienie opóźnienia, aby umożliwić przejście CSS
   setTimeout(() => {
     modalComponent.style.opacity = '1';
     modalBackground.style.opacity = '1';
@@ -21,7 +21,7 @@ function closeModal(modalName) {
   modalComponent.style.opacity = '0';
   modalBackground.style.opacity = '0';
 
-  // Użyj transitionend lub ustaw timeout, aby zaktualizować styl display po zakończeniu przejścia
+// Użyj transitionend lub ustaw timeout, aby zaktualizować styl display po zakończeniu przejścia
   modalComponent.addEventListener('transitionend', function handler() {
     modalComponent.style.display = 'none';
     modalBackground.style.display = 'none';
@@ -45,9 +45,123 @@ document.addEventListener('DOMContentLoaded', () => {
     button.addEventListener('click', () => closeModal(modalName));
   });
 
-  // Dodanie obsługi kliknięcia w tło, aby zamknąć modal
+// Dodanie obsługi kliknięcia w tło, aby zamknąć modal
   modalBackgrounds.forEach(background => {
     const modalName = background.id.replace('modal-background-', '');
     background.addEventListener('click', () => closeModal(modalName));
   });
 });
+
+(() => {
+
+// Update these class names here if you rename classes
+  iconWrapperClass = "tooltip1_element-wrapper"
+  tooltipWrapperClass = "tooltip1_tooltip-wrapper"
+  pointerClass = "tooltip1_pointer"
+
+
+// Code to reposition the tooltip if it is going to go outside the viewport. See https://github.com/relumetech/powerups/tree/main/tooltips for more info
+  function f(t) {
+    return t[0].toUpperCase() + t.slice(1)
+  }
+  function w(t) {
+    return "padding" + f(t)
+  }
+  const y = {
+      bottom: "top",
+      left: "right",
+      right: "left",
+      top: "bottom"
+    },
+    C = {
+      bottom: {
+        margin: [1, "auto", 0, "auto"],
+        inset: [0, 0, "auto", 0]
+      },
+      left: {
+        margin: [0, 1, 0, 0],
+        inset: ["auto", 0, "auto", "auto"]
+      },
+      right: {
+        margin: [0, 0, 0, 1],
+        inset: ["auto", "auto", "auto", 0]
+      },
+      top: {
+        margin: [0, "auto", 1, "auto"],
+        inset: ["auto", 0, 0, 0]
+      }
+    };
+  var t = {
+      start: "left",
+      end: "right",
+      len: "width",
+      translate: "translateX"
+    },
+    e = {
+      start: "top",
+      end: "bottom",
+      len: "height",
+      translate: "translateY"
+    };
+  const b = {
+    top: t,
+    bottom: t,
+    left: e,
+    right: e
+  };
+  function n(s) {
+    var e,
+      n = "relumeTooltipSetup";
+    if (! s.dataset[n]) {
+      s.dataset[n] = 1;
+        const d = s.parentElement.querySelector("." + tooltipWrapperClass),
+      m = s.parentElement.querySelector("." + pointerClass),
+      g = m.className.includes("is-left")
+            ? "left"
+            : m.className.includes("is-right")
+              ? "right"
+              : m.className.includes("is-bottom")
+                ? "bottom"
+                : "top",
+      u = y[g],
+      c = (n = d, n = window.getComputedStyle(n), parseInt(n.paddingTop, 10) || parseInt(n.paddingBottom, 10) || parseInt(n.paddingLeft, 10) || parseInt(n.paddingRight, 10) || 0);
+        n = m,
+      e = g,
+      n = window.getComputedStyle(n),
+      e = C[e].margin.indexOf(1);
+        const h = [n.marginTop, n.marginRight, n.marginBottom, n.marginLeft][e];
+        let t = !1;
+        function p() {
+          if (t) {
+            window.requestAnimationFrame(p);
+            var e = s.getBoundingClientRect(),
+              n = d.getBoundingClientRect(),
+              o = document.documentElement,
+              a = b[g],
+              i = (e[a.start] + e[a.end] - n[a.len]) / 2,
+              r = (e[a.start] + e[a.end] + n[a.len]) / 2;
+            let t = 0;
+            var l = o["client" + f(a.len)],
+              i = (
+                i < 0
+                ? t = - i
+                : l < r && (t = l - r), {
+                  bottom: e.bottom + n.height < o.clientHeight,
+                  left: 0 < e.left - n.width,
+                  right: e.right + n.width<o.clientWidth, top:0<e.top-n.height}), l=i[g]||!i[u]?g:u;r=l, o=a, e=t, n=y[r], d.style[n]="100%", d.style[r]="auto", d.style[w(n)]=c+"px", d.style[w(r)]="0", d.style.transform=o.translate+"("+e+"px)", m.style.transform=o.translate+"("+-e+"px) rotate(45deg)", m.style.margin=C[r].margin.map(t=>1===t?h:t).join(" "), m.style.inset=C[r].inset.join(" ")}}s.parentElement.addEventListener("mouseenter", ()=> {
+                    t = !0,
+                    p()
+                  }
+                ),
+                s.parentElement.addEventListener("mouseleave", () => {
+                  t = !1
+                })
+              }
+          }
+          function o() {
+            document.querySelectorAll("." + iconWrapperClass).forEach(n)
+          }
+          window.addEventListener("DOMContentLoaded", o),
+          o()
+        }
+    )();

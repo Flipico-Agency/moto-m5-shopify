@@ -17,6 +17,7 @@
             {% elsif product.collections[0].handle == 'felgi' %}
               {{ product.metafields.rims.model.value.model.value }}<span class="text-weight-normal">
                 {{ product.metafields.rims.width }}x{{ product.metafields.rims.diameter }} {{ product.metafields.rims.bolt_spacing }} ET {{ product.metafields.rims.e_t }}</span>
+            {% elsif product.collections[0].handle == 'kola' %}
             {% endif %}
           </h1>
         </div>
@@ -80,6 +81,10 @@
                       {% when 'parametr' %}
                         <p class="text-size-small text-weight-semibold text-color-grayiron600">{{ block.settings.parametr_name }}</p>
                         <p class="text-size-small text-weight-semibold text-color-black">{{ block.settings.parametr_value }}</p>
+                      {% when 'parametr_header' %}
+                        <div class="product-parameters_heading">
+                          <div class="heading-style-h6">{{ block.settings.header }}</div>
+                        </div>
                     {% endcase %}
                   {% endfor %}
                 </div>
@@ -254,6 +259,17 @@
 {% endjavascript %}
 
 {% stylesheet %}
+
+  .product-parameters_heading {
+    border-bottom: 1px solid var(--color-grayiron--grayiron400);
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    display: flex;
+    grid-area: span 1 / span 2 / span 1 / span 2;
+  }
+
   .product-accesories_tittle-wrapper {
     justify-content: space-between;
     align-items: center;
@@ -636,6 +652,16 @@
             "type": "text",
             "id": "parametr_value",
             "label": "Wartość Parametru"
+          }
+        ]
+      }, {
+        "name": "Sekcja parametr dodatkowy",
+        "type": "parametr_header",
+        "settings": [
+          {
+            "type": "text",
+            "id": "header",
+            "label": "Tytuł sekcji"
           }
         ]
       }, {
