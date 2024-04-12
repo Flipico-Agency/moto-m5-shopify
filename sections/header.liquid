@@ -461,8 +461,73 @@
         </div>
     </div>
 </div>
-<div class="w-nav-overlay" id="w-nav-overlay-0"></div>
+<div class="w-nav-overlay" id="w-nav-overlay-0" style="display: none">
+    <ul class="menu">
+        {% for link in section.settings.menu.links %}
+            <li class="menu-link">
+                <a href="{{ link.url }}">{{ link.title }}</a>
 
+                {% if link.links.size > 0 %}
+                    <ul class="menu dropdown-child">
+                        {% for child_link in link.links %}
+                            <li class="menu-link">
+                                <a href="{{ child_link.url }}">{{ child_link.title }}</a>
+
+                                {% if child_link.links.size > 0 %}
+                                    <ul class="menu dropdown-grandchild">
+                                        {% for grandchild_link in child_link.links %}
+                                            <li class="menu-link">
+                                                <a href="{{ grandchild_link.url }}">{{ grandchild_link.title }}</a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% comment %} Nav menu {% endcomment %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const menuButton = document.querySelector('.navbar7_menu-button');
+        const navOverlay = document.getElementById('w-nav-overlay-0');
+        const navMenu = document.querySelector('.navbar7_menu');
+        const originalParent = navMenu.parentNode;
+
+        menuButton.addEventListener('click', function() {
+            const isExpanded = menuButton.getAttribute('aria-expanded') === 'true';
+            if (!isExpanded) {
+                // Przenieś menu do overlay i pokaż overlay
+                navOverlay.appendChild(navMenu);
+                navOverlay.style.display = 'block';
+                menuButton.setAttribute('aria-expanded', 'true');
+            } else {
+                // Przywróć menu do pierwotnej lokalizacji i ukryj overlay
+                originalParent.appendChild(navMenu);
+                navOverlay.style.display = 'none';
+                menuButton.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        // Obsługa kliknięcia poza menu, aby zamknąć
+        document.addEventListener('click', function(event) {
+            if (!menuButton.contains(event.target) && !navMenu.contains(event.target)) {
+                if (menuButton.getAttribute('aria-expanded') === 'true') {
+                    originalParent.appendChild(navMenu);
+                    navOverlay.style.display = 'none';
+                    menuButton.setAttribute('aria-expanded', 'false');
+                }
+            }
+        });
+    });
+</script>
+
+{% comment %} Dropdowns {% endcomment %}
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const dropdownToggles = document.querySelectorAll('.navbar7_dropdown-toggle');
