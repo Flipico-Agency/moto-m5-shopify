@@ -1,439 +1,539 @@
 <section class="section_filters2 background-color-grayiron100">
-    <div class="padding-global">
-        <div class="container-large">
-            <div class="padding-section-small">
-                <div class="filters2_component">
-                    <div class="filters2_layout">
-                        <div class="filters2_filters-wrapper">
-                            <div class="filters2_form-block w-form">
-                                <div class="filters2_form">
-                                    <div class="filters2_form-header">
-                                        <div class="filters2_heading">Filtry</div>
-
-                                        <div class="button is-link hide-tablet w-inline-block">
-                                            <a class="text-clear-filters"
-                                               href="{{ collection.url }}?sort_by={{ collection.sort_by }}">WYCZYŚĆ
+  <div class="padding-global">
+    <div class="container-large">
+      <div class="padding-section-small">
+        <div class="filters2_component">
+          <div class="filters2_layout">
+            <div class="filters2_filters-wrapper">
+              <div class="filters2_form-block w-form">
+                <div class="filters2_form">
+                  <div class="filters2_form-header">
+                    <div class="filters2_heading">Filtry</div>
+                    <div class="button is-link hide-tablet w-inline-block">
+                      <a class="text-clear-filters" href="{{ collection.url }}?sort_by={{ collection.sort_by }}">WYCZYŚĆ
                                                 WSZYSTKIE</a>
-                                        </div>
-
-                                    </div>
-
-                                    {% comment %} header filter tabs wg auta & wg rozmiaru{% endcomment %}
-                                    <div class="filters2_filter-group">
-                                        <div class="filters2_filter-group-heading">
-                                            <div class="text-size-medium text-weight-semibold">
-                                                Szukaj {{ collection.title }}
-                                            </div>
-                                        </div>
-                                        {% comment %} MENU {% endcomment %}
-                                        <div class="tabs-menu-3 w-tab-menu">
-                                            {% assign tab_titles = "wg rozmiaru,wg auta" | split: "," %}
-                                            {% for tab_title in tab_titles %}
-                                                <a data-w-tab="{{ forloop.index }}"
-                                                   class="tab-link-tab-2 w-inline-block w-tab-link{% if forloop.first %} w--current{% endif %}">
-                                                    {{ tab_title }}
-                                                </a>
-                                            {% endfor %}
-                                        </div>
-
-                                        {% comment %} CONTENT {% endcomment %}
-                                        {% for tab_number in (1..2) %}
-                                            <div class="tab-pane-tab-{{ tab_number }} w-tab-pane{% if tab_number == 1 %} w--tab-active{% endif %}">
-                                                {% comment %} CHECK CLASS {% endcomment %}
-                                                <div class="">
-                                                    {% for sub_tab_number in (1..1) %}
-                                                        <div data-sub-tab="{{ tab_number }}.{{ sub_tab_number }}"
-                                                             class="w-tab-pane{% if sub_tab_number == 1 %} w--tab-active{% endif %}">
-                                                            <div class="w-form">
-                                                                {% comment %} CHECK CLASS {% endcomment %}
-                                                                <form class="">
-                                                                    {% if tab_number == 1 %}
-                                                                        {% assign tire_fields_label = "Szerokość,Profil,Średnica" | split: "," %}
-                                                                        {% assign wheel_fields_label = "Szerokość opony,Profil opony,Średnica opony,Rozstaw śrub,Szerokość felgi" | split: "," %}
-                                                                        {% assign rim_fields_label = "Średnica,Rozstaw śrub,Szerokość,ET" | split: "," %}
-
-                                                                        {% assign season_options = "Letnie,Zimowe,Całoroczne" | split: "," %}
-
-                                                                        {% assign tire_fields_data_name = "tire-width,tire-profile,tire-diameter" | split: "," %}
-                                                                        {% assign wheel_fields_data_name = "tire-width,tire-profile,tire-diameter,rim-bolt,rim-width" | split: "," %}
-                                                                        {% assign rim_fields_data_name = "rim-diameter,rim-bolt,rim-width,rim-et" | split: "," %}
-
-                                                                        {% case collection.title %}
-                                                                            {% when 'Opony' %}
-                                                                                {% for i in (0..2) %}
-                                                                                    <div class="form-field-wrapper">
-                                                                                        <label for="{{ tire_fields_data_name[i] | downcase }}"
-                                                                                               class="field-label">{{ tire_fields_label[i] }}</label>
-                                                                                        <select
-                                                                                                id="{{ tire_fields_data_name[i] | downcase }}"
-                                                                                                data-name="{{ tire_fields_data_name[i] }}"
-                                                                                                required="required"
-                                                                                                class="select-field w-select"></select>
-                                                                                        {% render 'select-arrow' %}
-                                                                                    </div>
-                                                                                {% endfor %}
-                                                                                <div class="form-field-wrapper">
-                                                                                    <label for="tire-season"
-                                                                                           class="field-label">Sezon</label>
-                                                                                    <select
-                                                                                            id="tire-season"
-                                                                                            data-name="tire-season"
-                                                                                            required="required"
-                                                                                            class="select-field w-select">
-                                                                                        {% for option in season_options %}
-                                                                                            <option value="{{ option }}">{{ option }}</option>
-                                                                                        {% endfor %}
-                                                                                    </select>
-                                                                                    {% render 'select-arrow' %}
-                                                                                </div>
-                                                                            {% when 'Koła' %}
-                                                                                {% for i in (0..4) %}
-                                                                                    <div class="form-field-wrapper">
-                                                                                        <label for="{{ wheel_fields_data_name[i] | downcase }}"
-                                                                                               class="field-label">{{ wheel_fields_label[i] }}</label>
-                                                                                        <select
-                                                                                                id="{{ wheel_fields_data_name[i] | downcase }}"
-                                                                                                data-name="{{ wheel_fields_data_name[i] }}"
-                                                                                                required="required"
-                                                                                                class="select-field w-select"></select>
-                                                                                        {% render 'select-arrow' %}
-                                                                                    </div>
-                                                                                {% endfor %}
-                                                                                <div class="form-field-wrapper">
-                                                                                    <label for="tire-season"
-                                                                                           class="field-label">Sezon</label>
-                                                                                    <select
-                                                                                            id="tire-season"
-                                                                                            data-name="tire-season"
-                                                                                            required="required"
-                                                                                            class="select-field w-select">
-                                                                                        {% for option in season_options %}
-                                                                                            <option value="{{ option }}">{{ option }}</option>
-                                                                                        {% endfor %}
-                                                                                    </select>
-                                                                                    {% render 'select-arrow' %}
-                                                                                </div>
-                                                                            {% when 'Felgi' %}
-                                                                                {% for i in (0..3) %}
-                                                                                    <div class="form-field-wrapper">
-                                                                                        <label for="{{ rim_fields_data_name[i] | downcase }}"
-                                                                                               class="field-label">{{ rim_fields_label[i] }}</label>
-                                                                                        <select
-                                                                                                id="{{ rim_fields_data_name[i] | downcase }}"
-                                                                                                data-name="{{ rim_fields_data_name[i] }}"
-                                                                                                required="required"
-                                                                                                class="select-field w-select"></select>
-                                                                                        {% render 'select-arrow' %}
-                                                                                    </div>
-                                                                                {% endfor %}
-                                                                        {% endcase %}
-                                                                    {% else %}
-                                                                        <div class="ifnotselectedcar">
-                                                                            {% assign form_fields = "Marka,Model,Generacja,Rok,Silnik" | split: "," %}
-                                                                            {% for field in form_fields %}
-                                                                                <div class="form-field-wrapper">
-                                                                                    <label for="car-{{ field | downcase }}"
-                                                                                           class="field-label">{{ field }}</label>
-                                                                                    <select
-                                                                                            id="car-{{ field | downcase }}"
-                                                                                            data-name="car-{{ field | downcase }}"
-                                                                                            required="required"
-                                                                                            class="select-field w-select"></select>
-                                                                                    {% render 'select-arrow' %}
-                                                                                </div>
-                                                                            {% endfor %}
-                                                                        </div>
-                                                                        <div class="ifselectedcar is-right"
-                                                                             style="display: none">
-                                                                            <div class="div-block-41">
-                                                                                <div class="text-size-small">
-                                                                                    Twoje auto:
-                                                                                </div>
-                                                                                <div id="selected_car"
-                                                                                     class="text-size-small text-weight-bold"></div>
-                                                                                <a
-                                                                                        id="change_car"
-                                                                                        class="text-size-small">Zmień
-                                                                                    auto</a>
-                                                                            </div>
-                                                                            <div class="form-field-wrapper">
-                                                                                <label for="matching_sizes"
-                                                                                       class="field-label">Pasujące
-                                                                                    rozmiary</label>
-                                                                                <select
-                                                                                        id="matching_sizes"
-                                                                                        class="select-field is-left w-select"></select>
-                                                                            </div>
-                                                                        </div>
-                                                                    {% endif %}
-                                                                    <input
-                                                                            type="submit"
-                                                                            data-wait="Zaczekaj..."
-                                                                            class="button w-button"
-                                                                            value="{% case tab_number %}{% when 1 %}{% case collection.title %}{% when 'Opony' %}Szukaj opon{% when 'Koła' %}Szukaj kół{% when 'Felgi' %}Szukaj felg{% endcase %}{% when 2 %}{% case collection.title %}{% when 'Opony' %}Szukaj opon{% when 'Koła' %}Szukaj kół{% when 'Felgi' %}Szukaj felg{% endcase %}{% endcase %}">
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    {% endfor %}
-                                                </div>
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-
-                                    {% comment %} standard filters{% endcomment %}
-                                    <form>
-                                        {%- for filter in collection.filters -%}
-                                            <details open class="filters2_filter-group">
-                                                <summary class="filters2_filter-group-heading">
-                                                    <div class="text-size-medium text-weight-semibold">
-                                                        {% if filter.label != 'Price' %}
-                                                            <span>{{ filter.label }}</span>
-                                                        {% else %}
-                                                            <span>Cena</span>
-                                                        {% endif %}
-
-                                                        {%- if filter.active_values.size > 0 -%}
-                                                            <span>({{ filter.active_values.size }})</span>
-                                                        {%- endif -%}
-                                                    </div>
-                                                </summary>
-
-                                                <div class="filters2_filter-options">
-                                                    <div>
-                                                        {%- if filter.active_values.size > 0 -%}
-                                                            <p>
-                                                                <a href="{{ filter.url_to_remove }}">Zresetuj</a>
-                                                            </p>
-                                                        {%- endif -%}
-                                                    </div>
-                                                    {%- case filter.type -%}
-                                                        {%- when 'boolean' -%}
-                                                            <ul class="filters-list">
-                                                                <li>
-                                                                    <label for="Filter-{{ filter.param_name }}-{{ filter.true_value.value }}">
-                                                                        <input
-                                                                                class="w-checkbox-input form-checkbox-icon{% if filter_value.active %} w-checkbox-input--inputType-custom w--redirected-checked{% endif %}"
-                                                                                type="checkbox"
-                                                                                name="{{ filter.param_name }}"
-                                                                                value="{{ filter.true_value.value }}"
-                                                                                id="Filter-{{ filter.param_name }}"
-                                                                                {% if filter.true_value.active -%}checked{%- endif %}
-                                                                            {% if filter.true_value.count == 0 and filter.true_value.active == false -%}disabled{%- endif -%}
-                                                                                onchange="this.form.submit()">
-                                                                        {{ filter.true_value.label }}
-                                                                    </label>
-                                                                </li>
-                                                                <li>
-                                                                    <label for="Filter-{{ filter.param_name }}-{{ filter.false_value.value }}">
-                                                                        <input
-                                                                                class="w-checkbox-input form-checkbox-icon{% if filter_value.active %} w-checkbox-input--inputType-custom w--redirected-checked{% endif %}"
-                                                                                type="checkbox"
-                                                                                name="{{ filter.param_name }}"
-                                                                                value="{{ filter.false_value.value }}"
-                                                                                id="Filter-{{ filter.param_name }}"
-                                                                                {% if filter.false_value.active -%}checked{%- endif %}
-                                                                            {% if filter.false_value.count == 0 and filter.false_value.active == false -%}disabled{%- endif %}
-                                                                                onchange="this.form.submit()">
-                                                                        {{ filter.false_value.label }}
-                                                                    </label>
-                                                                </li>
-                                                            </ul>
-                                                        {%- when 'list' -%}
-                                                            <ul class="filters-list">
-                                                                {%- for filter_value in filter.values -%}
-                                                                    <li>
-                                                                        <label for="Filter-{{ filter.param_name }}-{{ forloop.index }}">
-                                                                            <input
-                                                                                    class="w-checkbox-input form-checkbox-icon{% if filter_value.active %} w-checkbox-input--inputType-custom w--redirected-checked{% endif %}"
-                                                                                    type="checkbox"
-                                                                                    name="{{ filter_value.param_name }}"
-                                                                                    value="{{ filter_value.value }}"
-                                                                                    id="Filter-{{ filter.param_name }}-{{ forloop.index }}"
-                                                                                    {% if filter_value.active -%}checked{%- endif %}
-                                                                                {% if filter_value.count == 0 and filter_value.active == false -%}disabled{%- endif %}
-                                                                                    onchange="this.form.submit()">
-                                                                            {{ filter_value.label }}
-                                                                        </label>
-                                                                    </li>
-                                                                {%- endfor -%}
-                                                            </ul>
-                                                        {%- when 'price_range' -%}
-                                                        {% comment %} CENA STYLIZUJ {% endcomment %}
-                                                            <div class="filter-group-display__price-range">
-                                                                <div class="filter-group-display__price-range-from">
-                                                                    <label for="Filter-{{ filter.min_value.param_name }}">Od</label>
-
-                                                                    <input
-                                                                            name="{{ filter.min_value.param_name }}"
-                                                                            id="Filter-{{ filter.min_value.param_name }}"
-                                                                            {% if filter.min_value.value -%}
-                                                                                value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
-                                                                            {%- endif %}
-                                                                            type="number"
-                                                                            placeholder="0"
-                                                                            min="0"
-                                                                            max="{{ filter.range_max | money_without_currency | replace: ',', '' }}">
-
-                                                                    <span>{{ cart.currency.symbol }}</span>
-                                                                </div>
-                                                                <div class="filter-group-display__price-range-to">
-                                                                    <label for="Filter-{{ filter.max_value.param_name }}">Do</label>
-
-                                                                    <input
-                                                                            name="{{ filter.max_value.param_name }}"
-                                                                            id="Filter-{{ filter.max_value.param_name }}"
-                                                                            {% if filter.max_value.value -%}
-                                                                                value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
-                                                                            {%- endif %}
-                                                                            type="number"
-                                                                            placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
-                                                                            min="0"
-                                                                            max="{{ filter.range_max | money_without_currency | replace: ',', '' }}">
-
-                                                                    <span>{{ cart.currency.symbol }}</span>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="filter-group-display__submit">
-                                                                <input
-                                                                        type="submit"
-                                                                        value="Zastosuj"
-                                                                        class="button is-link">
-                                                            </div>
-                                                    {%- endcase -%}
-                                                </div>
-                                            </details>
-                                        {%- endfor -%}
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-wide_list">
-                            <div class="filters2_feed-header">
-                                <div class="filters2_tags-wrapper">
-                                    {%- for filter in collection.filters -%}
-                                        {%- if filter.type == "price_range" -%}
-                                            {%- if filter.min_value.value != null or filter.max_value.value != null -%}
-                                                <div class="filters2_tag">
-                                                    <a href="{{ filter.url_to_remove }}">
-                                                        {%- assign min_value = filter.min_value.value | default: 0 -%}
-                                                        {%- assign max_value = filter.max_value.value | default: filter.range_max -%}
-                                                        {{ min_value | money }} - {{ max_value | money }} X
-                                                    </a>
-                                                </div>
-                                            {%- endif -%}
-                                        {%- else -%}
-                                            {%- for filter_value in filter.active_values -%}
-                                                <div class="filters2_tag">
-                                                    <a href="{{ filter_value.url_to_remove }}">
-                                                        {{ filter.label }}: {{ filter_value.label }} X
-                                                    </a>
-                                                </div>
-                                            {%- endfor -%}
-                                        {%- endif -%}
-                                    {%- endfor -%}
-                                </div>
-                                <div class="filters2_results-wrapper">
-                                    <div class="filters2_results-text">
-                                        {% if paginate %}
-                                            Wyświetlam {{ paginate.page_size | times: paginate.current_page | minus: paginate.page_size | plus: 1 }} - {{ paginate.items | size }} z {{ paginate.items_count }} wyników
-                                        {% else %}
-                                            Wyświetlam {{ collection.products.count }} z {{ collection.products_count }} wyników
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {% for product in collection.products %}
-                                <div class="product-wide shadow-xsmall">
-                                    <a href="{{ product.url }}" class="product_content-wrapper w-inline-block">
-                                        {% if collection.handle == "opony" %}
-                                            <div class="div-block-47">
-                                                <div class="heading-style-h4">{{ product.metafields.tires.manufacturer.value.name.value }}</div>
-                                                <div class="div-block-46">
-                                                    <div class="text-size-large text-weight-semibold">{{ product.metafields.tires.model.value.model.value }}</div>
-                                                    <div class="text-size-large text-weight-semibold">{{ product.metafields.tires.width }}
-                                                        /{{ product.metafields.tires.profile }}
-                                                        R{{ product.metafields.tires.diameter }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}</div>
-                                                </div>
-                                                <div class="product_parameters-wrapper"></div>
-                                                <div class="product_parameters-wrapper"></div>
-                                            </div>
-                                        {% endif %}
-                                        <div class="margin-top margin-xsmall">
-                                            <div class="product_pictures-wrapper">
-                                                <div class="product_season-wrapper">
-                                                    {% if product.metafields.tires.season.value == 'Letnie' %}
-                                                        <img src="{{ 'IcRoundSun.svg' | asset_url }}"
-                                                             class="icon-embed-small" alt="summer-icon">
-                                                    {% elsif product.metafields.tires.season.value == 'Zimowe' %}
-                                                        <img src="{{ 'IcRoundWinter.svg' | asset_url }}"
-                                                             class="icon-embed-small" alt="winter-icon">
-                                                    {% elsif product.metafields.tires.season.value == 'Całoroczne' %}
-                                                        <img src="{{ 'IcRoundAllSeason.svg' | asset_url }}"
-                                                             class="icon-embed-small" alt="year-round-icon">
-                                                    {% endif %}
-                                                </div>
-                                                <div class="product_badge-wrapper">
-                                                    <div class="text-size-small text-weight-bold text-color-white">
-                                                        Klasa {{ product.metafields.tires.model.value.marka.value.class.value }}</div>
-                                                </div>
-                                                {% if product.featured_image %}
-                                                    <div class="product_image-wrapper">
-                                                        <img
-                                                                src="{{ product.featured_image | img_url: '500x500' }}"
-                                                                alt="{{ product.title }}"
-                                                                class="image-2">
-                                                    </div>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <div class="product_info-wrapper">
-                                        <div class="product_price-wrapper">
-                                            <div class="div-block-39">
-                                                <div class="heading-style-h4 text-color-red600">{{ product.price | money }}
-                                                    <span class="text-size-regular">
-                            / {{ product.metafields.tires.quantity }}</span>
-                                                </div>
-                                            </div>
-                                            <div class="text-size-tiny text-weight-semibold text-color-green">Darmowa
-                                                Dostawa, zamów przed {{ settings.delivery-hour }} - wyślemy dzisiaj
-                                            </div>
-                                            <div class="product_green-wrapper">
-                                                <p class="text-size-small text-color-green">Możliwość montażu
-                                                    <span class="text-weight-semibold">w serwisie</span>
-                                                </p>
-                                            </div>
-                                            <div class="product_green-wrapper">
-                                                <p class="text-size-small text-color-green">Możliwość zakupu
-                                                    <span class="text-weight-semibold">na raty</span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="product-header1_add-to-cart w-form">
-                                            <form method="post" action="/cart/add">
-                                                <input
-                                                        type="hidden"
-                                                        name="id"
-                                                        value="{{ product.variants.first.id }}">
-                                                <input
-                                                        type="submit"
-                                                        value="Dodaj do koszyka"
-                                                        class="button max-width-full">
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% else %}
-                                <p>Brak produktów w tej kolekcji.</p>
-                            {% endfor %}
-                        </div>
                     </div>
+                  </div>
+
+                  {% comment %} header filter tabs wg auta & wg rozmiaru{% endcomment %}
+                  <div class="filters2_filter-group">
+                    <div class="filters2_filter-group-heading">
+                      <div class="text-size-medium text-weight-semibold">
+                        Szukaj {{ collection.title }}
+                      </div>
+                    </div>
+                    {% comment %} MENU {% endcomment %}
+                    <div class="tabs-menu-3 w-tab-menu">
+                      {% assign tab_titles = "wg rozmiaru,wg auta" | split: "," %}
+                      {% for tab_title in tab_titles %}
+                        <a data-w-tab="{{ forloop.index }}" class="tab-link-tab-2 w-inline-block w-tab-link{% if forloop.first %} w--current{% endif %}">
+                          {{ tab_title }}
+                        </a>
+                      {% endfor %}
+                    </div>
+
+                    {% comment %} CONTENT {% endcomment %}
+                    {% for tab_number in (1..2) %}
+                      <div class="tab-pane-tab-{{ tab_number }} w-tab-pane{% if tab_number == 1 %} w--tab-active{% endif %}">
+                        {% comment %} CHECK CLASS {% endcomment %}
+                        <div class="">
+                          {% for sub_tab_number in (1..1) %}
+                            <div data-sub-tab="{{ tab_number }}.{{ sub_tab_number }}" class="w-tab-pane{% if sub_tab_number == 1 %} w--tab-active{% endif %}">
+                              <div class="w-form">
+                                {% comment %} CHECK CLASS {% endcomment %}
+                                <form class="">
+                                  {% if tab_number == 1 %}
+                                    {% assign tire_fields_label = "Szerokość,Profil,Średnica" | split: "," %}
+                                    {% assign wheel_fields_label = "Szerokość opony,Profil opony,Średnica opony,Rozstaw śrub,Szerokość felgi" | split: "," %}
+                                    {% assign rim_fields_label = "Średnica,Rozstaw śrub,Szerokość,ET" | split: "," %}
+
+                                    {% assign season_options = "Letnie,Zimowe,Całoroczne" | split: "," %}
+
+                                    {% assign tire_fields_data_name = "tire-width,tire-profile,tire-diameter" | split: "," %}
+                                    {% assign wheel_fields_data_name = "tire-width,tire-profile,tire-diameter,rim-bolt,rim-width" | split: "," %}
+                                    {% assign rim_fields_data_name = "rim-diameter,rim-bolt,rim-width,rim-et" | split: "," %}
+
+                                    {% case collection.title %}
+                                      {% when 'Opony' %}
+                                        {% for i in (0..2) %}
+                                          <div class="form-field-wrapper">
+                                            <label for="{{ tire_fields_data_name[i] | downcase }}" class="field-label">{{ tire_fields_label[i] }}</label>
+                                            <select
+                                              id="{{ tire_fields_data_name[i] | downcase }}"
+                                              data-name="{{ tire_fields_data_name[i] }}"
+                                              required="required"
+                                              class="select-field w-select"></select>
+                                            {% render 'select-arrow' %}
+                                          </div>
+                                        {% endfor %}
+                                        <div class="form-field-wrapper">
+                                          <label for="tire-season" class="field-label">Sezon</label>
+                                          <select
+                                            id="tire-season"
+                                            data-name="tire-season"
+                                            required="required"
+                                            class="select-field w-select">
+                                            {% for option in season_options %}
+                                              <option value="{{ option }}">{{ option }}</option>
+                                            {% endfor %}
+                                          </select>
+                                          {% render 'select-arrow' %}
+                                        </div>
+                                      {% when 'Koła' %}
+                                        {% for i in (0..4) %}
+                                          <div class="form-field-wrapper">
+                                            <label for="{{ wheel_fields_data_name[i] | downcase }}" class="field-label">{{ wheel_fields_label[i] }}</label>
+                                            <select
+                                              id="{{ wheel_fields_data_name[i] | downcase }}"
+                                              data-name="{{ wheel_fields_data_name[i] }}"
+                                              required="required"
+                                              class="select-field w-select"></select>
+                                            {% render 'select-arrow' %}
+                                          </div>
+                                        {% endfor %}
+                                        <div class="form-field-wrapper">
+                                          <label for="tire-season" class="field-label">Sezon</label>
+                                          <select
+                                            id="tire-season"
+                                            data-name="tire-season"
+                                            required="required"
+                                            class="select-field w-select">
+                                            {% for option in season_options %}
+                                              <option value="{{ option }}">{{ option }}</option>
+                                            {% endfor %}
+                                          </select>
+                                          {% render 'select-arrow' %}
+                                        </div>
+                                      {% when 'Felgi' %}
+                                        {% for i in (0..3) %}
+                                          <div class="form-field-wrapper">
+                                            <label for="{{ rim_fields_data_name[i] | downcase }}" class="field-label">{{ rim_fields_label[i] }}</label>
+                                            <select
+                                              id="{{ rim_fields_data_name[i] | downcase }}"
+                                              data-name="{{ rim_fields_data_name[i] }}"
+                                              required="required"
+                                              class="select-field w-select"></select>
+                                            {% render 'select-arrow' %}
+                                          </div>
+                                        {% endfor %}
+                                    {% endcase %}
+                                  {% else %}
+                                    <div class="ifnotselectedcar">
+                                      {% assign form_fields = "Marka,Model,Generacja,Rok,Silnik" | split: "," %}
+                                      {% for field in form_fields %}
+                                        <div class="form-field-wrapper">
+                                          <label for="car-{{ field | downcase }}" class="field-label">{{ field }}</label>
+                                          <select
+                                            id="car-{{ field | downcase }}"
+                                            data-name="car-{{ field | downcase }}"
+                                            required="required"
+                                            class="select-field w-select"></select>
+                                          {% render 'select-arrow' %}
+                                        </div>
+                                      {% endfor %}
+                                    </div>
+                                    <div class="ifselectedcar is-right" style="display: none">
+                                      <div class="div-block-41">
+                                        <div class="text-size-small">
+                                          Twoje auto:
+                                        </div>
+                                        <div id="selected_car" class="text-size-small text-weight-bold"></div>
+                                        <a id="change_car" class="text-size-small">Zmień
+                                                                                    auto</a>
+                                      </div>
+                                      <div class="form-field-wrapper">
+                                        <label for="matching_sizes" class="field-label">Pasujące
+                                                                                    rozmiary</label>
+                                        <select id="matching_sizes" class="select-field is-left w-select"></select>
+                                      </div>
+                                    </div>
+                                  {% endif %}
+                                  <input
+                                    type="submit"
+                                    data-wait="Zaczekaj..."
+                                    class="button w-button"
+                                    value="{% case tab_number %}{% when 1 %}{% case collection.title %}{% when 'Opony' %}Szukaj opon{% when 'Koła' %}Szukaj kół{% when 'Felgi' %}Szukaj felg{% endcase %}{% when 2 %}{% case collection.title %}{% when 'Opony' %}Szukaj opon{% when 'Koła' %}Szukaj kół{% when 'Felgi' %}Szukaj felg{% endcase %}{% endcase %}">
+                                </form>
+                              </div>
+                            </div>
+                          {% endfor %}
+                        </div>
+                      </div>
+                    {% endfor %}
+                  </div>
+
+                  {% comment %} standard filters{% endcomment %}
+                  <form>
+                    {%- for filter in collection.filters -%}
+                      <details open class="filters2_filter-group">
+                        <summary class="filters2_filter-group-heading">
+                          <div class="text-size-medium text-weight-semibold">
+                            {% if filter.label != 'Price' %}
+                              <span>{{ filter.label }}</span>
+                            {% else %}
+                              <span>Cena</span>
+                            {% endif %}
+
+                            {%- if filter.active_values.size > 0 -%}
+                              <span>({{ filter.active_values.size }})</span>
+                            {%- endif -%}
+                          </div>
+                        </summary>
+
+                        <div class="filters2_filter-options">
+                          <div>
+                            {%- if filter.active_values.size > 0 -%}
+                              <p>
+                                <a href="{{ filter.url_to_remove }}">Zresetuj</a>
+                              </p>
+                            {%- endif -%}
+                          </div>
+                          {%- case filter.type -%}
+                            {%- when 'boolean' -%}
+                              <div class="filters2_list-wrapper">
+                                <div class="filters-list">
+                                  <div class="filters2_item">
+                                    <label for="Filter-{{ filter.param_name }}-{{ filter.true_value.value }}">
+                                      <input
+                                        class="w-checkbox-input form-checkbox-icon{% if filter_value.active %} w-checkbox-input--inputType-custom w--redirected-checked{% endif %}"
+                                        type="checkbox"
+                                        name="{{ filter.param_name }}"
+                                        value="{{ filter.true_value.value }}"
+                                        id="Filter-{{ filter.param_name }}"
+                                        {% if filter.true_value.active -%}
+                                        checked{%- endif %}
+                                        {% if filter.true_value.count == 0 and filter.true_value.active == false -%}
+                                        disabled{%- endif -%}
+                                        onchange="this.form.submit()">
+                                      {{ filter.true_value.label }}
+                                    </label>
+                                  </div>
+                                  <div class="filteres2_item">
+                                    <label for="Filter-{{ filter.param_name }}-{{ filter.false_value.value }}">
+                                      <input
+                                        class="w-checkbox-input form-checkbox-icon{% if filter_value.active %} w-checkbox-input--inputType-custom w--redirected-checked{% endif %}"
+                                        type="checkbox"
+                                        name="{{ filter.param_name }}"
+                                        value="{{ filter.false_value.value }}"
+                                        id="Filter-{{ filter.param_name }}"
+                                        {% if filter.false_value.active -%}
+                                        checked{%- endif %}
+                                        {% if filter.false_value.count == 0 and filter.false_value.active == false -%}
+                                        disabled{%- endif %}
+                                        onchange="this.form.submit()">
+                                      {{ filter.false_value.label }}
+                                    </label>
+                                  </div>
+                                </div>
+                              </div>
+                            {%- when 'list' -%}
+                              <div class="filters2_list-wrapper">
+                                <div class="filters2_list">
+                                  {%- for filter_value in filter.values -%}
+                                    <div class="filters2_item">
+                                      <label class="w-checkbox filters2_form-checkbox1" for="Filter-{{ filter.param_name }}-{{ forloop.index }}">
+                                        <input
+                                          class="w-checkbox-input form-checkbox-icon{% if filter_value.active %} w-checkbox-input--inputType-custom w--redirected-checked{% endif %}"
+                                          type="checkbox"
+                                          name="{{ filter_value.param_name }}"
+                                          value="{{ filter_value.value }}"
+                                          id="Filter-{{ filter.param_name }}-{{ forloop.index }}"
+                                          {% if filter_value.active -%}
+                                          checked{%- endif %}
+                                          {% if filter_value.count == 0 and filter_value.active == false -%}
+                                          disabled{%- endif %}
+                                          onchange="this.form.submit()">
+                                        {{ filter_value.label }}
+                                      </label>
+                                    </div>
+                                  {%- endfor -%}
+                                </div>
+                              </div>
+                            {%- when 'price_range' -%}
+                              {% comment %} CENA STYLIZUJ {% endcomment %}
+                              <div class="filter-group-display__price-range">
+                                <div class="button-group-add-with-size">
+                                  <div class="filter-group-display__price-range-from">
+                                    <label for="Filter-{{ filter.min_value.param_name }}"></label>
+
+                                    <input
+                                      name="{{ filter.min_value.param_name }}"
+                                      class="form-input is-left-price"
+                                      style="width:100%"
+                                      id="Filter-{{ filter.min_value.param_name }}"
+                                      {% if filter.min_value.value -%}
+                                      value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
+                                      {%- endif %}
+                                      type="number"
+                                      placeholder="od"
+                                      min="0"
+                                      max="{{ filter.range_max | money_without_currency | replace: ',', '' }}">
+                                  </div>
+                                  <div class="filter-group-display__price-range-to">
+                                    <label for="Filter-{{ filter.max_value.param_name }}"></label>
+                                    <input
+                                      name="{{ filter.max_value.param_name }}"
+                                      id="Filter-{{ filter.max_value.param_name }}"
+                                      class="form-input is-right-price"
+                                      style="width:100%"
+                                      {% if filter.max_value.value -%}
+                                      value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
+                                      {%- endif %}
+                                      type="number"
+                                      placeholder="do"
+                                      min="0"
+                                      max="{{ filter.range_max | money_without_currency | replace: ',', '' }}">
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="filter-group-display__submit">
+                                <input
+                                  type="submit"
+                                  value="Zastosuj"
+                                  class="button is-link">
+                              </div>
+                          {%- endcase -%}
+                        </div>
+                      </details>
+                    {%- endfor -%}
+                  </form>
                 </div>
+              </div>
             </div>
+            <div class="product-wide_list">
+              <div class="filters2_feed-header">
+                <div class="filters_tags-wrapper">
+                  {%- for filter in collection.filters -%}
+                    {%- if filter.type == "price_range" -%}
+                      {%- if filter.min_value.value != null or filter.max_value.value != null -%}
+                        <div class="filters_tag-wrap">
+                          Cena:
+                          <a class="filters_tag" href="{{ filter.url_to_remove }}">
+                            {%- assign min_value = filter.min_value.value | default: 0 -%}
+                            {%- assign max_value = filter.max_value.value | default: filter.range_max -%}
+                            {{ min_value | money }} - {{ max_value | money }} <img src="{{ 'IcRoundCloseBlack.svg' |  asset_url }}" class="icon-embed-xxsmall">
+                          </a>
+                        </div>
+                      {%- endif -%}
+                    {%- else -%}
+                      {%- for filter_value in filter.active_values -%}
+                        <div class="filters_tag-wrap text-size-small">
+                          {{ filter.label }}:
+                          <a href="{{ filter_value.url_to_remove }}" class="filters_tag">{{ filter_value.label }} <img src="{{ 'IcRoundCloseBlack.svg' |  asset_url }}" class="icon-embed-xxsmall"></a>
+                        </div>
+                      {%- endfor -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+                <div class="filters2_results-wrapper">
+                  <div class="filters2_results-text">
+                    {% if paginate %}
+                      Wyświetlam {{ paginate.page_size | times: paginate.current_page | minus: paginate.page_size | plus: 1 }} - {{ paginate.items | size }} z {{ paginate.items_count }} wyników
+                    {% else %}
+                      Wyświetlam {{ collection.products.count }} z {{ collection.products_count }} wyników
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+
+              {% for product in collection.products %}
+                <div class="product-wide shadow-xsmall">
+                  <a href="{{ product.url }}" class="product_content-wrapper w-inline-block">
+                    {% if product.collections[0].handle == "opony" %}
+                      <div class="div-block-47">
+                        <div class="heading-style-h4">{{ product.metafields.tires.manufacturer.value.name.value }}</div>
+                        <div class="div-block-46">
+                          <div class="text-size-large text-weight-semibold">{{ product.metafields.tires.model.value.model.value }}</div>
+                          <div class="text-size-large text-weight-semibold">{{ product.metafields.tires.width }}
+                            /{{ product.metafields.tires.profile }}
+                            R{{ product.metafields.tires.diameter }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}</div>
+                        </div>
+                        <div class="product_parameters-wrapper">
+                          {% if product.metafields.tires.tread != blank %}
+                            <div class="product_parameters">
+                              <div class="tooltip1_component">
+                                <div class="tooltip1_tooltip-wrapper">
+                                  <div class="tooltip1_card-wrapper">
+                                    <div class="text-size-tiny text-weight-semibold">Ilość pozostałego bieżnika w oponach</div>
+                                  </div>
+                                  <div class="tooltip1_pointer"></div>
+                                </div>
+                                <div class="tooltip1_element-wrapper" data-relume-tooltip-setup="1">
+                                  <div class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.tread }}</div>
+                                </div>
+                                <div class="tooltip1_responsive"></div>
+                              </div>
+                            </div>
+                          {% endif %}
+                          {% if product.metafields.tires.years != blank %}
+                            <div class="product_parameters is-last">
+                              <div class="tooltip1_component">
+                                <div class="tooltip1_tooltip-wrapper">
+                                  <div class="tooltip1_card-wrapper">
+                                    <div class="text-size-tiny text-weight-semibold">Rocznik produkcji opon z wybranej oferty</div>
+                                  </div>
+                                  <div class="tooltip1_pointer"></div>
+                                </div>
+                                <div class="tooltip1_element-wrapper" data-relume-tooltip-setup="1">
+                                  <div class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.years }}</div>
+                                </div>
+                                <div class="tooltip1_responsive"></div>
+                              </div>
+                            </div>
+                          {% endif %}
+                        </div>
+                        <div class="product_parameters-wrapper">
+                          {% if product.metafields.tires.load_index != blank %}
+                            <div class="product_parameters">
+                              <div class="tooltip1_component">
+                                <div class="tooltip1_tooltip-wrapper">
+                                  <div class="tooltip1_card-wrapper">
+                                    <div class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.load_index }}. Indeks nośności, czyli maksymalne obciążenie pojedynczej opony</div>
+                                  </div>
+                                  <div class="tooltip1_pointer"></div>
+                                </div>
+                                <div class="tooltip1_element-wrapper" data-relume-tooltip-setup="1">
+                                  <div class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}</div>
+                                </div>
+                                <div class="tooltip1_responsive"></div>
+                              </div>
+                            </div>
+                          {% endif %}
+                          {% if product.metafields.tires.speed_index != blank %}
+                            <div class="product_parameters is-last">
+                              <div class="tooltip1_component">
+                                <div class="tooltip1_tooltip-wrapper">
+                                  <div class="tooltip1_card-wrapper">
+                                    <div class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.speed_index }}. Indeks prędkości, czyli maksymalna prędkość, do której przystosowana jest opona</div>
+                                  </div>
+                                  <div class="tooltip1_pointer"></div>
+                                </div>
+                                <div class="tooltip1_element-wrapper" data-relume-tooltip-setup="1">
+                                  <div class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.speed_index | slice: 0 }}</div>
+                                </div>
+                                <div class="tooltip1_responsive"></div>
+                              </div>
+                            </div>
+                          {% endif %}
+                        </div>
+                      </div>
+                    {% elsif product.collections[0].handle == 'felgi' %}
+                      <div class="div-block-47">
+                        <div class="heading-style-h4">{{ product.metafields.rims.manufacturer.value.name.value }}</div>
+                        <div class="div-block-46">
+                          <div class="text-size-large text-weight-semibold">{{ product.metafields.tires.model.value.model.value }} {{ product.metafields.rims.width }}x{{ product.metafields.rims.diameter }} {{ product.metafields.rims.bolt_spacing }} ET {{ product.metafields.rims.e_t }}</div>
+                        </div>
+                        <div class="product_parameters-wrapper"></div>
+                        <div class="product_parameters-wrapper"></div>
+                      </div>
+                    {% elsif product.collections[0].handle == 'akcesoria' %}
+                      <div class="div-block-47">
+                        <div class="heading-style-h4">{{ product.title }}</div>
+                      </div>
+                    {% endif %}
+                    <div class="margin-top margin-xsmall">
+                      <div class="product_pictures-wrapper">
+                        <div class="product_season-wrapper">
+                          {% if product.metafields.tires.season.value == 'Letnie' %}
+                            <img
+                              src="{{ 'IcRoundSun.svg' | asset_url }}"
+                              class="icon-embed-small"
+                              alt="summer-icon">
+                          {% elsif product.metafields.tires.season.value == 'Zimowe' %}
+                            <img
+                              src="{{ 'IcRoundWinter.svg' | asset_url }}"
+                              class="icon-embed-small"
+                              alt="winter-icon">
+                          {% elsif product.metafields.tires.season.value == 'Całoroczne' %}
+                            <img
+                              src="{{ 'IcRoundAllSeason.svg' | asset_url }}"
+                              class="icon-embed-small"
+                              alt="year-round-icon">
+                          {% endif %}
+                        </div>
+                        {% if product.collections[0].handle == 'opony' or product.collections[0].handle == 'kola' %}
+                          <div class="product_badge-wrapper">
+                            <div class="text-size-small text-weight-bold text-color-white">
+                              Klasa {{ product.metafields.tires.model.value.marka.value.class.value }}</div>
+                          </div>
+                        {% endif %}
+                        <div class="product_image-wrapper">
+                          {% if product.featured_image %}
+                            <img
+                              src="{{ product.featured_image | image_url: width: 800 }}"
+                              alt="{{ product.title }}"
+                              class="image-2">
+                          {% elsif product.collections[0].handle == 'opony' and product.metafields.tires.model.value.zdjecie.value != blank %}
+                            <img
+                              src="{{ product.metafields.tires.model.value.zdjecie.value | image_url: width: 800 }}"
+                              alt="{{ product.title }}"
+                              class="image-2">
+                          {% elsif product.collections[0].handle == 'felgi' and product.metafields.rims.model.value.zdjecie.value != blank %}
+                            <img
+                              src="{{ product.metafields.rims.model.value.zdjecie.value | image_url: width: 800 }}"
+                              alt="{{ product.title }}"
+                              class="image-2">
+                          {% else %}
+                            <img
+                              src="{{ 'ProductPlaceholder.webp' |  asset_url }}"
+                              alt="{{ product.title }}"
+                              class="image-2">
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                  <div class="product_info-wrapper">
+                    <div class="product_price-wrapper">
+                      <div class="div-block-39">
+                        <div class="heading-style-h4 text-color-red600">{{ product.price | money }}
+                          <span class="text-size-regular">
+                            /
+                            {% if product.collections[0].handle == 'opony' %}
+                              {{ product.metafields.tires.quantity }}
+                            {% elsif product.collections[0].handle == 'felgi' %}
+                              {{ product.metafields.rims.quantity }}{% endif %}
+                          </span>
+                        </div>
+                      </div>
+                      <div class="text-size-tiny text-weight-semibold text-color-green">Darmowa
+                                                Dostawa, zamów przed {{ settings.delivery-hour }} - wyślemy dzisiaj
+                      </div>
+                      <div class="product_green-wrapper">
+                        <p class="text-size-small text-color-green">Możliwość montażu
+                          <span class="text-weight-semibold">w serwisie</span>
+                        </p>
+                      </div>
+                      <div class="product_green-wrapper">
+                        <p class="text-size-small text-color-green">Możliwość zakupu
+                          <span class="text-weight-semibold">na raty</span>
+                        </p>
+                      </div>
+                    </div>
+                    <div class="product-header1_add-to-cart w-form">
+                      <form method="post" action="/cart/add">
+                        <input
+                          type="hidden"
+                          name="id"
+                          value="{{ product.variants.first.id }}">
+                        <input
+                          type="submit"
+                          value="Dodaj do koszyka"
+                          class="button max-width-full">
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              {% else %}
+                <p>Brak produktów w tej kolekcji.</p>
+              {% endfor %}
+            </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </section>
 
 
@@ -529,11 +629,55 @@
     display: flex;
     flex-direction: column;
   }
+
+  .filters_tag-wrap {
+    align-items: center;
+    display: flex;
+    grid-column-gap: 0.5rem;
+    grid-row-gap: 0.5rem;
+    font-weight: 500;
+  }
+
+  .filters_tag {
+    background-color: var(--color--white);
+    text-decoration: none;
+    color: var(--color-black);
+    border-radius: 0.25rem;
+    align-items: center;
+    padding: 0.5rem 0.75rem 0.5rem 1rem;
+    display: flex;
+    grid-column-gap: 0.25rem;
+    grid-row-gap: 0.25rem;
+  }
+
+  .filters_tags-wrapper {
+    grid-column-gap: 0.5rem;
+    grid-row-gap: 0.5rem;
+    flex-wrap: wrap;
+    flex: 1;
+    align-items: flex-start;
+    margin-right: 2rem;
+    display: flex;
+  }
+
+  .filter-group-display__price-range {
+    margin-top: calc(-1rem - 1px);
+    margin-right: calc(-1rem - 1px);
+    margin-left: calc(-1rem - 1px);
+
+  }
+
 {% endstylesheet %}
 
 {% schema %}
   {
     "name": "Filtry kolekcji",
+    "class": "section_filters2",
+    "tag": "section",
+    "limit": 1,
+    "enabled_on": {
+      "templates": ["collection"]
+    },
     "settings": [
       {
         "type": "richtext",
