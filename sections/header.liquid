@@ -151,44 +151,64 @@
     </nav>
     <div class="navbar7_menu-right">
         {% comment %} Contact button {% endcomment %}
-        <div data-hover="false" data-delay="200" class="navbar-dropdown8_component w-dropdown">
-            <div class="navbar-dropdown8_dropdown-toggle w-dropdown-toggle" id="w-dropdown-toggle-3"
-                 aria-controls="w-dropdown-list-3" aria-haspopup="menu" aria-expanded="false" role="button"
+        <div data-hover="false"
+             data-delay="200"
+             class="navbar-dropdown8_component w-dropdown"
+             onclick="showContactModal()"
+        >
+            <div class="navbar-dropdown8_dropdown-toggle w-dropdown-toggle"
+                 id="w-dropdown-toggle-contact"
+                 aria-controls="w-dropdown-list-3"
+                 aria-haspopup="menu"
+                 aria-expanded="false"
+                 role="button"
                  tabindex="0">
                 <div class="icon-1x1-nav">
                     <img src="{{ 'IcRoundPhoneBlack.svg' | asset_url }}"  alt="contact-button"/>
                 </div>
             </div>
-            <nav class="navbar-dropdown8_dropdown-list w-dropdown-list" id="w-dropdown-list-3" aria-labelledby="w-dropdown-toggle-3"
+
+            {% comment %} Contact modal {% endcomment %}
+            <nav class="navbar-dropdown8_dropdown-list w-dropdown-list"
+                 id="w-dropdown-list-contact"
+                 aria-labelledby="w-dropdown-toggle-3"
                     {% comment %}style="transform: translate3d(0px, 3rem, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; opacity: 0;"{% endcomment %}
             >
-                {% comment %} Contact modal {% endcomment %}
                 <div class="navbar-dropdown8_dropdown-wrapper">
-                    <div class="text-weight-bold">W&nbsp;czym możemy pomóc?</div>
-                    <a href="#" class="button is-small w-button" tabindex="0">+48 74 872 32 61</a>
+                    <div class="text-weight-bold">W czym możemy pomóc?</div>
+                    <a href="tel:+48748723261" class="button is-small w-button" tabindex="0">+48 74 872 32 61</a>
                     <div class="margin-top margin-xsmall">
                         <div class="text-weight-bold">Napisz nam wiadomość</div>
                     </div>
-                    <a href="#" class="button is-secondary is-small w-button" tabindex="0">sklep@motom5.pl</a>
+                    <a href="mailto:sklep@motom5.pl" class="button is-secondary is-small w-button" tabindex="0" style="text-transform: none">sklep@motom5.pl</a>
                 </div>
             </nav>
         </div>
 
         {% comment %} Account button {% endcomment %}
-        <div data-hover="false" data-delay="200"
-             class="navbar-dropdown8_component w-dropdown">
-            <div class="navbar-dropdown8_dropdown-toggle w-dropdown-toggle" id="w-dropdown-toggle-4"
-                 aria-controls="w-dropdown-list-4" aria-haspopup="menu" aria-expanded="false" role="button"
+        <div data-hover="false"
+             data-delay="200"
+             class="navbar-dropdown8_component w-dropdown"
+             onclick="showAccountModal()"
+        >
+            <div class="navbar-dropdown8_dropdown-toggle w-dropdown-toggle"
+                 id="w-dropdown-toggle-account"
+                 aria-controls="w-dropdown-list-4"
+                 aria-haspopup="menu"
+                 aria-expanded="false"
+                 role="button"
                  tabindex="0">
                 <div class="icon-1x1-nav">
                     <img src="{{ 'IcRoundAccountBlack.svg' | asset_url }}"  alt="account-button"/>
                 </div>
             </div>
 
-            {% comment %} Contact modal {% endcomment %}
-            <nav class="navbar-dropdown8_dropdown-list w-dropdown-list" id="w-dropdown-list-4"
+            {% comment %} Account modal {% endcomment %}
+            <nav class="navbar-dropdown8_dropdown-list w-dropdown-list"
+                 id="w-dropdown-list-account"
                  aria-labelledby="w-dropdown-toggle-4"
-                 style="transform: translate3d(0px, 3rem, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; opacity: 0;">
+                 {% comment %}style="transform: translate3d(0px, 3rem, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; opacity: 0;"{% endcomment %}
+            >
                 <div class="navbar-dropdown8_dropdown-wrapper">
                     <a href="/logowanie" class="button is-small w-button" tabindex="0">Zaloguj się</a>
                     <div class="margin-top margin-xsmall">
@@ -245,7 +265,51 @@
     </ul>
 </div>
 
-{% comment %} Nav menu {% endcomment %}
+{% comment %} Nav contact & account modals {% endcomment %}
+<script>
+    document.addEventListener('click', function(event) {
+        const contactModal = document.getElementById('w-dropdown-list-contact');
+        const accountModal = document.getElementById('w-dropdown-list-account');
+        const contactToggleButton = document.getElementById('w-dropdown-toggle-contact');
+        const accountToggleButton = document.getElementById('w-dropdown-toggle-account');
+
+        // We check whether the click occurred outside the contact modal
+        if (!contactModal.contains(event.target) && !contactToggleButton.contains(event.target)) {
+            hideContactModal();
+        }
+
+        // We check whether the click occurred outside the account modal
+        if (!accountModal.contains(event.target) && !accountToggleButton.contains(event.target)) {
+            hideAccountModal();
+        }
+    });
+
+    function showContactModal() {
+        const contactModal = document.getElementById('w-dropdown-list-contact');
+        contactModal.classList.add('w--open');
+        contactModal.style.display = 'block';
+    }
+
+    function hideContactModal() {
+        const contactModal = document.getElementById('w-dropdown-list-contact');
+        contactModal.classList.remove('w--open');
+        contactModal.style.display = 'none';
+    }
+
+    function showAccountModal() {
+        const accountModal = document.getElementById('w-dropdown-list-account');
+        accountModal.classList.add('w--open');
+        accountModal.style.display = 'block';
+    }
+
+    function hideAccountModal() {
+        const accountModal = document.getElementById('w-dropdown-list-account');
+        accountModal.classList.remove('w--open');
+        accountModal.style.display = 'none';
+    }
+</script>
+
+{% comment %} Nav mobile menu {% endcomment %}
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const menuButton = document.querySelector('.navbar7_menu-button');
@@ -256,19 +320,19 @@
         menuButton.addEventListener('click', function() {
             const isExpanded = menuButton.getAttribute('aria-expanded') === 'true';
             if (!isExpanded) {
-                // Przenieś menu do overlay i pokaż overlay
+                // Move menu to overlay and show overlay
                 navOverlay.appendChild(navMenu);
                 navOverlay.style.display = 'block';
                 menuButton.setAttribute('aria-expanded', 'true');
             } else {
-                // Przywróć menu do pierwotnej lokalizacji i ukryj overlay
+                // Restore the menu to its original location and hide the overlay
                 originalParent.appendChild(navMenu);
                 navOverlay.style.display = 'none';
                 menuButton.setAttribute('aria-expanded', 'false');
             }
         });
 
-        // Obsługa kliknięcia poza menu, aby zamknąć
+        // Handle click outside menu to close
         document.addEventListener('click', function(event) {
             if (!menuButton.contains(event.target) && !navMenu.contains(event.target)) {
                 if (menuButton.getAttribute('aria-expanded') === 'true') {
@@ -281,7 +345,7 @@
     });
 </script>
 
-{% comment %} Dropdowns {% endcomment %}
+{% comment %} Dropdowns nav desktop {% endcomment %}
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const dropdownToggles = document.querySelectorAll('.navbar7_dropdown-toggle');
