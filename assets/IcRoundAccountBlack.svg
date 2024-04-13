@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Group</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group">
+            <rect id="Rectangle" x="0" y="0" width="32" height="32"></rect>
+            <circle id="Oval" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="16" cy="16" r="12"></circle>
+            <circle id="Oval" stroke="#D92D20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" cx="16" cy="13.3333333" r="4"></circle>
+            <path d="M8.224,25.132 C8.90165014,22.8766067 10.9783369,21.33264 13.3333333,21.333333 L18.6666667,21.333333 C21.0248524,21.3325197 23.1036361,22.8804925 23.7786667,25.14" id="Path" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+        </g>
+    </g>
+</svg>
