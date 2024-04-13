@@ -250,12 +250,16 @@
                         <div class="text-weight-semibold">{{ block.settings.heading }}</div>
                     </div>
                     <div class="footer_info-wrapper">
-                        <div class="icon-embed-xsmall"><img src="{{ 'IcRoundLocationOn.svg' | asset_url }}" /></div>
+                        <div class="icon-embed-xsmall">
+                            <img src="{{ 'IcRoundLocationOn.svg' | asset_url }}"  alt="location-icon"/>
+                        </div>
                         <div>{{ block.settings.adress }}</div>
                     </div>
                     <div class="margin-top margin-xsmall">
                         <div class="footer_info-wrapper">
-                            <div class="icon-embed-xsmall"><img src="{{ 'IcRoundAccessTimeFilled.svg' | asset_url }}" /></div>
+                            <div class="icon-embed-xsmall">
+                                <img src="{{ 'IcRoundAccessTimeFilled.svg' | asset_url }}"  alt="clock-icon"/>
+                            </div>
                             <div>{{ block.settings.open-hours }}</div>
                         </div>
                     </div>
