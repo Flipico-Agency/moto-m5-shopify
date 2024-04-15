@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
     }
 
-    function buildSizeQueryParameters(activeSubTabNumber, tire, rim) {
+    function buildSizeQueryParameters(activeSubTabNumber, tire, rim, isCollectionsPage) {
         let queryParams = {};
         const pathSegments = window.location.pathname.split('/');
         const manufacturerSegmentIndex = pathSegments.indexOf('opony') + 1;
@@ -215,9 +215,13 @@ document.addEventListener('DOMContentLoaded', async function () {
             queryParams = {
                 'filter.p.m.tires.width': tire.width.value,
                 'filter.p.m.tires.profile': tire.profile.value,
-                'filter.p.m.tires.diameter': tire.diameter.value,
-                'filter.p.m.tires.season': tire.season.value
+                'filter.p.m.tires.diameter': tire.diameter.value
             };
+
+            // Add season parameter only if not on collections page
+            if (!isCollectionsPage) {
+                queryParams['filter.p.m.tires.season'] = tire.season.value;
+            }
         }
 
         if (manufacturer) {
@@ -301,9 +305,16 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         // Initialize select elements based on the active sub-tab
         const elementsToInitialize = activeSubTabNumber === '1' ? tireElements : activeSubTabNumber === '2' ? wheelElements : rimElements;
-        await initializeSelects(activeTabContent, elementsToInitialize, fetchDataEndpoints, urlParams);
-        setupEventListeners(activeTabContent, elementsToInitialize, fetchDataEndpoints);
-        checkFormCompleteAndManageSubmitButton(activeTabContent, elementsToInitialize);
+
+        // Check if the current pathname is '/collections'
+        const isCollectionsPage = window.location.pathname.includes('/collections');
+
+        // If we're on the '/collections' page, remove 'tire-season' from the elements to initialize
+        const finalElementsToInitialize = isCollectionsPage ? elementsToInitialize.filter(element => element !== 'tire-season') : elementsToInitialize;
+
+        await initializeSelects(activeTabContent, finalElementsToInitialize, fetchDataEndpoints, urlParams);
+        setupEventListeners(activeTabContent, finalElementsToInitialize, fetchDataEndpoints);
+        checkFormCompleteAndManageSubmitButton(activeTabContent, finalElementsToInitialize);
 
         const form = submitButton.form;
         form.addEventListener('submit', event => {
@@ -311,7 +322,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             localStorage.setItem('searchBy', 'bySize');
 
             // Build query parameters based on the active sub-tab and selected options
-            const queryParams = buildSizeQueryParameters(activeSubTabNumber, tire, rim);
+            const queryParams = buildSizeQueryParameters(activeSubTabNumber, tire, rim, isCollectionsPage);
             window.location.href = `${formAction}?${new URLSearchParams(queryParams).toString()}`;
         });
     }
@@ -404,13 +415,13 @@ document.addEventListener('DOMContentLoaded', async function () {
                 const carInfo = searchByModel[0];
                 document.getElementById('selected_car').textContent = `${carInfo.make.name} ${carInfo.model.name} ${carInfo.generation.name} ${carInfo.trim} (${carInfo.engine.power.PS} PS, ${carInfo.engine.power.kW} kW) (${carInfo.start_year}-${carInfo.end_year})`;
             } else {
-                document.querySelector('.ifnotselectedcar').style.display = 'block';
+                document.querySelector('.ifnotselectedcar').style.display = 'flex';
                 document.querySelector('.ifselectedcar').style.display = 'none';
             }
 
             document.getElementById('change_car').addEventListener("click", function() {
                 searchByModel = undefined;
-                document.querySelector('.ifnotselectedcar').style.display = 'block';
+                document.querySelector('.ifnotselectedcar').style.display = 'flex';
                 document.querySelector('.ifselectedcar').style.display = 'none';
             });
         }
