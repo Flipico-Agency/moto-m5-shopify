@@ -47,7 +47,7 @@
                                                                 <form class="tab-content-layout">
                                                                     {% if tab_number == 1 %}
                                                                         {% assign tire_fields_label = "Szerokość,Profil,Średnica" | split: "," %}
-                                                                        {% assign wheel_fields_label = "Szerokość opony,Profil opony,Średnica opony,Rozstaw śrub,Szerokość felgi" | split: "," %}
+                                                                        {% assign wheel_fields_label = "Szerokość,Profil,Średnica,Rozstaw śrub,Szerokość" | split: "," %}
                                                                         {% assign rim_fields_label = "Średnica,Rozstaw śrub,Szerokość,ET" | split: "," %}
 
                                                                         {% assign season_options = "Letnie,Zimowe,Całoroczne" | split: "," %}
@@ -75,31 +75,43 @@
                                                                                     {% endfor %}
                                                                                 </div>
                                                                             {% when 'Koła' %}
-                                                                                {% for i in (0..4) %}
-                                                                                    <div class="form-field-wrapper">
-                                                                                        <label for="{{ wheel_fields_data_name[i] | downcase }}"
-                                                                                               class="field-label is-small">{{ wheel_fields_label[i] }}</label>
-                                                                                        <select
-                                                                                                id="{{ wheel_fields_data_name[i] | downcase }}"
-                                                                                                data-name="{{ wheel_fields_data_name[i] }}"
-                                                                                                required="required"
-                                                                                                class="select-field w-select"></select>
-                                                                                        {% render 'select-arrow' %}
-                                                                                    </div>
-                                                                                {% endfor %}
+                                                                                <div>Opony</div>
+                                                                                <div style="display: grid; grid-template-columns: repeat(3, 1fr)">
+                                                                                    {% for i in (0..2) %}
+                                                                                        <div class="form-field-wrapper">
+                                                                                            <label for="{{ wheel_fields_data_name[i] | downcase }}" class="field-label is-small">{{ wheel_fields_label[i] }}</label>
+                                                                                            <select id="{{ wheel_fields_data_name[i] | downcase }}" data-name="{{ wheel_fields_data_name[i] }}" required="required" class="select-field w-select {{ select_position[i] }}"></select>
+                                                                                            {% render 'select-arrow' %}
+                                                                                        </div>
+                                                                                    {% endfor %}
+                                                                                </div>
+                                                                                <div>Felgi</div>
+                                                                                <div style="display: grid; grid-template-columns: repeat(2, 1fr)">
+                                                                                    {% for i in (3..4) %}
+                                                                                        <div class="form-field-wrapper">
+                                                                                            <label for="{{ wheel_fields_data_name[i] | downcase }}" class="field-label is-small">{{ wheel_fields_label[i] }}</label>
+                                                                                            <select id="{{ wheel_fields_data_name[i] | downcase }}" data-name="{{ wheel_fields_data_name[i] }}" required="required" class="select-field w-select {% if i ==3  %} {{ select_position[0] }} {% else %} {{ select_position[2] }} {% endif %}"></select>
+                                                                                            {% render 'select-arrow' %}
+                                                                                        </div>
+                                                                                    {% endfor %}
+                                                                                </div>
                                                                             {% when 'Felgi' %}
-                                                                                {% for i in (0..3) %}
-                                                                                    <div class="form-field-wrapper">
-                                                                                        <label for="{{ rim_fields_data_name[i] | downcase }}"
-                                                                                               class="field-label is-small">{{ rim_fields_label[i] }}</label>
-                                                                                        <select
-                                                                                                id="{{ rim_fields_data_name[i] | downcase }}"
-                                                                                                data-name="{{ rim_fields_data_name[i] }}"
-                                                                                                required="required"
-                                                                                                class="select-field w-select"></select>
-                                                                                        {% render 'select-arrow' %}
-                                                                                    </div>
-                                                                                {% endfor %}
+                                                                                <div style="display: grid; grid-template-columns: repeat(2, 1fr); row-gap: 1rem;">
+                                                                                    {% for i in (0..1) %}
+                                                                                        <div class="form-field-wrapper">
+                                                                                            <label for="{{ rim_fields_data_name[i] | downcase }}" class="field-label is-small">{{ rim_fields_label[i] }}</label>
+                                                                                            <select id="{{ rim_fields_data_name[i] | downcase }}" data-name="{{ rim_fields_data_name[i] }}" required="required" class="select-field w-select {% if i ==0  %} {{ select_position[0] }} {% else %} {{ select_position[2] }} {% endif %}"></select>
+                                                                                            {% render 'select-arrow' %}
+                                                                                        </div>
+                                                                                    {% endfor %}
+                                                                                    {% for i in (2..3) %}
+                                                                                        <div class="form-field-wrapper">
+                                                                                            <label for="{{ rim_fields_data_name[i] | downcase }}" class="field-label is-small">{{ rim_fields_label[i] }}</label>
+                                                                                            <select id="{{ rim_fields_data_name[i] | downcase }}" data-name="{{ rim_fields_data_name[i] }}" required="required" class="select-field w-select {% if i ==2  %} {{ select_position[0] }} {% else %} {{ select_position[2] }} {% endif %}"></select>
+                                                                                            {% render 'select-arrow' %}
+                                                                                        </div>
+                                                                                    {% endfor %}
+                                                                                </div>
                                                                         {% endcase %}
                                                                     {% else %}
                                                                         <div class="ifnotselectedcar">
