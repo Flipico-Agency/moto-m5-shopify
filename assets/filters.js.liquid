@@ -404,13 +404,13 @@ document.addEventListener('DOMContentLoaded', async function () {
                 const carInfo = searchByModel[0];
                 document.getElementById('selected_car').textContent = `${carInfo.make.name} ${carInfo.model.name} ${carInfo.generation.name} ${carInfo.trim} (${carInfo.engine.power.PS} PS, ${carInfo.engine.power.kW} kW) (${carInfo.start_year}-${carInfo.end_year})`;
             } else {
-                document.querySelector('.ifnotselectedcar').style.display = 'block';
+                document.querySelector('.ifnotselectedcar').style.display = 'flex';
                 document.querySelector('.ifselectedcar').style.display = 'none';
             }
 
             document.getElementById('change_car').addEventListener("click", function() {
                 searchByModel = undefined;
-                document.querySelector('.ifnotselectedcar').style.display = 'block';
+                document.querySelector('.ifnotselectedcar').style.display = 'flex';
                 document.querySelector('.ifselectedcar').style.display = 'none';
             });
         }
