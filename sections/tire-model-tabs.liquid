@@ -33,7 +33,7 @@
                                 <div data-sub-tab="{{ tab_number }}.{{ sub_tab_number }}"
                                      class="w-tab-pane{% if sub_tab_number == 1 %} w--tab-active{% endif %}">
                                     <div class="w-form">
-                                        <form class="div-block-8-copy {% if sub_tab_number == 2 %} is-wheel {% endif %} {% if sub_tab_number == 3 %} is-rim {% endif %}">
+                                        <form class="div-block-8-copy {% if sub_tab_number == 2  and tab_number == 1 %} is-wheel {% endif %} {% if sub_tab_number == 3 and tab_number == 1 %} is-rim {% endif %} {% if tab_number == 2 %} is-car {% endif %}">
                                             {% if tab_number == 1 %}
                                                 {% assign tire_fields_label = "Szerokość,Profil,Średnica" | split: "," %}
                                                 {% assign wheel_fields_label = "Szerokość,Profil,Średnica,Rozstaw śrub,Szerokość" | split: "," %}
@@ -118,7 +118,7 @@
                                                 {% endif %}
 
                                                 {% unless sub_tab_number == 3 %}
-                                                    <div class="form-field-wrapper" style="{% if sub_tab_number == 2 %} margin-top: 1.5rem {% endif %}">
+                                                    <div class="form-field-wrapper">
                                                         <label for="tire-season" class="field-label">Sezon</label>
                                                         <select
                                                                 id="tire-season"
@@ -151,6 +151,7 @@
                                                     type="submit"
                                                     data-wait="Zaczekaj..."
                                                     class="button w-button"
+                                                    style="max-height: 3rem"
                                                     value="{% case tab_number %}{% when 1 %}{% case sub_tab_number %}{% when 1 %}Szukaj opon{% when 2 %}Szukaj kół{% when 3 %}Szukaj felg{% endcase %}{% when 2 %}{% case sub_tab_number %}{% when 1 %}Szukaj opon{% when 2 %}Szukaj kół{% when 3 %}Szukaj felg{% endcase %}{% endcase %}">
                                         </form>
                                     </div>
