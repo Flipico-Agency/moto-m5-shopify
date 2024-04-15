@@ -64,7 +64,7 @@
                                                                                     {% for i in (0..2) %}
                                                                                         <div class="form-field-wrapper">
                                                                                             <label for="{{ tire_fields_data_name[i] | downcase }}"
-                                                                                                   class="field-label">{{ tire_fields_label[i] }}</label>
+                                                                                                   class="field-label is-small">{{ tire_fields_label[i] }}</label>
                                                                                             <select
                                                                                                     id="{{ tire_fields_data_name[i] | downcase }}"
                                                                                                     data-name="{{ tire_fields_data_name[i] }}"
@@ -74,25 +74,11 @@
                                                                                         </div>
                                                                                     {% endfor %}
                                                                                 </div>
-                                                                                <div class="form-field-wrapper">
-                                                                                    <label for="tire-season"
-                                                                                           class="field-label">Sezon</label>
-                                                                                    <select
-                                                                                            id="tire-season"
-                                                                                            data-name="tire-season"
-                                                                                            required="required"
-                                                                                            class="select-field w-select">
-                                                                                        {% for option in season_options %}
-                                                                                            <option value="{{ option }}">{{ option }}</option>
-                                                                                        {% endfor %}
-                                                                                    </select>
-                                                                                    {% render 'select-arrow' %}
-                                                                                </div>
                                                                             {% when 'Koła' %}
                                                                                 {% for i in (0..4) %}
                                                                                     <div class="form-field-wrapper">
                                                                                         <label for="{{ wheel_fields_data_name[i] | downcase }}"
-                                                                                               class="field-label">{{ wheel_fields_label[i] }}</label>
+                                                                                               class="field-label is-small">{{ wheel_fields_label[i] }}</label>
                                                                                         <select
                                                                                                 id="{{ wheel_fields_data_name[i] | downcase }}"
                                                                                                 data-name="{{ wheel_fields_data_name[i] }}"
@@ -101,25 +87,11 @@
                                                                                         {% render 'select-arrow' %}
                                                                                     </div>
                                                                                 {% endfor %}
-                                                                                <div class="form-field-wrapper">
-                                                                                    <label for="tire-season"
-                                                                                           class="field-label">Sezon</label>
-                                                                                    <select
-                                                                                            id="tire-season"
-                                                                                            data-name="tire-season"
-                                                                                            required="required"
-                                                                                            class="select-field w-select">
-                                                                                        {% for option in season_options %}
-                                                                                            <option value="{{ option }}">{{ option }}</option>
-                                                                                        {% endfor %}
-                                                                                    </select>
-                                                                                    {% render 'select-arrow' %}
-                                                                                </div>
                                                                             {% when 'Felgi' %}
                                                                                 {% for i in (0..3) %}
                                                                                     <div class="form-field-wrapper">
                                                                                         <label for="{{ rim_fields_data_name[i] | downcase }}"
-                                                                                               class="field-label">{{ rim_fields_label[i] }}</label>
+                                                                                               class="field-label is-small">{{ rim_fields_label[i] }}</label>
                                                                                         <select
                                                                                                 id="{{ rim_fields_data_name[i] | downcase }}"
                                                                                                 data-name="{{ rim_fields_data_name[i] }}"
@@ -135,7 +107,7 @@
                                                                             {% for field in form_fields %}
                                                                                 <div class="form-field-wrapper">
                                                                                     <label for="car-{{ field | downcase }}"
-                                                                                           class="field-label">{{ field }}</label>
+                                                                                           class="field-label is-small">{{ field }}</label>
                                                                                     <select
                                                                                             id="car-{{ field | downcase }}"
                                                                                             data-name="car-{{ field | downcase }}"
@@ -159,7 +131,7 @@
                                                                             </div>
                                                                             <div class="form-field-wrapper">
                                                                                 <label for="matching_sizes"
-                                                                                       class="field-label">Pasujące
+                                                                                       class="field-label is-small">Pasujące
                                                                                     rozmiary</label>
                                                                                 <select id="matching_sizes"
                                                                                         class="select-field is-left w-select"></select>
@@ -181,142 +153,144 @@
                                         {% endfor %}
                                     </div>
 
-                                    {% comment %} standard filters{% endcomment %}
+                                    {% comment %} standard filters {% endcomment %}
+                                    {% assign filters_do_not_display = "Szerokość opony,Profil opony,Średnica opony,Rozstaw śrub,Szerokość felgi,Średnica felgi,ET" | split: "," %}
                                     <form>
                                         {%- for filter in collection.filters -%}
-                                            <details open class="filters2_filter-group">
-                                                <summary class="filters2_filter-group-heading">
-                                                    <div class="text-size-medium text-weight-semibold">
-                                                        {% if filter.label != 'Price' %}
-                                                            <span>{{ filter.label }}</span>
-                                                        {% else %}
-                                                            <span>Cena</span>
-                                                        {% endif %}
+                                            {%- unless filters_do_not_display contains filter.label -%}
+                                                <details open class="filters2_filter-group">
+                                                    <summary class="filters2_filter-group-heading">
+                                                        <div class="text-size-medium text-weight-semibold">
+                                                            {% if filter.label != 'Price' %}
+                                                                <span>{{ filter.label }}</span>
+                                                            {% else %}
+                                                                <span>Cena</span>
+                                                            {% endif %}
 
-                                                        {%- if filter.active_values.size > 0 -%}
-                                                            <span>({{ filter.active_values.size }})</span>
-                                                        {%- endif -%}
-                                                    </div>
-                                                </summary>
+                                                            {%- if filter.active_values.size > 0 -%}
+                                                                <span>({{ filter.active_values.size }})</span>
+                                                            {%- endif -%}
+                                                        </div>
+                                                    </summary>
 
-                                                <div class="filters2_filter-options">
-                                                    <div>
-                                                        {%- if filter.active_values.size > 0 -%}
-                                                            <p>
-                                                                <a href="{{ filter.url_to_remove }}">Zresetuj</a>
-                                                            </p>
-                                                        {%- endif -%}
-                                                    </div>
-                                                    {%- case filter.type -%}
-                                                        {%- when 'boolean' -%}
-                                                            <div class="filters2_list-wrapper">
-                                                                <div class="filters-list">
-                                                                    <div class="filters2_item">
-                                                                        <label for="Filter-{{ filter.param_name }}-{{ filter.true_value.value }}">
-                                                                            <input
-                                                                                    class="w-checkbox-input form-checkbox-icon{% if filter_value.active %} w-checkbox-input--inputType-custom w--redirected-checked{% endif %}"
-                                                                                    type="checkbox"
-                                                                                    name="{{ filter.param_name }}"
-                                                                                    value="{{ filter.true_value.value }}"
-                                                                                    id="Filter-{{ filter.param_name }}"
-                                                                                    {% if filter.true_value.active -%}
-                                                                                        checked{%- endif %}
-                                                                                    {% if filter.true_value.count == 0 and filter.true_value.active == false -%}
-                                                                                        disabled{%- endif -%}
-                                                                                    onchange="this.form.submit()">
-                                                                            {{ filter.true_value.label }}
-                                                                        </label>
-                                                                    </div>
-                                                                    <div class="filteres2_item">
-                                                                        <label for="Filter-{{ filter.param_name }}-{{ filter.false_value.value }}">
-                                                                            <input
-                                                                                    class="w-checkbox-input form-checkbox-icon{% if filter_value.active %} w-checkbox-input--inputType-custom w--redirected-checked{% endif %}"
-                                                                                    type="checkbox"
-                                                                                    name="{{ filter.param_name }}"
-                                                                                    value="{{ filter.false_value.value }}"
-                                                                                    id="Filter-{{ filter.param_name }}"
-                                                                                    {% if filter.false_value.active -%}
-                                                                                        checked{%- endif %}
-                                                                                    {% if filter.false_value.count == 0 and filter.false_value.active == false -%}
-                                                                                        disabled{%- endif %}
-                                                                                    onchange="this.form.submit()">
-                                                                            {{ filter.false_value.label }}
-                                                                        </label>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        {%- when 'list' -%}
-                                                            <div class="filters2_list-wrapper">
-                                                                <div class="filters2_list">
-                                                                    {%- for filter_value in filter.values -%}
+                                                    <div class="filters2_filter-options">
+                                                        <div>
+                                                            {%- if filter.active_values.size > 0 -%}
+                                                                <p>
+                                                                    <a href="{{ filter.url_to_remove }}">Zresetuj</a>
+                                                                </p>
+                                                            {%- endif -%}
+                                                        </div>
+                                                        {%- case filter.type -%}
+                                                            {%- when 'boolean' -%}
+                                                                <div class="filters2_list-wrapper">
+                                                                    <div class="filters-list">
                                                                         <div class="filters2_item">
-                                                                            <label class="w-checkbox filters2_form-checkbox1"
-                                                                                   for="Filter-{{ filter.param_name }}-{{ forloop.index }}">
+                                                                            <label for="Filter-{{ filter.param_name }}-{{ filter.true_value.value }}">
                                                                                 <input
                                                                                         class="w-checkbox-input form-checkbox-icon{% if filter_value.active %} w-checkbox-input--inputType-custom w--redirected-checked{% endif %}"
                                                                                         type="checkbox"
-                                                                                        name="{{ filter_value.param_name }}"
-                                                                                        value="{{ filter_value.value }}"
-                                                                                        id="Filter-{{ filter.param_name }}-{{ forloop.index }}"
-                                                                                        {% if filter_value.active -%}
+                                                                                        name="{{ filter.param_name }}"
+                                                                                        value="{{ filter.true_value.value }}"
+                                                                                        id="Filter-{{ filter.param_name }}"
+                                                                                        {% if filter.true_value.active -%}
                                                                                             checked{%- endif %}
-                                                                                        {% if filter_value.count == 0 and filter_value.active == false -%}
-                                                                                            disabled{%- endif %}
+                                                                                        {% if filter.true_value.count == 0 and filter.true_value.active == false -%}
+                                                                                            disabled{%- endif -%}
                                                                                         onchange="this.form.submit()">
-                                                                                {{ filter_value.label }}
+                                                                                {{ filter.true_value.label }}
                                                                             </label>
                                                                         </div>
-                                                                    {%- endfor -%}
-                                                                </div>
-                                                            </div>
-                                                        {%- when 'price_range' -%}
-                                                            {% comment %} CENA STYLIZUJ {% endcomment %}
-                                                            <div class="filter-group-display__price-range">
-                                                                <div class="button-group-add-with-size">
-                                                                    <div class="filter-group-display__price-range-from">
-                                                                        <label for="Filter-{{ filter.min_value.param_name }}"></label>
-
-                                                                        <input
-                                                                                name="{{ filter.min_value.param_name }}"
-                                                                                class="form-input is-left-price"
-                                                                                style="width:100%"
-                                                                                id="Filter-{{ filter.min_value.param_name }}"
-                                                                                {% if filter.min_value.value -%}
-                                                                                    value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
-                                                                                {%- endif %}
-                                                                                type="number"
-                                                                                placeholder="od"
-                                                                                min="0"
-                                                                                max="{{ filter.range_max | money_without_currency | replace: ',', '' }}">
-                                                                    </div>
-                                                                    <div class="filter-group-display__price-range-to">
-                                                                        <label for="Filter-{{ filter.max_value.param_name }}"></label>
-                                                                        <input
-                                                                                name="{{ filter.max_value.param_name }}"
-                                                                                id="Filter-{{ filter.max_value.param_name }}"
-                                                                                class="form-input is-right-price"
-                                                                                style="width:100%"
-                                                                                {% if filter.max_value.value -%}
-                                                                                    value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
-                                                                                {%- endif %}
-                                                                                type="number"
-                                                                                placeholder="do"
-                                                                                min="0"
-                                                                                max="{{ filter.range_max | money_without_currency | replace: ',', '' }}">
+                                                                        <div class="filteres2_item">
+                                                                            <label for="Filter-{{ filter.param_name }}-{{ filter.false_value.value }}">
+                                                                                <input
+                                                                                        class="w-checkbox-input form-checkbox-icon{% if filter_value.active %} w-checkbox-input--inputType-custom w--redirected-checked{% endif %}"
+                                                                                        type="checkbox"
+                                                                                        name="{{ filter.param_name }}"
+                                                                                        value="{{ filter.false_value.value }}"
+                                                                                        id="Filter-{{ filter.param_name }}"
+                                                                                        {% if filter.false_value.active -%}
+                                                                                            checked{%- endif %}
+                                                                                        {% if filter.false_value.count == 0 and filter.false_value.active == false -%}
+                                                                                            disabled{%- endif %}
+                                                                                        onchange="this.form.submit()">
+                                                                                {{ filter.false_value.label }}
+                                                                            </label>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
+                                                            {%- when 'list' -%}
+                                                                <div class="filters2_list-wrapper">
+                                                                    <div class="filters2_list">
+                                                                        {%- for filter_value in filter.values -%}
+                                                                            <div class="filters2_item">
+                                                                                <label class="w-checkbox filters2_form-checkbox1"
+                                                                                       for="Filter-{{ filter.param_name }}-{{ forloop.index }}">
+                                                                                    <input
+                                                                                            class="w-checkbox-input form-checkbox-icon{% if filter_value.active %} w-checkbox-input--inputType-custom w--redirected-checked{% endif %}"
+                                                                                            type="checkbox"
+                                                                                            name="{{ filter_value.param_name }}"
+                                                                                            value="{{ filter_value.value }}"
+                                                                                            id="Filter-{{ filter.param_name }}-{{ forloop.index }}"
+                                                                                            {% if filter_value.active -%}
+                                                                                                checked{%- endif %}
+                                                                                            {% if filter_value.count == 0 and filter_value.active == false -%}
+                                                                                                disabled{%- endif %}
+                                                                                            onchange="this.form.submit()">
+                                                                                    {{ filter_value.label }}
+                                                                                </label>
+                                                                            </div>
+                                                                        {%- endfor -%}
+                                                                    </div>
+                                                                </div>
+                                                            {%- when 'price_range' -%}
+                                                                <div class="filter-group-display__price-range">
+                                                                    <div class="button-group-add-with-size">
+                                                                        <div class="filter-group-display__price-range-from">
+                                                                            <label for="Filter-{{ filter.min_value.param_name }}"></label>
 
-                                                            <div class="filter-group-display__submit"
-                                                                 style="margin-top: 1rem">
-                                                                <input
-                                                                        type="submit"
-                                                                        value="Zastosuj"
-                                                                        class="button is-link">
-                                                            </div>
-                                                    {%- endcase -%}
-                                                </div>
-                                            </details>
+                                                                            <input
+                                                                                    name="{{ filter.min_value.param_name }}"
+                                                                                    class="form-input is-left-price"
+                                                                                    style="width:100%"
+                                                                                    id="Filter-{{ filter.min_value.param_name }}"
+                                                                                    {% if filter.min_value.value -%}
+                                                                                        value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
+                                                                                    {%- endif %}
+                                                                                    type="number"
+                                                                                    placeholder="od"
+                                                                                    min="0"
+                                                                                    max="{{ filter.range_max | money_without_currency | replace: ',', '' }}">
+                                                                        </div>
+                                                                        <div class="filter-group-display__price-range-to">
+                                                                            <label for="Filter-{{ filter.max_value.param_name }}"></label>
+                                                                            <input
+                                                                                    name="{{ filter.max_value.param_name }}"
+                                                                                    id="Filter-{{ filter.max_value.param_name }}"
+                                                                                    class="form-input is-right-price"
+                                                                                    style="width:100%"
+                                                                                    {% if filter.max_value.value -%}
+                                                                                        value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
+                                                                                    {%- endif %}
+                                                                                    type="number"
+                                                                                    placeholder="do"
+                                                                                    min="0"
+                                                                                    max="{{ filter.range_max | money_without_currency | replace: ',', '' }}">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="filter-group-display__submit"
+                                                                     style="margin-top: 1rem">
+                                                                    <input
+                                                                            type="submit"
+                                                                            value="Zastosuj"
+                                                                            class="button is-link">
+                                                                </div>
+                                                        {%- endcase -%}
+                                                    </div>
+                                                </details>
+                                            {% endunless %}
                                         {%- endfor -%}
                                     </form>
                                 </div>
