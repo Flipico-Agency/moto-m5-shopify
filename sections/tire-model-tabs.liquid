@@ -2,12 +2,12 @@
 
 <div class="padding-global">
     <div class="container-large">
-        <div class="header-search-big_content">
-            <div class="header-search-big_content-wrapper">
+        <div class="header30_content">
+            <div class="header30_content-wrapper">
                 <div class="header-main-tabs">
                     <img src="{{ 'TireSearch.webp' | asset_url }}" class="image" alt="tire-image">
                     {% assign tab_titles = "Szukaj wg rozmiaru,Szukaj wg auta" | split: "," %}
-                    <div class="header-main-tabs-right">
+                    <div class="tabs-menu-2 w-tab-menu">
                         {% for tab_title in tab_titles %}
                             <a data-w-tab="{{ forloop.index }}"
                                class="tab-link-top-search w-inline-block w-tab-link{% if forloop.first %} w--current{% endif %}">
@@ -24,7 +24,7 @@
                                 {% for sub_tab_title in sub_tab_titles %}
                                     <a data-w-tab="{{ tab_number }}.{{ forloop.index }}"
                                        class="tab-link-left-search w-inline-block w-tab-link{% if forloop.first %} w--current{% endif %}">
-                                        {{ sub_tab_title }}
+                                        {{ sub_tab_title | upcase }}
                                     </a>
                                 {% endfor %}
                             </div>
@@ -182,7 +182,6 @@
                                           autoplay></dotlottie-player>
                         <div id="w-node-_39340757-8696-cb79-00fe-f89be820df12-2120814a">Wysyłka w 24h</div>
                     </div>
-                    {% comment %} WOJTEK STYLE{% endcomment %}
                     <div class="header30_feature is-last">
 
                         <dotlottie-player id="Checked"
@@ -196,6 +195,7 @@
         </div>
     </div>
 </div>
+{% comment %}
 <div class="header-slider_slides-wrapper">
     {% for block in section.blocks %}
         {% case block.type %}
@@ -221,7 +221,7 @@
         </div>
     </div>
 </div>
-
+{% endcomment %}
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -445,28 +445,6 @@
 
 .section_header-search-big {
     position: relative;
-}
-
-.header-search-big_content {
-    justify-content: center;
-    align-items: flex-start;
-    max-height: 60rem;
-    padding-top: 4rem;
-    padding-bottom: 16rem;
-    display: flex;
-}
-
-.header-search-big_content-wrapper {
-    grid-column-gap: 2rem;
-    background-color: #f4f4f5;
-    border-radius: 1rem;
-    flex-direction: column;
-    width: 100%;
-    padding-top: 1rem;
-    padding-bottom: 2rem;
-    display: flex;
-    position: relative;
-    z-index: 1;
 }
 
 .header-search-big_image {
