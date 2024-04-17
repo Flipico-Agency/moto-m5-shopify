@@ -42,7 +42,7 @@
                       <form method="post" action="/cart/add">
                         {% comment %} Prevent default action to href /cart {% endcomment %}
                         <input type="hidden" name="id" value="{{ product.variants.first.id }}" />
-                        <input min="1" type="number" id="quantity" name="quantity" value="1"/>
+                        <input type="hidden" min="1" type="number" id="quantity" name="quantity" value="1"/>
                         <input type="submit" value="Kup teraz" class="button is-small" />
                         {% comment %} Display modal {% endcomment %}
                       </form>
@@ -64,7 +64,7 @@
                   <p class="text-size-small text-weight-semibold">Cena i Ilość</p>
                 </div>
                 {% assign model_name = metaobject.model.value %}
-                {% for product in collections.kola-i-felgi-samochodowe.products %}
+                {% for product in collections.kola.products %}
                   {% assign product_model = product.metafields.tires.model.value.model %}
                   {% if product_model == model_name %}
                     <div class="tire-model_sizes-product_wrapper">
@@ -86,7 +86,7 @@
                       <form method="post" action="/cart/add">
                         {% comment %} Prevent default action to href /cart {% endcomment %}
                         <input type="hidden" name="id" value="{{ product.variants.first.id }}" />
-                        <input min="1" type="number" id="quantity" name="quantity" value="1"/>
+                        <input type="hidden" min="1" type="number" id="quantity" name="quantity" value="1"/>
                         <input type="submit" value="Kup teraz" class="button is-small" />
                         {% comment %} Display modal {% endcomment %}
                       </form>
