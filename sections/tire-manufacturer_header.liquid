@@ -16,25 +16,27 @@
             <div class="header_manufacturer-category_content-wrapper">
                 <div class="form-block-2 w-form">
                     <form id="tire-manufacturer-form"
-                          class="div-block-8-copy-copyavweva w-tab-pane tab-pane-tab-1 w--tab-active" data-w-tab="1.1"
+                          class="div-block-8-copy w-tab-pane tab-pane-tab-1 w--tab-active" data-w-tab="1.1"
                           style="border-top: none">
-                        <div class="cawecawecwace">
                             {% assign tire_fields_label = "Szerokość,Profil,Średnica" | split: "," %}
                             {% assign tire_fields_data_name = "tire-width,tire-profile,tire-diameter" | split: "," %}
+                            {% assign select_position = "is-left,is-middle,is-right" | split: "," %}
 
                             {% assign season_options = "Letnie,Zimowe,Całoroczne" | split: "," %}
 
-                            {% for i in (0..2) %}
-                                <div class="form-field-wrapper">
-                                    <label for="{{ tire_fields_data_name[i] | downcase }}"
-                                           class="field-label">{{ tire_fields_label[i] }}</label>
-                                    <select id="{{ tire_fields_data_name[i] | downcase }}"
-                                            data-name="{{ tire_fields_data_name[i] }}"
-                                            required="required" class="select-field w-select">
-                                    </select>
-                                    {% render 'select-arrow' %}
-                                </div>
-                            {% endfor %}
+                            <div class="div-block-21-copy">
+                                {% for i in (0..2) %}
+                                    <div class="form-field-wrapper">
+                                        <label for="{{ tire_fields_data_name[i] | downcase }}"
+                                               class="field-label">{{ tire_fields_label[i] }}</label>
+                                        <select id="{{ tire_fields_data_name[i] | downcase }}"
+                                                data-name="{{ tire_fields_data_name[i] }}"
+                                                required="required" class="select-field w-select {{ select_position[i] }}">
+                                        </select>
+                                        {% render 'select-arrow' %}
+                                    </div>
+                                {% endfor %}
+                            </div>
                             <div class="form-field-wrapper">
                                 <label for="tire-season" class="field-label">Sezon</label>
                                 <select id="tire-season" data-name="tire-season"
@@ -45,12 +47,10 @@
                                 </select>
                                 {% render 'select-arrow' %}
                             </div>
-                        </div>
                         <input
                                 type="submit"
                                 data-wait="Zaczekaj..."
                                 class="button w-button"
-                                data-manufacturer-gid="{{ metaobject.value }}"
                                 value="Szukaj {{ section.settings.nazwa-producenta }}"
                         >
                     </form>
