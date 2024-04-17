@@ -259,6 +259,44 @@
     </div>
   </div>
 </div>
+<div class="w-nav-overlay" id="w-nav-overlay-0" style="display: none">
+    {% comment %}
+    <ul class="menu">
+        {% for block in section.blocks %}
+            {% if block.type == 'navigation' %}
+                <div class="footer_link-list">
+                    <div class="margin-bottom margin-xsmall">
+                        <div class="text-weight-semibold">{{ block.settings.link-list.title }}</div>
+                    </div>
+                    {% for link in block.settings.link-list.links %}
+                        <a href="{{ link.url }}" class="footer_link">{{ link.title }}</a>
+                    {% endfor %}
+                </div>
+            {% elsif block.type == 'brand-info' %}
+                <div class="footer_link-list">
+                    <div class="margin-bottom margin-xsmall">
+                        <div class="text-weight-semibold">{{ block.settings.heading }}</div>
+                    </div>
+                    <div class="footer_info-wrapper">
+                        <div class="icon-embed-xsmall">
+                            <img src="{{ 'IcRoundLocationOn.svg' | asset_url }}"  alt="location-icon"/>
+                        </div>
+                        <div>{{ block.settings.adress }}</div>
+                    </div>
+                    <div class="margin-top margin-xsmall">
+                        <div class="footer_info-wrapper">
+                            <div class="icon-embed-xsmall">
+                                <img src="{{ 'IcRoundAccessTimeFilled.svg' | asset_url }}"  alt="clock-icon"/>
+                            </div>
+                            <div>{{ block.settings.open-hours }}</div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    {% endcomment %}
+</div>
 
 {% comment %} Nav contact & account modals {% endcomment %}
 <script>
@@ -318,12 +356,18 @@
                 // Move menu to overlay and show overlay
                 navOverlay.appendChild(navMenu);
                 navOverlay.style.display = 'block';
+                navOverlay.style.height = '100vh';
                 menuButton.setAttribute('aria-expanded', 'true');
+                navMenu.setAttribute('data-nav-menu-open', '');
+                navMenu.style.backgroundColor = 'var(--color--white)';
             } else {
                 // Restore the menu to its original location and hide the overlay
                 originalParent.appendChild(navMenu);
                 navOverlay.style.display = 'none';
+                navOverlay.style.removeProperty('height');
                 menuButton.setAttribute('aria-expanded', 'false');
+                navMenu.removeAttribute('data-nav-menu-open');
+                navMenu.removeProperty('background-color');
             }
         });
 
@@ -757,7 +801,7 @@
     }
 
     .navbar7_menu {
-      height: 100 dvh;
+      height: 100vh;
       background-color: var(--color--white);
       -webkit-text-fill-color: inherit;
       background-clip: border-box;
@@ -766,7 +810,7 @@
       margin-left: 0;
       padding: 1rem 2rem 6.5rem;
       transition: height 0.5s;
-      position: absolute;
+      position: absolute !important;
       overflow: auto;
     }
 
