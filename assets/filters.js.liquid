@@ -204,11 +204,31 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
     }
 
-    function buildSizeQueryParameters(activeSubTabNumber, tire, rim, isCollectionsPage) {
+    async function fetchManufacturerId(manufacturerHandle) {
+        try {
+            const response = await fetch('/admin/api/2024-01/graphql.json', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Shopify-Access-Token': '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',
+                },
+                body: JSON.stringify({
+                    query: `{ metaobjectByHandle(handle: {type: "brand_page_tires", handle: "${manufacturerHandle}"}) { id } }`
+                })
+            });
+            const json = await response.json();
+            return json.data.metaobjectByHandle ? json.data.metaobjectByHandle.id : null;
+        } catch (error) {
+            console.error('Error fetching manufacturer ID:', error);
+            return null;
+        }
+    }
+
+    async function buildSizeQueryParameters(activeSubTabNumber, tire, rim, isCollectionsPage) {
         let queryParams = {};
         const pathSegments = window.location.pathname.split('/');
         const manufacturerSegmentIndex = pathSegments.indexOf('opony') + 1;
-        const manufacturer = pathSegments.length > manufacturerSegmentIndex ? pathSegments[manufacturerSegmentIndex] : '';
+        const manufacturerHandle = pathSegments.length > manufacturerSegmentIndex ? pathSegments[manufacturerSegmentIndex] : '';
 
         // Base parameters for tires are always included in subtabs 1 and 2
         if (activeSubTabNumber === '1' || activeSubTabNumber === '2') {
@@ -224,8 +244,11 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         }
 
-        if (manufacturer) {
-            queryParams['filter.p.m.tires.manufacturer'] = manufacturer;
+        if (manufacturerHandle) {
+            const manufacturerId = await fetchManufacturerId(manufacturerHandle);
+            if (manufacturerId) {
+                queryParams['filter.p.m.tires.manufacturer'] = manufacturerId;
+            }
         }
 
         // For subtab 2, include rim parameters along with base tire parameters
@@ -317,13 +340,13 @@ document.addEventListener('DOMContentLoaded', async function () {
         checkFormCompleteAndManageSubmitButton(activeTabContent, finalElementsToInitialize);
 
         const form = submitButton.form;
-        form.addEventListener('submit', event => {
+        form.addEventListener('submit', async event => {
             event.preventDefault();
             localStorage.setItem('searchBy', 'bySize');
 
             // Build query parameters based on the active sub-tab and selected options
             const queryParams = buildSizeQueryParameters(activeSubTabNumber, tire, rim, isCollectionsPage);
-            window.location.href = `${formAction}?${new URLSearchParams(queryParams).toString()}`;
+            window.location.href = `${formAction}?${new URLSearchParams(await queryParams).toString()}`;
         });
     }
 
