@@ -1,19 +1,17 @@
 <div class="padding-global {{ section.settings.background }}">
   <div class="banner10_content-wrapper">
     <div class="banner10_content">
-      <a href="{{ section.settings.url }}" class="text-size-small text-weight-medium text-color-white">{{ section.settings.text }}</a>
+      <a href="{{ section.settings.url }}">{{ section.settings.text }}</a>
     </div>
-    <a href="#" class="banner10_close-button">
-      <div class="icon-embed-xsmall"><img src="{{ 'IcRoundCloseWhite.svg' | asset_url }}"></div>
-    </a>
   </div>
 </div>
 
 {% schema %}
   {
-    "name": "Baner 307",
+    "name": "Baner 10",
     "tag": "section",
     "class": "banner10_component",
+    "limit": 1,
     "enabled_on": {
       "groups": ["header"]
     },
@@ -54,7 +52,6 @@
 
 {% stylesheet %}
   .banner10_component {
-
     position: relative;
   }
 
@@ -70,11 +67,18 @@
     flex: 1;
     justify-content: center;
     align-items: center;
-    margin-left: 3rem;
     display: flex;
   }
 
-  .banner10_close-button {
-    margin-left: 1rem;
+  .banner10_content a {
+    color: var(--color--white);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .banner10_content a:hover {
+    color: var(--color--white);
+    text-decoration: underline;
   }
 {% endstylesheet %}
