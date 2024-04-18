@@ -1,63 +1,86 @@
 <header class="section_header46">
-  <div class="padding-global">
-    <div class="container-large">
-      <div class="padding-section-xsmall">
-        <div class="div-block-19">
-          <div class="margin-bottom margin-xsmall">
-            <h1 class="heading-style-h5">{{ section.settings.heading }}</h1>
-          </div>
-          <div></div>
-          <p class="text-size-small">{{ section.settings.text }}</p>
-          <div data-hover="false" data-delay="200">
-            <div
-              class="form-field-wrapper"
-              aria-haspopup="menu"
-              aria-expanded="false"
-              role="button">
-              <label for="SortBy" class="text-size-small">Sortowanie</label>
-              <select
-                class="select-field is-select text-size-small"
-                name="SortBy"
-                id="SortBy"
-                onchange="location = this.value;">
-                {% assign sort_by = collection.sort_by | default: collection.default_sort_by %}
-                {% for option in collection.sort_options %}
-                  {% unless option.value contains 'created-ascending' or option.value contains 'created-descending' %}
-                    <option
-                      value="{{ collection.url | append: '?sort_by=' | append: option.value }}"
-                      {% if sort_by == option.value %}
-                      selected="selected"
-                      {% endif %}>{{ option.name }}</option>
-                  {% endunless %}
-                {% endfor %}
-              </select>
-              {% render 'select-arrow' %}
+    <div class="padding-global">
+        <div class="container-large">
+            <div class="padding-section-xsmall">
+                <div class="div-block-19">
+                    <div class="margin-bottom margin-xsmall">
+                        <h1 class="heading-style-h5">{{ section.settings.heading }}</h1>
+                    </div>
+                    <div></div>
+                    <p class="text-size-small">{{ section.settings.text }}</p>
+                    <div data-hover="false" data-delay="200">
+                        <div
+                                class="form-field-wrapper"
+                                aria-haspopup="menu"
+                                aria-expanded="false"
+                                role="button">
+                            <label for="SortBy" class="text-size-small">Sortowanie</label>
+                            <select
+                                    class="select-field is-select text-size-small"
+                                    name="SortBy"
+                                    id="SortBy"
+                                    onchange="updateQueryStringParameter('sort_by', this.value)">
+                                {% assign sort_by = collection.sort_by | default: collection.default_sort_by %}
+                                {% for option in collection.sort_options %}
+                                    {% unless option.value contains 'created-ascending' or option.value contains 'created-descending' %}
+                                        <option
+                                                value="{{ option.value }}"
+                                        {% if sort_by == option.value %}
+                                            selected="selected"
+                                                {% endif %}>{{ option.name }}</option>
+                                    {% endunless %}
+                                {% endfor %}
+                            </select>
+                            {% render 'select-arrow' %}
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
 </header>
 
+<script>
+    function updateQueryStringParameter(key, value) {
+        let baseUrl = [location.protocol, '//', location.host, location.pathname].join('');
+        let urlQueryString = document.location.search;
+        let newParam = key + '=' + value;
+        let params = '?' + newParam;
+
+        // If any parameters already exist, we update or add a new one to them
+        if (urlQueryString) {
+            let keyRegex = new RegExp('([?&])' + key + '[^&]*');
+            // If the parameter already exists, replace it
+            if (urlQueryString.match(keyRegex) !== null) {
+                params = urlQueryString.replace(keyRegex, "$1" + newParam);
+            } else { // If not, add it to the string
+                params = urlQueryString + '&' + newParam;
+            }
+        }
+        // Redirect to a new URL
+        window.location.href = baseUrl + params;
+    }
+</script>
+
 {% schema %}
-  {
-    "name": "Nagłówek kolekcji",
-    "settings": [
-      {
-        "type": "text",
-        "id": "heading",
-        "label": "Nagłówek"
-      }, {
-        "type": "text",
-        "id": "text",
-        "label": "Tekst"
-      }
-    ],
-    "presets": [
-      {
-        "name": "Nagłówek kolekcji"
-      }
-    ]
-  }
+{
+  "name": "Nagłówek kolekcji",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Nagłówek"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Tekst"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Nagłówek kolekcji"
+    }
+  ]
+}
 {% endschema %}
