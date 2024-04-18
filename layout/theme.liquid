@@ -8,6 +8,7 @@
     {{ 'webflow.css' | asset_url | stylesheet_tag }}
     {{ 'snippets.css' | asset_url | stylesheet_tag }}
     {{ 'snippets.js' | asset_url | script_tag }}
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css">
     <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
     {% comment %}{{ 'cart.js' | asset_url | script_tag }}{% endcomment %}
     {% comment %}{{ 'checkout.js' | asset_url | script_tag }}{% endcomment %}
@@ -22,7 +23,13 @@
       </div>
       {% sections 'footer-group' %}
     </div>
-    <script src="https://unpkg.com/@popperjs/core@2"></script>
-    <script src="https://unpkg.com/tippy.js@6"></script>
+    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+
+    <script>
+          tdocument.addEventListener('DOMContentLoaded', function () {
+            tippy('[data-tippy-content]');
+        });
+    </script>
   </body>
 </html>
