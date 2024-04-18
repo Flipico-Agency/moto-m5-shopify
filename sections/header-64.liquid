@@ -1,0 +1,135 @@
+<div class="padding-global {{ section.settings.background }}">
+  <div class="container-{{ section.settings.container }}">
+    <div class="padding-section-{{ section.settings.padding }}">
+      <div class="text-align-center">
+        <div class="margin-bottom margin-small">
+          <{{ section.settings.heading_size }}>{{ section.settings.heading }}</{{ section.settings.heading_size }}>
+        </div>
+        <p class="{{ section.settings.text_size }}">{{ section.settings.text }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "header 64",
+    "tag": "section",
+    "class": "section_header64",
+    "settings": [
+      {
+        "label": "Heading",
+        "type": "text",
+        "id": "heading",
+        "default": "Short heading here"
+      }, {
+        "label": "Tekst",
+        "type": "text",
+        "id": "text",
+        "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique."
+      }, {
+        "id": "padding",
+        "type": "select",
+        "label": "Padding",
+        "options": [
+          {
+            "value": "large",
+            "label": "Duży"
+          }, {
+            "value": "medium",
+            "label": "Średni"
+          }, {
+            "value": "small",
+            "label": "Mały"
+          }
+        ],
+        "default": "large"
+      }, {
+        "id": "container",
+        "type": "select",
+        "label": "Kontener",
+        "options": [
+          {
+            "value": "large",
+            "label": "Duży"
+          }, {
+            "value": "medium",
+            "label": "Średni"
+          }, {
+            "value": "small",
+            "label": "Mały"
+          }
+        ],
+        "default": "large"
+      }, {
+        "id": "background",
+        "type": "select",
+        "label": "Kolor tła",
+        "options": [
+          {
+            "value": "background-color-white",
+            "label": "Biały"
+          }, {
+            "value": "background-color-grayiron50",
+            "label": "Szary"
+          }
+        ],
+        "default": "background-color-white"
+      }, {
+        "id": "heading_size",
+        "type": "select",
+        "label": "Heading rozmiar",
+        "options": [
+          {
+            "value": "h1",
+            "label": "Heading H1"
+          }, {
+            "value": "h2",
+            "label": "Heading H2"
+          }, {
+            "value": "h3",
+            "label": "Heading H3"
+          }, {
+            "value": "h4",
+            "label": "Heading H4"
+          }, {
+            "value": "h5",
+            "label": "Heading H5"
+          }, {
+            "value": "h6",
+            "label": "Heading H6"
+          }
+        ],
+        "default": "h1"
+      }, {
+        "id": "text_size",
+        "type": "select",
+        "label": "Tekst rozmiar",
+        "options": [
+          {
+            "value": "text-size-tiny",
+            "label": "Tiny"
+          }, {
+            "value": "text-size-small",
+            "label": "Small"
+          }, {
+            "value": "text-size-regular",
+            "label": "Regular"
+          }, {
+            "value": "text-size-medium",
+            "label": "Medium"
+          }, {
+            "value": "text-size-large",
+            "label": "Large"
+          }
+        ],
+        "default": "text-size-medium"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Header 64"
+      }
+    ]
+  }
+{% endschema %}

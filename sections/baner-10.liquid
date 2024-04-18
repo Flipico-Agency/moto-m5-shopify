@@ -1,0 +1,80 @@
+<div class="padding-global {{ section.settings.background }}">
+  <div class="banner10_content-wrapper">
+    <div class="banner10_content">
+      <a href="{{ section.settings.url }}" class="text-size-small text-weight-medium text-color-white">{{ section.settings.text }}</a>
+    </div>
+    <a href="#" class="banner10_close-button">
+      <div class="icon-embed-xsmall"><img src="{{ 'IcRoundCloseWhite.svg' | asset_url }}"></div>
+    </a>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Baner 307",
+    "tag": "section",
+    "class": "banner10_component",
+    "enabled_on": {
+      "groups": ["header"]
+    },
+    "settings": [
+      {
+        "label": "Tekst",
+        "type": "text",
+        "id": "text",
+        "default": "Medium length banner heading with link goes here"
+      }, {
+        "label": "Link",
+        "type": "url",
+        "id": "url",
+        "default": "/"
+      }, {
+        "label": "Tło",
+        "type": "select",
+        "id": "background",
+        "options": [
+          {
+            "value": "background-color-black",
+            "label": "Czarny"
+          }, {
+            "value": "background-color-red600",
+            "label": "Czerwony"
+          }
+        ],
+        "default": "background-color-red600"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Baner 10"
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+  .banner10_component {
+
+    position: relative;
+  }
+
+  .banner10_content-wrapper {
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    display: flex;
+  }
+
+  .banner10_content {
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    margin-left: 3rem;
+    display: flex;
+  }
+
+  .banner10_close-button {
+    margin-left: 1rem;
+  }
+{% endstylesheet %}
