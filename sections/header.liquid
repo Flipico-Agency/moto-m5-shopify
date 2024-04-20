@@ -59,7 +59,7 @@
                 <input
                         type="submit"
                         class="button is-small w-button"
-                        value="search">
+                        value="Szukaj">
             </form>
         </nav>
         <div class="navbar7_menu-right">
@@ -196,21 +196,14 @@
                         {% when 2 %}
                             <div class="navbar7_dropdown-content-rims">
                                 {% assign rims_titles = "Felgi Alumioniowe,Felgi Stalowe,Felgi Motocyklowe" | split: "," %}
+                                {% assign images = "rim-aluminium.webp,rim-steel.webp,rim-moto.webp" | split: "," %}
 
                                 {% for rim_title in rims_titles %}
                                     {% assign href_slug = rim_title | slugify %}
-                                    <a
-                                            href="/{{ href_slug }}"
-                                            class="link-block-2 w-inline-block"
-                                            tabindex="0">
+                                    {% assign index = forloop.index0 %}
+                                    <a href="/{{ href_slug }}" class="link-block-2 w-inline-block" tabindex="0">
                                         <div class="div-block-26">
-                                            {% comment %}
-                                              <img
-                                              src="https://assets-global.website-files.com/65945aac2ee770034538c7f4/65b3c68ab329b571e66b8e98_FelgiAluminiowe.webp"
-                                              loading="lazy" sizes="100vw"
-                                              srcset="https://assets-global.website-files.com/65945aac2ee770034538c7f4/65b3c68ab329b571e66b8e98_FelgiAluminiowe-p-500.webp 500w, https://assets-global.website-files.com/65945aac2ee770034538c7f4/65b3c68ab329b571e66b8e98_FelgiAluminiowe.webp 720w"
-                                              alt="" class="image-3">
-                                            {% endcomment %}
+                                            <img src="{{ images[index] | asset_url }}" loading="lazy" sizes="100vw" alt="tire-image">
                                         </div>
                                         <div class="heading-style-h5 text-align-center">{{ rim_title }}</div>
                                     </a>
