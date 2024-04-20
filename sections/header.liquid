@@ -413,18 +413,22 @@
 {% comment %} Dropdowns nav {% endcomment %}
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // Toggle dropdown based on 'w--open'
-        function toggleDropdown(dropdownList, wrapper, toggle) {
-            const allDropdownLists = document.querySelectorAll('.navbar7_dropdown-list');
-
+        // Function to toggle dropdown
+        function toggleDropdown(dropdownList) {
             const isOpen = dropdownList.classList.contains('w--open');
+            closeAllDropdowns(); // Close all dropdowns first
             if (!isOpen) {
+                // If it wasn't open, open it now
                 dropdownList.classList.add('w--open');
-            } else {
-                allDropdownLists.forEach(list => {
-                    list.classList.remove('w--open');
-                });
             }
+        }
+
+        // Function to close all dropdowns
+        function closeAllDropdowns() {
+            const allDropdownLists = document.querySelectorAll('.navbar7_dropdown-list');
+            allDropdownLists.forEach(list => {
+                list.classList.remove('w--open');
+            });
         }
 
         // Add event listener to every dropdown toggle
@@ -432,21 +436,17 @@
         dropdownToggles.forEach(toggle => {
             toggle.addEventListener('click', function(event) {
                 event.preventDefault();
-                event.stopPropagation();
+                event.stopPropagation(); // Prevent the click from propagating to the document
                 const dropdownListId = this.getAttribute('aria-controls');
                 const dropdownList = document.getElementById(dropdownListId);
-                toggleDropdown(dropdownList, this.parentElement, toggle);
+                toggleDropdown(dropdownList);
             });
         });
 
-        // Click outside navbar dropdowns
+        // Click outside navbar dropdowns to close any open dropdowns
         document.addEventListener('click', function(event) {
-            if (!event.target.closest('.navbar7_menu-dropdown')) {
-                const allDropdownLists = document.querySelectorAll('.navbar7_dropdown-list.w--open');
-                allDropdownLists.forEach(list => {
-                    list.classList.remove('w--open');
-                    list.style.transform = '';
-                });
+            if (!event.target.closest('.navbar7_dropdown-toggle') && !event.target.closest('.navbar7_dropdown-list')) {
+                closeAllDropdowns(); // Close all dropdowns if click is outside of dropdown areas
             }
         });
     });
