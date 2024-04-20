@@ -1,263 +1,267 @@
 <div
-  class="navbar7_container w-nav"
-  data-animation="default"
-  data-easing2="ease"
-  data-easing="ease"
-  data-collapse="medium">
-  <div
-    class="navbar7_menu-button w-nav-button"
-    style="-webkit-user-select: text;"
-    aria-label="menu"
-    role="button"
-    tabindex="0"
-    aria-controls="w-nav-overlay-0"
-    aria-haspopup="menu"
-    aria-expanded="false">
-    <div class="menu-icon">
-      <div class="menu-icon_line-top"></div>
-      <div class="menu-icon_line-middle">
-        <div class="menu-icon_line-middle-inner"></div>
-      </div>
-      <div class="menu-icon_line-bottom"></div>
-    </div>
-  </div>
-  <a class="navbar7_logo-link w-nav-brand" href="{{ shop.secure_url }}">{{ shop.brand.logo | image_url: height: 70 | image_tag: class: "navbar7_logo" }}</a>
-  <nav role="navigation" class="navbar7_menu w-nav-menu">
-    <div class="navbar7_menu-left">
-      {% assign menu_titles = "Opony,Felgi,Koła" | split: "," %}
-
-      {% for menu_title in menu_titles %}
-        <div
-          class="navbar7_menu-dropdown w-dropdown"
-          data-hover="true"
-          data-delay="300">
-          <div
-            class="navbar7_dropdown-toggle w-dropdown-toggle"
-            aria-controls="w-dropdown-list-{{ forloop.index }}"
+        class="navbar7_container w-nav"
+        data-animation="default"
+        data-easing2="ease"
+        data-easing="ease"
+        data-collapse="medium">
+    <div
+            class="navbar7_menu-button w-nav-button"
+            style="-webkit-user-select: text;"
+            aria-label="menu"
+            role="button"
+            tabindex="0"
+            aria-controls="w-nav-overlay-0"
             aria-haspopup="menu"
             aria-expanded="false">
-            <div class="text-weight-semibold">{{ menu_title }}</div>
-            <div class="dropdown-chevron" style="transform: translate3d(5px, 10px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;">
-              {% render 'select-arrow' %}
+        <div class="menu-icon">
+            <div class="menu-icon_line-top"></div>
+            <div class="menu-icon_line-middle">
+                <div class="menu-icon_line-middle-inner"></div>
             </div>
-          </div>
-          <nav
-            class="navbar7_dropdown-list w-dropdown-list"
-            id="w-dropdown-list-{{ forloop.index }}"
-            aria-labelledby="w-dropdown-toggle-{{ forloop.index }}"
-            style="opacity: 1;">
-            <div class="navbar7_container-dropdown">
-              <div class="navbar7_dropdown-content">
-                {% case forloop.index %}
-                  {% when 1 %}
-                    <div class="navbar7_dropdown-content-left">
-                      {% for block in section.blocks %}
-                        {% case block.type %}
-                          {% when 'navigation_tires' %}
-                            <div class="navbar7_dropdown-link-list">
-                              <h4 class="heading-style-h6">{{ block.settings.nav_list.title }}</h4>
-                              {% for link in block.settings.nav_list.links %}
-                                <a class="navbar7_dropdown-link w-inline-block" href="{{ link.url }}">{{ link.title }}</a>
-                              {% endfor %}
+            <div class="menu-icon_line-bottom"></div>
+        </div>
+    </div>
+    <a class="navbar7_logo-link w-nav-brand"
+       href="{{ shop.secure_url }}">{{ shop.brand.logo | image_url: height: 70 | image_tag: class: "navbar7_logo" }}</a>
+    <nav role="navigation" class="navbar7_menu w-nav-menu">
+        <div class="navbar7_menu-left">
+            {% assign menu_titles = "Opony,Felgi,Koła" | split: "," %}
+
+            {% for menu_title in menu_titles %}
+                <div
+                        class="navbar7_menu-dropdown w-dropdown"
+                        data-hover="true"
+                        data-delay="300">
+                    <div
+                            class="navbar7_dropdown-toggle w-dropdown-toggle"
+                            aria-controls="w-dropdown-list-{{ forloop.index }}"
+                            aria-haspopup="menu"
+                            aria-expanded="false">
+                        <div class="text-weight-semibold">{{ menu_title }}</div>
+                        <div class="dropdown-chevron"
+                             style="transform: translate3d(5px, 10px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;">
+                            {% render 'select-arrow' %}
+                        </div>
+                    </div>
+                    <nav
+                            class="navbar7_dropdown-list w-dropdown-list"
+                            id="w-dropdown-list-{{ forloop.index }}"
+                            aria-labelledby="w-dropdown-toggle-{{ forloop.index }}"
+                            style="opacity: 1;">
+                        <div class="navbar7_container-dropdown">
+                            <div class="navbar7_dropdown-content">
+                                {% case forloop.index %}
+                                    {% when 1 %}
+                                        <div class="navbar7_dropdown-content-left">
+                                            {% for block in section.blocks %}
+                                                {% case block.type %}
+                                                    {% when 'navigation_tires' %}
+                                                        <div class="navbar7_dropdown-link-list">
+                                                            <h4 class="heading-style-h6">{{ block.settings.nav_list.title }}</h4>
+                                                            {% for link in block.settings.nav_list.links %}
+                                                                <a class="navbar7_dropdown-link w-inline-block"
+                                                                   href="{{ link.url }}">{{ link.title }}</a>
+                                                            {% endfor %}
+                                                        </div>
+                                                {% endcase %}
+                                            {% endfor %}
+                                        </div>
+                                    {% when 2 %}
+                                        <div class="navbar7_dropdown-content-rims">
+                                            {% assign rims_titles = "Felgi Alumioniowe,Felgi Stalowe,Felgi Motocyklowe" | split: "," %}
+
+                                            {% for rim_title in rims_titles %}
+                                                {% assign href_slug = rim_title | slugify %}
+                                                <a
+                                                        href="/{{ href_slug }}"
+                                                        class="link-block-2 w-inline-block"
+                                                        tabindex="0">
+                                                    <div class="div-block-26">
+                                                        {% comment %}
+                                                          <img
+                                                          src="https://assets-global.website-files.com/65945aac2ee770034538c7f4/65b3c68ab329b571e66b8e98_FelgiAluminiowe.webp"
+                                                          loading="lazy" sizes="100vw"
+                                                          srcset="https://assets-global.website-files.com/65945aac2ee770034538c7f4/65b3c68ab329b571e66b8e98_FelgiAluminiowe-p-500.webp 500w, https://assets-global.website-files.com/65945aac2ee770034538c7f4/65b3c68ab329b571e66b8e98_FelgiAluminiowe.webp 720w"
+                                                          alt="" class="image-3">
+                                                        {% endcomment %}
+                                                    </div>
+                                                    <div class="heading-style-h5 text-align-center">{{ rim_title }}</div>
+                                                </a>
+                                            {% endfor %}
+                                        </div>
+                                    {% when 3 %}
+                                        <div class="navbar7_dropdown-content-left">
+                                            {% for block in section.blocks %}
+                                                {% case block.type %}
+                                                    {% when 'navigation_wheels' %}
+                                                        <div class="navbar7_dropdown-link-list">
+                                                            <h4 class="heading-style-h6">{{ block.settings.heading }}</h4>
+                                                            {% for link in block.settings.nav_list.links %}
+                                                                <a class="navbar7_dropdown-link w-inline-block"
+                                                                   href="{{ link.url }}">{{ link.title }}</a>
+                                                            {% endfor %}
+                                                        </div>
+                                                {% endcase %}
+                                            {% endfor %}
+                                        </div>
+                                {% endcase %}
                             </div>
-                        {% endcase %}
-                      {% endfor %}
-                    </div>
-                  {% when 2 %}
-                    <div class="navbar7_dropdown-content-rims">
-                      {% assign rims_titles = "Felgi Alumioniowe,Felgi Stalowe,Felgi Motocyklowe" | split: "," %}
-
-                      {% for rim_title in rims_titles %}
-                        {% assign href_slug = rim_title | slugify %}
-                        <a
-                          href="/{{ href_slug }}"
-                          class="link-block-2 w-inline-block"
-                          tabindex="0">
-                          <div class="div-block-26">
-                            {% comment %}
-                              <img
-                              src="https://assets-global.website-files.com/65945aac2ee770034538c7f4/65b3c68ab329b571e66b8e98_FelgiAluminiowe.webp"
-                              loading="lazy" sizes="100vw"
-                              srcset="https://assets-global.website-files.com/65945aac2ee770034538c7f4/65b3c68ab329b571e66b8e98_FelgiAluminiowe-p-500.webp 500w, https://assets-global.website-files.com/65945aac2ee770034538c7f4/65b3c68ab329b571e66b8e98_FelgiAluminiowe.webp 720w"
-                              alt="" class="image-3">
-                            {% endcomment %}
-                          </div>
-                          <div class="heading-style-h5 text-align-center">{{ rim_title }}</div>
-                        </a>
-                      {% endfor %}
-                    </div>
-                  {% when 3 %}
-                    <div class="navbar7_dropdown-content-left">
-                      {% for block in section.blocks %}
-                        {% case block.type %}
-                          {% when 'navigation_wheels' %}
-                            <div class="navbar7_dropdown-link-list">
-                              <h4 class="heading-style-h6">{{ block.settings.heading }}</h4>
-                              {% for link in block.settings.nav_list.links %}
-                                <a class="navbar7_dropdown-link w-inline-block" href="{{ link.url }}">{{ link.title }}</a>
-                              {% endfor %}
+                        </div>
+                        <div class="navbar7_bottom-bar">
+                            <div class="navbar7_bottom-bar-background-layer"></div>
+                            <div class="navbar7_bottom-bar-left">
+                                {% case forloop.index %}
+                                    {% when 1 %}
+                                        <p class="text-weight-semibold">{{ section.settings.bottom_nav_tires.title }}</p>
+                                        {% for link in section.settings.bottom_nav_tires.links %}
+                                            <a
+                                                    href="{{ link.url }}"
+                                                    class="text-style-link"
+                                                    tabindex="0">{{ link.title }}</a>
+                                        {% endfor %}
+                                    {% when 2 %}
+                                        <p class="text-weight-semibold">{{ section.settings.bottom_nav_rims.title }}</p>
+                                        {% for link in section.settings.bottom_nav_rims.links %}
+                                            <a
+                                                    href="{{ link.url }}"
+                                                    class="text-style-link"
+                                                    tabindex="0">{{ link.title }}</a>
+                                        {% endfor %}
+                                    {% when 3 %}
+                                        <p class="text-weight-semibold">{{ section.settings.bottom_nav_wheels.title }}</p>
+                                        {% for link in section.settings.bottom_nav_wheels.links %}
+                                            <a
+                                                    href="{{ link.url }}"
+                                                    class="text-style-link"
+                                                    tabindex="0">{{ link.title }}</a>
+                                        {% endfor %}
+                                {% endcase %}
                             </div>
-                        {% endcase %}
-                      {% endfor %}
+                        </div>
+                    </nav>
+                </div>
+            {% endfor %}
+        </div>
+        <form action="/search" class="search w-form">
+            <input
+                    class="form-input w-input"
+                    maxlength="256"
+                    name="q"
+                    placeholder="Czego szukasz?"
+                    type="search"
+                    id="search-q"
+                    required="">
+            <input
+                    type="submit"
+                    class="button is-small w-button"
+                    value="search">
+        </form>
+    </nav>
+    <div class="navbar7_menu-right">
+        {% comment %} Contact button {% endcomment %}
+        <div
+                data-hover="false"
+                data-delay="200"
+                class="navbar-dropdown8_component w-dropdown"
+                onclick="showContactModal()">
+            <div
+                    class="navbar-dropdown8_dropdown-toggle w-dropdown-toggle"
+                    id="w-dropdown-toggle-contact"
+                    aria-controls="w-dropdown-list-3"
+                    aria-haspopup="menu"
+                    aria-expanded="false"
+                    role="button"
+                    tabindex="0">
+                <div class="icon-1x1-nav">
+                    <img src="{{ 'IcRoundPhoneBlack.svg' | asset_url }}" alt="contact-button"/>
+                </div>
+            </div>
+
+            {% comment %} Contact modal {% endcomment %}
+            <nav
+                    class="navbar-dropdown8_dropdown-list w-dropdown-list"
+                    id="w-dropdown-list-contact"
+                    aria-labelledby="w-dropdown-toggle-3"
+                    {% comment %}
+                    style="transform: translate3d(0px, 3rem, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; opacity: 0;"
+                    {% endcomment %}>
+                <div class="navbar-dropdown8_dropdown-wrapper">
+                    <div class="text-weight-bold">W czym możemy pomóc?</div>
+                    <a
+                            href="tel:+48748723261"
+                            class="button is-small w-button"
+                            tabindex="0">+48 74 872 32 61</a>
+                    <div class="margin-top margin-xsmall">
+                        <div class="text-weight-bold">Napisz nam wiadomość</div>
                     </div>
-                {% endcase %}
-              </div>
+                    <a
+                            href="mailto:sklep@motom5.pl"
+                            class="button is-secondary is-small w-button"
+                            tabindex="0"
+                            style="text-transform: none">sklep@motom5.pl</a>
+                </div>
+            </nav>
+        </div>
+
+        {% comment %} Account button {% endcomment %}
+        <div
+                data-hover="false"
+                data-delay="200"
+                class="navbar-dropdown8_component w-dropdown"
+                onclick="showAccountModal()">
+            <div
+                    class="navbar-dropdown8_dropdown-toggle w-dropdown-toggle"
+                    id="w-dropdown-toggle-account"
+                    aria-controls="w-dropdown-list-4"
+                    aria-haspopup="menu"
+                    aria-expanded="false"
+                    role="button"
+                    tabindex="0">
+                <div class="icon-1x1-nav">
+                    <img src="{{ 'IcRoundAccountBlack.svg' | asset_url }}" alt="account-button"/>
+                </div>
             </div>
-            <div class="navbar7_bottom-bar">
-              <div class="navbar7_bottom-bar-background-layer"></div>
-              <div class="navbar7_bottom-bar-left">
-                {% case forloop.index %}
-                  {% when 1 %}
-                    <p class="text-weight-semibold">{{ section.settings.bottom_nav_tires.title }}</p>
-                    {% for link in section.settings.bottom_nav_tires.links %}
-                      <a
-                        href="{{ link.url }}"
-                        class="text-style-link"
-                        tabindex="0">{{ link.title }}</a>
-                    {% endfor %}
-                  {% when 2 %}
-                    <p class="text-weight-semibold">{{ section.settings.bottom_nav_rims.title }}</p>
-                    {% for link in section.settings.bottom_nav_rims.links %}
-                      <a
-                        href="{{ link.url }}"
-                        class="text-style-link"
-                        tabindex="0">{{ link.title }}</a>
-                    {% endfor %}
-                  {% when 3 %}
-                    <p class="text-weight-semibold">{{ section.settings.bottom_nav_wheels.title }}</p>
-                    {% for link in section.settings.bottom_nav_wheels.links %}
-                      <a
-                        href="{{ link.url }}"
-                        class="text-style-link"
-                        tabindex="0">{{ link.title }}</a>
-                    {% endfor %}
-                {% endcase %}
-              </div>
-            </div>
-          </nav>
-        </div>
-      {% endfor %}
-    </div>
-    <form action="/search" class="search w-form">
-      <input
-        class="form-input w-input"
-        maxlength="256"
-        name="q"
-        placeholder="Czego szukasz?"
-        type="search"
-        id="search-q"
-        required="">
-      <input
-        type="submit"
-        class="button is-small w-button"
-        value="search">
-    </form>
-  </nav>
-  <div class="navbar7_menu-right">
-    {% comment %} Contact button {% endcomment %}
-    <div
-      data-hover="false"
-      data-delay="200"
-      class="navbar-dropdown8_component w-dropdown"
-      onclick="showContactModal()">
-      <div
-        class="navbar-dropdown8_dropdown-toggle w-dropdown-toggle"
-        id="w-dropdown-toggle-contact"
-        aria-controls="w-dropdown-list-3"
-        aria-haspopup="menu"
-        aria-expanded="false"
-        role="button"
-        tabindex="0">
-        <div class="icon-1x1-nav">
-          <img src="{{ 'IcRoundPhoneBlack.svg' | asset_url }}" alt="contact-button" />
-        </div>
-      </div>
 
-      {% comment %} Contact modal {% endcomment %}
-      <nav
-        class="navbar-dropdown8_dropdown-list w-dropdown-list"
-        id="w-dropdown-list-contact"
-        aria-labelledby="w-dropdown-toggle-3"
-        {% comment %}
-        style="transform: translate3d(0px, 3rem, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; opacity: 0;"
-        {% endcomment %}>
-        <div class="navbar-dropdown8_dropdown-wrapper">
-          <div class="text-weight-bold">W czym możemy pomóc?</div>
-          <a
-            href="tel:+48748723261"
-            class="button is-small w-button"
-            tabindex="0">+48 74 872 32 61</a>
-          <div class="margin-top margin-xsmall">
-            <div class="text-weight-bold">Napisz nam wiadomość</div>
-          </div>
-          <a
-            href="mailto:sklep@motom5.pl"
-            class="button is-secondary is-small w-button"
-            tabindex="0"
-            style="text-transform: none">sklep@motom5.pl</a>
+            {% comment %} Account modal {% endcomment %}
+            <nav
+                    class="navbar-dropdown8_dropdown-list w-dropdown-list"
+                    id="w-dropdown-list-account"
+                    aria-labelledby="w-dropdown-toggle-4"
+                    style="transform: translate3d(-4rem, 0rem, 0rem) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;">
+                <div class="navbar-dropdown8_dropdown-wrapper">
+                    <a
+                            href="/logowanie"
+                            class="button is-small w-button"
+                            tabindex="0"
+                            style="text-transform: none">Zaloguj się</a>
+                    <div class="margin-top margin-xsmall">
+                        <div class="text-align-center">Nie masz konta?</div>
+                    </div>
+                    <a
+                            href="/rejestracja"
+                            class="button is-secondary is-small w-button"
+                            tabindex="0"
+                            style="text-transform: none">Zarejestruj się</a>
+                </div>
+            </nav>
         </div>
-      </nav>
-    </div>
 
-    {% comment %} Account button {% endcomment %}
-    <div
-      data-hover="false"
-      data-delay="200"
-      class="navbar-dropdown8_component w-dropdown"
-      onclick="showAccountModal()">
-      <div
-        class="navbar-dropdown8_dropdown-toggle w-dropdown-toggle"
-        id="w-dropdown-toggle-account"
-        aria-controls="w-dropdown-list-4"
-        aria-haspopup="menu"
-        aria-expanded="false"
-        role="button"
-        tabindex="0">
-        <div class="icon-1x1-nav">
-          <img src="{{ 'IcRoundAccountBlack.svg' | asset_url }}" alt="account-button" />
+        {% comment %} Cart button {% endcomment %}
+        <div class="div-block-5">
+            <a
+                    href="/cart"
+                    id="cart-button"
+                    class="button is-small is-icon w-inline-block">
+                <div class="icon-1x1-nav">
+                    <img src="{{ 'IcRoundCartWhite.svg' | asset_url }}" alt="cart-button"/>
+                </div>
+                <div class="hide-mobile-portrait">Koszyk</div>
+                <div class="cart-button-counter">
+                    <div class="text-block-2">{{ cart.item_count }}</div>
+                </div>
+            </a>
         </div>
-      </div>
-
-      {% comment %} Account modal {% endcomment %}
-      <nav
-        class="navbar-dropdown8_dropdown-list w-dropdown-list"
-        id="w-dropdown-list-account"
-        aria-labelledby="w-dropdown-toggle-4"
-        style="transform: translate3d(-4rem, 0rem, 0rem) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;">
-        <div class="navbar-dropdown8_dropdown-wrapper">
-          <a
-            href="/logowanie"
-            class="button is-small w-button"
-            tabindex="0"
-            style="text-transform: none">Zaloguj się</a>
-          <div class="margin-top margin-xsmall">
-            <div class="text-align-center">Nie masz konta?</div>
-          </div>
-          <a
-            href="/rejestracja"
-            class="button is-secondary is-small w-button"
-            tabindex="0"
-            style="text-transform: none">Zarejestruj się</a>
-        </div>
-      </nav>
     </div>
-
-    {% comment %} Cart button {% endcomment %}
-    <div class="div-block-5">
-      <a
-        href="/cart"
-        id="cart-button"
-        class="button is-small is-icon w-inline-block">
-        <div class="icon-1x1-nav">
-          <img src="{{ 'IcRoundCartWhite.svg' | asset_url }}" alt="cart-button" />
-        </div>
-        <div class="hide-mobile-portrait">Koszyk</div>
-        <div class="cart-button-counter">
-          <div class="text-block-2">{{ cart.item_count }}</div>
-        </div>
-      </a>
-    </div>
-  </div>
 </div>
 <div class="w-nav-overlay" id="w-nav-overlay-0" style="display: none">
     {% comment %}
