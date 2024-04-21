@@ -7,18 +7,17 @@
         </a>
         {% for block in section.blocks %}
           {% case block.type %}
-            {% when 'breadcrumb_collection' %}
+            {% when 'breadcrumb' %}
               <img class="breadcrumb-divider" src="{{ 'IcRoundBreadcrumbDivider.svg' |  asset_url}}">
-              <a href="{{ block.settings.url }}" class="breadcrumb-link {% if block.settings.is-active %}text-weight-medium text-color-red600{% endif %}">
-                <div>{{ block.settings.name }}</div>
-              </a>
-            {% when 'breadcrumb_product' %}
-              <img class="breadcrumb-divider" src="{{ 'IcRoundBreadcrumbDivider.svg' |  asset_url}}">
-              <a href="{{ block.settings.url }}" class="breadcrumb-link {% if block.settings.is-active %}text-weight-medium text-color-red600{% endif %}">
+              <a href="{{ block.settings.url }}" class="breadcrumb-link">
                 <div>{{ block.settings.name }}</div>
               </a>
           {% endcase %}
         {% endfor %}
+        <img class="breadcrumb-divider" src="{{ 'IcRoundBreadcrumbDivider.svg' |  asset_url}}">
+        <a href="{{ page.path }}" class="breadcrumb-link text-weight-medium text-color-red600">
+          <div>{{ section.settings.name }}</div>
+        </a>
       </div>
     </div>
   </div>
@@ -31,42 +30,26 @@
     "tag": "section",
     "class": "section_breadcrumbs",
     "limit": 1,
-    "settings": [],
+    "settings": [
+      {
+        "type": "text",
+        "id": "name",
+        "label": "Nazwa Aktualnej strony"
+      }
+    ],
     "blocks": [
       {
-        "name": "Link do kolekcji",
-        "type": "breadcrumb_collection",
+        "name": "Link",
+        "type": "breadcrumb",
         "settings": [
           {
             "type": "text",
             "id": "name",
             "label": "Nazwa"
           }, {
-            "type": "collection",
+            "type": "url",
             "id": "url",
             "label": "Link"
-          }, {
-            "type": "checkbox",
-            "id": "is-active",
-            "label": "Aktywny"
-          }
-        ]
-      }, {
-        "name": "Link do Produktu",
-        "type": "breadcrumb_product",
-        "settings": [
-          {
-            "type": "text",
-            "id": "name",
-            "label": "Nazwa"
-          }, {
-            "type": "product",
-            "id": "url",
-            "label": "Link"
-          }, {
-            "type": "checkbox",
-            "id": "is-active",
-            "label": "Aktywny"
           }
         ]
       }

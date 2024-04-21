@@ -10,6 +10,7 @@
           {% for season in shop.metaobjects.page_summer_tires.values %}
             {% if metaobject.name.value == season.manufacturer.value.name %}
               <a class="season_select-wrapper shadow-small" href="{{ season.system.url }}">
+                <img src="{{ 'IcRoundSun.svg' | asset_url }}" class="icon-embed-small">
                 <p class="text-weight-semibold text-color-black">Opony Letnie {{ metaobject.name }}</p>
               </a>
             {% endif %}
@@ -17,6 +18,7 @@
           {% for season in shop.metaobjects.page_winter_tires.values %}
             {% if metaobject.name.value == season.manufacturer.value.name %}
               <a class="season_select-wrapper shadow-small" href="{{ season.system.url }}">
+                <img src="{{ 'IcRoundWinter.svg' | asset_url }}" class="icon-embed-small">
                 <p class="text-weight-semibold text-color-black">Opony Zimowe {{ metaobject.name }}</p>
               </a>
             {% endif %}
@@ -24,6 +26,7 @@
           {% for season in shop.metaobjects.page_allyear_tires.values %}
             {% if metaobject.name.value == season.manufacturer.value.name %}
               <a class="season_select-wrapper shadow-small" href="{{ season.system.url }}">
+                <img src="{{ 'IcRoundAllSeason.svg' | asset_url }}" class="icon-embed-small">
                 <p class="text-weight-semibold text-color-black">Opony Całoroczne {{ metaobject.name }}</p>
               </a>
             {% endif %}
@@ -68,11 +71,11 @@
             "value": "background-color-white",
             "label": "Biały"
           }, {
-            "value": "background-color-grayiron50",
+            "value": "background-color-grayiron100",
             "label": "Szary"
           }
         ],
-        "default": "background-color-grayiron50"
+        "default": "background-color-grayiron100"
       }, {
         "type": "select",
         "id": "container",
