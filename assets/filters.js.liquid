@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         return mapping[selectName] || selectName;
     }
 
-    async function initializeSelects(activeTabContent, elements, fetchDataEndpoints, urlParams) {
+    async function initializeSelects(activeTabContent, elements, fetchDataEndpoints, urlParams, type) {
         let selectedValues = {};
 
         for (let i = 0; i < elements.length; i++) {
@@ -126,8 +126,26 @@ document.addEventListener('DOMContentLoaded', async function () {
                     manageSelect(selectElement, data.data, true);
 
                     if (!selectElement.value && data.data.length > 0) {
-                        selectElement.value = urlParamValue ? urlParamValue : data.data[0].value ? data.data[0].value : data.data[0].slug;
+                        if (type === 'bySize') {
+                            selectElement.value = urlParamValue ? urlParamValue : data.data[0].value ? data.data[0].value : data.data[0].slug;
+                        } else if (type === 'byCar') {
+                            switch (i) {
+                                case 0:
+                                    selectElement.value = urlParamValue ? urlParamValue : data.data[9].value ? data.data[9].value : data.data[9].slug;
+                                    break;
+                                case 1:
+                                    selectElement.value = urlParamValue ? urlParamValue : data.data[26].value ? data.data[26].value : data.data[26].slug;
+                                    break;
+                                case 2:
+                                    selectElement.value = urlParamValue ? urlParamValue : data.data[0].value ? data.data[0].value : data.data[0].slug;
+                                    break;
+                                case 4:
+                                    selectElement.value = urlParamValue ? urlParamValue : data.data[2].value ? data.data[2].value : data.data[2].slug;
+                                    break;
+                            }
+                        }
                     }
+
                     selectedValues[apiParam] = elementName === 'car-generacja' ? data.data.find(item => item.slug === selectElement.value) : selectElement.value;
                 }
             } else if (elementName === 'car-rok' && selectedValues['generation']) {
@@ -339,7 +357,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         // If we're on the '/collections' page, remove 'tire-season' from the elements to initialize
         const finalElementsToInitialize = isCollectionsPage ? elementsToInitialize.filter(element => element !== 'tire-season') : elementsToInitialize;
 
-        await initializeSelects(activeTabContent, finalElementsToInitialize, fetchDataEndpoints, urlParams);
+        await initializeSelects(activeTabContent, finalElementsToInitialize, fetchDataEndpoints, urlParams, 'bySize');
         setupEventListeners(activeTabContent, finalElementsToInitialize, fetchDataEndpoints);
         checkFormCompleteAndManageSubmitButton(activeTabContent, finalElementsToInitialize);
 
@@ -461,7 +479,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             'car-silnik': 'modifications/'
         };
 
-        await initializeSelects(activeTabContent, elements, fetchDataEndpoints, urlParams);
+        await initializeSelects(activeTabContent, elements, fetchDataEndpoints, urlParams, 'byCar');
         setupEventListeners(activeTabContent, elements, fetchDataEndpoints);
         checkFormCompleteAndManageSubmitButton(activeTabContent, elements);
 
