@@ -1,105 +1,152 @@
 <div class="padding-global">
-    <div class="container-large">
-        <div class="header_manufacturer-category_content">
-            <div class="margin-bottom margin-large">
-                <div class="max-width-large">
-                    <div class="margin-bottom margin-xsmall">
-                        <h1 class="text-color-white">
-                            {{ section.settings.nazwa-producenta }}
-                        </h1>
-                    </div>
-                    <p class="text-weight-semibold text-color-white">
-                        {{ section.settings.krotki-opis-producenta }}
-                    </p>
-                </div>
-            </div>
-            <div class="header_manufacturer-category_content-wrapper">
-                <div class="form-block-2 w-form">
-                    <form id="tire-manufacturer-form"
-                          class="div-block-8-copy w-tab-pane tab-pane-tab-1 w--tab-active" data-w-tab="1.1"
-                          style="border-top: none">
-                            {% assign tire_fields_label = "Szerokość,Profil,Średnica" | split: "," %}
-                            {% assign tire_fields_data_name = "tire-width,tire-profile,tire-diameter" | split: "," %}
-                            {% assign select_position = "is-left,is-middle,is-right" | split: "," %}
-
-                            {% assign season_options = "Letnie,Zimowe,Całoroczne" | split: "," %}
-
-                            <div class="div-block-21-copy">
-                                {% for i in (0..2) %}
-                                    <div class="form-field-wrapper">
-                                        <label for="{{ tire_fields_data_name[i] | downcase }}"
-                                               class="field-label">{{ tire_fields_label[i] }}</label>
-                                        <select id="{{ tire_fields_data_name[i] | downcase }}"
-                                                data-name="{{ tire_fields_data_name[i] }}"
-                                                required="required" class="select-field w-select {{ select_position[i] }}">
-                                        </select>
-                                        {% render 'select-arrow' %}
-                                    </div>
-                                {% endfor %}
-                            </div>
-                            <div class="form-field-wrapper">
-                                <label for="tire-season" class="field-label">Sezon</label>
-                                <select id="tire-season" data-name="tire-season"
-                                        required="required" class="select-field w-select">
-                                    {% for option in season_options %}
-                                        <option value="{{ option }}">{{ option }}</option>
-                                    {% endfor %}
-                                </select>
-                                {% render 'select-arrow' %}
-                            </div>
-                        <input
-                                type="submit"
-                                data-wait="Zaczekaj..."
-                                class="button w-button"
-                                value="Szukaj {{ section.settings.nazwa-producenta }}"
-                        >
-                    </form>
-                </div>
-            </div>
+  <div class="container-large">
+    <div class="header_manufacturer-category_content">
+      <div class="margin-bottom margin-large">
+        <div class="max-width-large">
+          <div class="margin-bottom margin-xsmall">
+            <h1 class="text-color-white">
+              {{ section.settings.nazwa-producenta }}
+            </h1>
+          </div>
+          <p class="text-weight-semibold text-color-white">
+            {{ section.settings.krotki-opis-producenta }}
+          </p>
         </div>
+      </div>
+      <div class="header_manufacturer-category_content-wrapper">
+        <div class="form-block-2 w-form">
+          <form
+            id="tire-manufacturer-form"
+            class="div-block-8-copy w-tab-pane tab-pane-tab-1 w--tab-active"
+            data-w-tab="1.1"
+            style="border-top: none">
+            {% assign tire_fields_label = "Szerokość,Profil,Średnica" | split: "," %}
+            {% assign tire_fields_data_name = "tire-width,tire-profile,tire-diameter" | split: "," %}
+            {% assign select_position = "is-left,is-middle,is-right" | split: "," %}
+
+            {% assign season_options = "Letnie,Zimowe,Całoroczne" | split: "," %}
+
+            <div class="div-block-21-copy">
+              {% for i in (0..2) %}
+                <div class="form-field-wrapper">
+                  <label for="{{ tire_fields_data_name[i] | downcase }}" class="field-label">{{ tire_fields_label[i] }}</label>
+                  <select
+                    id="{{ tire_fields_data_name[i] | downcase }}"
+                    data-name="{{ tire_fields_data_name[i] }}"
+                    required="required"
+                    class="select-field w-select {{ select_position[i] }}"></select>
+                  {% render 'select-arrow' %}
+                </div>
+              {% endfor %}
+            </div>
+            <div class="form-field-wrapper">
+              <label for="tire-season" class="field-label">Sezon</label>
+              <select
+                id="tire-season"
+                data-name="tire-season"
+                required="required"
+                class="select-field w-select">
+                {% for option in season_options %}
+                  <option value="{{ option }}">{{ option }}</option>
+                {% endfor %}
+              </select>
+              {% render 'select-arrow' %}
+            </div>
+            <input
+              type="submit"
+              data-wait="Zaczekaj..."
+              class="button w-button"
+              value="Szukaj {{ section.settings.nazwa-producenta }}">
+            <div class="header_manufacturer-suggested_sizes-wrapper">
+              <div>Popularne rozmiary {{ metaobject.name.value }}:</div>
+              <a href="/collections/opony?filter.p.m.tires.width=205&filter.p.m.tires.profile=55&filter.p.m.tires.diameter=16&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}">Opony {{ metaobject.name.value }}
+                <span class="text-weight-bold">205/55 R16</span>
+              </a>
+              <a href="/collections/opony?filter.p.m.tires.width=195&filter.p.m.tires.profile=65&filter.p.m.tires.diameter=15&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}">Opony {{ metaobject.name.value }}
+                <span class="text-weight-bold">195/65 R15</span>
+              </a>
+              <a href="/collections/opony?filter.p.m.tires.width=225&filter.p.m.tires.profile=45&filter.p.m.tires.diameter=17&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}">Opony {{ metaobject.name.value }}
+                <span class="text-weight-bold">225/45 R17</span>
+              </a>
+            </div>
+            {% render 'tire-help' %}
+          </form>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 <div class="header_manufacturer-category_background-image-wrapper">
-    <div class="image-overlay-layer-dark"></div>
-    {{ section.settings.zdjecie-w-tle | image_url: height: 1080 | image_tag: class: "header_manufacturer-category_background-image" }}
+  <div class="image-overlay-layer-dark"></div>
+  {{ section.settings.zdjecie-w-tle | image_url: height: 1080 | image_tag: class: "header_manufacturer-category_background-image" }}
 </div>
 
 <script type="text/javascript" src="{{ 'filters.js' | asset_url }}"></script>
 
 {% schema %}
-{
-  "name": "Producent Opon Header",
-  "tag": "header",
-  "class": "section_header_manufacturer-category",
-  "limit": 1,
-  "presets": [
-    {
-      "name": "Producent Opon Header"
-    }
-  ],
-  "settings": [
-    {
-      "type": "image_picker",
-      "id": "zdjecie-w-tle",
-      "label": "Zdjęcie w tle"
-    },
-    {
-      "type": "image_picker",
-      "id": "zdjecie-producenta",
-      "label": "Logo producenta"
-    },
-    {
-      "type": "text",
-      "id": "nazwa-producenta",
-      "label": "Nazwa Producenta",
-      "default": "Nazwa Producenta"
-    },
-    {
-      "type": "text",
-      "id": "krotki-opis-producenta",
-      "label": "Krótki opis Producenta",
-      "default": "Krótki opis Producenta"
-    }
-  ]
-}
+  {
+    "name": "Producent Opon Header",
+    "tag": "header",
+    "class": "section_header_manufacturer-category",
+    "limit": 1,
+    "presets": [
+      {
+        "name": "Producent Opon Header"
+      }
+    ],
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "zdjecie-w-tle",
+        "label": "Zdjęcie w tle"
+      }, {
+        "type": "image_picker",
+        "id": "zdjecie-producenta",
+        "label": "Logo producenta"
+      }, {
+        "type": "text",
+        "id": "nazwa-producenta",
+        "label": "Nazwa Producenta",
+        "default": "Nazwa Producenta"
+      }, {
+        "type": "text",
+        "id": "krotki-opis-producenta",
+        "label": "Krótki opis Producenta",
+        "default": "Krótki opis Producenta"
+      }
+    ]
+  }
 {% endschema %}
+
+
+{% stylesheet %}
+  .header_manufacturer-suggested_sizes-wrapper {
+    grid-area: span 1 / span 3 / span 1 / span 3;
+    display: grid;
+    grid-column-gap: 1rem;
+    grid-row-gap: 1rem;
+    grid-template-rows: auto;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+
+  @media screen and (max-width: 991px) {
+    .header_manufacturer-suggested_sizes-wrapper {
+      grid-area: span 1 / span 2 / span 1 / span 2;
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .header_manufacturer-suggested_sizes-wrapper {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    .header_manufacturer-suggested_sizes-wrapper {
+      grid-area: span 1 / span 1 / span 1 / span 1;
+    }
+  }
+
+
+{% endstylesheet %}
