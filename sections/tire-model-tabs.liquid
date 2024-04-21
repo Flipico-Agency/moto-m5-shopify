@@ -1,225 +1,238 @@
 <div class="padding-global">
-    <div class="container-large">
-        <div class="header30_content">
-            <div class="header30_content-wrapper">
-                <div class="header-main-tabs">
-                    <img src="{{ 'TireSearch.webp' | asset_url }}" class="image" alt="tire-image">
-                    {% assign tab_titles = "Szukaj wg rozmiaru,Szukaj wg auta" | split: "," %}
-                    <div class="tabs-menu-2 w-tab-menu">
-                        {% for tab_title in tab_titles %}
-                            <a data-w-tab="{{ forloop.index }}"
-                               class="tab-link-top-search w-inline-block w-tab-link{% if forloop.first %} w--current{% endif %}">
-                                {{ tab_title }}
-                            </a>
-                        {% endfor %}
-                    </div>
-                </div>
-                {% for tab_number in (1..2) %}
-                    <div class="tab-pane-tab-{{ tab_number }} w-tab-pane{% if tab_number == 1 %} w--tab-active{% endif %}">
-                        <div class="tabs-2 w-tabs">
-                            <div class="tabs-menu w-tab-menu">
-                                {% assign sub_tab_titles = "Opony,Koła,Felgi" | split: "," %}
-                                {% for sub_tab_title in sub_tab_titles %}
-                                    <a data-w-tab="{{ tab_number }}.{{ forloop.index }}"
-                                       class="tab-link-left-search w-inline-block w-tab-link{% if forloop.first %}{% endif %}">
-                                        {{ sub_tab_title | upcase }}
-                                    </a>
-                                {% endfor %}
-                            </div>
-
-                            {% for sub_tab_number in (1..3) %}
-                                <div data-sub-tab="{{ tab_number }}.{{ sub_tab_number }}"
-                                     class="w-tab-pane{% if sub_tab_number == 1 %} w--tab-active{% endif %}">
-                                    <div class="w-form">
-                                        <form class="div-block-8-copy {% if sub_tab_number == 2  and tab_number == 1 %} is-wheel {% endif %} {% if sub_tab_number == 3 and tab_number == 1 %} is-rim {% endif %} {% if tab_number == 2 %} is-car {% endif %}">
-                                            {% if tab_number == 1 %}
-                                                {% assign tire_fields_label = "Szerokość,Profil,Średnica" | split: "," %}
-                                                {% assign wheel_fields_label = "Szerokość,Profil,Średnica,Rozstaw śrub,Szerokość" | split: "," %}
-                                                {% assign rim_fields_label = "Średnica,Rozstaw śrub,Szerokość,ET" | split: "," %}
-
-                                                {% assign season_options = "Letnie,Zimowe,Całoroczne" | split: "," %}
-
-                                                {% assign tire_fields_data_name = "tire-width,tire-profile,tire-diameter" | split: "," %}
-                                                {% assign wheel_fields_data_name = "tire-width,tire-profile,tire-diameter,rim-bolt,rim-width" | split: "," %}
-                                                {% assign rim_fields_data_name = "rim-diameter,rim-bolt,rim-width,rim-et" | split: "," %}
-
-                                                {% assign select_position = "is-left,is-middle,is-right" | split: "," %}
-
-                                                {% if sub_tab_number == 1 %}
-                                                    <div class="div-block-21-copy">
-                                                        {% for i in (0..2) %}
-                                                            <div class="form-field-wrapper">
-                                                                <label for="{{ tire_fields_data_name[i] | downcase }}"
-                                                                       class="field-label">{{ tire_fields_label[i] }}</label>
-                                                                <select
-                                                                        id="{{ tire_fields_data_name[i] | downcase }}"
-                                                                        data-name="{{ tire_fields_data_name[i] }}"
-                                                                        required="required"
-                                                                        class="select-field w-select {{ select_position[i] }}"></select>
-                                                                {% render 'select-arrow' %}
-                                                            </div>
-                                                        {% endfor %}
-                                                    </div>
-                                                {% endif %}
-
-                                                {% if sub_tab_number == 2 %}
-                                                    <div>
-                                                        <div>Opony</div>
-                                                        <div class="div-block-21-copy">
-                                                            {% for i in (0..2) %}
-                                                                <div class="form-field-wrapper">
-                                                                    <label for="{{ wheel_fields_data_name[i] | downcase }}"
-                                                                           class="field-label">{{ wheel_fields_label[i] }}</label>
-                                                                    <select
-                                                                            id="{{ wheel_fields_data_name[i] | downcase }}"
-                                                                            data-name="{{ wheel_fields_data_name[i] }}"
-                                                                            required="required"
-                                                                            class="select-field w-select {{ select_position[i] }}"></select>
-                                                                    {% render 'select-arrow' %}
-                                                                </div>
-                                                            {% endfor %}
-                                                        </div>
-                                                    </div>
-
-                                                    <div>
-                                                        Felgi
-                                                        <div class="div-block-21-copy" style="grid-template-columns: 1fr 1fr;">
-                                                            {% for i in (3..4) %}
-                                                                <div class="form-field-wrapper">
-                                                                    <label for="{{ wheel_fields_data_name[i] | downcase }}"
-                                                                           class="field-label">{{ wheel_fields_label[i] }}</label>
-                                                                    <select
-                                                                            id="{{ wheel_fields_data_name[i] | downcase }}"
-                                                                            data-name="{{ wheel_fields_data_name[i] }}"
-                                                                            required="required"
-                                                                            class="select-field w-select {% if i ==3  %} {{ select_position[0] }} {% else %} {{ select_position[2] }} {% endif %}"></select>
-                                                                    {% render 'select-arrow' %}
-                                                                </div>
-                                                            {% endfor %}
-                                                        </div>
-                                                    </div>
-                                                {% endif %}
-
-                                                {% if sub_tab_number == 3 %}
-                                                    {% for i in (0..3) %}
-                                                        <div class="form-field-wrapper">
-                                                            <label for="{{ rim_fields_data_name[i] | downcase }}"
-                                                                   class="field-label">{{ rim_fields_label[i] }}</label>
-                                                            <select
-                                                                    id="{{ rim_fields_data_name[i] | downcase }}"
-                                                                    data-name="{{ rim_fields_data_name[i] }}"
-                                                                    required="required"
-                                                                    class="select-field w-select"></select>
-                                                            {% render 'select-arrow' %}
-                                                        </div>
-                                                    {% endfor %}
-                                                {% endif %}
-
-                                                {% unless sub_tab_number == 3 %}
-                                                    <div class="form-field-wrapper">
-                                                        <label for="tire-season" class="field-label">Sezon</label>
-                                                        <select
-                                                                id="tire-season"
-                                                                data-name="tire-season"
-                                                                required="required"
-                                                                class="select-field w-select">
-                                                            {% for option in season_options %}
-                                                                <option value="{{ option }}">{{ option }}</option>
-                                                            {% endfor %}
-                                                        </select>
-                                                        {% render 'select-arrow' %}
-                                                    </div>
-                                                {% endunless %}
-                                            {% else %}
-                                                {% assign form_fields = "Marka,Model,Generacja,Rok,Silnik" | split: "," %}
-                                                {% for field in form_fields %}
-                                                    <div class="form-field-wrapper">
-                                                        <label for="car-{{ field | downcase }}"
-                                                               class="field-label">{{ field }}</label>
-                                                        <select
-                                                                id="car-{{ field | downcase }}"
-                                                                data-name="car-{{ field | downcase }}"
-                                                                required="required"
-                                                                class="select-field w-select"></select>
-                                                        {% render 'select-arrow' %}
-                                                    </div>
-                                                {% endfor %}
-                                            {% endif %}
-                                            <input
-                                                    type="submit"
-                                                    data-wait="Zaczekaj..."
-                                                    class="button w-button"
-                                                    style="max-height: 3rem"
-                                                    value="{% case tab_number %}{% when 1 %}{% case sub_tab_number %}{% when 1 %}Szukaj opon{% when 2 %}Szukaj kół{% when 3 %}Szukaj felg{% endcase %}{% when 2 %}{% case sub_tab_number %}{% when 1 %}Szukaj opon{% when 2 %}Szukaj kół{% when 3 %}Szukaj felg{% endcase %}{% endcase %}">
-                                        </form>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                {% endfor %}
-                <div class="header30_feature-wrapper">
-                    <div id="w-node-bf10ec35-5c52-dbab-f8a3-688fde0bcf55-2120814a" class="header30_feature">
-                        <dotlottie-player id="FreeDelivery"
-                                          src="https://assets-global.website-files.com/65ef5f59d2077edc6275fcca/65ef5f59d2077edc6275fcf7_wired-outline-757-delivery.json"
-                                          background="transparent" speed="1" class="icon-embed-medium" loop
-                                          autoplay></dotlottie-player>
-                        <div id="w-node-_861b92b7-0b5b-6bb7-e3cd-4552d97659da-2120814a">Darmowa Dostawa</div>
-                    </div>
-                    <div id="w-node-_6aa78a52-0a32-5874-545c-1e65a6ab212a-2120814a" class="header30_feature is-second">
-                        <dotlottie-player id="30DayRefund"
-                                          src="https://assets-global.website-files.com/65945aac2ee770034538c7f4/659461255dc1ccf5365d38fe_wired-outline-2367-loan.json"
-                                          background="transparent" speed="1" class="icon-embed-medium" loop
-                                          autoplay></dotlottie-player>
-                        <div id="w-node-_6aa78a52-0a32-5874-545c-1e65a6ab212c-2120814a">30 dni na zwrot</div>
-                    </div>
-                    <div id="w-node-_39340757-8696-cb79-00fe-f89be820df10-2120814a" class="header30_feature">
-                        <dotlottie-player id="24HDelivery"
-                                          src="https://assets-global.website-files.com/65945aac2ee770034538c7f4/659461c1e3824bedf688d6e3_wired-outline-46-timer-stopwatch.json"
-                                          background="transparent" speed="1" class="icon-embed-medium" loop
-                                          autoplay></dotlottie-player>
-                        <div id="w-node-_39340757-8696-cb79-00fe-f89be820df12-2120814a">Wysyłka w 24h</div>
-                    </div>
-                    <div class="header30_feature is-last">
-
-                        <dotlottie-player id="Checked"
-                                          src="https://assets-global.website-files.com/65945aac2ee770034538c7f4/6594621df8162c5e8aba9757_wired-outline-852-wheel.json"
-                                          background="transparent" speed="1" class="icon-embed-medium" loop
-                                          autoplay></dotlottie-player>
-                        <div>Sprawdzone przez<br>specjalistów</div>
-                    </div>
-                </div>
-            </div>
+  <div class="container-large">
+    <div class="header30_content">
+      <div class="header30_content-wrapper">
+        <div class="header-main-tabs">
+          <img
+            src="{{ 'TireSearch.webp' | asset_url }}"
+            class="image"
+            alt="tire-image">
+          {% assign tab_titles = "Szukaj wg rozmiaru,Szukaj wg auta" | split: "," %}
+          <div class="tabs-menu-2 w-tab-menu">
+            {% for tab_title in tab_titles %}
+              <a data-w-tab="{{ forloop.index }}" class="tab-link-top-search w-inline-block w-tab-link{% if forloop.first %} w--current{% endif %}">
+                {{ tab_title }}
+              </a>
+            {% endfor %}
+          </div>
         </div>
+        {% for tab_number in (1..2) %}
+          <div class="tab-pane-tab-{{ tab_number }} w-tab-pane{% if tab_number == 1 %} w--tab-active{% endif %}">
+            <div class="tabs-2 w-tabs">
+              <div class="tabs-menu w-tab-menu">
+                {% assign sub_tab_titles = "Opony,Koła,Felgi" | split: "," %}
+                {% for sub_tab_title in sub_tab_titles %}
+                  <a data-w-tab="{{ tab_number }}.{{ forloop.index }}" class="tab-link-left-search w-inline-block w-tab-link{% if forloop.first %}{% endif %}">
+                    {{ sub_tab_title | upcase }}
+                  </a>
+                {% endfor %}
+              </div>
+
+              {% for sub_tab_number in (1..3) %}
+                <div data-sub-tab="{{ tab_number }}.{{ sub_tab_number }}" class="w-tab-pane{% if sub_tab_number == 1 %} w--tab-active{% endif %}">
+                  <div class="w-form">
+                    <form class="div-block-8-copy {% if sub_tab_number == 2  and tab_number == 1 %} is-wheel {% endif %} {% if sub_tab_number == 3 and tab_number == 1 %} is-rim {% endif %} {% if tab_number == 2 %} is-car {% endif %}">
+                      {% if tab_number == 1 %}
+                        {% assign tire_fields_label = "Szerokość,Profil,Średnica" | split: "," %}
+                        {% assign wheel_fields_label = "Szerokość,Profil,Średnica,Rozstaw śrub,Szerokość" | split: "," %}
+                        {% assign rim_fields_label = "Średnica,Rozstaw śrub,Szerokość,ET" | split: "," %}
+
+                        {% assign season_options = "Letnie,Zimowe,Całoroczne" | split: "," %}
+
+                        {% assign tire_fields_data_name = "tire-width,tire-profile,tire-diameter" | split: "," %}
+                        {% assign wheel_fields_data_name = "tire-width,tire-profile,tire-diameter,rim-bolt,rim-width" | split: "," %}
+                        {% assign rim_fields_data_name = "rim-diameter,rim-bolt,rim-width,rim-et" | split: "," %}
+
+                        {% assign select_position = "is-left,is-middle,is-right" | split: "," %}
+
+                        {% if sub_tab_number == 1 %}
+                          <div class="div-block-21-copy">
+                            {% for i in (0..2) %}
+                              <div class="form-field-wrapper">
+                                <label for="{{ tire_fields_data_name[i] | downcase }}" class="field-label">{{ tire_fields_label[i] }}</label>
+                                <select
+                                  id="{{ tire_fields_data_name[i] | downcase }}"
+                                  data-name="{{ tire_fields_data_name[i] }}"
+                                  required="required"
+                                  class="select-field w-select {{ select_position[i] }}"></select>
+                                {% render 'select-arrow' %}
+                              </div>
+                            {% endfor %}
+                          </div>
+                        {% endif %}
+
+                        {% if sub_tab_number == 2 %}
+                          <div>
+                            <div>Opony</div>
+                            <div class="div-block-21-copy">
+                              {% for i in (0..2) %}
+                                <div class="form-field-wrapper">
+                                  <label for="{{ wheel_fields_data_name[i] | downcase }}" class="field-label">{{ wheel_fields_label[i] }}</label>
+                                  <select
+                                    id="{{ wheel_fields_data_name[i] | downcase }}"
+                                    data-name="{{ wheel_fields_data_name[i] }}"
+                                    required="required"
+                                    class="select-field w-select {{ select_position[i] }}"></select>
+                                  {% render 'select-arrow' %}
+                                </div>
+                              {% endfor %}
+                            </div>
+                          </div>
+
+                          <div>
+                            Felgi
+                            <div class="div-block-21-copy" style="grid-template-columns: 1fr 1fr;">
+                              {% for i in (3..4) %}
+                                <div class="form-field-wrapper">
+                                  <label for="{{ wheel_fields_data_name[i] | downcase }}" class="field-label">{{ wheel_fields_label[i] }}</label>
+                                  <select
+                                    id="{{ wheel_fields_data_name[i] | downcase }}"
+                                    data-name="{{ wheel_fields_data_name[i] }}"
+                                    required="required"
+                                    class="select-field w-select {% if i ==3  %} {{ select_position[0] }} {% else %} {{ select_position[2] }} {% endif %}"></select>
+                                  {% render 'select-arrow' %}
+                                </div>
+                              {% endfor %}
+                            </div>
+                          </div>
+                        {% endif %}
+
+                        {% if sub_tab_number == 3 %}
+                          {% for i in (0..3) %}
+                            <div class="form-field-wrapper">
+                              <label for="{{ rim_fields_data_name[i] | downcase }}" class="field-label">{{ rim_fields_label[i] }}</label>
+                              <select
+                                id="{{ rim_fields_data_name[i] | downcase }}"
+                                data-name="{{ rim_fields_data_name[i] }}"
+                                required="required"
+                                class="select-field w-select"></select>
+                              {% render 'select-arrow' %}
+                            </div>
+                          {% endfor %}
+                        {% endif %}
+
+                        {% unless sub_tab_number == 3 %}
+                          <div class="form-field-wrapper">
+                            <label for="tire-season" class="field-label">Sezon</label>
+                            <select
+                              id="tire-season"
+                              data-name="tire-season"
+                              required="required"
+                              class="select-field w-select">
+                              {% for option in season_options %}
+                                <option value="{{ option }}">{{ option }}</option>
+                              {% endfor %}
+                            </select>
+                            {% render 'select-arrow' %}
+                          </div>
+                        {% endunless %}
+                      {% else %}
+                        {% assign form_fields = "Marka,Model,Generacja,Rok,Silnik" | split: "," %}
+                        {% for field in form_fields %}
+                          <div class="form-field-wrapper">
+                            <label for="car-{{ field | downcase }}" class="field-label">{{ field }}</label>
+                            <select
+                              id="car-{{ field | downcase }}"
+                              data-name="car-{{ field | downcase }}"
+                              required="required"
+                              class="select-field w-select"></select>
+                            {% render 'select-arrow' %}
+                          </div>
+                        {% endfor %}
+                      {% endif %}
+                      <input
+                        type="submit"
+                        data-wait="Zaczekaj..."
+                        class="button w-button"
+                        style="max-height: 3rem"
+                        value="{% case tab_number %}{% when 1 %}{% case sub_tab_number %}{% when 1 %}Szukaj opon{% when 2 %}Szukaj kół{% when 3 %}Szukaj felg{% endcase %}{% when 2 %}{% case sub_tab_number %}{% when 1 %}Szukaj opon{% when 2 %}Szukaj kół{% when 3 %}Szukaj felg{% endcase %}{% endcase %}">
+                    </form>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% endfor %}
+        <div class="header30_feature-wrapper">
+          <div id="w-node-bf10ec35-5c52-dbab-f8a3-688fde0bcf55-2120814a" class="header30_feature">
+            <dotlottie-player
+              id="FreeDelivery"
+              src="https://assets-global.website-files.com/65ef5f59d2077edc6275fcca/65ef5f59d2077edc6275fcf7_wired-outline-757-delivery.json"
+              background="transparent"
+              speed="1"
+              class="icon-embed-medium"
+              loop
+              autoplay></dotlottie-player>
+            <div id="w-node-_861b92b7-0b5b-6bb7-e3cd-4552d97659da-2120814a">Darmowa Dostawa</div>
+          </div>
+          <div id="w-node-_6aa78a52-0a32-5874-545c-1e65a6ab212a-2120814a" class="header30_feature is-second">
+            <dotlottie-player
+              id="30DayRefund"
+              src="https://assets-global.website-files.com/65945aac2ee770034538c7f4/659461255dc1ccf5365d38fe_wired-outline-2367-loan.json"
+              background="transparent"
+              speed="1"
+              class="icon-embed-medium"
+              loop
+              autoplay></dotlottie-player>
+            <div id="w-node-_6aa78a52-0a32-5874-545c-1e65a6ab212c-2120814a">30 dni na zwrot</div>
+          </div>
+          <div id="w-node-_39340757-8696-cb79-00fe-f89be820df10-2120814a" class="header30_feature">
+            <dotlottie-player
+              id="24HDelivery"
+              src="https://assets-global.website-files.com/65945aac2ee770034538c7f4/659461c1e3824bedf688d6e3_wired-outline-46-timer-stopwatch.json"
+              background="transparent"
+              speed="1"
+              class="icon-embed-medium"
+              loop
+              autoplay></dotlottie-player>
+            <div id="w-node-_39340757-8696-cb79-00fe-f89be820df12-2120814a">Wysyłka w 24h</div>
+          </div>
+          <div class="header30_feature is-last">
+
+            <dotlottie-player
+              id="Checked"
+              src="https://assets-global.website-files.com/65945aac2ee770034538c7f4/6594621df8162c5e8aba9757_wired-outline-852-wheel.json"
+              background="transparent"
+              speed="1"
+              class="icon-embed-medium"
+              loop
+              autoplay></dotlottie-player>
+            <div>Sprawdzone przez<br>specjalistów</div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
-{% comment %}
+
 <div class="header-slider_slides-wrapper">
-    {% for block in section.blocks %}
-        {% case block.type %}
-            {% when 'slider' %}
-                <a href="{{ block.settings.slider_url }}" class="header-slider_slide-wrap">
-                    <img src="{{ block.settings.slider_image | image_url: width: 2560 }}" class="header-slider_slide">
-                </a>
-        {% endcase %}
-    {% endfor %}
+  {% for block in section.blocks %}
+    {% case block.type %}
+      {% when 'slider' %}
+        <a href="{{ block.settings.slider_url }}" class="header-slider_slide-wrap">
+          <img src="{{ block.settings.slider_image | image_url: width: 2560 }}" class="header-slider_slide">
+        </a>
+        <a href="{{ block.settings.slider_url }}" class="header-slider_slide-wrap">
+          <img src="{{ block.settings.slider_image_mobile | image_url: width: 1000 }}" class="header-slider_slide-mobile">
+        </a>
+    {% endcase %}
+  {% endfor %}
 </div>
 <div class="header-slider">
-    <div class="container-large">
-        <div class="header-slider_wrapper">
-            {% assign slide = 0 %}
-            {% for block in section.blocks %}
-                {% case block.type %}
-                    {% when 'slider' %}
-                        {% assign slide = slide | plus: 1 %}
-                        <div onclick="currentSlide({{ slide }})"
-                             class="header-slider_text-wrapper">{{ block.settings.slider_text }}</div>
-                {% endcase %}
-            {% endfor %}
-        </div>
+  <div class="container-large">
+    <div class="header-slider_wrapper">
+      {% assign slide = 0 %}
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'slider' %}
+            {% assign slide = slide | plus: 1 %}
+            <div onclick="currentSlide({{ slide }})" class="header-slider_text-wrapper">{{ block.settings.slider_text }}</div>
+        {% endcase %}
+      {% endfor %}
     </div>
+  </div>
 </div>
-{% endcomment %}
+
 
 {% comment %} Mobile tab titles {% endcomment %}
 <script>
@@ -361,7 +374,7 @@
 {{ 'filters.js' | asset_url | script_tag }}
 
 {% stylesheet %}
-.header-slider_slide-wrap {
+  .header-slider_slide-wrap {
     display: none;
     position: relative;
     z-index: 1;
@@ -371,9 +384,9 @@
     right: 0;
     width: 100%;
     height: 100%;
-}
+  }
 
-.header-slider_slides-wrapper {
+  .header-slider_slides-wrapper {
     z-index: 0;
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
     position: absolute;
@@ -381,9 +394,10 @@
     bottom: 0;
     left: 0;
     right: 0;
-}
+    z-index: 1;
+  }
 
-.header-slider_slide {
+  .header-slider_slide {
     object-fit: cover;
     object-position: 50% 0;
     width: 100%;
@@ -393,14 +407,14 @@
     bottom: 0;
     left: 0;
     right: 0;
-}
+  }
 
-.header-slider_wrapper .is-active {
+  .header-slider_wrapper .is-active {
     border-color: var(--color-red--red600);
     color: var(--color-red--red600);
-}
+  }
 
-.header-slider_wrapper {
+  .header-slider_wrapper {
     grid-column-gap: 0.5rem;
     grid-row-gap: 0.5rem;
     grid-template-rows: auto;
@@ -411,9 +425,9 @@
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
     display: grid;
-}
+  }
 
-.header-slider_text-wrapper {
+  .header-slider_text-wrapper {
     background-color: var(--color--white);
     color: var(--color-grayiron--grayiron600);
     text-align: center;
@@ -426,9 +440,9 @@
     padding: 1rem;
     font-weight: 600;
     display: flex;
-}
+  }
 
-.header-slider {
+  .header-slider {
     background-color: var(--color-grayiron--grayiron200);
     justify-content: center;
     margin-bottom: 4.5rem;
@@ -437,71 +451,104 @@
     display: flex;
     position: relative;
     top: 4.5rem;
-}
+    z-index: 2;
+  }
 
-.header-search-big_tabs {
+  .header-search-big_tabs {
     grid-column-gap: 2rem;
     grid-row-gap: 0;
     grid-template-rows: auto auto;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-auto-columns: 1fr;
     display: grid;
-}
+  }
 
-.section_header-search-big {
+  .section_header-search-big {
     position: relative;
-}
+  }
 
-.header-search-big_image {
+  .header-search-big_image {
     object-fit: contain;
     width: 14rem;
     height: 6rem;
     position: absolute;
     top: -1.5rem;
     left: 2rem;
+  }
+
+  .header-slider_slide-mobile {
+    display: none;
+  }
+
+  @media screen and (max-width: 991px) {}
+@media screen and (max-width: 767px) {
+  .header-slider_slides-wrapper {
+    position: relative;
+  }
+  .header-slider {
+    top: 0;
+  }
+  .header-slider_slide {
+    display: none;
+  }
+  .header-slider_slide-mobile {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: inline-block;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+  }
 }
+@media screen and (max-width: 479px) {}
 {% endstylesheet %}
 
 {% schema %}
-{
-  "name": "Tire Model Tabs",
-  "tag": "header",
-  "class": "section_header-search-big",
-  "settings": [
-    {
-      "type": "image_picker",
-      "id": "background_image",
-      "label": "Zdjęcie w tle"
-    }
-  ],
-  "blocks": [
-    {
-      "name": "Slide",
-      "type": "slider",
-      "limit": 4,
-      "settings": [
-        {
-          "type": "image_picker",
-          "id": "slider_image",
-          "label": "Zdjęcie"
-        },
-        {
-          "type": "url",
-          "id": "slider_url",
-          "label": "Link"
-        },
-        {
-          "type": "text",
-          "id": "slider_text",
-          "label": "Nazwa"
-        }
-      ]
-    }
-  ],
-  "presets": [
-    {
-      "name": "Tabsy model"
-    }
-  ]
-}
+  {
+    "name": "Tire Model Tabs",
+    "tag": "header",
+    "class": "section_header-search-big",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "background_image",
+        "label": "Zdjęcie w tle"
+      }
+    ],
+    "blocks": [
+      {
+        "name": "Slide",
+        "type": "slider",
+        "limit": 4,
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "slider_image",
+            "label": "Zdjęcie"
+          }, {
+            "type": "image_picker",
+            "id": "slider_image_mobile",
+            "label": "Zdjęcie Telefon"
+          }, {
+            "type": "url",
+            "id": "slider_url",
+            "label": "Link"
+          }, {
+            "type": "text",
+            "id": "slider_text",
+            "label": "Nazwa"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Tabsy model"
+      }
+    ]
+  }
 {% endschema %}
