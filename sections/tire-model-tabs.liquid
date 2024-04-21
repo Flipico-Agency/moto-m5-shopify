@@ -212,6 +212,9 @@
         <a href="{{ block.settings.slider_url }}" class="header-slider_slide-wrap">
           <img src="{{ block.settings.slider_image | image_url: width: 2560 }}" class="header-slider_slide">
         </a>
+        <a href="{{ block.settings.slider_url }}" class="header-slider_slide-wrap">
+          <img src="{{ block.settings.slider_image_mobile | image_url: width: 1000 }}" class="header-slider_slide-mobile">
+        </a>
     {% endcase %}
   {% endfor %}
 </div>
@@ -448,6 +451,7 @@
     display: flex;
     position: relative;
     top: 4.5rem;
+    z-index: 2;
   }
 
   .header-search-big_tabs {
@@ -471,6 +475,36 @@
     top: -1.5rem;
     left: 2rem;
   }
+
+  .header-slider_slide-mobile {
+    display: none;
+  }
+
+  @media screen and (max-width: 991px) {}
+@media screen and (max-width: 767px) {
+  .header-slider_slides-wrapper {
+    position: relative;
+  }
+  .header-slider {
+    top: 0;
+  }
+  .header-slider_slide {
+    display: none;
+  }
+  .header-slider_slide-mobile {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: inline-block;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+  }
+}
+@media screen and (max-width: 479px) {}
 {% endstylesheet %}
 
 {% schema %}
@@ -495,6 +529,10 @@
             "type": "image_picker",
             "id": "slider_image",
             "label": "Zdjęcie"
+          }, {
+            "type": "image_picker",
+            "id": "slider_image_mobile",
+            "label": "Zdjęcie Telefon"
           }, {
             "type": "url",
             "id": "slider_url",
