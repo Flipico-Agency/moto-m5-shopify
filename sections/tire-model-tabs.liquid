@@ -1,5 +1,3 @@
-{{ 'filters.js' | asset_url | script_tag }}
-
 <div class="padding-global">
     <div class="container-large">
         <div class="header30_content">
@@ -23,7 +21,7 @@
                                 {% assign sub_tab_titles = "Opony,Koła,Felgi" | split: "," %}
                                 {% for sub_tab_title in sub_tab_titles %}
                                     <a data-w-tab="{{ tab_number }}.{{ forloop.index }}"
-                                       class="tab-link-left-search w-inline-block w-tab-link{% if forloop.first %} w--current{% endif %}">
+                                       class="tab-link-left-search w-inline-block w-tab-link{% if forloop.first %}{% endif %}">
                                         {{ sub_tab_title | upcase }}
                                     </a>
                                 {% endfor %}
@@ -223,6 +221,7 @@
 </div>
 {% endcomment %}
 
+{% comment %} Mobile tab titles {% endcomment %}
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
@@ -240,6 +239,7 @@
     });
 </script>
 
+{% comment %} Slider {% endcomment %}
 <script>
     let slideIndex = 1;
     showSlides(slideIndex);
@@ -275,8 +275,9 @@
     }
 </script>
 
+{% comment %} Tabs logic {% endcomment %}
 <script>
-    var currentSection = document.currentScript.closest('.shopify-section');
+    let currentSection = document.currentScript.closest('.shopify-section');
     currentSection.setAttribute("class", "section_header-search-big");
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -306,8 +307,9 @@
             const targetTab = tab.getAttribute('data-w-tab');
             const targetContent = document.querySelector(`.tab-pane-tab-${targetTab}`);
             const subTabs = targetContent.querySelectorAll('.tab-link-left-search');
+            const subTabsAll = document.querySelectorAll('.tab-link-left-search');
 
-            clearActiveStates([...topTabs, ...subTabs]); // Clear both top and sub-tabs
+            clearActiveStates([...topTabs, ...subTabsAll]); // Clear both top and sub-tabs
             hideAllTabContents([...topTabContents, ...subTabContents]); // Hide both top and sub-tab contents
 
             tab.classList.add('w--current');
@@ -354,6 +356,9 @@
         }
     });
 </script>
+
+{% comment %} Filters logic {% endcomment %}
+{{ 'filters.js' | asset_url | script_tag }}
 
 {% stylesheet %}
 .header-slider_slide-wrap {

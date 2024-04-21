@@ -275,11 +275,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         return queryParams;
     }
-    function buildCarQueryParameters(activeSubTabNumber, elements, urlParams) {
+    function buildCarQueryParameters(activeTabContent, elements, urlParams) {
         let queryParams = {};
 
         elements.forEach(element => {
-            const selectElement = document.querySelector(`select[data-name="${element}"]`);
+            const selectElement = activeTabContent.querySelector(`select[data-name="${element}"]`);
             if (selectElement && selectElement.value) {
                 const urlParamKey = mapSelectNameToURLParam(element);
                 queryParams[urlParamKey] = selectElement.value;
@@ -366,11 +366,15 @@ document.addEventListener('DOMContentLoaded', async function () {
             return tireSize ? tireSize.replace(/(\d+)\/(\d+)[A-Z]*/g, '$1/$2/R') : 'Brak danych o oponach';
         };
 
-        // Helper function to create option element for tires and rims
+        // Helper function to create option element for tires, rims, wheels
         const createOption = (prefix) => {
+            const sizeRegex = /(\d+\/\d+\/[RZ]\d+)|((\d+\.?\d*)Jx(\d+\.?\d*) ET(\d+\.?\d*))/g;
+            const matchSizes = [...prefix.matchAll(sizeRegex)];
+            const sizes = matchSizes.map(match => match[0]).join(" ");
+
             const option = document.createElement("option");
             option.text = prefix.trim();
-            option.value = prefix.trim();
+            option.value = sizes;
             return option;
         };
 
@@ -382,36 +386,40 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             if (currentData && Array.isArray(currentData)) {
                 let pairIndex = 1;
-                const uniqueCombos = new Map(); // Mapa do przechowywania unikalnych kombinacji opon i felg
+                const uniquePairCombos = new Set();
 
                 currentData[0].wheels.forEach((item) => {
-                    // Formatujemy rozmiary opon i felg
-                    const frontTire = item.front.tire ? formatTireSize(item.front.tire) : null;
-                    const rearTire = item.rear.tire ? formatTireSize(item.rear.tire) : frontTire; // Używamy przedniej opony, jeśli tylna jest pusta
-                    const frontRim = item.front.rim ? formatRimSize(item.front.rim) : null;
-                    const rearRim = item.rear.rim ? formatRimSize(item.rear.rim) : frontRim; // Używamy przedniej felgi, jeśli tylna jest pusta
+                    const frontTireFormatted = formatTireSize(item.front.tire);
+                    const rearTireFormatted = item.rear.tire ? formatTireSize(item.rear.tire) : frontTireFormatted;
+                    const frontRimFormatted = formatRimSize(item.front.rim);
+                    const rearRimFormatted = item.rear.rim ? formatRimSize(item.rear.rim) : frontRimFormatted;
 
-                    // Sprawdzamy, czy obie opony i felgi są identyczne
-                    const identicalFrontAndRear = frontTire === rearTire && frontRim === rearRim;
-                    let comboText = '';
+                    // Check if the front and rear have the same tires and rims
+                    const identicalTiresAndRims = frontTireFormatted === rearTireFormatted && frontRimFormatted === rearRimFormatted;
 
+                    let optionTextFront, optionTextRear;
                     if (window.location.pathname.includes('collections/opony')) {
-                        comboText = identicalFrontAndRear ? `Przód i tył: ${frontTire}` : `Przód: ${frontTire}, Tył: ${rearTire}`;
+                        optionTextFront = `${frontTireFormatted}`;
+                        optionTextRear = `${rearTireFormatted}`;
                     } else if (window.location.pathname.includes('collections/felgi')) {
-                        comboText = identicalFrontAndRear ? `Przód i tył: ${frontRim}` : `Przód: ${frontRim}, Tył: ${rearRim}`;
-                    } else if (window.location.pathname.includes('collections/kola')) {
-                        comboText = identicalFrontAndRear ? `Przód i tył: Opona: ${frontTire}, Felga: ${frontRim}` : `Przód: Opona: ${frontTire}, Felga: ${frontRim}, Tył: Opona: ${rearTire}, Felga: ${rearRim}`;
+                        optionTextFront = `${frontRimFormatted}`;
+                        optionTextRear = `${rearRimFormatted}`;
+                    } else { // for wheels
+                        optionTextFront = `Opona: ${frontTireFormatted}, Felga: ${frontRimFormatted}`;
+                        optionTextRear = `Opona: ${rearTireFormatted}, Felga: ${rearRimFormatted}`;
                     }
 
-                    // Tworzymy unikalny identyfikator dla zestawu opon i felg
-                    const comboId = identicalFrontAndRear ? `${frontTire || ''}-${frontRim || ''}` : `${frontTire || ''}-${frontRim || ''}-${rearTire || ''}-${rearRim || ''}`;
-
-                    if (!uniqueCombos.has(comboId)) {
-                        uniqueCombos.set(comboId, true);
-                        const optionText = `Komplet ${pairIndex}: ${comboText}`;
-                        selectMatchingSize.add(createOption(optionText));
-                        pairIndex++;
+                    if (identicalTiresAndRims) {
+                        if (!uniquePairCombos.has(optionTextFront + optionTextRear)) {
+                            uniquePairCombos.add(optionTextFront + optionTextRear);
+                            selectMatchingSize.add(createOption(`Komplet ${pairIndex} (Przód i tył): ${optionTextFront}`));
+                        }
+                    } else {
+                        selectMatchingSize.add(createOption(`Komplet ${pairIndex} (Przód): ${optionTextFront}`));
+                        selectMatchingSize.add(createOption(`Komplet ${pairIndex} (Tył): ${optionTextRear}`));
                     }
+
+                    pairIndex++;
                 });
 
                 selectMatchingSize.selectedIndex = 0;
@@ -464,7 +472,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             const fetchAndProcessData = () => {
                 const allElementsForFetch = elements.reduce((acc, element) => {
-                    const selectElement = document.querySelector(`select[data-name="${element}"]`);
+                    const selectElement = activeTabContent.querySelector(`select[data-name="${element}"]`);
                     if (selectElement && selectElement.value) {
                         const apiParam = mapSelectNameToApiParam(element);
                         acc[apiParam] = selectElement.value;
@@ -484,7 +492,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             const processSearchByModel = () => {
                 if (!window.location.pathname.includes('collections')) {
-                    const queryParams = buildCarQueryParameters(activeSubTabNumber, elements, new URLSearchParams(window.location.search));
+                    const queryParams = buildCarQueryParameters(activeTabContent, elements, new URLSearchParams(window.location.search));
                     const queryString = new URLSearchParams(queryParams).toString();
                     window.location.href = `${formAction}?${queryString}`;
                 } else {
@@ -498,7 +506,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 }
             };
 
-            {% comment %} Customize to rims and wheels {% endcomment %}
             const updateMatchingSizeAndRedirect = () => {
                 const selectedOption = document.getElementById('matching_sizes').value;
                 let queryParams = new URLSearchParams();
@@ -512,7 +519,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                         queryParams.set('filter.p.m.tires.diameter', tireDiameter);
                     }
                 } else if (window.location.pathname.includes('collections/felgi')) {
-                    const rimMatch = selectedOption.match(/(\d+)x(\d+) ET(\d+)/);
+                    const rimMatch = selectedOption.match(/(\d+\.?\d*)Jx(\d+\.?\d*) ET(\d+)/);
                     if (rimMatch) {
                         const [_, rimWidth, rimDiameter, rimOffset] = rimMatch;
                         queryParams.set('filter.p.rims.width', rimWidth);
@@ -520,8 +527,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                         queryParams.set('filter.p.rims.et', rimOffset);
                     }
                 } else if (window.location.pathname.includes('collections/kola')) {
-                    const tireMatch = selectedOption.match(/Opona: (\d+)\/(\d+)\/R(\d+)/);
-                    const rimMatch = selectedOption.match(/Felga: (\d+)x(\d+) ET(\d+)/);
+                    const tireMatch = selectedOption.match(/(\d+)\/(\d+)\/R(\d+)/);
+                    const rimMatch = selectedOption.match(/(\d+\.?\d*)Jx(\d+\.?\d*) ET(\d+)/);
                     if (tireMatch && rimMatch) {
                         const [_, tireWidth, tireProfile, tireDiameter] = tireMatch;
                         const [__, rimWidth, rimDiameter, rimOffset] = rimMatch;
@@ -530,7 +537,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                         queryParams.set('filter.p.m.tires.diameter', tireDiameter);
                         queryParams.set('filter.p.rims.width', rimWidth);
                         queryParams.set('filter.p.rims.diameter', rimDiameter);
-                        queryParams.set('filter.p.rims.et', rimOffset);
+                        queryParams.set('filter.p.rims.e_t', rimOffset);
                     }
                 }
 
