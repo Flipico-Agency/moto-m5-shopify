@@ -96,8 +96,32 @@
               <span class="text-weight-bold">Test dla Remigiusza</span>
             </a>
           {% elsif section.settings.season_select == "Popularne_felgi_srednica" %}
-            <a class="text-size-small" href="/collections/felgi?filter.p.m.tires.width=205&filter.p.m.tires.profile=55&filter.p.m.tires.diameter=16{% if metaobject.system.type == 'brand_page_tires'%}&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}{% endif %}">{{ page.title }}
+            <a class="text-size-small" href="/collections/felgi?filter.p.m.rims.material={% if page.handle == 'felgi-aluminiowe' %}Aluminiowe{% elsif page.handle == 'felgi-stalowe' %}Stalowe{% endif %}&filter.p.m.rims.diameter=14">{{ page.title }}
               <br><span class="text-size-large text-weight-bold">14 cali</span>
+            </a>
+            <a class="text-size-small" href="/collections/felgi?filter.p.m.rims.material={% if page.handle == 'felgi-aluminiowe' %}Aluminiowe{% elsif page.handle == 'felgi-stalowe' %}Stalowe{% endif %}&filter.p.m.rims.diameter=15">{{ page.title }}
+              <br><span class="text-size-large text-weight-bold">15 cali</span>
+            </a>
+            <a class="text-size-small" href="/collections/felgi?filter.p.m.rims.material={% if page.handle == 'felgi-aluminiowe' %}Aluminiowe{% elsif page.handle == 'felgi-stalowe' %}Stalowe{% endif %}&filter.p.m.rims.diameter=16">{{ page.title }}
+              <br><span class="text-size-large text-weight-bold">16 cali</span>
+            </a>
+            <a class="text-size-small" href="/collections/felgi?filter.p.m.rims.material={% if page.handle == 'felgi-aluminiowe' %}Aluminiowe{% elsif page.handle == 'felgi-stalowe' %}Stalowe{% endif %}&filter.p.m.rims.diameter=17">{{ page.title }}
+              <br><span class="text-size-large text-weight-bold">17 cali</span>
+            </a>
+            <a class="text-size-small" href="/collections/felgi?filter.p.m.rims.material={% if page.handle == 'felgi-aluminiowe' %}Aluminiowe{% elsif page.handle == 'felgi-stalowe' %}Stalowe{% endif %}&filter.p.m.rims.diameter=18">{{ page.title }}
+              <br><span class="text-size-large text-weight-bold">18 cali</span>
+            </a>
+            <a class="text-size-small" href="/collections/felgi?filter.p.m.rims.material={% if page.handle == 'felgi-aluminiowe' %}Aluminiowe{% elsif page.handle == 'felgi-stalowe' %}Stalowe{% endif %}&filter.p.m.rims.diameter=19">{{ page.title }}
+              <br><span class="text-size-large text-weight-bold">19 cali</span>
+            </a>
+            <a class="text-size-small" href="/collections/felgi?filter.p.m.rims.material={% if page.handle == 'felgi-aluminiowe' %}Aluminiowe{% elsif page.handle == 'felgi-stalowe' %}Stalowe{% endif %}&filter.p.m.rims.diameter=20">{{ page.title }}
+              <br><span class="text-size-large text-weight-bold">20 cali</span>
+            </a>
+            <a class="text-size-small" href="/collections/felgi?filter.p.m.rims.material={% if page.handle == 'felgi-aluminiowe' %}Aluminiowe{% elsif page.handle == 'felgi-stalowe' %}Stalowe{% endif %}&filter.p.m.rims.diameter=21">{{ page.title }}
+              <br><span class="text-size-large text-weight-bold">21 cali</span>
+            </a>
+            <a class="text-size-small" href="/collections/felgi?filter.p.m.rims.material={% if page.handle == 'felgi-aluminiowe' %}Aluminiowe{% elsif page.handle == 'felgi-stalowe' %}Stalowe{% endif %}&filter.p.m.rims.diameter=22">{{ page.title }}
+              <br><span class="text-size-large text-weight-bold">22 cali</span>
             </a>
           {% endif %}
         </div>
