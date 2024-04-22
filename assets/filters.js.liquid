@@ -69,9 +69,10 @@ document.addEventListener('DOMContentLoaded', async function () {
             'tire-profile': 'filter.p.m.tires.profile',
             'tire-diameter': 'filter.p.m.tires.diameter',
             'tire-season': 'filter.p.m.tires.season',
-            'rim-bolt': 'filter.p.m.rim.rim_bolt',
-            'rim-width': 'filter.p.m.rim.width',
-            'rim-diameter': 'filter.p.m.rim.diameter',
+            'rim-bolt': 'filter.p.m.rims.bolt_spacing',
+            'rim-width': 'filter.p.m.rims.width',
+            'rim-diameter': 'filter.p.m.rims.diameter',
+            'rim-et': 'filter.p.m.rims.e_t',
 
             // Map for cars
             'car-marka': 'filter.p.m.car.make',
@@ -276,18 +277,18 @@ document.addEventListener('DOMContentLoaded', async function () {
         // For subtab 2, include rim parameters along with base tire parameters
         if (activeSubTabNumber === '2') {
             Object.assign(queryParams, {
-                'filter.p.m.rim.rim_bolt': rim.bolt.value,
-                'filter.p.m.rim.width': rim.width.value
+                'filter.p.m.rims.bolt_spacing': rim.bolt.value,
+                'filter.p.m.rims.width': rim.width.value
             });
         }
 
         // For subtab 3, only include rim parameters
         if (activeSubTabNumber === '3') {
             queryParams = {
-                'filter.p.m.rim.diameter': rim.diameter.value,
-                'filter.p.m.rim.rim_bolt': rim.bolt.value,
-                'filter.p.m.rim.width': rim.width.value,
-                'filter.p.m.rim.rim_et': rim.et.value
+                'filter.p.m.rims.diameter': rim.diameter.value,
+                'filter.p.m.rims.bolt_spacing': rim.bolt.value,
+                'filter.p.m.rims.width': rim.width.value,
+                'filter.p.m.rims.e_t': rim.et.value
             };
         }
 
@@ -540,9 +541,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                     const rimMatch = selectedOption.match(/(\d+\.?\d*)Jx(\d+\.?\d*) ET(\d+)/);
                     if (rimMatch) {
                         const [_, rimWidth, rimDiameter, rimOffset] = rimMatch;
-                        queryParams.set('filter.p.rims.width', rimWidth);
-                        queryParams.set('filter.p.rims.diameter', rimDiameter);
-                        queryParams.set('filter.p.rims.et', rimOffset);
+                        queryParams.set('filter.p.m.rims.width', rimWidth);
+                        queryParams.set('filter.p.m.rims.diameter', rimDiameter);
+                        queryParams.set('filter.p.m.rims.e_t', rimOffset);
                     }
                 } else if (window.location.pathname.includes('collections/kola')) {
                     const tireMatch = selectedOption.match(/(\d+)\/(\d+)\/R(\d+)/);
@@ -553,9 +554,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                         queryParams.set('filter.p.m.tires.width', tireWidth);
                         queryParams.set('filter.p.m.tires.profile', tireProfile);
                         queryParams.set('filter.p.m.tires.diameter', tireDiameter);
-                        queryParams.set('filter.p.rims.width', rimWidth);
-                        queryParams.set('filter.p.rims.diameter', rimDiameter);
-                        queryParams.set('filter.p.rims.e_t', rimOffset);
+                        queryParams.set('filter.p.m.rims.width', rimWidth);
+                        queryParams.set('filter.p.m.rims.diameter', rimDiameter);
+                        queryParams.set('filter.p.m.rims.e_t', rimOffset);
                     }
                 }
 

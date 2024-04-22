@@ -20,6 +20,8 @@
             </div>
           {% elsif section.settings.season_select == "Popularne" %}
             <h4>Popularne rozmiary opon {{ metaobject.name.value }}</h4>
+          {% elsif section.settings.season_select == "Popularne_felgi_srednica" %}
+            <h4>Popularne średnice {{ page.title }}</h4>
           {% endif %}
         </div>
         <div class="link-list">
@@ -93,6 +95,10 @@
             <a class="text-size-small" href="/collections/opony?filter.p.m.tires.width=275&filter.p.m.tires.profile=30&filter.p.m.tires.diameter=20&{% if metaobject.system.type == 'brand_page_tires'%}&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}{% endif %}">Opony {{ metaobject.name.value }}
               <span class="text-weight-bold">Test dla Remigiusza</span>
             </a>
+          {% elsif section.settings.season_select == "Popularne_felgi_srednica" %}
+            <a class="text-size-small" href="/collections/felgi?filter.p.m.tires.width=205&filter.p.m.tires.profile=55&filter.p.m.tires.diameter=16{% if metaobject.system.type == 'brand_page_tires'%}&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}{% endif %}">{{ page.title }}
+              <br><span class="text-size-large text-weight-bold">14 cali</span>
+            </a>
           {% endif %}
         </div>
       </div>
@@ -118,15 +124,21 @@
           {
             "label": "Letnie",
             "value": "Letnie"
-          }, {
+          },
+          {
             "label": "Zimowe",
             "value": "Zimowe"
-          }, {
+          },
+          {
             "label": "Całoroczne",
             "value": "Całoroczne"
-          }, {
-            "label": "Popularne rozmiary",
+          },
+          {
+            "label": "Popularne Rozmiary Opon",
             "value": "Popularne"
+          }, {
+            "label": "Popularne Średnice Felg",
+            "value": "Popularne_felgi_srednica"
           }
         ],
         "default": "Letnie"

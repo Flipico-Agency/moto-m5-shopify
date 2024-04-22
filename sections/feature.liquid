@@ -1,0 +1,175 @@
+<div class="padding-global {{ section.settings.background }}">
+  <div class="container-large">
+    <div class="padding-section-{{ section.settings.padding }}">
+      <div class="layout6_component">
+        <div class="layout6_content">
+          <div class="margin-bottom margin-small">
+            <{{ section.settings.heading_size }}>
+              {{ section.settings.heading }}</{{ section.settings.heading_size }}>
+            </div>
+            <div class="margin-bottom margin-medium">
+              <p class="text-size-medium">{{ section.settings.text }}</p>
+            </div>
+            <div class="layout6_item-list">
+              <div class="layout6_text-wrapper">
+                <div class="margin-bottom margin-xsmall">
+                  <h6>{{ section.settings.heading_1 }}</h6>
+                </div>
+                <p>{{ section.settings.text_1 }}</p>
+              </div>
+              <div class="layout6_text-wrapper">
+                <div class="margin-bottom margin-xsmall">
+                  <h6>{{ section.settings.heading_2 }}</h6>
+                </div>
+                <p>{{ section.settings.text_2 }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="layout6_image-wrapper"><img
+              src="{{ section.settings.photo | image_url: height: 1080 }}"
+              loading="lazy"
+              alt="{{ section.settings.heading }}"
+              class="layout6_image"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% stylesheet %}
+
+    .layout6_component {
+      grid-column-gap: 5rem;
+      grid-row-gap: 4rem;
+      grid-template-rows: auto;
+      grid-template-columns: 1fr 1fr;
+      grid-auto-columns: 1fr;
+      align-items: center;
+      display: grid;
+    }
+
+    .layout6_item-list {
+      grid-column-gap: 1.5rem;
+      grid-row-gap: 1.5rem;
+      grid-template-rows: auto;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-auto-columns: 1fr;
+    }
+
+    .layout6_image {
+      aspect-ratio: 1;
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
+
+    .layout6_image-wrapper {
+      aspect-ratio: 1;
+    }
+
+  {% endstylesheet %}
+  {% schema %}
+    {
+      "name": "layout 6",
+      "tag": "section",
+      "class": "section_layout6",
+      "disabled_on": {
+        "groups": ["footer", "header"]
+      },
+      "settings": [
+        {
+          "label": "Heading",
+          "type": "text",
+          "id": "heading",
+          "default": "Short heading here"
+        },
+        {
+          "label": "Tekst",
+          "type": "text",
+          "id": "text",
+          "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique."
+        },
+        {
+          "label": "Heading 1",
+          "type": "text",
+          "id": "heading_1",
+          "default": "Short heading here"
+        },
+        {
+          "label": "Heading 2",
+          "type": "text",
+          "id": "heading_2",
+          "default": "Short heading here"
+        }, {
+          "label": "Tekst 1 paragraf",
+          "type": "text",
+          "id": "text_1",
+          "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique."
+        }, {
+          "label": "Tekst 2 paragraf",
+          "type": "text",
+          "id": "text_2",
+          "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique."
+        }, {
+          "label": "Zdjęcie",
+          "type": "image_picker",
+          "id": "photo"
+        }, {
+          "id": "padding",
+          "type": "select",
+          "label": "Padding",
+          "options": [
+            {
+              "value": "large",
+              "label": "Duży"
+            }, {
+              "value": "medium",
+              "label": "Średni"
+            }, {
+              "value": "small",
+              "label": "Mały"
+            }
+          ],
+          "default": "large"
+        }, {
+          "id": "background",
+          "type": "select",
+          "label": "Kolor tła",
+          "options": [
+            {
+              "value": "background-color-white",
+              "label": "Biały"
+            }, {
+              "value": "background-color-grayiron100",
+              "label": "Szary"
+            }
+          ],
+          "default": "background-color-white"
+        }, {
+          "id": "heading_size",
+          "type": "select",
+          "label": "Heading rozmiar",
+          "options": [
+            {
+              "value": "h1",
+              "label": "Heading H1"
+            }, {
+              "value": "h2",
+              "label": "Heading H2"
+            }, {
+              "value": "h3",
+              "label": "Heading H3"
+            }
+          ],
+          "default": "h3"
+        }
+      ],
+      "presets": [
+        {
+          "name": "Layout 6"
+        }
+      ]
+    }
+  {% endschema %}
