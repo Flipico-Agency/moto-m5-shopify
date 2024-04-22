@@ -22,11 +22,7 @@
             style="border-top: none">
             {% assign tire_fields_label = "Szerokość,Profil,Średnica" | split: "," %}
             {% assign tire_fields_data_name = "tire-width,tire-profile,tire-diameter" | split: "," %}
-<<<<<<< Updated upstream
             {% assign select_position = "is-left,is-middle,is-right" | split: "," %}
-=======
-            {% assign select_position = "is-left,is-middle,is-middle" | split: "," %}
->>>>>>> Stashed changes
 
             {% assign season_options = "Letnie,Zimowe,Całoroczne" | split: "," %}
 
@@ -42,7 +38,6 @@
                   {% render 'select-arrow' %}
                 </div>
               {% endfor %}
-<<<<<<< Updated upstream
             </div>
             <div class="form-field-wrapper">
               <label for="tire-season" class="field-label">Sezon</label>
@@ -57,29 +52,11 @@
               </select>
               {% render 'select-arrow' %}
             </div>
-=======
-              <div class="form-field-wrapper">
-                <label for="tire-season" class="field-label">Sezon</label>
-                <select
-                  id="tire-season"
-                  data-name="tire-season"
-                  required="required"
-                  class="select-field w-select is-right">
-                  {% for option in season_options %}
-                    <option value="{{ option }}">{{ option }}</option>
-                  {% endfor %}
-                </select>
-                {% render 'select-arrow' %}
-              </div>
-            </div>
-
->>>>>>> Stashed changes
             <input
               type="submit"
               data-wait="Zaczekaj..."
               class="button w-button"
               value="Szukaj {{ section.settings.nazwa-producenta }}">
-<<<<<<< Updated upstream
             <div class="header_manufacturer-suggested_sizes-wrapper">
               <div>Popularne rozmiary {{ metaobject.name.value }}:</div>
               <a href="/collections/opony?filter.p.m.tires.width=205&filter.p.m.tires.profile=55&filter.p.m.tires.diameter=16&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}">Opony {{ metaobject.name.value }}
@@ -96,14 +73,6 @@
           </form>
         </div>
       </div>
-=======
-
-          </form>
-        </div>
-        {% render 'tire-help' %}
-      </div>
-
->>>>>>> Stashed changes
     </div>
   </div>
 </div>
@@ -159,7 +128,6 @@
     grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 
-<<<<<<< Updated upstream
   @media screen and (max-width: 991px) {
     .header_manufacturer-suggested_sizes-wrapper {
       grid-area: span 1 / span 2 / span 1 / span 2;
@@ -180,23 +148,4 @@
   }
 
 
-=======
-@media screen and (max-width: 991px) {}
-@media screen and (max-width: 767px) {}
-@media screen and (max-width: 479px) {}
-
-
-<div class="header_manufacturer-suggested_sizes-wrapper">
-              <div>Popularne rozmiary {{ metaobject.name.value }}:</div>
-              <a href="/collections/opony?filter.p.m.tires.width=205&filter.p.m.tires.profile=55&filter.p.m.tires.diameter=16&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}">Opony {{ metaobject.name.value }}
-                <span class="text-weight-bold">205/55 R16</span>
-              </a>
-              <a href="/collections/opony?filter.p.m.tires.width=195&filter.p.m.tires.profile=65&filter.p.m.tires.diameter=15&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}">Opony {{ metaobject.name.value }}
-                <span class="text-weight-bold">195/65 R15</span>
-              </a>
-              <a href="/collections/opony?filter.p.m.tires.width=225&filter.p.m.tires.profile=45&filter.p.m.tires.diameter=17&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}">Opony {{ metaobject.name.value }}
-                <span class="text-weight-bold">225/45 R17</span>
-              </a>
-            </div>
->>>>>>> Stashed changes
 {% endstylesheet %}
