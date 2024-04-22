@@ -262,44 +262,7 @@
     {% endfor %}
 
 </div>
-<div class="w-nav-overlay" id="w-nav-overlay-0" style="display: none">
-    {% comment %}
-    <ul class="menu">
-        {% for block in section.blocks %}
-            {% if block.type == 'navigation' %}
-                <div class="footer_link-list">
-                    <div class="margin-bottom margin-xsmall">
-                        <div class="text-weight-semibold">{{ block.settings.link-list.title }}</div>
-                    </div>
-                    {% for link in block.settings.link-list.links %}
-                        <a href="{{ link.url }}" class="footer_link">{{ link.title }}</a>
-                    {% endfor %}
-                </div>
-            {% elsif block.type == 'brand-info' %}
-                <div class="footer_link-list">
-                    <div class="margin-bottom margin-xsmall">
-                        <div class="text-weight-semibold">{{ block.settings.heading }}</div>
-                    </div>
-                    <div class="footer_info-wrapper">
-                        <div class="icon-embed-xsmall">
-                            <img src="{{ 'IcRoundLocationOn.svg' | asset_url }}"  alt="location-icon"/>
-                        </div>
-                        <div>{{ block.settings.adress }}</div>
-                    </div>
-                    <div class="margin-top margin-xsmall">
-                        <div class="footer_info-wrapper">
-                            <div class="icon-embed-xsmall">
-                                <img src="{{ 'IcRoundAccessTimeFilled.svg' | asset_url }}"  alt="clock-icon"/>
-                            </div>
-                            <div>{{ block.settings.open-hours }}</div>
-                        </div>
-                    </div>
-                </div>
-            {% endif %}
-        {% endfor %}
-    </ul>
-    {% endcomment %}
-</div>
+<div class="w-nav-overlay" id="w-nav-overlay-0" style="display: none"></div>
 
 {% comment %} Nav contact & account modals {% endcomment %}
 <script>
