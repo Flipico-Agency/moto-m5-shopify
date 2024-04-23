@@ -195,13 +195,13 @@
                             </div>
                         {% when 2 %}
                             <div class="navbar7_dropdown-content-rims">
-                                {% assign rims_titles = "Felgi Alumioniowe,Felgi Stalowe,Felgi Motocyklowe" | split: "," %}
+                                {% assign rims_titles = "Felgi Aluminiowe,Felgi Stalowe,Felgi Motocyklowe" | split: "," %}
                                 {% assign images = "rim-aluminium.webp,rim-steel.webp,rim-moto.webp" | split: "," %}
 
                                 {% for rim_title in rims_titles %}
-                                    {% assign href_slug = rim_title | slugify %}
+                                    {% assign href_slug = rim_title | replace: ' ', '-' | downcase %}
                                     {% assign index = forloop.index0 %}
-                                    <a href="/{{ href_slug }}" class="link-block-2 w-inline-block" tabindex="0">
+                                    <a href="/pages/{{ href_slug }}" class="link-block-2 w-inline-block" tabindex="0">
                                         <div class="div-block-26">
                                             <img src="{{ images[index] | asset_url }}" loading="lazy" sizes="100vw" alt="tire-image">
                                         </div>

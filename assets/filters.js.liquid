@@ -290,6 +290,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                 'filter.p.m.rims.width': rim.width.value,
                 'filter.p.m.rims.e_t': rim.et.value
             };
+
+            {% comment %} Use pathsegments to indentify the rims page and add the query param {% endcomment %}
         }
 
         return queryParams;
@@ -596,6 +598,9 @@ document.addEventListener('DOMContentLoaded', async function () {
             if (activePage.includes('/pages/opony/')) {
                 activeTabContent = document.getElementById('tire-manufacturer-form');
                 activeSubTabNumber = '1';
+            } else if (activePage.includes('/pages/felgi-aluminiowe') || activePage.includes('/pages/felgi-stalowe')) {
+                activeTabContent = document.getElementById('tire-manufacturer-form');
+                activeSubTabNumber = '3';
             } else if (activePage.includes('/collections/')) {
                 activeTabContent = document.querySelector('div[data-sub-tab].w-tab-pane.w--tab-active');
                 activeSubTabNumber = pathToSubTabNumber[activePage] || null;
