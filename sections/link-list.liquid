@@ -20,6 +20,8 @@
             </div>
           {% elsif section.settings.season_select == "Popularne" %}
             <h4>Popularne rozmiary opon {{ metaobject.name.value }}</h4>
+          {% elsif section.settings.season_select == "Popularne_felgi_srednica" %}
+            <h4>Popularne średnice {{ page.title }}</h4>
           {% endif %}
         </div>
         <div class="link-list">
@@ -57,41 +59,69 @@
               {% endif %}
             {% endfor %}
           {% elsif section.settings.season_select == "Popularne" %}
-            <a class="text-size-small" href="/collections/opony?filter.p.m.tires.width=205&filter.p.m.tires.profile=55&filter.p.m.tires.diameter=16&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}">Opony {{ metaobject.name.value }}
+            <a class="text-size-small" href="/collections/opony?filter.p.m.tires.width=205&filter.p.m.tires.profile=55&filter.p.m.tires.diameter=16{% if metaobject.system.type == 'brand_page_tires'%}&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}{% endif %}">Opony {{ metaobject.name.value }}
               <span class="text-weight-bold">205/55 R16</span>
             </a>
-            <a class="text-size-small" href="/collections/opony?filter.p.m.tires.width=195&filter.p.m.tires.profile=65&filter.p.m.tires.diameter=15&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}">Opony {{ metaobject.name.value }}
+            <a class="text-size-small" href="/collections/opony?filter.p.m.tires.width=195&filter.p.m.tires.profile=65&filter.p.m.tires.diameter=15&{% if metaobject.system.type == 'brand_page_tires'%}&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}{% endif %}">Opony {{ metaobject.name.value }}
               <span class="text-weight-bold">195/65 R15</span>
             </a>
-            <a class="text-size-small" href="/collections/opony?filter.p.m.tires.width=225&filter.p.m.tires.profile=45&filter.p.m.tires.diameter=17&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}">Opony {{ metaobject.name.value }}
+            <a class="text-size-small" href="/collections/opony?filter.p.m.tires.width=225&filter.p.m.tires.profile=45&filter.p.m.tires.diameter=17&{% if metaobject.system.type == 'brand_page_tires'%}&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}{% endif %}">Opony {{ metaobject.name.value }}
               <span class="text-weight-bold">225/45 R17</span>
             </a>
-            <a class="text-size-small" href="/collections/opony?filter.p.m.tires.width=215&filter.p.m.tires.profile=65&filter.p.m.tires.diameter=16&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}">Opony {{ metaobject.name.value }}
+            <a class="text-size-small" href="/collections/opony?filter.p.m.tires.width=215&filter.p.m.tires.profile=65&filter.p.m.tires.diameter=16&{% if metaobject.system.type == 'brand_page_tires'%}&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}{% endif %}">Opony {{ metaobject.name.value }}
               <span class="text-weight-bold">215/65 R16</span>
             </a>
-            <a class="text-size-small" href="/collections/opony?filter.p.m.tires.width=205&filter.p.m.tires.profile=60&filter.p.m.tires.diameter=16&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}">Opony {{ metaobject.name.value }}
+            <a class="text-size-small" href="/collections/opony?filter.p.m.tires.width=205&filter.p.m.tires.profile=60&filter.p.m.tires.diameter=16&{% if metaobject.system.type == 'brand_page_tires'%}&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}{% endif %}">Opony {{ metaobject.name.value }}
               <span class="text-weight-bold">205/60 R16</span>
             </a>
-            <a class="text-size-small" href="/collections/opony?filter.p.m.tires.width=225&filter.p.m.tires.profile=50&filter.p.m.tires.diameter=17&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}">Opony {{ metaobject.name.value }}
+            <a class="text-size-small" href="/collections/opony?filter.p.m.tires.width=225&filter.p.m.tires.profile=50&filter.p.m.tires.diameter=17&{% if metaobject.system.type == 'brand_page_tires'%}&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}{% endif %}">Opony {{ metaobject.name.value }}
               <span class="text-weight-bold">225/50 R17</span>
             </a>
-            <a class="text-size-small" href="/collections/opony?filter.p.m.tires.width=225&filter.p.m.tires.profile=55&filter.p.m.tires.diameter=17&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}">Opony {{ metaobject.name.value }}
+            <a class="text-size-small" href="/collections/opony?filter.p.m.tires.width=225&filter.p.m.tires.profile=55&filter.p.m.tires.diameter=17&{% if metaobject.system.type == 'brand_page_tires'%}&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}{% endif %}">Opony {{ metaobject.name.value }}
               <span class="text-weight-bold">225/55 R17</span>
             </a>
-            <a class="text-size-small" href="/collections/opony?filter.p.m.tires.width=185&filter.p.m.tires.profile=65&filter.p.m.tires.diameter=15&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}">Opony {{ metaobject.name.value }}
+            <a class="text-size-small" href="/collections/opony?filter.p.m.tires.width=185&filter.p.m.tires.profile=65&filter.p.m.tires.diameter=15&{% if metaobject.system.type == 'brand_page_tires'%}&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}{% endif %}">Opony {{ metaobject.name.value }}
               <span class="text-weight-bold">185/65 R15</span>
             </a>
-            <a class="text-size-small" href="/collections/opony?filter.p.m.tires.width=215&filter.p.m.tires.profile=60&filter.p.m.tires.diameter=16&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}">Opony {{ metaobject.name.value }}
+            <a class="text-size-small" href="/collections/opony?filter.p.m.tires.width=215&filter.p.m.tires.profile=60&filter.p.m.tires.diameter=16&{% if metaobject.system.type == 'brand_page_tires'%}&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}{% endif %}">Opony {{ metaobject.name.value }}
               <span class="text-weight-bold">215/60 R16</span>
             </a>
-            <a class="text-size-small" href="/collections/opony?filter.p.m.tires.width=195&filter.p.m.tires.profile=55&filter.p.m.tires.diameter=16&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}">Opony {{ metaobject.name.value }}
+            <a class="text-size-small" href="/collections/opony?filter.p.m.tires.width=195&filter.p.m.tires.profile=55&filter.p.m.tires.diameter=16&{% if metaobject.system.type == 'brand_page_tires'%}&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}{% endif %}">Opony {{ metaobject.name.value }}
               <span class="text-weight-bold">195/55 R16</span>
             </a>
-            <a class="text-size-small" href="/collections/opony?filter.p.m.tires.width=175&filter.p.m.tires.profile=65&filter.p.m.tires.diameter=14&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}">Opony {{ metaobject.name.value }}
+            <a class="text-size-small" href="/collections/opony?filter.p.m.tires.width=175&filter.p.m.tires.profile=65&filter.p.m.tires.diameter=14&{% if metaobject.system.type == 'brand_page_tires'%}&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}{% endif %}">Opony {{ metaobject.name.value }}
               <span class="text-weight-bold">175/65 R14</span>
             </a>
-            <a class="text-size-small" href="/collections/opony?filter.p.m.tires.width=275&filter.p.m.tires.profile=30&filter.p.m.tires.diameter=20&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}">Opony {{ metaobject.name.value }}
+            <a class="text-size-small" href="/collections/opony?filter.p.m.tires.width=275&filter.p.m.tires.profile=30&filter.p.m.tires.diameter=20&{% if metaobject.system.type == 'brand_page_tires'%}&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}{% endif %}">Opony {{ metaobject.name.value }}
               <span class="text-weight-bold">Test dla Remigiusza</span>
+            </a>
+          {% elsif section.settings.season_select == "Popularne_felgi_srednica" %}
+            <a class="text-size-small" href="/collections/felgi?filter.p.m.rims.material={% if page.handle == 'felgi-aluminiowe' %}Aluminiowe{% elsif page.handle == 'felgi-stalowe' %}Stalowe{% endif %}&filter.p.m.rims.diameter=14">{{ page.title }}
+              <br><span class="text-size-large text-weight-bold">14 cali</span>
+            </a>
+            <a class="text-size-small" href="/collections/felgi?filter.p.m.rims.material={% if page.handle == 'felgi-aluminiowe' %}Aluminiowe{% elsif page.handle == 'felgi-stalowe' %}Stalowe{% endif %}&filter.p.m.rims.diameter=15">{{ page.title }}
+              <br><span class="text-size-large text-weight-bold">15 cali</span>
+            </a>
+            <a class="text-size-small" href="/collections/felgi?filter.p.m.rims.material={% if page.handle == 'felgi-aluminiowe' %}Aluminiowe{% elsif page.handle == 'felgi-stalowe' %}Stalowe{% endif %}&filter.p.m.rims.diameter=16">{{ page.title }}
+              <br><span class="text-size-large text-weight-bold">16 cali</span>
+            </a>
+            <a class="text-size-small" href="/collections/felgi?filter.p.m.rims.material={% if page.handle == 'felgi-aluminiowe' %}Aluminiowe{% elsif page.handle == 'felgi-stalowe' %}Stalowe{% endif %}&filter.p.m.rims.diameter=17">{{ page.title }}
+              <br><span class="text-size-large text-weight-bold">17 cali</span>
+            </a>
+            <a class="text-size-small" href="/collections/felgi?filter.p.m.rims.material={% if page.handle == 'felgi-aluminiowe' %}Aluminiowe{% elsif page.handle == 'felgi-stalowe' %}Stalowe{% endif %}&filter.p.m.rims.diameter=18">{{ page.title }}
+              <br><span class="text-size-large text-weight-bold">18 cali</span>
+            </a>
+            <a class="text-size-small" href="/collections/felgi?filter.p.m.rims.material={% if page.handle == 'felgi-aluminiowe' %}Aluminiowe{% elsif page.handle == 'felgi-stalowe' %}Stalowe{% endif %}&filter.p.m.rims.diameter=19">{{ page.title }}
+              <br><span class="text-size-large text-weight-bold">19 cali</span>
+            </a>
+            <a class="text-size-small" href="/collections/felgi?filter.p.m.rims.material={% if page.handle == 'felgi-aluminiowe' %}Aluminiowe{% elsif page.handle == 'felgi-stalowe' %}Stalowe{% endif %}&filter.p.m.rims.diameter=20">{{ page.title }}
+              <br><span class="text-size-large text-weight-bold">20 cali</span>
+            </a>
+            <a class="text-size-small" href="/collections/felgi?filter.p.m.rims.material={% if page.handle == 'felgi-aluminiowe' %}Aluminiowe{% elsif page.handle == 'felgi-stalowe' %}Stalowe{% endif %}&filter.p.m.rims.diameter=21">{{ page.title }}
+              <br><span class="text-size-large text-weight-bold">21 cali</span>
+            </a>
+            <a class="text-size-small" href="/collections/felgi?filter.p.m.rims.material={% if page.handle == 'felgi-aluminiowe' %}Aluminiowe{% elsif page.handle == 'felgi-stalowe' %}Stalowe{% endif %}&filter.p.m.rims.diameter=22">{{ page.title }}
+              <br><span class="text-size-large text-weight-bold">22 cali</span>
             </a>
           {% endif %}
         </div>
@@ -118,15 +148,21 @@
           {
             "label": "Letnie",
             "value": "Letnie"
-          }, {
+          },
+          {
             "label": "Zimowe",
             "value": "Zimowe"
-          }, {
+          },
+          {
             "label": "Całoroczne",
             "value": "Całoroczne"
-          }, {
-            "label": "Popularne rozmiary",
+          },
+          {
+            "label": "Popularne Rozmiary Opon",
             "value": "Popularne"
+          }, {
+            "label": "Popularne Średnice Felg",
+            "value": "Popularne_felgi_srednica"
           }
         ],
         "default": "Letnie"
