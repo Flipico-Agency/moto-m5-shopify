@@ -265,12 +265,12 @@ document.addEventListener('DOMContentLoaded', async function () {
             if (!isCollectionsPage) {
                 queryParams['filter.p.m.tires.season'] = tire.season.value;
             }
-        }
 
-        if (manufacturerHandle) {
-            const manufacturerId = await fetchManufacturerId(manufacturerHandle);
-            if (manufacturerId) {
-                queryParams['filter.p.m.tires.manufacturer'] = manufacturerId;
+            if (manufacturerHandle) {
+                const manufacturerId = await fetchManufacturerId(manufacturerHandle);
+                if (manufacturerId) {
+                    queryParams['filter.p.m.tires.manufacturer'] = manufacturerId;
+                }
             }
         }
 
@@ -292,6 +292,13 @@ document.addEventListener('DOMContentLoaded', async function () {
             };
 
             {% comment %} Use pathsegments to indentify the rims page and add the query param {% endcomment %}
+            if (pathSegments[2] === 'felgi-aluminiowe' || pathSegments[2] === 'felgi-stalowe') {
+                // Extract the full material name after "felgi-"
+                let material = pathSegments[2].slice(6);
+
+                // Capitalize the first letter and concatenate the rest of the string
+                queryParams['filter.p.m.rims.material'] = material.charAt(0).toUpperCase() + material.slice(1);
+            }
         }
 
         return queryParams;
