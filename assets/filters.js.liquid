@@ -111,12 +111,12 @@ document.addEventListener('DOMContentLoaded', async function () {
             });
 
             if (elementName === 'tire-season') {
-                const seasons = ['Letnie', 'Zimowe', 'Całoroczne'];
-                manageSelect(selectElement, seasons.map(season => ({ name: season, value: season })), true);
+                //const seasons = ['Letnie', 'Zimowe', 'Całoroczne'];
+                //manageSelect(selectElement, seasons.map(season => ({ name: season, value: season })), true);
                 if (urlParamValue) {
                     selectElement.value = urlParamValue;
                 } else {
-                    selectElement.value = 'Letnie'; // Default
+                    //selectElement.value = 'Letnie'; // Default
                 }
             } else if (apiParam && fetchDataEndpoints[elementName]) {
                 {% comment %}console.log(`Sending API request for ${elementName} with params:`, fetchDataParams);{% endcomment %}
@@ -250,8 +250,15 @@ document.addEventListener('DOMContentLoaded', async function () {
     async function buildSizeQueryParameters(activeSubTabNumber, tire, rim, isCollectionsPage) {
         let queryParams = {};
         const pathSegments = window.location.pathname.split('/');
-        const manufacturerSegmentIndex = pathSegments.indexOf('opony') + 1;
-        const manufacturerHandle = pathSegments.length > manufacturerSegmentIndex ? pathSegments[manufacturerSegmentIndex] : '';
+        let manufacturerHandle = '';
+
+        // Find the index of the segment that starts with "opony" or "opony-"
+        const tireSegmentIndex = pathSegments.findIndex(segment => segment === 'opony' || segment.startsWith('opony-'));
+
+        // If found, and there is another segment after this, assign it as a manufacturer handle
+        if (tireSegmentIndex !== -1 && pathSegments.length > tireSegmentIndex + 1) {
+            manufacturerHandle = pathSegments[tireSegmentIndex + 1];
+        }
 
         // Base parameters for tires are always included in subtabs 1 and 2
         if (activeSubTabNumber === '1' || activeSubTabNumber === '2') {
@@ -602,12 +609,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                 activeSubTabNumber = activeSubTab.getAttribute('data-w-tab').split('.')[1];
             }
         } else {
-            if (activePage.includes('/pages/opony/')) {
-                activeTabContent = document.getElementById('tire-manufacturer-form');
-                activeSubTabNumber = '1';
-            } else if (activePage.includes('/pages/felgi-aluminiowe') || activePage.includes('/pages/felgi-stalowe')) {
-                activeTabContent = document.getElementById('tire-manufacturer-form');
-                activeSubTabNumber = '3';
+            if (activePage.includes('/pages/')) {
+                activeTabContent = document.getElementById('single-tab-form');
+                activeSubTabNumber = activeTabContent.getAttribute('data-w-tab').split('.')[1];
             } else if (activePage.includes('/collections/')) {
                 activeTabContent = document.querySelector('div[data-sub-tab].w-tab-pane.w--tab-active');
                 activeSubTabNumber = pathToSubTabNumber[activePage] || null;
