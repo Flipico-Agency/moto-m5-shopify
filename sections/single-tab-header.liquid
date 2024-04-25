@@ -102,7 +102,7 @@
             {% endif %}
 
             {% unless section.settings.typ_sekcji == 'Felgi' %}
-              <div class="form-field-wrapper {% if types_do_not_display_season contains section.settings.typ_sekcji %}hide{% endif %}">
+              <div class="form-field-wrapper {% if types_do_not_display_season contains section.settings.typ_sekcji %}visibility-hidden{% endif %}">
                 <label for="tire-season" class="field-label">Sezon</label>
                 <select
                         id="tire-season"
