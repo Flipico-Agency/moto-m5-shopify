@@ -279,7 +279,7 @@
                                                                                             {% if filter_value.count == 0 and filter_value.active == false -%}
                                                                                                 disabled{%- endif %}
                                                                                             onchange="this.form.submit()">
-                                                                                    {{ filter_value.label }}
+                                                                                    {{ filter_value.label }} ({{ filter_value.count }})
                                                                                 </label>
                                                                             </div>
                                                                         {%- endfor -%}

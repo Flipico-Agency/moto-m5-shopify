@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     async function buildSizeQueryParameters(activeSubTabNumber, tire, rim, isCollectionsPage) {
-        let queryParams = {};
+        const queryParams = new URLSearchParams();
         const pathSegments = window.location.pathname.split('/');
         let manufacturerHandle = '';
 
@@ -262,54 +262,51 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         // Base parameters for tires are always included in subtabs 1 and 2
         if (activeSubTabNumber === '1' || activeSubTabNumber === '2') {
-            queryParams = {
-                'filter.p.m.tires.width': tire.width.value,
-                'filter.p.m.tires.profile': tire.profile.value,
-                'filter.p.m.tires.diameter': tire.diameter.value
-            };
+            queryParams.set('filter.p.m.tires.width', tire.width.value);
+            queryParams.set('filter.p.m.tires.profile', tire.profile.value);
+            queryParams.set('filter.p.m.tires.diameter', tire.diameter.value);
 
-            // Add season parameter only if not on collections page
+            // Add season parameter only if not on collection page
             if (!isCollectionsPage) {
-                queryParams['filter.p.m.tires.season'] = tire.season.value;
+                queryParams.set('filter.p.m.tires.season', tire.season.value);
             }
 
             if (manufacturerHandle) {
                 const manufacturerId = await fetchManufacturerId(manufacturerHandle);
                 if (manufacturerId) {
-                    queryParams['filter.p.m.tires.manufacturer'] = manufacturerId;
+                    queryParams.set('filter.p.m.tires.manufacturer', manufacturerId);
                 }
+            }
+
+            // Check for 'opony-run-flat' in the path segments
+            if (pathSegments.includes('opony-run-flat')) {
+                queryParams.set('filter.p.m.tires.additional_information', 'Run+flat');
             }
         }
 
         // For subtab 2, include rim parameters along with base tire parameters
         if (activeSubTabNumber === '2') {
-            Object.assign(queryParams, {
-                'filter.p.m.rims.bolt_spacing': rim.bolt.value,
-                'filter.p.m.rims.width': rim.width.value
-            });
+            queryParams.set('filter.p.m.rims.bolt_spacing', rim.bolt.value);
+            queryParams.set('filter.p.m.rims.width', rim.width.value);
         }
 
         // For subtab 3, only include rim parameters
         if (activeSubTabNumber === '3') {
-            queryParams = {
-                'filter.p.m.rims.diameter': rim.diameter.value,
-                'filter.p.m.rims.bolt_spacing': rim.bolt.value,
-                'filter.p.m.rims.width': rim.width.value,
-                'filter.p.m.rims.e_t': rim.et.value
-            };
+            queryParams.set('filter.p.m.rims.diameter', rim.diameter.value);
+            queryParams.set('filter.p.m.rims.bolt_spacing', rim.bolt.value);
+            queryParams.set('filter.p.m.rims.width', rim.width.value);
+            queryParams.set('filter.p.m.rims.e_t', rim.et.value);
 
-            {% comment %} Use pathsegments to indentify the rims page and add the query param {% endcomment %}
-            if (pathSegments[2] === 'felgi-aluminiowe' || pathSegments[2] === 'felgi-stalowe') {
-                // Extract the full material name after "felgi-"
+            // Handle a special materials case
+            if (pathSegments[2] && (pathSegments[2] === 'felgi-aluminiowe' || pathSegments[2] === 'felgi-stalowe')) {
                 let material = pathSegments[2].slice(6);
-
-                // Capitalize the first letter and concatenate the rest of the string
-                queryParams['filter.p.m.rims.material'] = material.charAt(0).toUpperCase() + material.slice(1);
+                queryParams.set('filter.p.m.rims.material', material.charAt(0).toUpperCase() + material.slice(1));
             }
         }
 
         return queryParams;
     }
+
     function buildCarQueryParameters(activeTabContent, elements, urlParams) {
         let queryParams = {};
 
@@ -384,8 +381,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             localStorage.setItem('searchBy', 'bySize');
 
             // Build query parameters based on the active sub-tab and selected options
-            const queryParams = buildSizeQueryParameters(activeSubTabNumber, tire, rim, isCollectionsPage);
-            window.location.href = `${formAction}?${new URLSearchParams(await queryParams).toString()}`;
+            const queryParams = await buildSizeQueryParameters(activeSubTabNumber, tire, rim, isCollectionsPage);
+            window.location.href = `${formAction}?${queryParams.toString().replace('%2B', '+')}`;
         });
     }
 

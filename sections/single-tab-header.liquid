@@ -35,7 +35,7 @@
             {% assign types_do_not_display_season = "Opony Letnie,Opony Zimowe,Opony Całoroczne" | split: "," %}
 
             {% if section.settings.typ_sekcji contains 'Opony'%}
-              <div class="div-block-21-copy">
+              <div class="div-block-21-copy" {% if types_do_not_display_season contains section.settings.typ_sekcji %} style="grid-area: span 1 / span 2 / span 1 / span 2" {% endif %}>
                 {% for i in (0..2) %}
                   <div class="form-field-wrapper">
                     <label for="{{ tire_fields_data_name[i] | downcase }}" class="field-label">{{ tire_fields_label[i] }}</label>
@@ -102,7 +102,7 @@
             {% endif %}
 
             {% unless section.settings.typ_sekcji == 'Felgi' %}
-              <div class="form-field-wrapper {% if types_do_not_display_season contains section.settings.typ_sekcji %}visibility-hidden{% endif %}">
+              <div class="form-field-wrapper {% if types_do_not_display_season contains section.settings.typ_sekcji %}hide{% endif %}">
                 <label for="tire-season" class="field-label">Sezon</label>
                 <select
                         id="tire-season"
@@ -256,12 +256,5 @@
       grid-template-columns: 1fr;
     }
   }
-
-  @media screen and (max-width: 479px) {
-    .header_manufacturer-suggested_sizes-wrapper {
-      grid-area: span 1 / span 1 / span 1 / span 1;
-    }
-  }
-
 
 {% endstylesheet %}
