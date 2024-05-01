@@ -1,690 +1,714 @@
 <div class="padding-global">
-  <div class="container-large">
-    <div class="padding-section-medium">
-      <div class="product-header_component">
-        <div class="product-header_tittle">
-          {% if product.metafields.tires.season.value == 'Letnie' %}
-            <img src="{{ 'IcRoundSun.svg' | asset_url }}" class="icon-embed-medium">
-          {% elsif product.metafields.tires.season.value == 'Zimowe' %}
-            <img src="{{ 'IcRoundWinter.svg' | asset_url }}" class="icon-embed-medium">
-          {% elsif product.metafields.tires.season.value == 'Całoroczne' %}
-            <img src="{{ 'IcRoundAllSeason.svg' | asset_url }}" class="icon-embed-medium">
-          {% endif %}
-          <h1 class="heading-style-h3">
-            {% if product.collections[0].handle == 'opony' %}
-              {{ product.metafields.tires.model.value.model.value }}<span class="text-weight-normal">
-                {{ product.metafields.tires.width }}/{{ product.metafields.tires.profile }} R{{ product.metafields.tires.diameter }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}</span>
-            {% elsif product.collections[0].handle == 'felgi' %}
-              {{ product.metafields.rims.model.value.model.value }}<span class="text-weight-normal">
-                {{ product.metafields.rims.width }}x{{ product.metafields.rims.diameter }} {{ product.metafields.rims.bolt_spacing }} ET {{ product.metafields.rims.e_t }}</span>
-            {% elsif product.collections[0].handle == 'kola' %}
-            {% endif %}
-          </h1>
-        </div>
-        <div class="product-header_manufacturer-logo">
-          {% if product.collections[0].handle == 'opony' %}
-            <img src="{{ product.metafields.tires.manufacturer.value.logo.value |  image_url: width: 400 }}" class="product-header_tittle-image">
-          {% elsif product.collections[0].handle == 'felgi' %}
-            <img src="{{ product.metafields.rims.manufacturer.value.logo.value |  image_url: width: 400 }}" class="product-header_tittle-image">
-          {% endif %}
-        </div>
-        <div class="product-header_gallery">
-          <div class="product-header_gallery_main-image_wrapper">
-            {% if product.featured_image %}
-              {{ product.featured_image | image_url: height: 1000 | image_tag: class: 'product-header_gallery_main-image' }}
-            {% else %}
-              {% if product.collections[0].handle == 'opony' %}
-                {{ product.metafields.tires.model.value.zdjecie.value | image_url: height: 1000 | image_tag: class: 'product-header_gallery_main-image' }}
-              {% endif %}
-              {% if product.collections[0].handle == 'felgi' %}
-                {{ product.metafields.rims.model.value.zdjecie.value | image_url: height: 1000 | image_tag: class: 'product-header_gallery_main-image' }}
-              {% endif %}
-            {% endif %}
-          </div>
-          <div class="product-header_gallery-images_wrapper">
-            {% for image in product.images %}
-              <div class="product-header_gallery-image-wrapper">
-                <img class="product-header_gallery-image" src="{{ image | image_url: height: 200 | image_tag }}">
-              </div>
-            {% endfor %}
-          </div>
-        </div>
-        <div class="product-header_info">
-          <div class="product-header_info-top">
-            {% for block in section.blocks %}
-              {% case block.type %}
-                {% when 'parametr_main' %}
-                  <p class="text-size-tiny text-weight-semibold text-color-grayiron600">{{ block.settings.parametr_name }}</p>
-                  <p class="text-size-tiny text-weight-semibold text-color-black">{{ block.settings.parametr_value }}</p>
-              {% endcase %}
-            {% endfor %}
-          </div>
-          <div class="product-header_info-bottom">
-            <div class="product-header_info-bottom_item-wrapper" id="modal-open-data">
-              <div class="product-header_info-bottom_item">
-                <img src="{{ 'IcRoundList.svg' |  asset_url}}" class="icon-embed-xxsmall">
-                <div class="text-size-small">Dane techniczne</div>
-              </div>
-              <div class="icon-embed-xsmall"><img src="{{ 'IcArrowSmallRight.svg' | asset_url }}" /></div>
-            </div>
-            <div class="modal_component" id="modal-component-data">
-              <div class="modal_content-wrapper">
-                <div class="modal_close-button" id="modal-close-data"><img src="{{ 'IcRoundCloseRed.svg' |  asset_url}}" class="icon-embed-small"></div>
-                <div class="margin-bottom margin-large">
-                  <div class="margin-bottom margin-xsmall">
-                    <h4>Dane techniczne</h4>
-                  </div>
+    <div class="container-large">
+        <div class="padding-section-medium">
+            <div class="product-header_component">
+                <div class="product-header_tittle">
+                    {% if product.metafields.tires.season.value == 'Letnie' %}
+                        <img src="{{ 'IcRoundSun.svg' | asset_url }}" class="icon-embed-medium">
+                    {% elsif product.metafields.tires.season.value == 'Zimowe' %}
+                        <img src="{{ 'IcRoundWinter.svg' | asset_url }}" class="icon-embed-medium">
+                    {% elsif product.metafields.tires.season.value == 'Całoroczne' %}
+                        <img src="{{ 'IcRoundAllSeason.svg' | asset_url }}" class="icon-embed-medium">
+                    {% endif %}
+                    <h1 class="heading-style-h3">
+                        {% if product.collections[0].handle == 'opony' %}
+                            {{ product.metafields.tires.model.value.model.value }}<span class="text-weight-normal">
+                            {{ product.metafields.tires.width }}/{{ product.metafields.tires.profile }}
+                            R{{ product.metafields.tires.diameter }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}</span>
+                        {% elsif product.collections[0].handle == 'felgi' %}
+                            {{ product.metafields.rims.model.value.model.value }}<span class="text-weight-normal">
+                            {{ product.metafields.rims.width }}
+                            x{{ product.metafields.rims.diameter }} {{ product.metafields.rims.bolt_spacing }}
+                            ET {{ product.metafields.rims.e_t }}</span>
+                        {% elsif product.collections[0].handle == 'kola' %}
+                        {% endif %}
+                    </h1>
                 </div>
-                <div class="product-header_info-modal">
-                  {% for block in section.blocks %}
-                    {% case block.type %}
-                      {% when 'parametr' %}
-                        <p class="text-size-small text-weight-semibold text-color-grayiron600">{{ block.settings.parametr_name }}</p>
-                        <p class="text-size-small text-weight-semibold text-color-black">{{ block.settings.parametr_value }}</p>
-                      {% when 'parametr_header' %}
-                        <div class="product-parameters_heading">
-                          <div class="heading-style-h6">{{ block.settings.header }}</div>
+                <div class="product-header_manufacturer-logo">
+                    {% if product.collections[0].handle == 'opony' %}
+                        <img src="{{ product.metafields.tires.manufacturer.value.logo.value | image_url: width: 400 }}"
+                             class="product-header_tittle-image">
+                    {% elsif product.collections[0].handle == 'felgi' %}
+                        <img src="{{ product.metafields.rims.manufacturer.value.logo.value | image_url: width: 400 }}"
+                             class="product-header_tittle-image">
+                    {% endif %}
+                </div>
+                <div class="product-header_gallery">
+                    <div class="product-header_gallery_main-image_wrapper">
+                        {% if product.featured_image %}
+                            {{ product.featured_image | image_url: height: 1000 | image_tag: class: 'product-header_gallery_main-image' }}
+                        {% else %}
+                            {% if product.collections[0].handle == 'opony' %}
+                                {{ product.metafields.tires.model.value.zdjecie.value | image_url: height: 1000 | image_tag: class: 'product-header_gallery_main-image' }}
+                            {% endif %}
+                            {% if product.collections[0].handle == 'felgi' %}
+                                {{ product.metafields.rims.model.value.zdjecie.value | image_url: height: 1000 | image_tag: class: 'product-header_gallery_main-image' }}
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    <div class="product-header_gallery-images_wrapper">
+                        {% for image in product.images %}
+                            <div class="product-header_gallery-image-wrapper">
+                                <img class="product-header_gallery-image"
+                                     src="{{ image | image_url: height: 200 | image_tag }}">
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="product-header_info">
+                    <div class="product-header_info-top">
+                        {% for block in section.blocks %}
+                            {% case block.type %}
+                                {% when 'parametr_main' %}
+                                    <p class="text-size-tiny text-weight-semibold text-color-grayiron600">{{ block.settings.parametr_name }}</p>
+                                    <p class="text-size-tiny text-weight-semibold text-color-black">{{ block.settings.parametr_value }}</p>
+                            {% endcase %}
+                        {% endfor %}
+                    </div>
+                    <div class="product-header_info-bottom">
+                        <div class="product-header_info-bottom_item-wrapper" id="modal-open-data">
+                            <div class="product-header_info-bottom_item">
+                                <img src="{{ 'IcRoundList.svg' | asset_url }}" class="icon-embed-xxsmall">
+                                <div class="text-size-small">Dane techniczne</div>
+                            </div>
+                            <div class="icon-embed-xsmall"><img src="{{ 'IcArrowSmallRight.svg' | asset_url }}"/></div>
                         </div>
-                    {% endcase %}
-                  {% endfor %}
-                </div>
-              </div>
-              <div class="modal_background-overlay" id="modal-background-data"></div>
-            </div>
-            {% if section.settings.opis != blank %}
-              <div class="product-header_info-bottom_item-wrapper" id="modal-open-description">
-                <div class="product-header_info-bottom_item">
-                  <img src="{{ 'IcRoundDescription.svg' |  asset_url}}" class="icon-embed-xxsmall">
-                  <div class="text-size-small">Opis</div>
-                </div>
-                <div class="icon-embed-xsmall"><img src="{{ 'IcArrowSmallRight.svg' | asset_url }}" /></div>
-              </div>
-              <div class="modal_component" id="modal-component-description">
-                <div class="modal_content-wrapper">
-                  <div class="modal_close-button" id="modal-close-description"><img src="{{ 'IcRoundCloseRed.svg' |  asset_url}}" class="icon-embed-small"></div>
-                  <div class="margin-bottom margin-large">
-                    <div class="margin-bottom margin-xsmall">
-                      <h4>Opis</h4>
+                        <div class="modal_component" id="modal-component-data">
+                            <div class="modal_content-wrapper">
+                                <div class="modal_close-button" id="modal-close-data"><img
+                                            src="{{ 'IcRoundCloseRed.svg' | asset_url }}"
+                                            class="icon-embed-small"></div>
+                                <div class="margin-bottom margin-large">
+                                    <div class="margin-bottom margin-xsmall">
+                                        <h4>Dane techniczne</h4>
+                                    </div>
+                                </div>
+                                <div class="product-header_info-modal">
+                                    {% for block in section.blocks %}
+                                        {% case block.type %}
+                                            {% when 'parametr' %}
+                                                <p class="text-size-small text-weight-semibold text-color-grayiron600">{{ block.settings.parametr_name }}</p>
+                                                <p class="text-size-small text-weight-semibold text-color-black">{{ block.settings.parametr_value }}</p>
+                                            {% when 'parametr_header' %}
+                                                <div class="product-parameters_heading">
+                                                    <div class="heading-style-h6">{{ block.settings.header }}</div>
+                                                </div>
+                                        {% endcase %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="modal_background-overlay" id="modal-background-data"></div>
+                        </div>
+                        {% if section.settings.opis != blank %}
+                            <div class="product-header_info-bottom_item-wrapper" id="modal-open-description">
+                                <div class="product-header_info-bottom_item">
+                                    <img src="{{ 'IcRoundDescription.svg' | asset_url }}" class="icon-embed-xxsmall">
+                                    <div class="text-size-small">Opis</div>
+                                </div>
+                                <div class="icon-embed-xsmall"><img src="{{ 'IcArrowSmallRight.svg' | asset_url }}"/>
+                                </div>
+                            </div>
+                            <div class="modal_component" id="modal-component-description">
+                                <div class="modal_content-wrapper">
+                                    <div class="modal_close-button" id="modal-close-description"><img
+                                                src="{{ 'IcRoundCloseRed.svg' | asset_url }}" class="icon-embed-small">
+                                    </div>
+                                    <div class="margin-bottom margin-large">
+                                        <div class="margin-bottom margin-xsmall">
+                                            <h4>Opis</h4>
+                                        </div>
+                                    </div>
+                                    <div class="text-rich-text">{{ section.settings.opis }}</div>
+                                </div>
+                                <div class="modal_background-overlay" id="modal-background-description"></div>
+                            </div>
+                        {% endif %}
+                        <div class="product-header_info-bottom_item-wrapper">
+                            <div class="product-header_info-bottom_item">
+                                <img src="{{ 'IcRoundDelivery.svg' | asset_url }}" class="icon-embed-xxsmall">
+                                <div class="text-size-small">Dostawa i zwroty</div>
+                            </div>
+                            <div class="icon-embed-xsmall"><img src="{{ 'IcArrowSmallRight.svg' | asset_url }}"/></div>
+                        </div>
+                        {% if section.settings.guarantee != blank %}
+                            <div class="product-header_info-bottom_item-wrapper" id="modal-open-guarantee">
+                                <div class="product-header_info-bottom_item">
+                                    <img src="{{ 'IcRoundShield.svg' | asset_url }}" class="icon-embed-xxsmall">
+                                    <div class="text-size-small">Gwarancja</div>
+                                </div>
+                                <div class="icon-embed-xsmall"><img src="{{ 'IcArrowSmallRight.svg' | asset_url }}"/>
+                                </div>
+                            </div>
+                            <div class="modal_component" id="modal-component-guarantee">
+                                <div class="modal_content-wrapper">
+                                    <div class="modal_close-button" id="modal-close-guarantee"><img
+                                                src="{{ 'IcRoundCloseRed.svg' | asset_url }}" class="icon-embed-small">
+                                    </div>
+                                    <div class="margin-bottom margin-large">
+                                        <div class="margin-bottom margin-xsmall">
+                                            <h4>Gwarancja</h4>
+                                        </div>
+                                        <div class="guarantee-content-green">
+                                            <p class="text-weight-bold text-color-green">Dożywotnia gwarancja na
+                                                naprawę</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-rich-text">{{ section.settings.guarantee }}</div>
+                                </div>
+                                <div class="modal_background-overlay" id="modal-background-guarantee"></div>
+                            </div>
+                        {% endif %}
+                        <div class="product-header_info-bottom_item-wrapper" id="modal-open-payments">
+                            <div class="product-header_info-bottom_item">
+                                <img src="{{ 'IcRoundPayments.svg' | asset_url }}" class="icon-embed-xxsmall">
+                                <div class="text-size-small">Formy płatności</div>
+                            </div>
+                            <div class="icon-embed-xsmall"><img src="{{ 'IcArrowSmallRight.svg' | asset_url }}"/></div>
+                        </div>
+                        <div class="modal_component" id="modal-component-payments">
+                            <div class="modal_content-wrapper">
+                                <div class="modal_close-button" id="modal-close-payments"><img
+                                            src="{{ 'IcRoundCloseRed.svg' | asset_url }}" class="icon-embed-small">
+                                </div>
+                                <div class="margin-bottom margin-large">
+                                    <div class="margin-bottom margin-xsmall">
+                                        <h4>Opis</h4>
+                                    </div>
+                                </div>
+                                {% render 'payments' %}
+                            </div>
+                            <div class="modal_background-overlay" id="modal-background-payments"></div>
+                        </div>
                     </div>
-                  </div>
-                  <div class="text-rich-text">{{ section.settings.opis }}</div>
                 </div>
-                <div class="modal_background-overlay" id="modal-background-description"></div>
-              </div>
-            {% endif %}
-            <div class="product-header_info-bottom_item-wrapper">
-              <div class="product-header_info-bottom_item">
-                <img src="{{ 'IcRoundDelivery.svg' |  asset_url}}" class="icon-embed-xxsmall">
-                <div class="text-size-small">Dostawa i zwroty</div>
-              </div>
-              <div class="icon-embed-xsmall"><img src="{{ 'IcArrowSmallRight.svg' | asset_url }}" /></div>
-            </div>
-            {% if section.settings.guarantee != blank %}
-              <div class="product-header_info-bottom_item-wrapper" id="modal-open-guarantee">
-                <div class="product-header_info-bottom_item">
-                  <img src="{{ 'IcRoundShield.svg' |  asset_url}}" class="icon-embed-xxsmall">
-                  <div class="text-size-small">Gwarancja</div>
-                </div>
-                <div class="icon-embed-xsmall"><img src="{{ 'IcArrowSmallRight.svg' | asset_url }}" /></div>
-              </div>
-              <div class="modal_component" id="modal-component-guarantee">
-                <div class="modal_content-wrapper">
-                  <div class="modal_close-button" id="modal-close-guarantee"><img src="{{ 'IcRoundCloseRed.svg' |  asset_url}}" class="icon-embed-small"></div>
-                  <div class="margin-bottom margin-large">
-                    <div class="margin-bottom margin-xsmall">
-                      <h4>Gwarancja</h4>
+                <div class="product-header_buy">
+                    <div class="heading-style-h4 text-color-red600">{{ product.price | money }}
+                        <span class="text-size-regular">/{% if product.collections[0].handle == 'opony' %}{{ product.metafields.tires.quantity }}{% elsif product.collections[0].handle == 'felgi' %}{{ product.metafields.rims.quantity }}{% endif %}</span>
                     </div>
-                    <div class="guarantee-content-green">
-                      <p class="text-weight-bold text-color-green">Dożywotnia gwarancja na naprawę</p>
+                    <div class="text-size-tiny text-weight-semibold text-color-green">Darmowa Dostawa</div>
+                    <div class="product-buy_divider"></div>
+                    <div class="text-size-small text-weight-bold text-color-green">
+                        Zamów przed {{ settings.delivery-hour }} - wyślemy dzisiaj
                     </div>
-                  </div>
-                  <div class="text-rich-text">{{ section.settings.guarantee }}</div>
+                    {% if product.available %}
+                        <form
+                                method="post"
+                                action="/cart/add"
+                                enctype="multipart/form-data"
+                                class="margin-top margin-xsmall">
+                            <input
+                                    type="hidden"
+                                    name="id[]"
+                                    value="{{ product.variants.first.id }}"/>
+                            <input
+                                    type="hidden"
+                                    min="1"
+                                    name="quantity[]"
+                                    value="1"/>
+
+                            <div class="button-group-add-with-size">
+                                {% if product.collections[0].handle == 'opony' %}
+                                    <select id="size-selector" class="form-select_size">
+                                        <option selected="selected">{{ product.metafields.tires.quantity | slice: 0 }}
+                                            x {{ product.metafields.tires.width }}
+                                            /{{ product.metafields.tires.profile }}
+                                            R{{ product.metafields.tires.diameter }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}</option>
+                                        {% assign model_name = product.metafields.tires.model.value.model.value %}
+                                        {% assign model_url = product.url %}
+                                        {% for product in collections.opony.products %}
+                                            {% assign product_model = product.metafields.tires.model.value.model %}
+                                            {% if product_model == model_name and model_url != product.url %}
+                                                <option value="{{ product.url }}">{{ product.metafields.tires.quantity | slice: 0 }}
+                                                    x {{ product.metafields.tires.width }}
+                                                    /{{ product.metafields.tires.profile }}
+                                                    R{{ product.metafields.tires.diameter }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                {% endif %}
+                                <input
+                                        type="submit"
+                                        value="Dodaj do koszyka"
+                                        class="button is-small is-add-to-cart"/>
+                            </div>
+
+                            {% if product.collections[0].handle == 'opony' %}
+                                {% render 'tire-help' %}
+                            {% endif %}
+
+                            {% assign accesories_list = product.metafields.tires.accesories.value %}
+                            {% if accesories_list %}
+                                <div class="product-accesories-wrapper">
+                                    <div class="product-accesories-tittle">
+                                        <div class="text-size-tiny text-weight-medium">Kup przy okazji</div>
+                                        <a href="{{ collections.akcesoria.url }}" class="text-size-tiny text-weight-semibold">Więcej akcesoriów</a>
+                                    </div>
+                                    {% for accesories in accesories_list %}
+                                        <label class="form-checkbox-green">
+                                            <input type="checkbox" class="form-checkbox-icon-green" name="id[]" value="{{ accesories.variants.first.id }}">
+                                            {{ accesories.featured_image | image_url: height: 128 | image_tag: class: 'product-accesories-image' }}
+                                            <div class="product-accesories_tittle-wrapper">
+                                                <div class="text-size-small text-weight-medium">{{ accesories.title }}</div>
+                                                <div class="text-size-small text-weight-semibold text-color-red600">{{ accesories.price | money }}</div>
+                                            </div>
+                                        </label>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </form>
+                    {% else %}
+                        <div class="button is-secondary max-width-full">Produkt niedostępny</div>
+                    {% endif %}
                 </div>
-                <div class="modal_background-overlay" id="modal-background-guarantee"></div>
-              </div>
-            {% endif %}
-            <div class="product-header_info-bottom_item-wrapper" id="modal-open-payments">
-              <div class="product-header_info-bottom_item">
-                <img src="{{ 'IcRoundPayments.svg' |  asset_url}}" class="icon-embed-xxsmall">
-                <div class="text-size-small">Formy płatności</div>
-              </div>
-              <div class="icon-embed-xsmall"><img src="{{ 'IcArrowSmallRight.svg' | asset_url }}" /></div>
             </div>
-            <div class="modal_component" id="modal-component-payments">
-              <div class="modal_content-wrapper">
-                <div class="modal_close-button" id="modal-close-payments"><img src="{{ 'IcRoundCloseRed.svg' |  asset_url}}" class="icon-embed-small"></div>
-                <div class="margin-bottom margin-large">
-                  <div class="margin-bottom margin-xsmall">
-                    <h4>Opis</h4>
-                  </div>
-                </div>
-                {% render 'payments' %}
-              </div>
-              <div class="modal_background-overlay" id="modal-background-payments"></div>
-            </div>
-          </div>
         </div>
-        <div class="product-header_buy">
-          <div class="heading-style-h4 text-color-red600">{{ product.price | money }}<span class="text-size-regular">
-              /
-              {% if product.collections[0].handle == 'opony' %}
-                {{ product.metafields.tires.quantity }}
-              {% elsif product.collections[0].handle == 'felgi' %}
-                {{ product.metafields.rims.quantity }}{% endif %}
-            </span>
-          </div>
-          <div class="text-size-tiny text-weight-semibold text-color-green">Darmowa Dostawa</div>
-          <div class="product-buy_divider"></div>
-          <div class="text-size-small text-weight-bold text-color-green">Zamów przed {{ settings.delivery-hour }} - wyślemy dzisiaj</div>
-          {% if product.available %}
-            <form
-              method="post"
-              action="/cart/add"
-              class="margin-top margin-xsmall">
-              <input
-                type="hidden"
-                name="id"
-                value="{{ product.variants.first.id }}" />
-              <input
-                type="hidden"
-                min="1"
-                type="number"
-                id="quantity"
-                name="quantity"
-                value="1" />
-              <div class="button-group-add-with-size">
-                {% if product.collections[0].handle == 'opony' %}
-                  <select id="size-selector" class="form-select_size">
-                    <option selected="selected">{{ product.metafields.tires.quantity | slice: 0 }} x {{ product.metafields.tires.width }}/{{ product.metafields.tires.profile }} R{{ product.metafields.tires.diameter }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}</option>
-                    {% assign model_name = product.metafields.tires.model.value.model.value %}
-                    {% assign model_url = product.url %}
-                    {% for product in collections.opony.products %}
-                      {% assign product_model = product.metafields.tires.model.value.model %}
-                      {% if product_model == model_name and model_url != product.url %}
-                        <option value="{{ product.url}}">{{ product.metafields.tires.quantity | slice: 0 }} x {{ product.metafields.tires.width }}/{{ product.metafields.tires.profile }} R{{ product.metafields.tires.diameter }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}</option>
-                      {% endif %}
-                    {% endfor %}
-                  </select>
-                {% endif %}
-                <input
-                  type="submit"
-                  value="Dodaj do koszyka"
-                  class="button is-small is-add-to-cart" /></div>
-              {% if product.collections[0].handle == 'opony' %}
-                {% render 'tire-help' %}
-              {% endif %}
-              {% assign accesories_list = product.metafields.tires.accesories.value %}
-              {% if accesories_list %}
-                <div class="product-accesories-wrapper">
-                  <div class="product-accesories-tittle">
-                    <div class="text-size-tiny text-weight-medium">Kup przy okazji</div>
-                    <a href="{{ collections.akcesoria.url }}" class="text-size-tiny text-weight-semibold">Więcej akcesoriów</a>
-                  </div>
-                  {% for accesories in accesories_list %}
-                    <label class="form-checkbox-green">
-                      <input type="checkbox" class="form-checkbox-icon-green">
-                      {{ accesories.featured_image | image_url: height: 128 | image_tag: class: 'product-accesories-image' }}
-                      <div class="product-accesories_tittle-wrapper">
-                        <div class="text-size-small text-weight-medium">{{ accesories.title }}</div>
-                        <div class="text-size-small text-weight-semibold text-color-red600">{{ accesories.price | money }}</div>
-                      </div>
-                    </label>
-                  {% endfor %}
-                </div>
-              {% endif %}
-            </form>
-          {% else %}
-            <div class="button is-secondary max-width-full">Produkt niedostępny</div>
-          {% endif %}
-        </div>
-      </div>
     </div>
-  </div>
 </div>
 
-
 {% javascript %}
-  document.addEventListener('DOMContentLoaded', function() {
-    var selectElement = document.getElementById('size-selector');
+    document.addEventListener('DOMContentLoaded', function() {
+            var selectElement = document.getElementById('size-selector');
 
-    selectElement.addEventListener('change', function() {
-      var selectedValue = this.value;
+            selectElement.addEventListener('change', function() {
+            var selectedValue = this.value;
 
-// Assuming you want to change the window's location to the selected value
-      window.location.href = selectedValue;
-
-// If you need to do something else with the selected value, you can replace the above line
+            // Assuming you want to change the window's location to the selected value
+            window.location.href = selectedValue;
+        });
     });
-  });
 {% endjavascript %}
 
 {% stylesheet %}
 
-  .product-parameters_heading {
-    border-bottom: 1px solid var(--color-grayiron--grayiron400);
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    display: flex;
-    grid-area: span 1 / span 2 / span 1 / span 2;
-  }
+.product-parameters_heading {
+border-bottom: 1px solid var(--color-grayiron--grayiron400);
+justify-content: space-between;
+align-items: center;
+padding-top: 0.5rem;
+padding-bottom: 0.5rem;
+display: flex;
+grid-area: span 1 / span 2 / span 1 / span 2;
+}
 
-  .product-accesories_tittle-wrapper {
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    display: flex;
-  }
+.product-accesories_tittle-wrapper {
+justify-content: space-between;
+align-items: center;
+width: 100%;
+display: flex;
+}
 
-  .product-accesories-image {
-    aspect-ratio: 1;
-    object-fit: contain;
-    border-radius: 0.25rem;
-    width: 2.5rem;
-    height: 2.5rem;
-    margin-right: 0.5rem;
-  }
+.product-accesories-image {
+aspect-ratio: 1;
+object-fit: contain;
+border-radius: 0.25rem;
+width: 2.5rem;
+height: 2.5rem;
+margin-right: 0.5rem;
+}
 
-  .form-checkbox-green {
-    align-items: center;
-    width: 100%;
-    margin-bottom: 0;
-    padding-left: 1.25rem;
-    display: flex;
-  }
+.form-checkbox-green {
+align-items: center;
+width: 100%;
+margin-bottom: 0;
+padding-left: 1.25rem;
+display: flex;
+}
 
-  .form-checkbox-icon-green {
-    border: 1px solid var(--color-grayiron--grayiron400);
-    cursor: pointer;
-    border-radius: 0.25rem;
-    width: 1.25rem;
-    min-width: 1.25rem;
-    height: 1.25rem;
-    min-height: 1.25rem;
-    margin-top: 0;
-    margin-left: -1.25rem;
-    margin-right: 0.5rem;
-    transition: all 0.2s;
-  }
+.form-checkbox-icon-green {
+border: 1px solid var(--color-grayiron--grayiron400);
+cursor: pointer;
+border-radius: 0.25rem;
+width: 1.25rem;
+min-width: 1.25rem;
+height: 1.25rem;
+min-height: 1.25rem;
+margin-top: 0;
+margin-left: -1.25rem;
+margin-right: 0.5rem;
+transition: all 0.2s;
+}
 
-  .form-checkbox-icon-green:checked {
-    border: 1px solid var(--status-color--green);
-    background-color: var(--status-color--green);
-    box-shadow: none;
-    background-size: 16px 16px;
-    border-radius: 0.25rem;
-    width: 1.25rem;
-    height: 1.25rem;
-    margin-top: 0;
-    margin-left: -1.25rem;
-  }
-  .product-accesories-tittle {
-    justify-content: space-between;
-    align-items: center;
-    display: flex;
-  }
+.form-checkbox-icon-green:checked {
+border: 1px solid var(--status-color--green);
+background-color: var(--status-color--green);
+box-shadow: none;
+background-size: 16px 16px;
+border-radius: 0.25rem;
+width: 1.25rem;
+height: 1.25rem;
+margin-top: 0;
+margin-left: -1.25rem;
+}
+.product-accesories-tittle {
+justify-content: space-between;
+align-items: center;
+display: flex;
+}
 
-  .product-accesories-wrapper {
-    grid-column-gap: 0.5rem;
-    grid-row-gap: 0.5rem;
-    border-top: 1px solid var(--color-grayiron--grayiron400);
-    flex-flow: column;
-    margin-top: 1rem;
-    margin-left: -1rem;
-    margin-right: -1rem;
-    padding-top: 1rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    display: flex;
-  }
+.product-accesories-wrapper {
+grid-column-gap: 0.5rem;
+grid-row-gap: 0.5rem;
+border-top: 1px solid var(--color-grayiron--grayiron400);
+flex-flow: column;
+margin-top: 1rem;
+margin-left: -1rem;
+margin-right: -1rem;
+padding-top: 1rem;
+padding-left: 1rem;
+padding-right: 1rem;
+display: flex;
+}
 
-  .size-help-wrapper {
-    grid-column-gap: 0.5rem;
-    grid-row-gap: 0.5rem;
-    align-items: center;
-    margin-top: 1rem;
-    display: flex;
-  }
-  .button.is-small.is-add-to-cart {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-  }
+.size-help-wrapper {
+grid-column-gap: 0.5rem;
+grid-row-gap: 0.5rem;
+align-items: center;
+margin-top: 1rem;
+display: flex;
+}
+.button.is-small.is-add-to-cart {
+border-top-left-radius: 0;
+border-bottom-left-radius: 0;
+}
 
-  .form-select_size {
-    background-color: var(--color-grayiron--grayiron100);
-    color: var(--color--black);
-    text-align: left;
-    text-transform: capitalize;
-    border: 2px solid rgba(0, 0, 0, 0);
-    border-radius: 0.25rem 0 0 0.25rem;
-    height: 100%;
-    margin: 0;
-    padding: 0.75rem;
-    font-weight: 500;
-    text-decoration: none;
-    transition: border-color 0.2s ease-in-out
-    , background-color 0.2s ease-in-out;
-  }
+.form-select_size {
+background-color: var(--color-grayiron--grayiron100);
+color: var(--color--black);
+text-align: left;
+text-transform: capitalize;
+border: 2px solid rgba(0, 0, 0, 0);
+border-radius: 0.25rem 0 0 0.25rem;
+height: 100%;
+margin: 0;
+padding: 0.75rem;
+font-weight: 500;
+text-decoration: none;
+transition: border-color 0.2s ease-in-out
+, background-color 0.2s ease-in-out;
+}
 
-  .product-header_component {
-    grid-column-gap: 1rem;
-    grid-row-gap: 1rem;
-    grid-template-rows: auto auto;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-auto-columns: 1fr;
-    padding-bottom: 3rem;
-    display: grid;
-  }
+.product-header_component {
+grid-column-gap: 1rem;
+grid-row-gap: 1rem;
+grid-template-rows: auto auto;
+grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+grid-auto-columns: 1fr;
+padding-bottom: 3rem;
+display: grid;
+}
 
-  .product-header_tittle {
-    grid-column-gap: 0.5rem;
-    grid-row-gap: 0.5rem;
-    grid-template-rows: auto;
-    grid-template-columns: max-content 1fr;
-    grid-auto-columns: 1fr;
-    align-items: center;
-    display: grid;
-    grid-area: span 1 / span 8 / span 1 / span 8;
-  }
+.product-header_tittle {
+grid-column-gap: 0.5rem;
+grid-row-gap: 0.5rem;
+grid-template-rows: auto;
+grid-template-columns: max-content 1fr;
+grid-auto-columns: 1fr;
+align-items: center;
+display: grid;
+grid-area: span 1 / span 8 / span 1 / span 8;
+}
 
-  .product-header_manufacturer-logo {
-    background-color: var(--color--white);
-    border-radius: 0.5rem;
-    justify-content: center;
-    align-items: center;
-    padding: 1rem;
-    display: flex;
-    grid-area: span 1 / span 4 / span 1 / span 4;
-  }
+.product-header_manufacturer-logo {
+background-color: var(--color--white);
+border-radius: 0.5rem;
+justify-content: center;
+align-items: center;
+padding: 1rem;
+display: flex;
+grid-area: span 1 / span 4 / span 1 / span 4;
+}
 
-  .product-header_tittle-image {
-    aspect-ratio: 4;
-    max-height: 2rem;
-    grid-area: span 1 / span 2 / span 1 / span 2;
-  }
+.product-header_tittle-image {
+aspect-ratio: 4;
+max-height: 2rem;
+grid-area: span 1 / span 2 / span 1 / span 2;
+}
 
-  .product-header_gallery {
-    grid-column-gap: 1rem;
-    grid-row-gap: 1rem;
-    background-color: var(--color--white);
-    border-radius: 0.5rem;
-    flex-flow: column;
-    padding: 1rem;
-    display: flex;
-    grid-area: span 1 / span 4 / span 1 / span 4;
-  }
+.product-header_gallery {
+grid-column-gap: 1rem;
+grid-row-gap: 1rem;
+background-color: var(--color--white);
+border-radius: 0.5rem;
+flex-flow: column;
+padding: 1rem;
+display: flex;
+grid-area: span 1 / span 4 / span 1 / span 4;
+}
 
-  .product-header_gallery-images_wrapper {
-    grid-column-gap: 1rem;
-    grid-row-gap: 1rem;
-    grid-template-rows: auto;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-auto-columns: 1fr;
-    align-items: stretch;
-    display: grid;
-  }
+.product-header_gallery-images_wrapper {
+grid-column-gap: 1rem;
+grid-row-gap: 1rem;
+grid-template-rows: auto;
+grid-template-columns: 1fr 1fr 1fr 1fr;
+grid-auto-columns: 1fr;
+align-items: stretch;
+display: grid;
+}
 
-  .product-header_gallery-image-wrapper {
-    aspect-ratio: 1;
-    background-color: var(--color--white);
-    border-radius: 0.5rem;
-    overflow: hidden;
-  }
+.product-header_gallery-image-wrapper {
+aspect-ratio: 1;
+background-color: var(--color--white);
+border-radius: 0.5rem;
+overflow: hidden;
+}
 
-  .product-header_gallery-image {
-    aspect-ratio: 1;
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-  }
+.product-header_gallery-image {
+aspect-ratio: 1;
+object-fit: cover;
+width: 100%;
+height: 100%;
+}
 
-  .product-header_gallery_main-image_wrapper {
-    aspect-ratio: 1;
-    background-color: var(--color--white);
-    border-radius: 0.5rem;
-    overflow: hidden;
-    grid-area: span 1 / span 4 / span 1 / span 4;
-  }
+.product-header_gallery_main-image_wrapper {
+aspect-ratio: 1;
+background-color: var(--color--white);
+border-radius: 0.5rem;
+overflow: hidden;
+grid-area: span 1 / span 4 / span 1 / span 4;
+}
 
-  .product-header_gallery_main-image {
-    aspect-ratio: 1;
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-  }
+.product-header_gallery_main-image {
+aspect-ratio: 1;
+object-fit: cover;
+width: 100%;
+height: 100%;
+}
 
-  .product-header_info {
-    flex-flow: column;
-    justify-content: space-between;
-    padding: 0.5rem 1rem;
-    display: flex;
-    grid-area: span 1 / span 4 / span 1 / span 4;
-  }
+.product-header_info {
+flex-flow: column;
+justify-content: space-between;
+padding: 0.5rem 1rem;
+display: flex;
+grid-area: span 1 / span 4 / span 1 / span 4;
+}
 
-  .product-header_info-top {
-    grid-column-gap: 1rem;
-    grid-row-gap: 0.5rem;
-    grid-template-rows: auto auto;
-    grid-template-columns: 1fr 1fr;
-    grid-auto-columns: 1fr;
-    display: grid;
-  }
+.product-header_info-top {
+grid-column-gap: 1rem;
+grid-row-gap: 0.5rem;
+grid-template-rows: auto auto;
+grid-template-columns: 1fr 1fr;
+grid-auto-columns: 1fr;
+display: grid;
+}
 
-  .product-header_info-modal {
-    grid-column-gap: 1rem;
-    grid-row-gap: 1rem;
-    grid-template-rows: auto auto;
-    grid-template-columns: 1fr 1fr;
-    grid-auto-columns: 1fr;
-    display: grid;
-    width: 100%;
-  }
+.product-header_info-modal {
+grid-column-gap: 1rem;
+grid-row-gap: 1rem;
+grid-template-rows: auto auto;
+grid-template-columns: 1fr 1fr;
+grid-auto-columns: 1fr;
+display: grid;
+width: 100%;
+}
 
-  .product-header_info-bottom {
-    flex-flow: column;
-    justify-content: flex-end;
-    display: flex;
-  }
+.product-header_info-bottom {
+flex-flow: column;
+justify-content: flex-end;
+display: flex;
+}
 
-  .product-header_info-bottom_item-wrapper {
-    border-bottom: 1px solid var(--color-grayiron--grayiron400);
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    display: flex;
-  }
+.product-header_info-bottom_item-wrapper {
+border-bottom: 1px solid var(--color-grayiron--grayiron400);
+justify-content: space-between;
+align-items: center;
+padding-top: 0.5rem;
+padding-bottom: 0.5rem;
+display: flex;
+}
 
-  .product-header_info-bottom_item {
-    grid-column-gap: 0.5rem;
-    grid-row-gap: 0.5rem;
-    align-items: center;
-    display: flex;
-  }
+.product-header_info-bottom_item {
+grid-column-gap: 0.5rem;
+grid-row-gap: 0.5rem;
+align-items: center;
+display: flex;
+}
 
-  .product-header_buy {
-    background-color: var(--color--white);
-    border-radius: 0.5rem;
-    padding: 1rem;
-    grid-area: span 1 / span 4 / span 1 / span 4;
-  }
+.product-header_buy {
+background-color: var(--color--white);
+border-radius: 0.5rem;
+padding: 1rem;
+grid-area: span 1 / span 4 / span 1 / span 4;
+}
 
-  .modal_component {
-    z-index: 9999;
-    justify-content: flex-end;
-    align-items: center;
-    width: 100vw;
-    height: 100vh;
-    display: none;
-    opacity: 0;
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    transition: opacity 300ms ease-in-out;
-  }
+.modal_component {
+z-index: 9999;
+justify-content: flex-end;
+align-items: center;
+width: 100vw;
+height: 100vh;
+display: none;
+opacity: 0;
+position: fixed;
+top: 0;
+bottom: 0;
+left: 0;
+right: 0;
+transition: opacity 300ms ease-in-out;
+}
 
-  .modal_close-button {
-    position: absolute;
-    top: 2rem;
-    right: 2rem;
-  }
+.modal_close-button {
+position: absolute;
+top: 2rem;
+right: 2rem;
+}
 
-  .modal_content-wrapper {
-    background-color: var(--color--white);
-    width: 100%;
-    max-width: 40rem;
-    height: 100vh;
-    padding: 2rem;
-    position: absolute;
-    overflow: scroll;
-  }
+.modal_content-wrapper {
+background-color: var(--color--white);
+width: 100%;
+max-width: 40rem;
+height: 100vh;
+padding: 2rem;
+position: absolute;
+overflow: scroll;
+}
 
-  .modal_background-overlay {
-    z-index: -1;
-    background-color: rgba(0, 0, 0, 0.5);
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    opacity: 0;
-    display: none;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    transition: opacity 300ms ease-in-out;
-  }
+.modal_background-overlay {
+z-index: -1;
+background-color: rgba(0, 0, 0, 0.5);
+width: 100%;
+height: 100%;
+position: absolute;
+opacity: 0;
+display: none;
+top: 0;
+bottom: 0;
+left: 0;
+right: 0;
+transition: opacity 300ms ease-in-out;
+}
 
-  .product-buy_divider {
-    background-color: var(--color-grayiron--grayiron300);
-    height: 1px;
-    margin: 1rem -1rem;
-  }
+.product-buy_divider {
+background-color: var(--color-grayiron--grayiron300);
+height: 1px;
+margin: 1rem -1rem;
+}
 
-  .button-group-add-with-size {
-    grid-column-gap: 0;
-    grid-row-gap: 0;
-    flex-wrap: wrap;
-    grid-template-rows: auto;
-    grid-template-columns: 1fr;
-    grid-auto-columns: 1fr;
-    align-items: stretch;
-    justify-items: stretch;
-    grid-auto-flow: column;
-    display: grid;
-  }
+.button-group-add-with-size {
+grid-column-gap: 0;
+grid-row-gap: 0;
+flex-wrap: wrap;
+grid-template-rows: auto;
+grid-template-columns: 1fr;
+grid-auto-columns: 1fr;
+align-items: stretch;
+justify-items: stretch;
+grid-auto-flow: column;
+display: grid;
+}
 
-  @media screen and (max-width: 991px) {
-    .product-header_component {
-      flex-flow: column;
-      display: flex;
-    }
+@media screen and (max-width: 991px) {
+.product-header_component {
+flex-flow: column;
+display: flex;
+}
 
-    .product-header_manufacturer-logo {
-      order: -1;
-    }
+.product-header_manufacturer-logo {
+order: -1;
+}
 
-    .product-header_info {
-      order: 1;
-      padding-left: 0;
-      padding-right: 0;
-      grid-column-gap: 2rem;
-      grid-row-gap: 2rem;
+.product-header_info {
+order: 1;
+padding-left: 0;
+padding-right: 0;
+grid-column-gap: 2rem;
+grid-row-gap: 2rem;
 
-    }
-  }
-  @media screen and (max-width: 767px) {
-    .product-header_buy {
-      border-radius: 0;
-      margin-left: -1rem;
-      margin-right: -1rem;
-    }
+}
+}
+@media screen and (max-width: 767px) {
+.product-header_buy {
+border-radius: 0;
+margin-left: -1rem;
+margin-right: -1rem;
+}
 
-    .product-header_gallery {
-      border-radius: 0;
-      margin-left: -1rem;
-      margin-right: -1rem;
-    }
+.product-header_gallery {
+border-radius: 0;
+margin-left: -1rem;
+margin-right: -1rem;
+}
 
-    .product-header_manufacturer-logo {
-      border-radius: 0;
-      margin-left: -1rem;
-      margin-right: -1rem;
-    }
+.product-header_manufacturer-logo {
+border-radius: 0;
+margin-left: -1rem;
+margin-right: -1rem;
+}
 
-    .product-header_component {
-      margin-top: -3rem;
-    }
-  }
-  @media screen and (max-width: 479px) {}
+.product-header_component {
+margin-top: -3rem;
+}
+}
+@media screen and (max-width: 479px) {}
 {% endstylesheet %}
 
-
 {% schema %}
-  {
-    "name": "Product Header",
-    "tag": "section",
-    "class": "section_logo background-color-grayiron100",
-    "limit": 1,
-    "settings": [
-      {
-        "type": "richtext",
-        "id": "guarantee",
-        "label": "Gwarancja"
-      }, {
-        "type": "richtext",
-        "id": "opis",
-        "label": "Opis Modelu"
-      }
-    ],
-    "blocks": [
-      {
-        "name": "Parametr dodatkowy",
-        "type": "parametr",
-        "settings": [
-          {
-            "type": "text",
-            "id": "parametr_name",
-            "label": "Nazwa Parametru"
-          }, {
-            "type": "text",
-            "id": "parametr_value",
-            "label": "Wartość Parametru"
-          }
-        ]
-      }, {
-        "name": "Sekcja parametr dodatkowy",
-        "type": "parametr_header",
-        "settings": [
-          {
-            "type": "text",
-            "id": "header",
-            "label": "Tytuł sekcji"
-          }
-        ]
-      }, {
-        "name": "Parametr",
-        "type": "parametr_main",
-        "settings": [
-          {
-            "type": "text",
-            "id": "parametr_name",
-            "label": "Nazwa Parametru"
-          }, {
-            "type": "text",
-            "id": "parametr_value",
-            "label": "Wartość Parametru"
-          }
-        ]
-      }
-    ],
-    "presets": [
-      {
-        "name": "Produkt Header"
-      }
-    ]
-  }
+{
+  "name": "Product Header",
+  "tag": "section",
+  "class": "section_logo background-color-grayiron100",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "guarantee",
+      "label": "Gwarancja"
+    },
+    {
+      "type": "richtext",
+      "id": "opis",
+      "label": "Opis Modelu"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Parametr dodatkowy",
+      "type": "parametr",
+      "settings": [
+        {
+          "type": "text",
+          "id": "parametr_name",
+          "label": "Nazwa Parametru"
+        },
+        {
+          "type": "text",
+          "id": "parametr_value",
+          "label": "Wartość Parametru"
+        }
+      ]
+    },
+    {
+      "name": "Sekcja parametr dodatkowy",
+      "type": "parametr_header",
+      "settings": [
+        {
+          "type": "text",
+          "id": "header",
+          "label": "Tytuł sekcji"
+        }
+      ]
+    },
+    {
+      "name": "Parametr",
+      "type": "parametr_main",
+      "settings": [
+        {
+          "type": "text",
+          "id": "parametr_name",
+          "label": "Nazwa Parametru"
+        },
+        {
+          "type": "text",
+          "id": "parametr_value",
+          "label": "Wartość Parametru"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Produkt Header"
+    }
+  ]
+}
 
 {% endschema %}
