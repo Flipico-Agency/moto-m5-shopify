@@ -682,6 +682,29 @@
 
             checkScreenWidth();
             window.addEventListener('resize', checkScreenWidth);
+
+            // Function to show tooltip
+            function showTooltip(event) {
+                const tooltipWrapper = event.currentTarget.querySelector('.tooltip1_tooltip-wrapper');
+                if (tooltipWrapper) {
+                    tooltipWrapper.style.display = 'block';
+                }
+            }
+
+            // Function to hide tooltip
+            function hideTooltip(event) {
+                const tooltipWrapper = event.currentTarget.querySelector('.tooltip1_tooltip-wrapper');
+                if (tooltipWrapper) {
+                    tooltipWrapper.style.display = 'none';
+                }
+            }
+
+            // Add event listeners to all tooltip components
+            const tooltipComponents = document.querySelectorAll('.tooltip1_component');
+            tooltipComponents.forEach(component => {
+                component.addEventListener('mouseenter', showTooltip);
+                component.addEventListener('mouseleave', hideTooltip);
+            });
         });
     })();
 </script>
