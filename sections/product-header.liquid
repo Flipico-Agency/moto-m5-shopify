@@ -486,32 +486,38 @@
                             </div>
                             <div class="modal_background-overlay" id="modal-background-data"></div>
                         </div>
-                        {% if section.settings.opis != blank %}
-                            <div class="product-header_info-bottom_item-wrapper" id="modal-open-description">
-                                <div class="product-header_info-bottom_item">
-                                    <img src="{{ 'IcRoundDescription.svg' | asset_url }}" class="icon-embed-xxsmall">
-                                    <div class="text-size-small">Opis</div>
-                                </div>
-                                <div class="icon-embed-xsmall"><img src="{{ 'IcArrowSmallRight.svg' | asset_url }}"/>
-                                </div>
+                        {% comment %} PRODUCT DESCRIPTION BUTTON AND MODAL {% endcomment %}
+                        <div class="product-header_info-bottom_item-wrapper" id="modal-open-description">
+                            <div class="product-header_info-bottom_item">
+                                <img src="{{ 'IcRoundDescription.svg' | asset_url }}" class="icon-embed-xxsmall">
+                                <div class="text-size-small">Opis</div>
                             </div>
-                            <div class="modal_component" id="modal-component-description">
-                                <div class="modal_content-wrapper">
-                                    <div class="modal_close-button" id="modal-close-description"><img
-                                                src="{{ 'IcRoundCloseRed.svg' | asset_url }}" class="icon-embed-small">
-                                    </div>
-                                    <div class="margin-bottom margin-large">
-                                        <div class="margin-bottom margin-xsmall">
-                                            <h4>Opis</h4>
-                                        </div>
-                                    </div>
-                                    <div class="text-rich-text">{{ section.settings.opis }}</div>
-                                </div>
-                                <div class="modal_background-overlay" id="modal-background-description"></div>
+                            <div class="icon-embed-xsmall"><img src="{{ 'IcArrowSmallRight.svg' | asset_url }}"/>
                             </div>
-                        {% elsif collection_handle == 'akcesoria' %}
-                            {% comment %} Accesories content {% endcomment %}
-                        {% endif %}
+                        </div>
+                        <div class="modal_component" id="modal-component-description">
+                            <div class="modal_content-wrapper">
+                                <div class="modal_close-button" id="modal-close-description"><img
+                                            src="{{ 'IcRoundCloseRed.svg' | asset_url }}" class="icon-embed-small">
+                                </div>
+                                <div class="margin-bottom margin-large">
+                                    <div class="margin-bottom margin-xsmall">
+                                        <h4>Opis</h4>
+                                    </div>
+                                </div>
+                                {% if collection_handle == 'opony' %}
+                                    <div class="text-rich-text">{{ product.metafields.tires.model.value.opis_modelu | metafield_tag }}</div>
+                                {% elsif collection_handle == 'felgi' %}
+                                    <div class="text-rich-text">{{ product.metafields.rims.model.value.opis_modelu | metafield_tag }}</div>
+                                {% elsif collection_handle == 'kola' %}
+                                    <div class="text-rich-text">{{ product.metafields.tires.model.value.opis_modelu | metafield_tag }}</div>
+                                    <div class="text-rich-text">{{ product.metafields.rims.model.value.opis_modelu | metafield_tag }}</div>
+                                {% elsif collection_handle == 'akcesoria' %}
+                                    {% comment %} Accessories content {% endcomment %}
+                                {% endif %}
+                            </div>
+                            <div class="modal_background-overlay" id="modal-background-description"></div>
+                        </div>
                         <div class="product-header_info-bottom_item-wrapper">
                             <div class="product-header_info-bottom_item">
                                 <img src="{{ 'IcRoundDelivery.svg' | asset_url }}" class="icon-embed-xxsmall">
@@ -519,7 +525,8 @@
                             </div>
                             <div class="icon-embed-xsmall"><img src="{{ 'IcArrowSmallRight.svg' | asset_url }}"/></div>
                         </div>
-                        {% if section.settings.guarantee != blank %}
+                        {% comment %} GUARANTEE BUTTON & MODAL {% endcomment %}
+                        {% if section.settings.guarantee != blank and collection_handle == 'opony'%}
                             <div class="product-header_info-bottom_item-wrapper" id="modal-open-guarantee">
                                 <div class="product-header_info-bottom_item">
                                     <img src="{{ 'IcRoundShield.svg' | asset_url }}" class="icon-embed-xxsmall">
@@ -1041,11 +1048,6 @@ margin-top: -3rem;
       "type": "richtext",
       "id": "guarantee",
       "label": "Gwarancja"
-    },
-    {
-      "type": "richtext",
-      "id": "opis",
-      "label": "Opis Modelu"
     }
   ],
   "presets": [
