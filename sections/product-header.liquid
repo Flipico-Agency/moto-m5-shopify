@@ -20,12 +20,12 @@
                             {{ product.metafields.rims.width }}
                             x{{ product.metafields.rims.diameter }} {{ product.metafields.rims.bolt_spacing }}
                             ET {{ product.metafields.rims.e_t }}</span>
-                        {% elsif product.collections[0].handle == 'kola' %}
+                        {% elsif product.collections[0].handle == 'kola' or product.collections[0].handle == 'akcesoria' or product.collections[0].handle == 'kola-dojazdowe' %}
                             {{ product.title }}
                         {% endif %}
                     </h1>
                 </div>
-                <div class="product-header_manufacturer-logo">
+                <div class="product-header_manufacturer-logo" {% if product.collections[0].handle == 'akcesoria' or product.collections[0].handle == 'kola-dojazdowe' %} style="visibility: hidden" {% endif %}>
                     {% if product.collections[0].handle == 'opony' %}
                         <img src="{{ product.metafields.tires.manufacturer.value.logo.value | image_url: width: 400 }}"
                              class="product-header_tittle-image" alt="tire manufacturer logo">
@@ -236,6 +236,22 @@
                                 <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.condition }}</p>
                             </div>
                             <div>
+                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Powłoka</p>
+                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.coating }}</p>
+                            </div>
+                            <div>
+                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Otwór centralny</p>
+                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.center_hole }}</p>
+                            </div>
+                            <div>
+                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Rozstaw śrub</p>
+                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.bolt_spacing }}</p>
+                            </div>
+                            <div>
+                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Osadzenie (ET)</p>
+                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.e_t }}</p>
+                            </div>
+                            <div>
                                 <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Szerokość</p>
                                 <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.width }}</p>
                             </div>
@@ -244,248 +260,270 @@
                                 <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.diameter }}</p>
                             </div>
                         {% elsif collection_handle == 'akcesoria' %}
-                            {% comment %} Accesories content {% endcomment %}
+                            {% comment %} Accesories content empty {% endcomment %}
+                        {% elsif collection_handle == 'kola-dojazdowe' %}
+                            {% comment %} Spare wheels content empty {% endcomment %}
                         {% endif %}
                     </div>
                     <div class="product-header_info-bottom">
-                        <div class="product-header_info-bottom_item-wrapper" id="modal-open-data">
-                            <div class="product-header_info-bottom_item">
-                                <img src="{{ 'IcRoundList.svg' | asset_url }}" class="icon-embed-xxsmall">
-                                <div class="text-size-small">Dane techniczne</div>
+                        {% comment %} PRODUCT TECH DATA BUTTON AND MODAL {% endcomment %}
+                        {% if collection_handle != 'akcesoria' %}
+                            <div class="product-header_info-bottom_item-wrapper" id="modal-open-data">
+                                <div class="product-header_info-bottom_item">
+                                    <img src="{{ 'IcRoundList.svg' | asset_url }}" class="icon-embed-xxsmall">
+                                    <div class="text-size-small">Dane techniczne</div>
+                                </div>
+                                <div class="icon-embed-xsmall"><img src="{{ 'IcArrowSmallRight.svg' | asset_url }}"/></div>
                             </div>
-                            <div class="icon-embed-xsmall"><img src="{{ 'IcArrowSmallRight.svg' | asset_url }}"/></div>
-                        </div>
-                        <div class="modal_component" id="modal-component-data">
-                            <div class="modal_content-wrapper">
-                                <div class="modal_close-button" id="modal-close-data"><img
-                                            src="{{ 'IcRoundCloseRed.svg' | asset_url }}"
-                                            class="icon-embed-small"></div>
-                                <div class="margin-bottom margin-large">
-                                    <div class="margin-bottom margin-xsmall">
-                                        <h4>Dane techniczne</h4>
+                            <div class="modal_component" id="modal-component-data">
+                                <div class="modal_content-wrapper">
+                                    <div class="modal_close-button" id="modal-close-data"><img
+                                                src="{{ 'IcRoundCloseRed.svg' | asset_url }}"
+                                                class="icon-embed-small"></div>
+                                    <div class="margin-bottom margin-large">
+                                        <div class="margin-bottom margin-xsmall">
+                                            <h4>Dane techniczne</h4>
+                                        </div>
+                                    </div>
+                                    <div class="product-header_info-modal">
+                                        {% assign collection_handle = product.collections[0].handle %}
+
+                                        {% if collection_handle == 'opony' %}
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Producent</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.manufacturer.value.name.value }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Model</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.model.value.model.value }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Stan</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.condition }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Sezon</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.season }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Bieżnik</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.tread }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Klasa</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.class }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Lata</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.years }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Szerokość</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.width }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Profil</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.profile }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Średnica</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.diameter }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Indeks prędkości</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.speed_index }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Przyczepność na mokrej nawierzchni</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.wet_grip }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Poziom hałasu</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.noise_level }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Indeks nośności</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.load_index }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Opór toczenia</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.rolling_resistance }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Ilość</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.quantity }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Homologacja</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">
+                                                    {{ product.metafields.tires.homologation | remove: '"' | remove: '[' | remove: ']' }}
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Informacje dodatkowe</p>
+                                                {% assign additional_info = product.metafields.tires.additional_information %}
+                                                {% if additional_info != blank %}
+                                                    {% assign additional_info_list = additional_info | split: ',' %}
+                                                    <p class="text-size-tiny text-weight-semibold text-color-black">
+                                                        {% for item in additional_info_list %}
+                                                            {{ item | remove: '"' | remove: '[' | remove: ']' | strip }}{% if forloop.last == false %}<br>{% endif %}
+                                                        {% endfor %}
+                                                    </p>
+                                                {% else %}
+                                                    <p class="text-size-tiny text-weight-semibold text-color-black">Brak dodatkowych informacji</p>
+                                                {% endif %}
+                                            </div>
+                                        {% elsif collection_handle == 'felgi' %}
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Producent</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.manufacturer.value.name.value }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Model</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.model.value.model.value }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Stan</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.condition }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Kolor</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.color }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Powłoka</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.coating }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Otwór centralny</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.center_hole }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Rozstaw śrub</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.bolt_spacing }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Osadzenie (ET)</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.e_t }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Szerokość</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.width }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Średnica</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.diameter }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Ilość</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.quantity }}</p>
+                                            </div>
+                                        {% elsif collection_handle == 'kola' %}
+                                            <div class="product-parameters_heading">
+                                                <div class="heading-style-h6">OPONY</div>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Producent</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.manufacturer.value.name.value }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Model</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.model.value.model.value }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Stan</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.condition }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Sezon</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.season }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Bieżnik</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.tread }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Klasa</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.class }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Lata</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.years }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Szerokość</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.width }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Profil</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.profile }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Homologacja</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">
+                                                    {{ product.metafields.tires.homologation | remove: '"' | remove: '[' | remove: ']' }}
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Informacje dodatkowe</p>
+                                                {% assign additional_info = product.metafields.tires.additional_information %}
+                                                {% if additional_info != blank %}
+                                                    {% assign additional_info_list = additional_info | split: ',' %}
+                                                    <p class="text-size-tiny text-weight-semibold text-color-black">
+                                                        {% for item in additional_info_list %}
+                                                            {{ item | remove: '"' | remove: '[' | remove: ']' | strip }}{% if forloop.last == false %}<br>{% endif %}
+                                                        {% endfor %}
+                                                    </p>
+                                                {% else %}
+                                                    <p class="text-size-tiny text-weight-semibold text-color-black">Brak dodatkowych informacji</p>
+                                                {% endif %}
+                                            </div>
+                                            <div class="product-parameters_heading">
+                                                <div class="heading-style-h6">FELGI</div>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Producent</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.manufacturer.value.name.value }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Model</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.model.value.model.value }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Stan</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.condition }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Powłoka</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.coating }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Otwór centralny</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.center_hole }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Rozstaw śrub</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.bolt_spacing }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Osadzenie (ET)</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.e_t }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Szerokość</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.width }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Średnica</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.diameter }}</p>
+                                            </div>
+                                        {% endif %}
                                     </div>
                                 </div>
-                                <div class="product-header_info-modal">
-                                    {% assign collection_handle = product.collections[0].handle %}
-
-                                    {% if collection_handle == 'opony' %}
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Producent</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.manufacturer.value.name.value }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Model</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.model.value.model.value }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Stan</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.condition }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Sezon</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.season }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Bieżnik</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.tread }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Klasa</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.class }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Lata</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.years }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Szerokość</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.width }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Profil</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.profile }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Średnica</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.diameter }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Indeks prędkości</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.speed_index }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Przyczepność na mokrej nawierzchni</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.wet_grip }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Poziom hałasu</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.noise_level }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Indeks nośności</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.load_index }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Opór toczenia</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.rolling_resistance }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Ilość</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.quantity }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Homologacja</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">
-                                                {{ product.metafields.tires.homologation | remove: '"' | remove: '[' | remove: ']' }}
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Informacje dodatkowe</p>
-                                            {% assign additional_info = product.metafields.tires.additional_information %}
-                                            {% if additional_info != blank %}
-                                                {% assign additional_info_list = additional_info | split: ',' %}
-                                                <p class="text-size-tiny text-weight-semibold text-color-black">
-                                                    {% for item in additional_info_list %}
-                                                        {{ item | remove: '"' | remove: '[' | remove: ']' | strip }}{% if forloop.last == false %}<br>{% endif %}
-                                                    {% endfor %}
-                                                </p>
-                                            {% else %}
-                                                <p class="text-size-tiny text-weight-semibold text-color-black">Brak dodatkowych informacji</p>
-                                            {% endif %}
-                                        </div>
-                                    {% elsif collection_handle == 'felgi' %}
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Producent</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.manufacturer.value.name.value }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Model</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.model.value.model.value }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Stan</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.condition }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Kolor</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.color }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Powłoka</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.coating }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Otwór centralny</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.center_hole }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Rozstaw śrub</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.bolt_spacing }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Osadzenie (ET)</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.e_t }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Szerokość</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.width }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Średnica</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.diameter }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Ilość</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.quantity }}</p>
-                                        </div>
-                                    {% elsif collection_handle == 'kola' %}
-                                        <div class="product-parameters_heading">
-                                            <div class="heading-style-h6">OPONY</div>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Producent</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.manufacturer.value.name.value }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Model</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.model.value.model.value }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Stan</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.condition }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Sezon</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.season }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Bieżnik</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.tread }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Klasa</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.class }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Lata</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.years }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Szerokość</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.width }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Profil</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.profile }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Homologacja</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">
-                                                {{ product.metafields.tires.homologation | remove: '"' | remove: '[' | remove: ']' }}
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Informacje dodatkowe</p>
-                                            {% assign additional_info = product.metafields.tires.additional_information %}
-                                            {% if additional_info != blank %}
-                                                {% assign additional_info_list = additional_info | split: ',' %}
-                                                <p class="text-size-tiny text-weight-semibold text-color-black">
-                                                    {% for item in additional_info_list %}
-                                                        {{ item | remove: '"' | remove: '[' | remove: ']' | strip }}{% if forloop.last == false %}<br>{% endif %}
-                                                    {% endfor %}
-                                                </p>
-                                            {% else %}
-                                                <p class="text-size-tiny text-weight-semibold text-color-black">Brak dodatkowych informacji</p>
-                                            {% endif %}
-                                        </div>
-                                        <div class="product-parameters_heading">
-                                            <div class="heading-style-h6">FELGI</div>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Producent</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.manufacturer.value.name.value }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Model</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.model.value.model.value }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Stan</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.condition }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Szerokość</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.width }}</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Średnica</p>
-                                            <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.diameter }}</p>
-                                        </div>
-                                    {% endif %}
-                                </div>
+                                <div class="modal_background-overlay" id="modal-background-data"></div>
                             </div>
-                            <div class="modal_background-overlay" id="modal-background-data"></div>
-                        </div>
+                        {% endif %}
+
                         {% comment %} PRODUCT DESCRIPTION BUTTON AND MODAL {% endcomment %}
                         <div class="product-header_info-bottom_item-wrapper" id="modal-open-description">
                             <div class="product-header_info-bottom_item">
@@ -512,21 +550,38 @@
                                 {% elsif collection_handle == 'kola' %}
                                     <div class="text-rich-text">{{ product.metafields.tires.model.value.opis_modelu | metafield_tag }}</div>
                                     <div class="text-rich-text">{{ product.metafields.rims.model.value.opis_modelu | metafield_tag }}</div>
-                                {% elsif collection_handle == 'akcesoria' %}
-                                    {% comment %} Accessories content {% endcomment %}
+                                {% elsif collection_handle == 'akcesoria' or collection_handle == 'kola-dojazdowe' %}
+                                    {{ product.description }}
                                 {% endif %}
                             </div>
                             <div class="modal_background-overlay" id="modal-background-description"></div>
                         </div>
-                        <div class="product-header_info-bottom_item-wrapper">
+
+                        {% comment %} DELIVERY & RETURN BUTTON AND MODAL {% endcomment %}
+                        <div class="product-header_info-bottom_item-wrapper" id="modal-open-delivery">
                             <div class="product-header_info-bottom_item">
                                 <img src="{{ 'IcRoundDelivery.svg' | asset_url }}" class="icon-embed-xxsmall">
                                 <div class="text-size-small">Dostawa i zwroty</div>
                             </div>
                             <div class="icon-embed-xsmall"><img src="{{ 'IcArrowSmallRight.svg' | asset_url }}"/></div>
                         </div>
+                        <div class="modal_component" id="modal-component-delivery">
+                            <div class="modal_content-wrapper">
+                                <div class="modal_close-button" id="modal-close-delivery"><img
+                                            src="{{ 'IcRoundCloseRed.svg' | asset_url }}" class="icon-embed-small">
+                                </div>
+                                <div class="margin-bottom margin-large">
+                                    <div class="margin-bottom margin-xsmall">
+                                        <h4>Dostawa i zwroty</h4>
+                                    </div>
+                                </div>
+                                <div class="text-rich-text">{{ section.settings.delivery }}</div>
+                            </div>
+                            <div class="modal_background-overlay" id="modal-background-delivery"></div>
+                        </div>
+
                         {% comment %} GUARANTEE BUTTON & MODAL {% endcomment %}
-                        {% if section.settings.guarantee != blank and collection_handle == 'opony'%}
+                        {% if section.settings.guarantee != blank and collection_handle == 'opony' %}
                             <div class="product-header_info-bottom_item-wrapper" id="modal-open-guarantee">
                                 <div class="product-header_info-bottom_item">
                                     <img src="{{ 'IcRoundShield.svg' | asset_url }}" class="icon-embed-xxsmall">
@@ -554,6 +609,8 @@
                                 <div class="modal_background-overlay" id="modal-background-guarantee"></div>
                             </div>
                         {% endif %}
+
+                        {% comment %} PAYMENTS BUTTON AND MODAL {% endcomment %}
                         <div class="product-header_info-bottom_item-wrapper" id="modal-open-payments">
                             <div class="product-header_info-bottom_item">
                                 <img src="{{ 'IcRoundPayments.svg' | asset_url }}" class="icon-embed-xxsmall">
@@ -568,7 +625,7 @@
                                 </div>
                                 <div class="margin-bottom margin-large">
                                     <div class="margin-bottom margin-xsmall">
-                                        <h4>Opis</h4>
+                                        <h4>Dostępne metody płatności</h4>
                                     </div>
                                 </div>
                                 {% render 'payments' %}
@@ -1048,6 +1105,11 @@ margin-top: -3rem;
       "type": "richtext",
       "id": "guarantee",
       "label": "Gwarancja"
+    },
+    {
+      "type": "richtext",
+      "id": "delivery",
+      "label": "Dostawa i zwroty"
     }
   ],
   "presets": [
