@@ -37,7 +37,7 @@
                       <div class="text-weight-bold">{{ product.metafields.tires.condition }} | {{ product.metafields.tires.tread }}</div>
                       <div>
                         <div class="text-size-large text-weight-bold">{{ product.price | money }}</div>
-                        <div>/ {{ product.metafields.tires.quantity }}</div>
+                        <div>/ {{ product.metafields.custom.quantity }}</div>
                       </div>
                       <form method="post" action="/cart/add">
                         {% comment %} Prevent default action to href /cart {% endcomment %}
@@ -50,12 +50,6 @@
                   {% endif %}
                 {% endfor %}
               {% endif %}
-
-
-
-
-
-
               {% if block.settings.type == "kola" %}
                 <div class="tire-model_sizes-parameters hide-tablet">
                   <p class="text-size-small text-weight-semibold">Rozmiar</p>
@@ -81,7 +75,7 @@
                       <div class="text-weight-bold">{{ product.metafields.tires.condition }} | {{ product.metafields.tires.tread }}</div>
                       <div>
                         <div class="text-size-large text-weight-bold">{{ product.price | money }}</div>
-                        <div>/ {{ product.metafields.tires.quantity }}</div>
+                        <div>/ {{ product.metafields.custom.quantity }}</div>
                       </div>
                       <form method="post" action="/cart/add">
                         {% comment %} Prevent default action to href /cart {% endcomment %}

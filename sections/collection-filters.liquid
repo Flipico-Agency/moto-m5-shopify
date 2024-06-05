@@ -393,9 +393,7 @@
                                                 <div class="heading-style-h4">{{ product.metafields.tires.manufacturer.value.name.value }}</div>
                                                 <div class="div-block-46">
                                                     <div class="text-size-large text-weight-semibold">{{ product.metafields.tires.model.value.model.value }}</div>
-                                                    <div class="text-size-large text-weight-semibold">{{ product.metafields.tires.width }}
-                                                        /{{ product.metafields.tires.profile }}
-                                                        R{{ product.metafields.tires.diameter }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}</div>
+                                                    <div class="text-size-large text-weight-semibold">{{ product.metafields.tires.width | remove: '"' | remove: '[' | remove: ']' }}/{{ product.metafields.tires.profile | remove: '"' | remove: '[' | remove: ']' }}/R{{ product.metafields.tires.diameter | remove: '"' | remove: '[' | remove: ']' }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}</div>
                                                 </div>
                                                 <div class="product_parameters-wrapper">
                                                     {% if product.metafields.tires.tread != blank %}
@@ -470,9 +468,8 @@
                                             <div class="div-block-47">
                                                 <div class="heading-style-h4">{{ product.metafields.rims.manufacturer.value.name.value }}</div>
                                                 <div class="div-block-46">
-                                                    <div class="text-size-large text-weight-semibold">{{ product.metafields.tires.model.value.model.value }} {{ product.metafields.rims.width }}
-                                                        x{{ product.metafields.rims.diameter }} {{ product.metafields.rims.bolt_spacing }}
-                                                        ET {{ product.metafields.rims.e_t }}</div>
+                                                    <div class="text-size-large text-weight-semibold">{{ product.metafields.tires.model.value.model.value }} {{ product.metafields.rims.width | remove: '"' | remove: '[' | remove: ']' }}x{{ product.metafields.rims.diameter | remove: '"' | remove: '[' | remove: ']' }} {{ product.metafields.rims.bolt_spacing }}
+                                                        ET {{ product.metafields.rims.e_t | remove: '"' | remove: '[' | remove: ']' }}</div>
                                                 </div>
                                                 <div class="product_parameters-wrapper"></div>
                                                 <div class="product_parameters-wrapper"></div>
@@ -539,12 +536,8 @@
                                             <div class="div-block-39">
                                                 <div class="heading-style-h4 text-color-red600">{{ product.price | money }}
                                                     <span class="text-size-regular">
-                            /
-                            {% if product.collections[0].handle == 'opony' %}
-                                {{ product.metafields.tires.quantity }}
-                            {% elsif product.collections[0].handle == 'felgi' %}
-                                {{ product.metafields.rims.quantity }}{% endif %}
-                          </span>
+                                                        / {{ product.metafields.custom.quantity }}
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div class="text-size-tiny text-weight-semibold text-color-green">Darmowa

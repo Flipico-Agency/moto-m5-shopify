@@ -59,7 +59,7 @@
                                   {% if item.quantity > 1 %}
                                     {{ item.quantity }} x
                                   {% endif %}
-                                  {{ item.product.metafields.tires.quantity }}
+                                  {{ item.product.metafields.custom.quantity }}
                                   {{ item.product.metafields.tires.manufacturer.value.name.value }}</div>
                                 <div>{{ item.product.metafields.tires.model.value.model.value }} {{ item.product.metafields.tires.width }}/{{ item.product.metafields.tires.profile }} R{{ item.product.metafields.tires.diameter }} {{ item.product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ item.product.metafields.tires.speed_index | slice: 0 }}</div>
                               </a>
