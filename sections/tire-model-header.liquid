@@ -24,9 +24,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tire-model_benefits-wrapper">
-                        {% render 'benefits-small' %}
-                    </div>
+                    {% render 'benefits-small' %}
                 </div>
             </div>
         </div>
@@ -73,20 +71,12 @@
     border-radius: 1rem;
 }
 
-.button-group .full {
-    width: 100%;
-}
-
-.tire-model_benefits-wrapper {
-
-}
-
 @media screen and (max-width: 991px) {
     .tire-model-description-wrapper {
         flex-direction: column;
     }
-
 }
+
 {% endstylesheet %}
 
 {% schema %}
