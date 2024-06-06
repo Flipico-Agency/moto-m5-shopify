@@ -557,8 +557,8 @@
     }
 
     .navbar7_bottom-bar-left {
+        grid-template-columns: 1fr 1fr !important;
         grid-template-rows: auto auto;
-        grid-template-columns: max-content;
     }
 
     .navbar7_dropdown-content-left {
@@ -648,6 +648,11 @@
         grid-auto-columns: 1fr;
         margin-bottom: 1rem;
         display: grid;
+        text-align: left;
+    }
+
+    .navbar7_bottom-bar-left > :first-child {
+        grid-column: 1 / -1; /* Make the first child span the entire row */
     }
 
     .navbar7_dropdown-content {
