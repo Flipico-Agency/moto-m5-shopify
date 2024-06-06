@@ -386,6 +386,24 @@
                             </div>
 
                             {% for product in collection.products %}
+                                {% comment %} Tires main parameters {% endcomment %}
+                                {% assign tires_width = product.metafields.tires.width | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
+                                {% assign tires_profile = product.metafields.tires.profile | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
+                                {% assign tires_diameter = product.metafields.tires.diameter | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
+
+                                {% comment %} Rims main parameters {% endcomment %}
+                                {% assign rims_diameter = product.metafields.rims.diameter | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
+                                {% assign rims_e_t = product.metafields.rims.e_t | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
+                                {% assign rims_width = product.metafields.rims.width | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
+
+                                {% comment %} Two different tires? {% endcomment %}
+                                {% capture double_parameters_tires %}{% if tires_width.size > 1 or tires_profile.size > 1 or tires_diameter.size > 1 %}true{% else %}false{% endif %}{% endcapture %}
+                                {% comment %}{{ double_parameters_tires }}{% endcomment %}
+
+                                {% comment %} Two different rims? {% endcomment %}
+                                {% capture double_parameters_rims %}{% if rims_diameter.size > 1 or rims_e_t.size > 1 or rims_width.size > 1 %}true{% else %}false{% endif %}{% endcapture %}
+                                {% comment %}{{ double_parameters_rims }}{% endcomment %}
+
                                 <div class="product-wide shadow-xsmall">
                                     <a href="{{ product.url }}" class="product_content-wrapper w-inline-block">
                                         {% if product.collections[0].handle == "opony" %}
@@ -393,7 +411,16 @@
                                                 <div class="heading-style-h4">{{ product.metafields.tires.manufacturer.value.name.value }}</div>
                                                 <div class="div-block-46">
                                                     <div class="text-size-large text-weight-semibold">{{ product.metafields.tires.model.value.model.value }}</div>
-                                                    <div class="text-size-large text-weight-semibold">{{ product.metafields.tires.width | remove: '"' | remove: '[' | remove: ']' }}/{{ product.metafields.tires.profile | remove: '"' | remove: '[' | remove: ']' }}/R{{ product.metafields.tires.diameter | remove: '"' | remove: '[' | remove: ']' }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}</div>
+                                                    <div class="text-size-large text-weight-semibold">
+                                                        {% if double_parameters_tires == 'true' %}
+                                                            2 X {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }},
+                                                            2 X
+                                                            {% if tires_width[1] == blank %}{{ tires_width[0] }}{% else %}{{ tires_width[1] }}{% endif %}/{% if tires_profile[1] == blank %}{{ tires_profile[0] }}{% else %}{{ tires_profile[1] }}{% endif %} R{% if tires_diameter[1] == blank %}{{ tires_diameter[0] }}{% else %}{{ tires_diameter[1] }}{% endif %}
+                                                            {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }} {{ product.metafields.tires.speed_index | slice: 0 }}
+                                                        {% else %}
+                                                            {{ product.metafields.custom.quantity | slice: 0 }} X {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}
+                                                        {% endif %}
+                                                    </div>
                                                 </div>
                                                 <div class="product_parameters-wrapper">
                                                     {% if product.metafields.tires.tread != blank %}
@@ -468,8 +495,17 @@
                                             <div class="div-block-47">
                                                 <div class="heading-style-h4">{{ product.metafields.rims.manufacturer.value.name.value }}</div>
                                                 <div class="div-block-46">
-                                                    <div class="text-size-large text-weight-semibold">{{ product.metafields.tires.model.value.model.value }} {{ product.metafields.rims.width | remove: '"' | remove: '[' | remove: ']' }}x{{ product.metafields.rims.diameter | remove: '"' | remove: '[' | remove: ']' }} {{ product.metafields.rims.bolt_spacing }}
-                                                        ET {{ product.metafields.rims.e_t | remove: '"' | remove: '[' | remove: ']' }}</div>
+                                                    <div class="text-size-large text-weight-semibold">{{ product.metafields.rims.model.value.model.value }}</div>
+                                                    <div class="text-size-large text-weight-semibold">
+                                                        {% if double_parameters_rims == 'true' %}
+                                                            2 X R{{ rims_diameter[0] }}x{{ rims_width[0] }}J ET{{ rims_e_t[0] }},
+                                                            2 X
+                                                            R{% if rims_diameter[1] == blank %}{{ rims_diameter[0] }}{% else %}{{ rims_diameter[1] }}{% endif %}x{% if rims_width[1] == blank %}{{ rims_width[0] }}{% else %}{{ rims_width[1] }}{% endif %} ET{% if rims_e_t[1] == blank %}{{ rims_e_t[0] }}{% else %}{{ rims_e_t[1] }}{% endif %}
+                                                        {% else %}
+                                                            {{ product.metafields.custom.quantity | slice: 0 }} X R{{ rims_diameter[0] }}x{{ rims_width[0] }}J ET{{ rims_e_t[0] }}
+                                                        {% endif %}
+                                                        {{ product.metafields.rims.bolt_spacing }}
+                                                    </div>
                                                 </div>
                                                 <div class="product_parameters-wrapper"></div>
                                                 <div class="product_parameters-wrapper"></div>

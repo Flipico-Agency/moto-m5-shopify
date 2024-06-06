@@ -546,6 +546,10 @@
                                                 <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.years }}</p>
                                             </div>
                                             <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Homologacja</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.homologation | map: 'value' | join: ', ' }}</p>
+                                            </div>
+                                            <div>
                                                 <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Informacje dodatkowe</p>
                                                 {% assign additional_info = product.metafields.tires.additional_information %}
                                                 {% if additional_info != blank %}
@@ -715,6 +719,10 @@
                                             <div>
                                                 <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Rocznik</p>
                                                 <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.years }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Homologacja</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.homologation | map: 'value' | join: ', ' }}</p>
                                             </div>
                                             <div>
                                                 <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Informacje dodatkowe</p>
