@@ -1,7 +1,7 @@
 {
     "sections": {
-        "tire-model_top": {
-            "type": "tire-model_top",
+        "tire-model-header": {
+            "type": "tire-model-header",
             "settings": {}
         },
         "tire-model_tabs": {
@@ -10,5 +10,5 @@
         }
 
     },
-    "order": ["tire-model_top", "tire-model_tabs"]
+    "order": ["tire-model-header", "tire-model_tabs"]
 }
