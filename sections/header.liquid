@@ -205,12 +205,13 @@
                                         <div class="div-block-26">
                                             <img src="{{ images[index] | asset_url }}" loading="lazy" sizes="100vw" alt="tire-image">
                                         </div>
-                                        <div class="heading-style-h5 text-align-center">{{ rim_title }}</div>
+                                        <h4 class="heading-style-h6 text-align-center">{{ rim_title }}</h4>
                                     </a>
                                 {% endfor %}
                             </div>
                         {% when 3 %}
-                            <div class="navbar7_dropdown-content-left">
+                            <div class="navbar7_dropdown-content-wheels">
+                                {% comment %}
                                 {% for block in section.blocks %}
                                     {% case block.type %}
                                         {% when 'navigation_wheels' %}
@@ -222,6 +223,20 @@
                                                 {% endfor %}
                                             </div>
                                     {% endcase %}
+                                {% endfor %}
+                                {% endcomment %}
+                                {% assign wheels_titles = "Aluminiowe Z Oponami Letnimi,Aluminiowe Z Oponami Zimowymi,Aluminiowe Z Oponami Całorocznymi,Stalowe Z Oponami Letnimi,Stalowe Z Oponami Zimowymi,Stalowe Z Oponami Całorocznymi" | split: "," %}
+                                {% assign wheels_images = "wheel-aluminium-summer.webp,wheel-aluminium-winter.webp,wheel-aluminium-allyear.webp,wheel-steel-summer.webp,wheel-steel-winter.webp,wheel-steel-allyear.webp" | split: "," %}
+                                {% assign wheels_slugs = "filter.p.m.rims.material=Aluminiowe&filter.p.m.tires.season=Letnie,filter.p.m.rims.material=Aluminiowe&filter.p.m.tires.season=Zimowe,filter.p.m.rims.material=Aluminiowe&filter.p.m.tires.season=Całoroczne,filter.p.m.rims.material=Stalowe&filter.p.m.tires.season=Letnie,filter.p.m.rims.material=Stalowe&filter.p.m.tires.season=Zimowe,filter.p.m.rims.material=Stalowe&filter.p.m.tires.season=Całoroczne" | split: "," %}
+
+                                {% for wheel_title in wheels_titles %}
+                                    {% assign index = forloop.index0 %}
+                                    <a href="/collections/kola?{{ wheels_slugs[index] }}" class="link-block-2 w-inline-block" tabindex="0">
+                                        <div class="div-block-26">
+                                            <img src="{{ wheels_images[index] | asset_url }}" loading="lazy" sizes="100vw" alt="wheel-image">
+                                        </div>
+                                        <h4 class="heading-style-h6 text-align-center">{{ wheel_title }}</h4>
+                                    </a>
                                 {% endfor %}
                             </div>
                     {% endcase %}
