@@ -1,0 +1,50 @@
+<div class="section_tire-model_tabs background-color-grayiron100">
+    <div class="padding-global">
+        <div class="container-large">
+            <div class="padding-section-small">
+                <div class="tire-model_component">
+                    <div class="tire-model_content-bottom">
+                        <div class="tire-model_description">
+                            <div data-current="Tab 1" data-easing="ease-in-out" data-duration-in="100"
+                                 data-duration-out="100" class="tire-model_tabs w-tabs">
+                                <div class="tire-model_tabs-menu w-tab-menu" role="tablist">
+                                    <a data-w-tab="Tab 1"
+                                       class="tire-model_tab-link w-inline-block w-tab-link w--current"
+                                       id="w-tabs-0-data-w-tab-0" href="#description" role="tab"
+                                       aria-controls="description" aria-selected="true">
+                                        <div>Opis modelu</div>
+                                    </a>
+                                </div>
+                                <div class="tire-model_tabs-content shadow-medium w-tab-content">
+                                    <div data-w-tab="Tab 1" id="description"
+                                         class="white-container w-tab-pane w--tab-active" role="tabpanel"
+                                         aria-labelledby="w-tabs-0-data-w-tab-0">
+                                        <div>{{ section.settings.opis-modelu }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% schema %}
+{
+    "name": "Modele Opon Opis",
+    "settings": [
+        {
+            "type": "richtext",
+            "id": "opis-modelu",
+            "label": "Opis modelu"
+        }
+    ],
+    "presets": [
+        {
+          "name": "Modele Opon Opis"
+        }
+    ]
+}
+{% endschema %}
