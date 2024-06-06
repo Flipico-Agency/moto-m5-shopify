@@ -1,250 +1,269 @@
 {% for block in section.blocks %}
-  {% case block.type %}
-    {% when 'list' %}
-      <div class="padding-global {{ section.settings.background }}">
-        <div class="container-large">
-          <div class="padding-section-{{ section.settings.padding }}">
-            <div class="{{ section.settings.container }}">
-              {%- if block.settings.header != blank -%}
-                <div class="margin-bottom margin-medium">
-                  <h4>
-                    {{ block.settings.header }}
-                  </h4>
-                </div>
-              {%- endif -%}
-              {% if block.settings.type == "opony" %}
-                <div class="tire-model_sizes-parameters hide-tablet">
-                  <p class="text-size-small text-weight-semibold">Rozmiar</p>
-                  <p class="text-size-small text-weight-semibold">Rocznik</p>
-                  <p class="text-size-small text-weight-semibold">Stan i Bieżnik</p>
-                  <p class="text-size-small text-weight-semibold">Cena i Ilość</p>
-                </div>
-                {% assign model_name = metaobject.model.value %}
-                {% for product in collections.opony.products %}
-                  {% comment %} Tires main parameters {% endcomment %}
-                  {% assign tires_width = product.metafields.tires.width | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
-                  {% assign tires_profile = product.metafields.tires.profile | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
-                  {% assign tires_diameter = product.metafields.tires.diameter | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
+    {% case block.type %}
+        {% when 'list' %}
+            <div class="padding-global {{ section.settings.background }}">
+                <div class="container-large">
+                    <div class="padding-section-{{ section.settings.padding }}">
+                        <div class="{{ section.settings.container }}">
+                            {%- if block.settings.header != blank -%}
+                                <div class="margin-bottom margin-medium">
+                                    <h4>
+                                        {{ block.settings.header }}
+                                    </h4>
+                                </div>
+                            {%- endif -%}
+                            {% if block.settings.type == "opony" %}
+                                <div class="tire-model_sizes-parameters hide-tablet">
+                                    <p class="text-size-small text-weight-semibold">Rozmiar</p>
+                                    <p class="text-size-small text-weight-semibold">Rocznik</p>
+                                    <p class="text-size-small text-weight-semibold">Stan i Bieżnik</p>
+                                    <p class="text-size-small text-weight-semibold">Cena i Ilość</p>
+                                </div>
+                                {% assign model_name = metaobject.model.value %}
+                                {% for product in collections.opony.products %}
+                                    {% comment %} Tires main parameters {% endcomment %}
+                                    {% assign tires_width = product.metafields.tires.width | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
+                                    {% assign tires_profile = product.metafields.tires.profile | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
+                                    {% assign tires_diameter = product.metafields.tires.diameter | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
 
-                  {% comment %} Two different tires? {% endcomment %}
-                  {% capture double_parameters_tires %}{% if tires_width.size > 1 or tires_profile.size > 1 or tires_diameter.size > 1 %}true{% else %}false{% endif %}{% endcapture %}
-                  {% comment %}{{ double_parameters_tires }}{% endcomment %}
+                                    {% comment %} Two different tires? {% endcomment %}
+                                    {% capture double_parameters_tires %}{% if tires_width.size > 1 or tires_profile.size > 1 or tires_diameter.size > 1 %}true{% else %}false{% endif %}{% endcapture %}
+                                    {% comment %}{{ double_parameters_tires }}{% endcomment %}
 
-                  {% assign product_model = product.metafields.tires.model.value.model %}
-                  {% if product_model == model_name %}
-                    <div class="tire-model_sizes-product_wrapper">
-                      <a href="{{ product.url }}" class="tire-model_sizes-product_tittle-wrapper">
-                        <div class="text-size-large text-weight-bold">{{ product.metafields.tires.manufacturer.value.name }}</div>
-                        <div>{{ product.metafields.tires.model.value.model }}
-                          <span class="text-weight-semibold">
-                            {% if double_parameters_tires == 'true' %}
-                              2 X {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }},
-                              2 X
-                              {% if tires_width[1] == blank %}{{ tires_width[0] }}{% else %}{{ tires_width[1] }}{% endif %}/{% if tires_profile[1] == blank %}{{ tires_profile[0] }}{% else %}{{ tires_profile[1] }}{% endif %} R{% if tires_diameter[1] == blank %}{{ tires_diameter[0] }}{% else %}{{ tires_diameter[1] }}{% endif %}
-                              {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }} {{ product.metafields.tires.speed_index | slice: 0 }}
-                            {% else %}
-                              {{ product.metafields.custom.quantity | slice: 0 }} X {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}
+                                    {% assign product_model = product.metafields.tires.model.value.model %}
+                                    {% if product_model == model_name %}
+                                        <div class="tire-model_sizes-product_wrapper">
+                                            <a href="{{ product.url }}" class="tire-model_sizes-product_tittle-wrapper">
+                                                <div class="text-size-large text-weight-bold">{{ product.metafields.tires.manufacturer.value.name }}</div>
+                                                <div>{{ product.metafields.tires.model.value.model }}</div>
+                                                    <span class="text-weight-semibold">
+                                                    {% if double_parameters_tires == 'true' %}
+                                                        2 X {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }},
+                                                        2 X
+                                                        {% if tires_width[1] == blank %}{{ tires_width[0] }}{% else %}{{ tires_width[1] }}{% endif %}/{% if tires_profile[1] == blank %}{{ tires_profile[0] }}{% else %}{{ tires_profile[1] }}{% endif %} R{% if tires_diameter[1] == blank %}{{ tires_diameter[0] }}{% else %}{{ tires_diameter[1] }}{% endif %}
+                                                        {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }} {{ product.metafields.tires.speed_index | slice: 0 }}
+                                                    {% else %}
+                                                        {{ product.metafields.custom.quantity | slice: 0 }} X {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}
+                                                    {% endif %}
+                                                </span>
+                                                {%- if product.metafields.tires.homologation != blank -%}
+                                                    <div class="text-size-tiny text-weight-bold text-color-grayiron600">
+                                                        Homologacja: {{ product.metafields.tires.homologation | map: 'value' | join: ', ' }}</div>
+                                                {%- endif -%}
+                                            </a>
+                                            <div class="text-weight-bold">{{ product.metafields.tires.years }}</div>
+                                            <div class="text-weight-bold">{{ product.metafields.tires.condition }}
+                                                | {{ product.metafields.tires.tread }}</div>
+                                            <div style="display: flex; align-items: center">
+                                                <div class="text-size-large text-weight-bold">{{ product.price | money }}</div>
+                                                <div>&nbsp / {{ product.metafields.custom.quantity }}</div>
+                                            </div>
+                                            <form method="post" action="/cart/add" style="margin-block-end: 0">
+                                                {% comment %} Prevent default action to href /cart {% endcomment %}
+                                                <input type="hidden" name="id" value="{{ product.variants.first.id }}"/>
+                                                <input type="hidden" min="1" type="number" id="quantity" name="quantity"
+                                                       value="1"/>
+                                                <input type="submit" value="Kup teraz" class="button is-small"/>
+                                                {% comment %} Display modal {% endcomment %}
+                                            </form>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
                             {% endif %}
-                          </span>
-                        </div>
-                        {%- if product.metafields.tires.homologation != blank -%}
-                          <div class="text-size-tiny text-weight-bold text-color-grayiron600">Homologacja: {{ product.metafields.tires.homologation | map: 'value' | join: ', ' }}</div>
-                        {%- endif -%}
-                      </a>
-                      <div class="text-weight-bold">{{ product.metafields.tires.years }}</div>
-                      <div class="text-weight-bold">{{ product.metafields.tires.condition }} | {{ product.metafields.tires.tread }}</div>
-                      <div>
-                        <div class="text-size-large text-weight-bold">{{ product.price | money }}</div>
-                        <div>/ {{ product.metafields.custom.quantity }}</div>
-                      </div>
-                      <form method="post" action="/cart/add">
-                        {% comment %} Prevent default action to href /cart {% endcomment %}
-                        <input type="hidden" name="id" value="{{ product.variants.first.id }}" />
-                        <input type="hidden" min="1" type="number" id="quantity" name="quantity" value="1"/>
-                        <input type="submit" value="Kup teraz" class="button is-small" />
-                        {% comment %} Display modal {% endcomment %}
-                      </form>
-                    </div>
-                  {% endif %}
-                {% endfor %}
-              {% endif %}
-              {% if block.settings.type == "kola" %}
-                <div class="tire-model_sizes-parameters hide-tablet">
-                  <p class="text-size-small text-weight-semibold">Rozmiar</p>
-                  <p class="text-size-small text-weight-semibold">Rocznik</p>
-                  <p class="text-size-small text-weight-semibold">Stan i Bieżnik</p>
-                  <p class="text-size-small text-weight-semibold">Cena i Ilość</p>
-                </div>
-                {% assign model_name = metaobject.model.value %}
-                {% for product in collections.kola.products %}
-                  {% comment %} Tires main parameters {% endcomment %}
-                  {% assign tires_width = product.metafields.tires.width | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
-                  {% assign tires_profile = product.metafields.tires.profile | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
-                  {% assign tires_diameter = product.metafields.tires.diameter | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
+                            {% if block.settings.type == "kola" %}
+                                <div class="tire-model_sizes-parameters hide-tablet">
+                                    <p class="text-size-small text-weight-semibold">Rozmiar</p>
+                                    <p class="text-size-small text-weight-semibold">Rocznik</p>
+                                    <p class="text-size-small text-weight-semibold">Stan i Bieżnik</p>
+                                    <p class="text-size-small text-weight-semibold">Cena i Ilość</p>
+                                </div>
+                                {% assign model_name = metaobject.model.value %}
+                                {% for product in collections.kola.products %}
+                                    {% comment %} Tires main parameters {% endcomment %}
+                                    {% assign tires_width = product.metafields.tires.width | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
+                                    {% assign tires_profile = product.metafields.tires.profile | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
+                                    {% assign tires_diameter = product.metafields.tires.diameter | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
 
-                  {% comment %} Two different tires? {% endcomment %}
-                  {% capture double_parameters_tires %}{% if tires_width.size > 1 or tires_profile.size > 1 or tires_diameter.size > 1 %}true{% else %}false{% endif %}{% endcapture %}
-                  {% comment %}{{ double_parameters_tires }}{% endcomment %}
+                                    {% comment %} Two different tires? {% endcomment %}
+                                    {% capture double_parameters_tires %}{% if tires_width.size > 1 or tires_profile.size > 1 or tires_diameter.size > 1 %}true{% else %}false{% endif %}{% endcapture %}
+                                    {% comment %}{{ double_parameters_tires }}{% endcomment %}
 
-                  {% assign product_model = product.metafields.tires.model.value.model %}
-                  {% if product_model == model_name %}
-                    <div class="tire-model_sizes-product_wrapper">
-                      <a href="{{ product.url }}" class="tire-model_sizes-product_tittle-wrapper">
-                        <div class="text-size-large text-weight-bold">{{ product.metafields.tires.manufacturer.value.name }}</div>
-                        <div>{{ product.metafields.tires.model.value.model }}
-                          <span class="text-weight-semibold">
-                            {% if double_parameters_tires == 'true' %}
-                              2 X {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }},
-                              2 X
-                              {% if tires_width[1] == blank %}{{ tires_width[0] }}{% else %}{{ tires_width[1] }}{% endif %}/{% if tires_profile[1] == blank %}{{ tires_profile[0] }}{% else %}{{ tires_profile[1] }}{% endif %} R{% if tires_diameter[1] == blank %}{{ tires_diameter[0] }}{% else %}{{ tires_diameter[1] }}{% endif %}
-                              {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }} {{ product.metafields.tires.speed_index | slice: 0 }}
-                            {% else %}
-                              {{ product.metafields.custom.quantity | slice: 0 }} X {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}
+                                    {% assign product_model = product.metafields.tires.model.value.model %}
+                                    {% if product_model == model_name %}
+                                        <div class="tire-model_sizes-product_wrapper">
+                                            <a href="{{ product.url }}" class="tire-model_sizes-product_tittle-wrapper">
+                                                <div class="text-size-large text-weight-bold">{{ product.metafields.tires.manufacturer.value.name }}</div>
+                                                <div>{{ product.metafields.tires.model.value.model }}</div>
+                                                <span class="text-weight-semibold">
+                                                    {% if double_parameters_tires == 'true' %}
+                                                        2 X {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }},
+                                                        2 X
+                                                        {% if tires_width[1] == blank %}{{ tires_width[0] }}{% else %}{{ tires_width[1] }}{% endif %}/{% if tires_profile[1] == blank %}{{ tires_profile[0] }}{% else %}{{ tires_profile[1] }}{% endif %} R{% if tires_diameter[1] == blank %}{{ tires_diameter[0] }}{% else %}{{ tires_diameter[1] }}{% endif %}
+                                                        {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }} {{ product.metafields.tires.speed_index | slice: 0 }}
+                                                    {% else %}
+                                                        {{ product.metafields.custom.quantity | slice: 0 }} X {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}
+                                                    {% endif %}
+                                                  </span>
+                                                {%- if product.metafields.tires.homologation != blank -%}
+                                                    <div class="text-size-tiny text-weight-bold text-color-grayiron600">
+                                                        Homologacja: {{ product.metafields.tires.homologation | map: 'value' | join: ', ' }}</div>
+                                                {%- endif -%}
+                                            </a>
+                                            <div class="text-weight-bold">{{ product.metafields.tires.years }}</div>
+                                            <div class="text-weight-bold">{{ product.metafields.tires.condition }}
+                                                | {{ product.metafields.tires.tread }}</div>
+                                            <div style="display: flex; align-items: center">
+                                                <div class="text-size-large text-weight-bold">{{ product.price | money }}</div>
+                                                <div>&nbsp / {{ product.metafields.custom.quantity }}</div>
+                                            </div>
+                                            <form method="post" action="/cart/add" style="margin-block-end: 0">
+                                                {% comment %} Prevent default action to href /cart {% endcomment %}
+                                                <input type="hidden" name="id" value="{{ product.variants.first.id }}"/>
+                                                <input type="hidden" min="1" type="number" id="quantity" name="quantity"
+                                                       value="1"/>
+                                                <input type="submit" value="Kup teraz" class="button is-small"/>
+                                                {% comment %} Display modal {% endcomment %}
+                                            </form>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
                             {% endif %}
-                          </span>
                         </div>
-                        {%- if product.metafields.tires.homologation != blank -%}
-                          <div class="text-size-tiny text-weight-bold text-color-grayiron600">Homologacja: {{ product.metafields.tires.homologation | map: 'value' | join: ', ' }}</div>
-                        {%- endif -%}
-                      </a>
-                      <div class="text-weight-bold">{{ product.metafields.tires.years }}</div>
-                      <div class="text-weight-bold">{{ product.metafields.tires.condition }} | {{ product.metafields.tires.tread }}</div>
-                      <div>
-                        <div class="text-size-large text-weight-bold">{{ product.price | money }}</div>
-                        <div>/ {{ product.metafields.custom.quantity }}</div>
-                      </div>
-                      <form method="post" action="/cart/add">
-                        {% comment %} Prevent default action to href /cart {% endcomment %}
-                        <input type="hidden" name="id" value="{{ product.variants.first.id }}" />
-                        <input type="hidden" min="1" type="number" id="quantity" name="quantity" value="1"/>
-                        <input type="submit" value="Kup teraz" class="button is-small" />
-                        {% comment %} Display modal {% endcomment %}
-                      </form>
                     </div>
-                  {% endif %}
-                {% endfor %}
-              {% endif %}
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-  {% endcase %}
+    {% endcase %}
 {% endfor %}
 
 {% schema %}
-  {
-    "name": "Lista Produktów",
-    "tag": "section",
-    "class": "section_tire-model_sizes",
-    "limit": 1,
-    "settings": [
-      {
-        "id": "padding",
-        "type": "select",
-        "label": "Padding",
-        "options": [
-          {
-            "value": "large",
-            "label": "Duży"
-          }, {
-            "value": "medium",
-            "label": "Średni"
-          }, {
-            "value": "small",
-            "label": "Mały"
-          }
-        ],
-        "default": "large"
-      }, {
-        "id": "background",
-        "type": "select",
-        "label": "Kolor tła",
-        "options": [
-          {
-            "value": "background-color-white",
-            "label": "Biały"
-          }, {
-            "value": "background-color-grayiron50",
-            "label": "Szary"
-          }
-        ],
-        "default": "background-color-white"
-      }, {
-        "type": "text",
-        "id": "header",
-        "label": "Tytuł",
-        "default": "Polecane Modele Opon"
-      }, {
-        "type": "select",
-        "id": "container",
-        "label": "Kontener",
-        "options": [
-          {
-            "value": "white-container",
-            "label": "Kontener Biały"
-          }, {
-            "value": "",
-            "label": "Brak Kontenera"
-          }, {
-            "value": "white-container shadow-small",
-            "label": "Kontener z cieniem"
-          }
-        ],
-        "default": "white-container shadow-small"
-      }
-    ],
-    "presets": [
-      {
-        "name": "Lista Produktów"
-      }
-    ],
-    "blocks": [
-      {
-        "name": "Lista",
-        "type": "list",
-        "limit": 2,
-        "settings": [
-          {
-            "type": "text",
-            "id": "header",
-            "label": "Tytuł",
-            "default": "Dostępne rozmiary opon {model}"
-          }, {
-            "type": "select",
-            "id": "type",
-            "label": "Rodzaj produktu",
-            "options": [
-              {
-                "label": "Opony",
-                "value": "opony"
-              }, {
-                "label": "Felgi",
-                "value": "felgi"
-              }, {
-                "label": "Koła",
-                "value": "kola"
-              }
-            ],
-            "default": "opony"
-          }
-        ]
-      }
-    ]
-  }
+{
+  "name": "Lista Produktów",
+  "tag": "section",
+  "class": "section_tire-model_sizes",
+  "limit": 1,
+  "settings": [
+    {
+      "id": "padding",
+      "type": "select",
+      "label": "Padding",
+      "options": [
+        {
+          "value": "large",
+          "label": "Duży"
+        },
+        {
+          "value": "medium",
+          "label": "Średni"
+        },
+        {
+          "value": "small",
+          "label": "Mały"
+        }
+      ],
+      "default": "large"
+    },
+    {
+      "id": "background",
+      "type": "select",
+      "label": "Kolor tła",
+      "options": [
+        {
+          "value": "background-color-white",
+          "label": "Biały"
+        },
+        {
+          "value": "background-color-grayiron50",
+          "label": "Szary"
+        }
+      ],
+      "default": "background-color-white"
+    },
+    {
+      "type": "text",
+      "id": "header",
+      "label": "Tytuł",
+      "default": "Polecane Modele Opon"
+    },
+    {
+      "type": "select",
+      "id": "container",
+      "label": "Kontener",
+      "options": [
+        {
+          "value": "white-container",
+          "label": "Kontener Biały"
+        },
+        {
+          "value": "",
+          "label": "Brak Kontenera"
+        },
+        {
+          "value": "white-container shadow-small",
+          "label": "Kontener z cieniem"
+        }
+      ],
+      "default": "white-container shadow-small"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Lista Produktów"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Lista",
+      "type": "list",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "text",
+          "id": "header",
+          "label": "Tytuł",
+          "default": "Dostępne rozmiary opon {model}"
+        },
+        {
+          "type": "select",
+          "id": "type",
+          "label": "Rodzaj produktu",
+          "options": [
+            {
+              "label": "Opony",
+              "value": "opony"
+            },
+            {
+              "label": "Felgi",
+              "value": "felgi"
+            },
+            {
+              "label": "Koła",
+              "value": "kola"
+            }
+          ],
+          "default": "opony"
+        }
+      ]
+    }
+  ]
+}
 {% endschema %}
 
 
 {% stylesheet %}
-  .tire-model_sizes-parameters {
+.tire-model_sizes-product_tittle-wrapper {
+    text-decoration: none;
+}
+
+.tire-model_sizes-parameters {
     grid-column-gap: 1rem;
     grid-row-gap: 1rem;
     grid-template-rows: auto;
     grid-template-columns: 1.5fr 1fr 1.5fr 1fr 1fr;
     grid-auto-columns: 1fr;
     display: grid;
-  }
+}
 
-  .tire-model_sizes-product_wrapper {
+.tire-model_sizes-product_wrapper {
     grid-column-gap: 1rem;
     grid-row-gap: 1rem;
     border-bottom: 2px solid var(--color-grayiron--grayiron200);
@@ -255,10 +274,32 @@
     padding-top: 1rem;
     padding-bottom: 1rem;
     display: grid;
-  }
+}
 
-  .tire-model_sizes-product_tittle-wrapper {
-    text-decoration: none;
-  }
+@media screen and (min-width: 768px) {
+    .tire-model_sizes-product_wrapper > :first-child {
+        grid-column: 1 / -1; /* Make the first and last child span the entire row */
+    }
+}
 
+@media screen and (max-width: 767px) and (min-width: 500px) {
+    .tire-model_sizes-product_wrapper {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .tire-model_sizes-product_wrapper > :first-child,
+    .tire-model_sizes-product_wrapper > :last-child {
+        grid-column: 1 / -1; /* Make the first and last child span the entire row */
+    }
+}
+
+@media screen and (max-width: 499px) {
+    .tire-model_sizes-product_wrapper {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .tire-model_sizes-product_wrapper > :first-child {
+        grid-column: 1 / -1; /* Make the first and last child span the entire row */
+    }
+}
 {% endstylesheet %}
