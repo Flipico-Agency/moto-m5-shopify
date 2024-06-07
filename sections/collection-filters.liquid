@@ -347,6 +347,19 @@
                         <div class="product-wide_list">
                             <div class="filters2_feed-header">
                                 <div class="filters_tags-wrapper">
+                                    {%- comment -%} Capture the content for header containing the tracking data {%- endcomment -%}
+                                    {%- capture contentForQuerystring -%}{{ content_for_header }}{%- endcapture -%}
+
+                                    {% comment %} Use string splitting to pull the value from content_for_header and apply some string clean up {% endcomment %}
+                                    {%- assign pageUrlWithoutHost= contentForQuerystring | split:'"pageurl":"' | last | split:'"' | first | split:'.myshopify.com' | last |
+                                            replace:'\/','/' |
+                                            replace:'%20',' ' |
+                                            replace:'\u0026','&'
+                                    -%}
+
+                                    {% comment %}Page URL without a request host: {{ pageUrlWithoutHost }}{% endcomment %}
+                                    {% comment %}/collections/opony?filter.p.m.tires.width=115&filter.p.m.tires.profile=80&filter.p.m.tires.diameter=16&filter.p.m.tires.season=Letnie{% endcomment %}
+
                                     {%- for filter in collection.filters -%}
                                         {%- if filter.type == "price_range" -%}
                                             {%- if filter.min_value.value != null or filter.max_value.value != null -%}
@@ -366,11 +379,28 @@
                                                 <div class="filters_tag-wrap text-size-small">
                                                     {{ filter.label }}:
                                                     <a href="{{ filter_value.url_to_remove }}"
-                                                       class="filters_tag">{{ filter_value.label }} <img
-                                                                src="{{ 'IcRoundCloseBlack.svg' | asset_url }}"
-                                                                class="icon-embed-xxsmall"></a>
+                                                       class="filters_tag">{{ filter_value.label }}
+                                                        <img
+                                                            src="{{ 'IcRoundCloseBlack.svg' | asset_url }}"
+                                                            class="icon-embed-xxsmall"
+                                                            alt="delete-param">
+                                                    </a>
                                                 </div>
                                             {%- endfor -%}
+
+                                            {%- if filter.active_values.size == 0 and pageUrlWithoutHost contains filter.param_name -%}
+                                                {%- assign filter_param_value = pageUrlWithoutHost | split: filter.param_name | last | split: '&' | first | split: '=' | last -%}
+                                                <div class="filters_tag-wrap text-size-small">
+                                                    {{ filter.label }}:
+                                                    <a href="{{ filter.url_to_remove }}"
+                                                       class="filters_tag">{{ filter_param_value }}
+                                                        <img
+                                                            src="{{ 'IcRoundCloseBlack.svg' | asset_url }}"
+                                                            class="icon-embed-xxsmall"
+                                                            alt="delete-param">
+                                                    </a>
+                                                </div>
+                                            {%- endif -%}
                                         {%- endif -%}
                                     {%- endfor -%}
                                 </div>
