@@ -360,6 +360,8 @@
                                     {% comment %}Page URL without a request host: {{ pageUrlWithoutHost }}{% endcomment %}
                                     {% comment %}/collections/opony?filter.p.m.tires.width=115&filter.p.m.tires.profile=80&filter.p.m.tires.diameter=16&filter.p.m.tires.season=Letnie{% endcomment %}
 
+                                    {% assign show_custom_message = false %}
+
                                     {%- for filter in collection.filters -%}
                                         {%- if filter.type == "price_range" -%}
                                             {%- if filter.min_value.value != null or filter.max_value.value != null -%}
@@ -393,13 +395,14 @@
                                                 <div class="filters_tag-wrap text-size-small">
                                                     {{ filter.label }}:
                                                     <a href="{{ filter.url_to_remove }}"
-                                                       class="filters_tag">{{ filter_param_value }}
+                                                       class="filters_tag" style="color: red;">{{ filter_param_value }}
                                                         <img
                                                             src="{{ 'IcRoundCloseBlack.svg' | asset_url }}"
                                                             class="icon-embed-xxsmall"
                                                             alt="delete-param">
                                                     </a>
                                                 </div>
+                                                {% assign show_custom_message = true %}
                                             {%- endif -%}
                                         {%- endif -%}
                                     {%- endfor -%}
@@ -634,6 +637,11 @@
                                     </div>
                                 </div>
                             {% else %}
+                                {% if show_custom_message %}
+                                    <p>Przykro nam!<br>
+                                        Nie znaleźliśmy produktów w wybranej konfiguracji.<br>
+                                        Usuń wybrane filtry, aby rozszerzyć wyszukanie.</p>
+                                {% endif %}
                                 <p>Brak produktów w tej kolekcji.</p>
                             {% endfor %}
                         </div>
