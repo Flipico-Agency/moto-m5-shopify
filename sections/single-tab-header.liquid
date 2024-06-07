@@ -17,7 +17,7 @@
         <div class="form-block-2 w-form">
           <form
             id="single-tab-form"
-            class="div-block-8-copy {% if section.settings.typ_sekcji contains 'Opony'%}is-tire{% elsif section.settings.typ_sekcji == 'Koła' %}is-wheel{% elsif section.settings.typ_sekcji == 'Felgi' %}is-rim{% endif %} w-tab-pane tab-pane-tab-1 w--tab-active"
+            class="div-block-8-copy last-item-grid-full {% if section.settings.typ_sekcji contains 'Opony'%}is-tire{% elsif section.settings.typ_sekcji == 'Koła' %}is-wheel{% elsif section.settings.typ_sekcji == 'Felgi' %}is-rim{% endif %} w-tab-pane tab-pane-tab-1 w--tab-active"
             data-w-tab="1.{% if section.settings.typ_sekcji contains 'Opony'%}1{% elsif section.settings.typ_sekcji == 'Koła' %}2{% elsif section.settings.typ_sekcji == 'Felgi' %}3{% endif %}"
             style="border-top: none">
             {% assign tire_fields_label = "Szerokość,Profil,Średnica" | split: "," %}
@@ -235,8 +235,11 @@
 {% endschema %}
 
 {% stylesheet %}
+  .div-block-8-copy.last-item-grid-full > :last-child {
+    grid-column: 1 / -1; /* Make the last child span the entire row */
+  }
+
   .header_manufacturer-suggested_sizes-wrapper {
-    grid-area: span 1 / span 3 / span 1 / span 3;
     display: grid;
     grid-column-gap: 1rem;
     grid-row-gap: 1rem;
@@ -246,7 +249,6 @@
 
   @media screen and (max-width: 991px) {
     .header_manufacturer-suggested_sizes-wrapper {
-      grid-area: span 1 / span 2 / span 1 / span 2;
       grid-template-columns: 1fr 1fr;
     }
   }
