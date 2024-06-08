@@ -14,7 +14,8 @@
                             {%- endif -%}
                             {% if block.settings.type == "opony" %}
                                 <div class="tire-model_sizes-parameters hide-tablet">
-                                    <p class="text-size-small text-weight-semibold">Rozmiar</p>
+                                    <p class="text-size-small text-weight-semibold">Model</p>
+                                    {% comment %}<p class="text-size-small text-weight-semibold">Rozmiar</p>{% endcomment %}
                                     <p class="text-size-small text-weight-semibold">Rocznik</p>
                                     <p class="text-size-small text-weight-semibold">Stan i Bieżnik</p>
                                     <p class="text-size-small text-weight-semibold">Cena i Ilość</p>
@@ -72,7 +73,8 @@
                             {% endif %}
                             {% if block.settings.type == "kola" %}
                                 <div class="tire-model_sizes-parameters hide-tablet">
-                                    <p class="text-size-small text-weight-semibold">Rozmiar</p>
+                                    <p class="text-size-small text-weight-semibold">Model</p>
+                                    {% comment %}<p class="text-size-small text-weight-semibold">Rozmiar</p>{% endcomment %}
                                     <p class="text-size-small text-weight-semibold">Rocznik</p>
                                     <p class="text-size-small text-weight-semibold">Stan i Bieżnik</p>
                                     <p class="text-size-small text-weight-semibold">Cena i Ilość</p>
@@ -276,13 +278,17 @@
     display: grid;
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 768px) and (max-width: 991px) {
+    .tire-model_sizes-product_wrapper {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+
     .tire-model_sizes-product_wrapper > :first-child {
         grid-column: 1 / -1; /* Make the first child span the entire row */
     }
 }
 
-@media screen and (max-width: 767px) and (min-width: 500px) {
+@media screen and (min-width: 500px) and (max-width: 767px) {
     .tire-model_sizes-product_wrapper {
         grid-template-columns: 1fr 1fr 1fr;
     }
