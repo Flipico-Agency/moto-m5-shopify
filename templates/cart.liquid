@@ -51,19 +51,33 @@
                         <div class="cart_product-content">
                           {% for collection in item.product.collections %}
                             {% if collection.title == 'Opony' %}
-                              <a
-                                class="cart_product-title"
-                                href="{{ item.url }}"
-                                id="w-node-a3fc45f6-3394-d351-49d3-241dece435d1-65612e35">
+                              {% comment %} Tires main parameters {% endcomment %}
+                              {% assign tires_width = item.product.metafields.tires.width | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
+                              {% assign tires_profile = item.product.metafields.tires.profile | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
+                              {% assign tires_diameter = item.product.metafields.tires.diameter | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
+                              {% capture double_parameters_tires %}{% if tires_width.size > 1 or tires_profile.size > 1 or tires_diameter.size > 1 %}true{% else %}false{% endif %}{% endcapture %}
+
+                              <a class="cart_product-title" href="{{ item.url }}">
                                 <div class="text-weight-bold">
                                   {% if item.quantity > 1 %}
                                     {{ item.quantity }} x
                                   {% endif %}
                                   {{ item.product.metafields.custom.quantity }}
-                                  {{ item.product.metafields.tires.manufacturer.value.name.value }}</div>
-                                <div>{{ item.product.metafields.tires.model.value.model.value }} {{ item.product.metafields.tires.width }}/{{ item.product.metafields.tires.profile }} R{{ item.product.metafields.tires.diameter }} {{ item.product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ item.product.metafields.tires.speed_index | slice: 0 }}</div>
+                                  {{ item.product.metafields.tires.manufacturer.value.name.value }}
+                                  {{ item.product.metafields.tires.model.value.model.value }}
+                                </div>
+                                <div>
+                                  {% if double_parameters_tires == 'true' %}
+                                    2 X {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }},
+                                    2 X
+                                    {% if tires_width[1] == blank %}{{ tires_width[0] }}{% else %}{{ tires_width[1] }}{% endif %}/{% if tires_profile[1] == blank %}{{ tires_profile[0] }}{% else %}{{ tires_profile[1] }}{% endif %} R{% if tires_diameter[1] == blank %}{{ tires_diameter[0] }}{% else %}{{ tires_diameter[1] }}{% endif %}
+                                    {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }} {{ product.metafields.tires.speed_index | slice: 0 }}
+                                  {% else %}
+                                    {{ product.metafields.custom.quantity | slice: 0 }} X {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}
+                                  {% endif %}
+                                </div>
                               </a>
-                              <div id="w-node-a0529447-4ac9-eaf6-02fc-ea15f2186713-65612e35">
+                              <div>
                                 <div class="text-size-tiny">
                                   <span class="text-color-grayiron600">Data produkcji:</span>
                                   <span class="text-weight-bold">{{ item.product.metafields.tires.years }}</span>
@@ -73,27 +87,65 @@
                                   <span class="text-weight-bold">{{ item.product.metafields.tires.condition }} | {{ item.product.metafields.tires.tread }}</span>
                                 </div>
                               </div>
-                            {% elsif collection.title == 'Akcesoria' %}
-                              <a
-                                class="cart_product-title"
-                                href="{{ item.url }}"
-                                id="w-node-a3fc45f6-3394-d351-49d3-241dece435d1-65612e35">
+                            {% elsif collection.title == 'Felgi' %}
+                              {% comment %} Rims main parameters {% endcomment %}
+                              {% assign rims_diameter = item.product.metafields.rims.diameter | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
+                              {% assign rims_e_t = item.product.metafields.rims.e_t | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
+                              {% assign rims_width = item.product.metafields.rims.width | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
+                              {% capture double_parameters_rims %}{% if rims_diameter.size > 1 or rims_e_t.size > 1 or rims_width.size > 1 %}true{% else %}false{% endif %}{% endcapture %}
+
+                              <a class="cart_product-title" href="{{ item.url }}">
                                 <div class="text-weight-bold">
                                   {% if item.quantity > 1 %}
                                     {{ item.quantity }} x
                                   {% endif %}
-                                  {{ item.product.title }}</div>
-                                <div class="text-size-tiny text-color-grayiron600">
-                                  Otrzymasz ze swoim zamówieniem
+                                  {{ item.product.metafields.custom.quantity }}
+                                  {{ item.product.metafields.rims.manufacturer.value.name.value }}
+                                  {{ item.product.metafields.rims.model.value.model.value }}
+                                </div>
+                                <div>
+                                  {% if double_parameters_rims == 'true' %}
+                                    2 X R{{ rims_diameter[0] }}x{{ rims_width[0] }}J ET{{ rims_e_t[0] }},
+                                    2 X
+                                    R{% if rims_diameter[1] == blank %}{{ rims_diameter[0] }}{% else %}{{ rims_diameter[1] }}{% endif %}x{% if rims_width[1] == blank %}{{ rims_width[0] }}{% else %}{{ rims_width[1] }}{% endif %} ET{% if rims_e_t[1] == blank %}{{ rims_e_t[0] }}{% else %}{{ rims_e_t[1] }}{% endif %}
+                                  {% else %}
+                                    {{ product.metafields.custom.quantity | slice: 0 }} X R{{ rims_diameter[0] }}x{{ rims_width[0] }}J ET{{ rims_e_t[0] }}
+                                  {% endif %}
                                 </div>
                               </a>
-                              <div id="w-node-a0529447-4ac9-eaf6-02fc-ea15f2186713-65612e35"></div>
+                              <div>
+                                <div class="text-size-tiny">
+                                  <span class="text-color-grayiron600">Data produkcji:</span>
+                                  <span class="text-weight-bold">{{ item.product.metafields.rims.years }}</span>
+                                </div>
+                                <div class="text-size-tiny">
+                                  <span class="text-color-grayiron600">Stan i rozstaw śrub:</span>
+                                  <span class="text-weight-bold">{{ item.product.metafields.rims.condition }} | {{ item.product.metafields.rims.bolt_spacing }}</span>
+                                </div>
+                              </div>
+                            {% elsif collection.title == 'Koła' or collection.title == 'Koła dojazdowe' or collection.title == 'Akcesoria' %}
+                              <a class="cart_product-title" href="{{ item.url }}">
+                                <div class="text-weight-bold">
+                                  {% if item.quantity > 1 %}
+                                    {{ item.quantity }} x
+                                  {% endif %}
+                                  {{ item.product.title }}
+                                </div>
+                                {% if collection.title == 'Akcesoria' %}
+                                  <div class="text-size-tiny text-color-grayiron600">
+                                    Otrzymasz ze swoim zamówieniem
+                                  </div>
+                                {% endif %}
+                              </a>
+                              <div></div>
                             {% endif %}
                           {% endfor %}
-                          <div id="w-node-f37ffad2-1e5e-42e0-2327-78b9991e8a10-65612e35">
-                            <a href="/cart/change?line={{ forloop.index }}&quantity=0"><img class="icon-embed-xxsmall" src="{{ 'IcRoundDelete.svg' | asset_url }}"></a>
+                          <div style="display: flex; justify-content: flex-end">
+                            <a href="/cart/change?line={{ forloop.index }}&quantity=0">
+                              <img class="icon-embed-xxsmall" src="{{ 'IcRoundDelete.svg' | asset_url }}">
+                            </a>
                           </div>
-                          <div id="w-node-cfb9a4ab-e3fd-2276-ebc0-b72fc1ea1637-65612e35" style="text-align: right;">
+                          <div style="text-align: right;">
                             <div class="text-color-red600 text-weight-bold">
                               {{ item.price | times: item.quantity | money }}
                               {% if item.quantity > 1 %}
