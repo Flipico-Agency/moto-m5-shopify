@@ -123,47 +123,47 @@
             </div>
 
             {% comment %} Account button {% endcomment %}
-            <div
-                    data-hover="false"
-                    data-delay="200"
-                    class="navbar-dropdown8_component w-dropdown"
-                    onclick="showAccountModal()">
-                <div
-                        class="navbar-dropdown8_dropdown-toggle w-dropdown-toggle"
-                        id="w-dropdown-toggle-account"
-                        aria-controls="w-dropdown-list-4"
-                        aria-haspopup="menu"
-                        aria-expanded="false"
-                        role="button"
-                        tabindex="0">
-                    <div class="icon-1x1-nav">
-                        <img src="{{ 'IcRoundAccountBlack.svg' | asset_url }}" alt="account-button"/>
-                    </div>
-                </div>
-
-                {% comment %} Account modal {% endcomment %}
-                <nav
-                        class="navbar-dropdown8_dropdown-list w-dropdown-list"
-                        id="w-dropdown-list-account"
-                        aria-labelledby="w-dropdown-toggle-4"
-                        style="transform: translate3d(-4rem, 0rem, 0rem) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;">
-                    <div class="navbar-dropdown8_dropdown-wrapper">
-                        <a
-                                href="/logowanie"
-                                class="button is-small w-button"
-                                tabindex="0"
-                                style="text-transform: none">Zaloguj się</a>
-                        <div class="margin-top margin-xsmall">
-                            <div class="text-align-center">Nie masz konta?</div>
-                        </div>
-                        <a
-                                href="/rejestracja"
-                                class="button is-secondary is-small w-button"
-                                tabindex="0"
-                                style="text-transform: none">Zarejestruj się</a>
-                    </div>
-                </nav>
-            </div>
+            {% comment %}<div{% endcomment %}
+                    {% comment %}data-hover="false"{% endcomment %}
+                    {% comment %}data-delay="200"{% endcomment %}
+                    {% comment %}class="navbar-dropdown8_component w-dropdown"{% endcomment %}
+                    {% comment %}onclick="showAccountModal()">{% endcomment %}
+                {% comment %}<div{% endcomment %}
+                        {% comment %}class="navbar-dropdown8_dropdown-toggle w-dropdown-toggle"{% endcomment %}
+                        {% comment %}id="w-dropdown-toggle-account"{% endcomment %}
+                        {% comment %}aria-controls="w-dropdown-list-4"{% endcomment %}
+                        {% comment %}aria-haspopup="menu"{% endcomment %}
+                        {% comment %}aria-expanded="false"{% endcomment %}
+                        {% comment %}role="button"{% endcomment %}
+                        {% comment %}tabindex="0">{% endcomment %}
+                    {% comment %}<div class="icon-1x1-nav">{% endcomment %}
+                        {% comment %}<img src="{{ 'IcRoundAccountBlack.svg' | asset_url }}" alt="account-button"/>{% endcomment %}
+                    {% comment %}</div>{% endcomment %}
+                {% comment %}</div>{% endcomment %}
+{% comment %}{% endcomment %}
+                {% comment %}{% comment %} Account modal {% endcomment %}{% endcomment %}
+                {% comment %}<nav{% endcomment %}
+                        {% comment %}class="navbar-dropdown8_dropdown-list w-dropdown-list"{% endcomment %}
+                        {% comment %}id="w-dropdown-list-account"{% endcomment %}
+                        {% comment %}aria-labelledby="w-dropdown-toggle-4"{% endcomment %}
+                        {% comment %}style="transform: translate3d(-4rem, 0rem, 0rem) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;">{% endcomment %}
+                    {% comment %}<div class="navbar-dropdown8_dropdown-wrapper">{% endcomment %}
+                        {% comment %}<a{% endcomment %}
+                                {% comment %}href="/logowanie"{% endcomment %}
+                                {% comment %}class="button is-small w-button"{% endcomment %}
+                                {% comment %}tabindex="0"{% endcomment %}
+                                {% comment %}style="text-transform: none">Zaloguj się</a>{% endcomment %}
+                        {% comment %}<div class="margin-top margin-xsmall">{% endcomment %}
+                            {% comment %}<div class="text-align-center">Nie masz konta?</div>{% endcomment %}
+                        {% comment %}</div>{% endcomment %}
+                        {% comment %}<a{% endcomment %}
+                                {% comment %}href="/rejestracja"{% endcomment %}
+                                {% comment %}class="button is-secondary is-small w-button"{% endcomment %}
+                                {% comment %}tabindex="0"{% endcomment %}
+                                {% comment %}style="text-transform: none">Zarejestruj się</a>{% endcomment %}
+                    {% comment %}</div>{% endcomment %}
+                {% comment %}</nav>{% endcomment %}
+            {% comment %}</div>{% endcomment %}
 
             {% comment %} Cart button {% endcomment %}
             <div class="div-block-5">

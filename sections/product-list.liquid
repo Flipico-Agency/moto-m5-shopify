@@ -39,12 +39,13 @@
                                                 <div>{{ product.metafields.tires.model.value.model }}</div>
                                                     <span class="text-weight-semibold">
                                                     {% if double_parameters_tires == 'true' %}
-                                                        2 X {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }},
-                                                        2 X
+                                                        2x {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }},
+                                                        2x
                                                         {% if tires_width[1] == blank %}{{ tires_width[0] }}{% else %}{{ tires_width[1] }}{% endif %}/{% if tires_profile[1] == blank %}{{ tires_profile[0] }}{% else %}{{ tires_profile[1] }}{% endif %} R{% if tires_diameter[1] == blank %}{{ tires_diameter[0] }}{% else %}{{ tires_diameter[1] }}{% endif %}
-                                                        {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }} {{ product.metafields.tires.speed_index | slice: 0 }}
+                                                        {% comment %}{{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }} {{ product.metafields.tires.speed_index | slice: 0 }}{% endcomment %}
                                                     {% else %}
-                                                        {{ product.metafields.custom.quantity | slice: 0 }} X {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}
+                                                        {{ product.metafields.custom.quantity | slice: 0 }}x {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }}
+                                                        {% comment %}{{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}{% endcomment %}
                                                     {% endif %}
                                                 </span>
                                                 {%- if product.metafields.tires.homologation != blank -%}
@@ -98,12 +99,13 @@
                                                 <div>{{ product.metafields.tires.model.value.model }}</div>
                                                 <span class="text-weight-semibold">
                                                     {% if double_parameters_tires == 'true' %}
-                                                        2 X {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }},
-                                                        2 X
+                                                        2x {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }},
+                                                        2x
                                                         {% if tires_width[1] == blank %}{{ tires_width[0] }}{% else %}{{ tires_width[1] }}{% endif %}/{% if tires_profile[1] == blank %}{{ tires_profile[0] }}{% else %}{{ tires_profile[1] }}{% endif %} R{% if tires_diameter[1] == blank %}{{ tires_diameter[0] }}{% else %}{{ tires_diameter[1] }}{% endif %}
-                                                        {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }} {{ product.metafields.tires.speed_index | slice: 0 }}
+                                                        {% comment %}{{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }} {{ product.metafields.tires.speed_index | slice: 0 }}{% endcomment %}
                                                     {% else %}
-                                                        {{ product.metafields.custom.quantity | slice: 0 }} X {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}
+                                                        {{ product.metafields.custom.quantity | slice: 0 }}x {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }}
+                                                        {% comment %}{{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}{% endcomment %}
                                                     {% endif %}
                                                   </span>
                                                 {%- if product.metafields.tires.homologation != blank -%}

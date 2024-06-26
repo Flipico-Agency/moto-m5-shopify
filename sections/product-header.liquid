@@ -1500,9 +1500,10 @@
                                                     {% if double_parameters_tires == 'true' %}
                                                         2x {{ tires_width | first }}/{{ tires_profile | first }} R{{ tires_diameter | first }},
                                                         2x {{ tires_width | last }}/{{ tires_profile | last }} R{{ tires_diameter | last }}
-                                                        {{ other_product.metafields.tires.load_index | slice: 0, 3 | rstrip }} {{ other_product.metafields.tires.speed_index | slice: 0 }}
+                                                        {% comment %}{{ other_product.metafields.tires.load_index | slice: 0, 3 | rstrip }} {{ other_product.metafields.tires.speed_index | slice: 0 }}{% endcomment %}
                                                     {% else %}
-                                                        {{ other_product.metafields.custom.quantity }} {{ tires_width | first }}/{{ tires_profile | first }} R{{ tires_diameter | first }} {{ other_product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ other_product.metafields.tires.speed_index | slice: 0 }}
+                                                        {{ other_product.metafields.custom.quantity }} {{ tires_width | first }}/{{ tires_profile | first }} R{{ tires_diameter | first }}
+                                                        {% comment %}{{ other_product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ other_product.metafields.tires.speed_index | slice: 0 }}{% endcomment %}
                                                     {% endif %}
                                                 </option>
                                             {% endif %}
