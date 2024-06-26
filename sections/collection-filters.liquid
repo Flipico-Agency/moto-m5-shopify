@@ -611,9 +611,7 @@
                                                     </span>
                                                 </div>
                                             </div>
-                                            <div class="text-size-tiny text-weight-semibold text-color-green">Darmowa
-                                                Dostawa, zamów przed {{ settings.delivery-hour }} - wyślemy dzisiaj
-                                            </div>
+                                            <div class="add-delivery-text"></div>
                                             <div class="product_green-wrapper">
                                                 <p class="text-size-small text-color-green">Możliwość montażu
                                                     <span class="text-weight-semibold">w serwisie</span>
@@ -782,6 +780,7 @@
 </script>
 
 <script type="text/javascript" src="{{ 'filters.js' | asset_url }}"></script>
+<script type="text/javascript" src="{{ 'delivery.js' | asset_url }}"></script>
 
 {% stylesheet %}
 .filters-list {

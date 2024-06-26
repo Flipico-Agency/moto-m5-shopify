@@ -1,0 +1,48 @@
+document.addEventListener("DOMContentLoaded", function() {
+    const holidays = [
+        "2024-01-01", // Nowy Rok
+        "2024-01-06", // Święto Trzech Króli
+        "2024-03-31", // Wielkanoc (Niedziela Wielkanocna)
+        "2024-04-01", // Wielkanoc (Poniedziałek Wielkanocny)
+        "2024-05-01", // Święto Pracy
+        "2024-05-03", // Święto Konstytucji 3 Maja
+        "2024-05-19", // Zesłanie Ducha Świętego (Zielone Świątki)
+        "2024-05-30", // Boże Ciało
+        "2024-08-15", // Wniebowzięcie Najświętszej Maryi Panny
+        "2024-11-01", // Wszystkich Świętych
+        "2024-11-11", // Święto Niepodległości
+        "2024-12-25", // Boże Narodzenie (pierwszy dzień)
+        "2024-12-26"  // Boże Narodzenie (drugi dzień)
+    ];
+
+    function isHoliday(today) {
+        const todayFormatted = today.toISOString().split('T')[0];
+        return holidays.includes(todayFormatted);
+    }
+
+    const today = new Date();
+    const dayOfWeek = today.getDay(); // 0 - Sunday, 1 - Monday, ..., 6 - Saturday
+    const hour = today.getHours();
+
+    const deliveryElement = document.createElement('div');
+    deliveryElement.className = 'text-size-small text-weight-bold text-color-green';
+
+    if (isHoliday(today)) {
+        deliveryElement.innerHTML = 'Zamów dzisiaj, wyślemy po świętach.';
+    } else {
+        if (dayOfWeek >= 1 && dayOfWeek <= 5) { // Monday - Friday
+            if (hour < 14) {
+                deliveryElement.innerHTML = 'Zamów przed 14:00, wyślemy dzisiaj.';
+            } else {
+                deliveryElement.innerHTML = 'Zamów dzisiaj, wyślemy jutro.';
+            }
+        } else { // Saturday - Sunday
+            deliveryElement.innerHTML = 'Zamów dzisiaj, wyślemy w poniedziałek.';
+        }
+    }
+
+    const container = document.querySelector('.add-delivery-text');
+    if (container) {
+        container.appendChild(deliveryElement);
+    }
+});

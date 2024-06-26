@@ -202,12 +202,4 @@
             "default": "#4875f8"
         }
     ]
-}, {
-    "name": "Ustawienia sklepu",
-    "settings": [{
-        "type": "text",
-        "id": "delivery-hour",
-        "label": "Godzina wysyłki tego samego dnia",
-        "default": "15:00"
-    }]
 }]

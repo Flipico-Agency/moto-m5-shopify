@@ -229,7 +229,7 @@
                     </div>
                   </div>
                   <div class="cart_list">
-                    <div class="text-size-small text-weight-bold text-color-green">Zamów przed {{ settings.delivery-hour }} - wyślemy dzisiaj</div>
+                    <div class="add-delivery-text"></div>
                   </div>
                   <div class="cart_list">
                     <div class="text-size-small">Oczekiwana dostawa 1-2 dni robocze</div>
@@ -247,14 +247,14 @@
                 </div>
               </form>
               <div class="white-container-border">
-                <img src="{{ 'Payments.svg' | asset_url }}">
+                <img src="{{ 'Payments.svg' | asset_url }}" alt="payments">
               </div>
             </div>
           </div>
         {% else %}
           <div class="white-container-border">
             <div class="cart_empty">
-              <img src="{{ 'IcRoundEmptyCart.svg' | asset_url }}" class="icon-embed-medium">
+              <img src="{{ 'IcRoundEmptyCart.svg' | asset_url }}" class="icon-embed-medium" alt="ic-round-empty-cart">
               <div class="heading-style-h5">Twój koszyk jest pusty</div>
               <a class="button" href="{{ shop.url }}">Wróć do sklepu</a>
             </div>
@@ -264,3 +264,5 @@
     </div>
   </div>
 </div>
+
+<script type="text/javascript" src="{{ 'delivery.js' | asset_url }}"></script>
