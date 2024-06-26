@@ -1349,12 +1349,12 @@
                                 <img src="{{ 'IcRoundDelivery.svg' | asset_url }}" class="icon-embed-xxsmall">
                                 <div class="text-size-small">Dostawa i zwroty</div>
                             </div>
-                            <div class="icon-embed-xsmall"><img src="{{ 'IcArrowSmallRight.svg' | asset_url }}"/></div>
+                            <div class="icon-embed-xsmall"><img src="{{ 'IcArrowSmallRight.svg' | asset_url }}" alt="icon-arrow-small-right"/></div>
                         </div>
                         <div class="modal_component" id="modal-component-delivery">
                             <div class="modal_content-wrapper">
                                 <div class="modal_close-button" id="modal-close-delivery"><img
-                                            src="{{ 'IcRoundCloseRed.svg' | asset_url }}" class="icon-embed-small">
+                                            src="{{ 'IcRoundCloseRed.svg' | asset_url }}" class="icon-embed-small" alt="icon-arrow-close-red">
                                 </div>
                                 <div class="margin-bottom margin-large">
                                     <div class="margin-bottom margin-xsmall">
@@ -1426,9 +1426,7 @@
                     </div>
                     <div class="text-size-tiny text-weight-semibold text-color-green">Darmowa Dostawa</div>
                     <div class="product-buy_divider"></div>
-                    <div class="text-size-small text-weight-bold text-color-green">
-                        Zamów przed {{ settings.delivery-hour }} - wyślemy dzisiaj
-                    </div>
+                    <div class="add-delivery-text"></div>
                     {% if product.available %}
                         <form
                                 method="post"
@@ -1522,6 +1520,57 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const holidays = [
+            "2024-01-01", // Nowy Rok
+            "2024-01-06", // Święto Trzech Króli
+            "2024-03-31", // Wielkanoc (Niedziela Wielkanocna)
+            "2024-04-01", // Wielkanoc (Poniedziałek Wielkanocny)
+            "2024-05-01", // Święto Pracy
+            "2024-05-03", // Święto Konstytucji 3 Maja
+            "2024-05-19", // Zesłanie Ducha Świętego (Zielone Świątki)
+            "2024-05-30", // Boże Ciało
+            "2024-08-15", // Wniebowzięcie Najświętszej Maryi Panny
+            "2024-11-01", // Wszystkich Świętych
+            "2024-11-11", // Święto Niepodległości
+            "2024-12-25", // Boże Narodzenie (pierwszy dzień)
+            "2024-12-26"  // Boże Narodzenie (drugi dzień)
+        ];
+
+        function isHoliday(today) {
+            const todayFormatted = today.toISOString().split('T')[0];
+            return holidays.includes(todayFormatted);
+        }
+
+        const today = new Date();
+        const dayOfWeek = today.getDay(); // 0 - Sunday, 1 - Monday, ..., 6 - Saturday
+        const hour = today.getHours();
+
+        const deliveryElement = document.createElement('div');
+        deliveryElement.className = 'text-size-small text-weight-bold text-color-green';
+
+        if (isHoliday(today)) {
+            deliveryElement.innerHTML = 'Zamów dzisiaj, wyślemy po świętach.';
+        } else {
+            if (dayOfWeek >= 1 && dayOfWeek <= 5) { // Monday - Friday
+                if (hour < 14) {
+                    deliveryElement.innerHTML = 'Zamów przed 14:00, wyślemy dzisiaj.';
+                } else {
+                    deliveryElement.innerHTML = 'Zamów dzisiaj, wyślemy jutro.';
+                }
+            } else { // Saturday - Sunday
+                deliveryElement.innerHTML = 'Zamów dzisiaj, wyślemy w poniedziałek.';
+            }
+        }
+
+        const container = document.querySelector('.add-delivery-text');
+        if (container) {
+            container.appendChild(deliveryElement);
+        }
+    });
+</script>
 
 {% javascript %}
     document.addEventListener('DOMContentLoaded', function() {
