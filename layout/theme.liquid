@@ -9,8 +9,8 @@
     {{ 'navbar.css' | asset_url | stylesheet_tag }}
     {{ 'snippets.css' | asset_url | stylesheet_tag }}
     {{ 'snippets.js' | asset_url | script_tag }}
-    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css">
     <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css">
     {% comment %}{{ 'cart.js' | asset_url | script_tag }}{% endcomment %}
     {% comment %}{{ 'checkout.js' | asset_url | script_tag }}{% endcomment %}
     <meta content="width=device-width, initial-scale=1" name="viewport" />
@@ -25,12 +25,6 @@
       {% sections 'footer-group' %}
     </div>
     <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
-    <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
-
-    <script>
-          tdocument.addEventListener('DOMContentLoaded', function () {
-            tippy('[data-tippy-content]');
-        });
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
   </body>
 </html>

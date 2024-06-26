@@ -451,9 +451,10 @@
                                                             2x {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }},
                                                             2x
                                                             {% if tires_width[1] == blank %}{{ tires_width[0] }}{% else %}{{ tires_width[1] }}{% endif %}/{% if tires_profile[1] == blank %}{{ tires_profile[0] }}{% else %}{{ tires_profile[1] }}{% endif %} R{% if tires_diameter[1] == blank %}{{ tires_diameter[0] }}{% else %}{{ tires_diameter[1] }}{% endif %}
-                                                            {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }} {{ product.metafields.tires.speed_index | slice: 0 }}
+                                                            {% comment %}{{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }} {{ product.metafields.tires.speed_index | slice: 0 }}{% endcomment %}
                                                         {% else %}
-                                                            {{ product.metafields.custom.quantity | slice: 0 }}x {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}
+                                                            {{ product.metafields.custom.quantity | slice: 0 }}x {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }}
+                                                            {% comment %}{{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}{% endcomment %}
                                                         {% endif %}
                                                     </div>
                                                 </div>
@@ -497,34 +498,34 @@
                                                         </div>
                                                     {% endif %}
                                                 </div>
-                                                <div class="product_parameters-wrapper">
-                                                    {% if product.metafields.tires.load_index != blank %}
-                                                        <div class="product_parameters">
-                                                            <div class="tooltip1_component">
-                                                                <div class="tooltip1_tooltip-wrapper">
-                                                                    <div class="tooltip1_card-wrapper">
-                                                                        <div class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.load_index }}
-                                                                            . Indeks nośności, czyli maksymalne
-                                                                            obciążenie pojedynczej opony
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="tooltip1_pointer"></div>
-                                                                </div>
-                                                                <div class="tooltip1_element-wrapper"
-                                                                     data-relume-tooltip-setup="1">
-                                                                    <div class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}</div>
-                                                                </div>
-                                                                <div class="tooltip1_responsive"></div>
-                                                            </div>
-                                                        </div>
-                                                    {% endif %}
-                                                    {% if product.metafields.tires.speed_index != blank %}
-                                                        <div data-tippy-content="{{ product.metafields.tires.speed_index }}. Indeks prędkości, czyli maksymalna prędkość, do której przystosowana jest opona"
-                                                             class="product_parameters is-last">
-                                                            <div class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.speed_index | slice: 0 }}</div>
-                                                        </div>
-                                                    {% endif %}
-                                                </div>
+                                                {% comment %}<div class="product_parameters-wrapper">{% endcomment %}
+                                                    {% comment %}{% if product.metafields.tires.load_index != blank %}{% endcomment %}
+                                                        {% comment %}<div class="product_parameters">{% endcomment %}
+                                                            {% comment %}<div class="tooltip1_component">{% endcomment %}
+                                                                {% comment %}<div class="tooltip1_tooltip-wrapper">{% endcomment %}
+                                                                    {% comment %}<div class="tooltip1_card-wrapper">{% endcomment %}
+                                                                        {% comment %}<div class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.load_index }}{% endcomment %}
+                                                                            {% comment %}. Indeks nośności, czyli maksymalne{% endcomment %}
+                                                                            {% comment %}obciążenie pojedynczej opony{% endcomment %}
+                                                                        {% comment %}</div>{% endcomment %}
+                                                                    {% comment %}</div>{% endcomment %}
+                                                                    {% comment %}<div class="tooltip1_pointer"></div>{% endcomment %}
+                                                                {% comment %}</div>{% endcomment %}
+                                                                {% comment %}<div class="tooltip1_element-wrapper"{% endcomment %}
+                                                                     {% comment %}data-relume-tooltip-setup="1">{% endcomment %}
+                                                                    {% comment %}<div class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}</div>{% endcomment %}
+                                                                {% comment %}</div>{% endcomment %}
+                                                                {% comment %}<div class="tooltip1_responsive"></div>{% endcomment %}
+                                                            {% comment %}</div>{% endcomment %}
+                                                        {% comment %}</div>{% endcomment %}
+                                                    {% comment %}{% endif %}{% endcomment %}
+                                                    {% comment %}{% if product.metafields.tires.speed_index != blank %}{% endcomment %}
+                                                        {% comment %}<div data-tippy-content="{{ product.metafields.tires.speed_index }}. Indeks prędkości, czyli maksymalna prędkość, do której przystosowana jest opona"{% endcomment %}
+                                                             {% comment %}class="product_parameters is-last">{% endcomment %}
+                                                            {% comment %}<div class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.speed_index | slice: 0 }}</div>{% endcomment %}
+                                                        {% comment %}</div>{% endcomment %}
+                                                    {% comment %}{% endif %}{% endcomment %}
+                                                {% comment %}</div>{% endcomment %}
                                             </div>
                                         {% elsif product.collections[0].handle == 'felgi' %}
                                             <div class="div-block-47">

@@ -90,8 +90,7 @@
                     <div class="product-header_gallery-images_wrapper">
                         {% for image in product.images %}
                             <div class="product-header_gallery-image-wrapper">
-                                <img class="product-header_gallery-image"
-                                     src="{{ image | image_url: height: 200 | image_tag }}">
+                                <img class="product-header_gallery-image" src="{{ image | image_url: height: 200 | image_tag }}" alt="gallery-image">
                             </div>
                         {% endfor %}
                     </div>
@@ -1463,9 +1462,10 @@
                                                 2x {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }},
                                                 2x
                                                 {% if tires_width[1] == blank %}{{ tires_width[0] }}{% else %}{{ tires_width[1] }}{% endif %}/{% if tires_profile[1] == blank %}{{ tires_profile[0] }}{% else %}{{ tires_profile[1] }}{% endif %} R{% if tires_diameter[1] == blank %}{{ tires_diameter[0] }}{% else %}{{ tires_diameter[1] }}{% endif %}
-                                                {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }} {{ product.metafields.tires.speed_index | slice: 0 }}
+                                                {% comment %}{{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }} {{ product.metafields.tires.speed_index | slice: 0 }}{% endcomment %}
                                             {% else %}
-                                                {{ product.metafields.custom.quantity | slice: 0 }}x {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}
+                                                {{ product.metafields.custom.quantity | slice: 0 }}x {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }}
+                                                {% comment %}{{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}{% endcomment %}
                                             {% endif %}
                                         </option>
 
