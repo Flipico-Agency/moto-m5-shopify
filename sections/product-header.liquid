@@ -39,9 +39,10 @@
                                      2x {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }},
                                      2x
                                      {% if tires_width[1] == blank %}{{ tires_width[0] }}{% else %}{{ tires_width[1] }}{% endif %}/{% if tires_profile[1] == blank %}{{ tires_profile[0] }}{% else %}{{ tires_profile[1] }}{% endif %} R{% if tires_diameter[1] == blank %}{{ tires_diameter[0] }}{% else %}{{ tires_diameter[1] }}{% endif %}
-                                     {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }} {{ product.metafields.tires.speed_index | slice: 0 }}
+                                     {% comment %}{{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }} {{ product.metafields.tires.speed_index | slice: 0 }}{% endcomment %}
                                  {% else %}
-                                     {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}
+                                     {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }}
+                                     {% comment %}{{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}{% endcomment %}
                                  {% endif %}
                             </span>
                         {% elsif product.collections[0].handle == 'felgi' %}
@@ -77,20 +78,28 @@
                 <div class="product-header_gallery">
                     <div class="product-header_gallery_main-image_wrapper">
                         {% if product.featured_image %}
-                            {{ product.featured_image | image_url: height: 1000 | image_tag: class: 'product-header_gallery_main-image' }}
+                            <a data-fancybox="gallery" href="{{ product.featured_image | image_url: height: 1000 }}">
+                                {{ product.featured_image | image_url: height: 1000 | image_tag: class: 'product-header_gallery_main-image' }}
+                            </a>
                         {% else %}
                             {% if product.collections[0].handle == 'opony' %}
-                                {{ product.metafields.tires.model.value.zdjecie.value | image_url: height: 1000 | image_tag: class: 'product-header_gallery_main-image' }}
+                                <a data-fancybox="gallery" href="{{ product.metafields.tires.model.value.zdjecie.value | image_url: height: 1000 }}">
+                                    {{ product.metafields.tires.model.value.zdjecie.value | image_url: height: 1000 | image_tag: class: 'product-header_gallery_main-image' }}
+                                </a>
                             {% endif %}
                             {% if product.collections[0].handle == 'felgi' %}
-                                {{ product.metafields.rims.model.value.zdjecie.value | image_url: height: 1000 | image_tag: class: 'product-header_gallery_main-image' }}
+                                <a data-fancybox="gallery" href="{{ product.metafields.rims.model.value.zdjecie.value | image_url: height: 1000 }}">
+                                    {{ product.metafields.rims.model.value.zdjecie.value | image_url: height: 1000 | image_tag: class: 'product-header_gallery_main-image' }}
+                                </a>
                             {% endif %}
                         {% endif %}
                     </div>
                     <div class="product-header_gallery-images_wrapper">
                         {% for image in product.images %}
                             <div class="product-header_gallery-image-wrapper">
-                                <img class="product-header_gallery-image" src="{{ image | image_url: height: 200 | image_tag }}" alt="gallery-image">
+                                <a data-fancybox="gallery" href="{{ image | image_url: height: 1000 }}">
+                                    <img class="product-header_gallery-image" src="{{ image | image_url: height: 200 }}" alt="gallery-image">
+                                </a>
                             </div>
                         {% endfor %}
                     </div>
