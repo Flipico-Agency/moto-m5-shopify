@@ -1445,47 +1445,55 @@
 
                             <div class="button-group-add-with-size">
                                 {% if product.collections[0].handle == 'opony' %}
-                                    <select id="size-selector" class="form-select_size">
-                                        {% assign product_model = product.metafields.tires.model.value.model %}
-                                        {% assign model_name = product.metafields.tires.model.value.model.value %}
-                                        {% assign model_url = product.url %}
+                                    {% assign actual_product_model = product.metafields.tires.model.value.model.value | string %}
 
+                                    <select id="size-selector" class="form-select_size">
                                         <option selected="selected">
+                                            {% comment %} Check actual model {% endcomment %}
+                                            {{ actual_product_model }}
+
                                             {% if double_parameters_tires == 'true' %}
-                                                2 X {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }},
-                                                2 X
+                                                2x {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }},
+                                                2x
                                                 {% if tires_width[1] == blank %}{{ tires_width[0] }}{% else %}{{ tires_width[1] }}{% endif %}/{% if tires_profile[1] == blank %}{{ tires_profile[0] }}{% else %}{{ tires_profile[1] }}{% endif %} R{% if tires_diameter[1] == blank %}{{ tires_diameter[0] }}{% else %}{{ tires_diameter[1] }}{% endif %}
                                                 {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }} {{ product.metafields.tires.speed_index | slice: 0 }}
                                             {% else %}
-                                                {{ product.metafields.custom.quantity | slice: 0 }} X {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}
+                                                {{ product.metafields.custom.quantity | slice: 0 }}x {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}
                                             {% endif %}
                                         </option>
 
-                                        {% for product in collections.opony.products %}
-                                            {% comment %} Tires main parameters {% endcomment %}
-                                            {% assign tires_width = product.metafields.tires.width | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
-                                            {% assign tires_profile = product.metafields.tires.profile | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
-                                            {% assign tires_diameter = product.metafields.tires.diameter | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
+                                        {% for other_product in collections.opony.products %}
+                                            {% assign other_product_model = other_product.metafields.tires.model.value.model.value | string %}
 
-                                            {% if product_model == model_name and model_url != product.url %}
-                                                <option value="{{ product.url }}">
+                                            {% if actual_product_model == other_product_model and product.id != other_product.id %}
+                                                {% comment %} Tires main parameters {% endcomment %}
+                                                {% assign tires_width = other_product.metafields.tires.width | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
+                                                {% assign tires_profile = other_product.metafields.tires.profile | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
+                                                {% assign tires_diameter = other_product.metafields.tires.diameter | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
+                                                {% assign tires_speed_index = other_product.metafields.tires.speed_index | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
+                                                {% assign tires_load_index = other_product.metafields.tires.load_index | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
+
+                                                {% comment %} Two different tires? {% endcomment %}
+                                                {% capture double_parameters_tires %}{% if tires_width.size > 1 or tires_profile.size > 1 or tires_diameter.size > 1 %}true{% else %}false{% endif %}{% endcapture %}
+                                                {% comment %}{{ double_parameters_tires }}{% endcomment %}
+
+                                                <option value="{{ other_product.url }}">
+                                                    {% comment %} Check model {% endcomment %}
+                                                    {{ other_product_model }}
+
                                                     {% if double_parameters_tires == 'true' %}
-                                                        2 X {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }},
-                                                        2 X
-                                                        {% if tires_width[1] == blank %}{{ tires_width[0] }}{% else %}{{ tires_width[1] }}{% endif %}/{% if tires_profile[1] == blank %}{{ tires_profile[0] }}{% else %}{{ tires_profile[1] }}{% endif %} R{% if tires_diameter[1] == blank %}{{ tires_diameter[0] }}{% else %}{{ tires_diameter[1] }}{% endif %}
-                                                        {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }} {{ product.metafields.tires.speed_index | slice: 0 }}
+                                                        2x {{ tires_width | first }}/{{ tires_profile | first }} R{{ tires_diameter | first }},
+                                                        2x {{ tires_width | last }}/{{ tires_profile | last }} R{{ tires_diameter | last }}
+                                                        {{ other_product.metafields.tires.load_index | slice: 0, 3 | rstrip }} {{ other_product.metafields.tires.speed_index | slice: 0 }}
                                                     {% else %}
-                                                        {{ product.metafields.custom.quantity | slice: 0 }} X {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }} {{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}
+                                                        {{ other_product.metafields.custom.quantity }} {{ tires_width | first }}/{{ tires_profile | first }} R{{ tires_diameter | first }} {{ other_product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ other_product.metafields.tires.speed_index | slice: 0 }}
                                                     {% endif %}
                                                 </option>
                                             {% endif %}
                                         {% endfor %}
                                     </select>
                                 {% endif %}
-                                <input
-                                        type="submit"
-                                        value="Dodaj do koszyka"
-                                        class="button is-small is-add-to-cart"/>
+                                <input type="submit" value="Dodaj do koszyka" class="button is-small is-add-to-cart"/>
                             </div>
 
                             {% if product.collections[0].handle == 'opony' %}
