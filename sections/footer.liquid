@@ -3,9 +3,23 @@
     <div class="padding-section-medium">
       <div class="footer_newsletter-wrapper">
         <div class="footer_newsletter-text-wrapper">
-          <div class="text-size-large text-weight-bold">Masz pytania? Chcesz zamówić przez telefon?</div>
-          <a href="tel:{{ shop.phone }}" class="text-size-large text-weight-bold">
-            {{ shop.phone }}</a>
+          <div>
+            <div class="text-size-large text-weight-bold">Masz pytania? Chcesz zamówić przez telefon?</div>
+            <a href="tel:{{ shop.phone }}" class="text-size-large text-weight-bold">
+              {{ shop.phone }}
+            </a>
+          </div>
+          <div>
+            <div class="text-size-large text-weight-bold">Dział opon, kół, felg:</div>
+            <div style="display: flex; flex-direction: column">
+              <a href="tel:+48 698 622 622" class="text-size-large text-weight-bold">
+                +48 698 622 622
+              </a>
+              <a href="tel:+48 698 668 888" class="text-size-large text-weight-bold">
+                +48 698 668 888
+              </a>
+            </div>
+          </div>
         </div>
       </div>
       <div class="padding-bottom padding-xxlarge">
@@ -133,6 +147,7 @@
     align-items: flex-start;
     justify-content: flex-start;
     gap: 0.5rem;
+    flex-direction: column;
   }
 
   .footer_bottom-wrapper {
