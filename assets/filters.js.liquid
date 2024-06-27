@@ -224,6 +224,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     async function fetchManufacturerId(manufacturerHandle) {
+        {% comment %}
         try {
             const makeURL = 'https://hook.eu2.make.com/8dxnlvq5gkmye46t456qralta2hv5wxu';
 
@@ -245,6 +246,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             console.error('Error fetching manufacturer ID:', error);
             return null;
         }
+        {% endcomment %}
+        return document.getElementById('submit-manufacturer-form').getAttribute('data-model-gid');
     }
 
     async function buildSizeQueryParameters(activeSubTabNumber, tire, rim, isCollectionsPage) {
