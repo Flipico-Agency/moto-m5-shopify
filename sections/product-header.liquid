@@ -1409,21 +1409,42 @@
                                     </div>
                                 </div>
                                 {% if collection_handle == 'opony' %}
-                                    <div class="text-rich-text">{{ product.metafields.tires.model.value.opis_modelu | metafield_tag }}</div>
+                                    {% if product.metafields.tires.model.value.opis_modelu %}
+                                        <div class="text-rich-text">{{ product.metafields.tires.model.value.opis_modelu | metafield_tag }}</div>
+                                    {% else %}
+                                        <div class="text-rich-text">{{ product.description }}</div>
+                                    {% endif %}
                                 {% elsif collection_handle == 'felgi' %}
-                                    <div class="text-rich-text">{{ product.metafields.rims.model.value.opis_modelu | metafield_tag }}</div>
+                                    {% if product.metafields.rims.model.value.opis_modelu %}
+                                        <div class="text-rich-text">{{ product.metafields.rims.model.value.opis_modelu | metafield_tag }}</div>
+                                    {% else %}
+                                        <div class="text-rich-text">{{ product.description }}</div>
+                                    {% endif %}
                                 {% elsif collection_handle == 'kola' %}
-                                    <div class="margin-bottom margin-xsmall">
-                                        <h3>Opony</h3>
-                                    </div>
-                                    <div class="text-rich-text">{{ product.metafields.tires.model.value.opis_modelu | metafield_tag }}</div>
-                                    <div class="product-buy_divider"></div>
-                                    <div class="margin-bottom margin-xsmall">
-                                        <h3>Felgi</h3>
-                                    </div>
-                                    <div class="text-rich-text">{{ product.metafields.rims.model.value.opis_modelu | metafield_tag }}</div>
+                                    {% assign has_tires_description = product.metafields.tires.model.value.opis_modelu %}
+                                    {% assign has_rims_description = product.metafields.rims.model.value.opis_modelu %}
+
+                                    {% if has_tires_description or has_rims_description %}
+                                        {% if has_tires_description %}
+                                            <div class="margin-bottom margin-xsmall">
+                                                <h3>Opony</h3>
+                                            </div>
+                                            <div class="text-rich-text">{{ product.metafields.tires.model.value.opis_modelu | metafield_tag }}</div>
+                                        {% endif %}
+                                        {% if has_tires_description and has_rims_description %}
+                                            <div class="product-buy_divider"></div>
+                                        {% endif %}
+                                        {% if has_rims_description %}
+                                            <div class="margin-bottom margin-xsmall">
+                                                <h3>Felgi</h3>
+                                            </div>
+                                            <div class="text-rich-text">{{ product.metafields.rims.model.value.opis_modelu | metafield_tag }}</div>
+                                        {% endif %}
+                                    {% else %}
+                                        <div class="text-rich-text">{{ product.description }}</div>
+                                    {% endif %}
                                 {% elsif collection_handle == 'akcesoria' or collection_handle == 'kola-dojazdowe' %}
-                                    {{ product.description }}
+                                    <div class="text-rich-text">{{ product.description }}</div>
                                 {% endif %}
                             </div>
                             <div class="modal_background-overlay" id="modal-background-description"></div>
