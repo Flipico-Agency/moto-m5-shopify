@@ -15,34 +15,54 @@ document.addEventListener("DOMContentLoaded", function() {
         "2024-12-26"  // Boże Narodzenie (drugi dzień)
     ];
 
-    function isHoliday(today) {
-        const todayFormatted = today.toISOString().split('T')[0];
-        return holidays.includes(todayFormatted);
+    function isHoliday(date) {
+        const formattedDate = date.toISOString().split('T')[0];
+        return holidays.includes(formattedDate);
+    }
+
+    function getNextWorkingDay(date) {
+        let nextDay = new Date(date);
+        nextDay.setDate(date.getDate() + 1);
+
+        while (nextDay.getDay() === 0 || nextDay.getDay() === 6 || isHoliday(nextDay)) {
+            nextDay.setDate(nextDay.getDate() + 1);
+        }
+
+        return nextDay;
     }
 
     const today = new Date();
     const dayOfWeek = today.getDay(); // 0 - Sunday, 1 - Monday, ..., 6 - Saturday
     const hour = today.getHours();
 
-    const deliveryElement = document.createElement('div');
-    deliveryElement.className = 'text-size-small text-weight-bold text-color-green';
-
-    if (isHoliday(today)) {
-        deliveryElement.innerHTML = 'Zamów dzisiaj, wyślemy po świętach.';
-    } else {
-        if (dayOfWeek >= 1 && dayOfWeek <= 5) { // Monday - Friday
-            if (hour < 14) {
-                deliveryElement.innerHTML = 'Zamów przed 14:00, wyślemy dzisiaj.';
-            } else {
-                deliveryElement.innerHTML = 'Zamów dzisiaj, wyślemy jutro.';
+    function getDeliveryMessage() {
+        if (isHoliday(today)) {
+            return 'Zamów dzisiaj, wyślemy po świętach.';
+        } else {
+            if (dayOfWeek >= 1 && dayOfWeek <= 4) { // Monday - Thursday
+                if (hour < 14) {
+                    return 'Zamów przed 14:00, wyślemy dzisiaj.';
+                } else {
+                    return `Zamów dzisiaj, wyślemy ${isHoliday(getNextWorkingDay(today)) ? 'po świętach' : 'jutro'}.`;
+                }
+            } else if (dayOfWeek === 5) { // Friday
+                if (hour < 14) {
+                    return 'Zamów przed 14:00, wyślemy dzisiaj.';
+                } else {
+                    return `Zamów dzisiaj, wyślemy ${isHoliday(getNextWorkingDay(today)) ? 'po świętach' : 'w poniedziałek'}.`;
+                }
+            } else { // Saturday - Sunday
+                const nextWorkingDay = getNextWorkingDay(today);
+                return `Zamów dzisiaj, wyślemy ${isHoliday(nextWorkingDay) ? 'po świętach' : 'w poniedziałek'}.`;
             }
-        } else { // Saturday - Sunday
-            deliveryElement.innerHTML = 'Zamów dzisiaj, wyślemy w poniedziałek.';
         }
     }
 
-    const container = document.querySelector('.add-delivery-text');
-    if (container) {
+    const containers = document.querySelectorAll('.add-delivery-text');
+    containers.forEach(container => {
+        const deliveryElement = document.createElement('div');
+        deliveryElement.className = 'text-size-small text-weight-bold text-color-green';
+        deliveryElement.innerHTML = getDeliveryMessage();
         container.appendChild(deliveryElement);
-    }
+    });
 });
