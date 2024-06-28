@@ -174,8 +174,8 @@
                           <div class="text-weight-bold text-color-red600">{{ product.price | money }}</div>
                         </div>
                       </div>
-                      <div class="text-weight-medium">{{ product.title }}</div>
-                      <form method="post" action="/cart/add">
+                      <div class="text-weight-medium" style="margin-top: auto">{{ product.title }}</div>
+                      <form method="post" action="/cart/add" style="margin-bottom: 0">
                         <input
                           type="hidden"
                           name="id"
