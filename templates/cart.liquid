@@ -246,6 +246,16 @@
                                         </div>
                                     </div>
                                     {% endcomment %}
+                                    <p style="display: flex; align-items: center; gap: 0.5rem; margin-top: 1rem">
+                                        <label for="nip">NIP</label>
+                                        <input id="nip"
+                                               type="text"
+                                               class="cart-attribute__field form-input w-input"
+                                               name="attributes[nip]"
+                                               pattern="\d{10}"
+                                               placeholder="Wprowadź NIP"
+                                               value="{{ customer.metafields.client.nip.value }}">
+                                    </p>
                                     <input
                                             type="submit"
                                             name="checkout"
