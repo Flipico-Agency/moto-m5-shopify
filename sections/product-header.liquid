@@ -24,6 +24,7 @@
                     {% assign rims_width = product.metafields.rims.width | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
 
                     {% assign producer_serial_number = product.metafields.custom.producer_serial_number | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
+                    {% assign vehicle_type = product.metafields.custom.type %}
 
                     {% comment %} Two different tires? {% endcomment %}
                     {% capture double_parameters_tires %}{% if tires_width.size > 1 or tires_profile.size > 1 or tires_diameter.size > 1 %}true{% else %}false{% endif %}{% endcapture %}
@@ -50,13 +51,13 @@
                                  {% endif %}
                             </span>
                             {% endcomment %}
-                            Opony {{ product.metafields.tires.season.value | downcase }}
                             <span class="text-weight-normal">
+                                Opony {{ product.metafields.tires.season.value | downcase }}
                                  {% if double_parameters_tires == 'true' %}
-                                     {{ tires_width[0] }}/{{ tires_profile[0] }}R{{ tires_diameter[0] }} {{ tires_load_index[0] | slice: 0, 3 | rstrip }}{{ tires_speed_index[0] | slice: 0 }}
+                                     {{ tires_width[0] }}/{{ tires_profile[0] }}R{{ tires_diameter[0] }}{% if vehicle_type == 'Dostawcze' or 'Ciężarowe' %}C{% endif %} {{ tires_load_index[0] | slice: 0, 3 | rstrip }}{{ tires_speed_index[0] | slice: 0 }}
                                      ({% if tires_width[1] == blank %}{{ tires_width[0] }}{% else %}{{ tires_width[1] }}{% endif %}/{% if tires_profile[1] == blank %}{{ tires_profile[0] }}{% else %}{{ tires_profile[1] }}{% endif %} R{% if tires_diameter[1] == blank %}{{ tires_diameter[0] }}{% else %}{{ tires_diameter[1] }}{% endif %})
                                  {% else %}
-                                     {{ tires_width[0] }}/{{ tires_profile[0] }}R{{ tires_diameter[0] }} {{ tires_load_index[0] | slice: 0, 3 | rstrip }}{{ tires_speed_index[0] | slice: 0 }}
+                                     {{ tires_width[0] }}/{{ tires_profile[0] }}R{{ tires_diameter[0] }}{% if vehicle_type == 'Dostawcze' or 'Ciężarowe' %}C{% endif %} {{ tires_load_index[0] | slice: 0, 3 | rstrip }}{{ tires_speed_index[0] | slice: 0 }}
                                      {% comment %}{{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}{% endcomment %}
                                  {% endif %}
                             </span>
