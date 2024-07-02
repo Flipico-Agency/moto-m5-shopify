@@ -304,6 +304,7 @@
                                 <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Rozstaw śrub</p>
                                 <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.bolt_spacing }}</p>
                             </div>
+                            {% comment %}
                             {% assign producer_serial_number = product.metafields.custom.producer_serial_number %}
                             {% if producer_serial_number != blank %}
                                 <div>
@@ -311,6 +312,7 @@
                                     <p class="text-size-tiny text-weight-semibold text-color-black">{{ producer_serial_number }}</p>
                                 </div>
                             {% endif %}
+                            {% endcomment %}
                             <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Cena nie dotyczy dekielków</p>
                         {% elsif collection_handle == 'kola' %}
                             <div class="product-parameters_heading">
