@@ -485,6 +485,7 @@
                                 <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Rozstaw śrub</p>
                                 <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.bolt_spacing }}</p>
                             </div>
+                            {% comment %}
                             {% assign producer_serial_number = product.metafields.custom.producer_serial_number %}
                             {% if producer_serial_number != blank %}
                                 <div>
@@ -492,6 +493,7 @@
                                     <p class="text-size-tiny text-weight-semibold text-color-black">{{ producer_serial_number }}</p>
                                 </div>
                             {% endif %}
+                            {% endcomment %}
                             <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Cena nie dotyczy dekielków</p>
                         {% elsif collection_handle == 'akcesoria' %}
                             {% comment %} Accesories content empty {% endcomment %}
@@ -712,7 +714,7 @@
                                                     <p class="text-size-tiny text-weight-semibold text-color-black">Średnica: {{ tires_diameter[0] }}</p>
                                                     <p class="text-size-tiny text-weight-semibold text-color-black">Index prędkości: {{ tires_speed_index[0] }}</p>
                                                     <p class="text-size-tiny text-weight-semibold text-color-black">Index nośności: {{ tires_load_index[0] }}</p>
-                                                    <p class="text-size-tiny text-weight-semibold text-color-black">Numer seryjny producenta: {{ producer_serial_number[0] }}</p>
+                                                    {% comment %}<p class="text-size-tiny text-weight-semibold text-color-black">Numer seryjny producenta: {{ producer_serial_number[0] }}</p>{% endcomment %}
                                                 </div>
                                                 <div>
                                                     <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Tył</p>
@@ -756,6 +758,7 @@
                                                             {{ tires_load_index[1] }}
                                                         {% endif %}
                                                     </p>
+                                                    {% comment %}
                                                     <p class="text-size-tiny text-weight-semibold text-color-black">
                                                         Numer seryjny producenta:
                                                         {% if producer_serial_number[1] == blank %}
@@ -764,6 +767,7 @@
                                                             {{ producer_serial_number[1] }}
                                                         {% endif %}
                                                     </p>
+                                                    {% endcomment %}
                                                 </div>
                                             {% else %}
                                                 <div>
@@ -786,10 +790,12 @@
                                                     <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Index nośności</p>
                                                     <p class="text-size-tiny text-weight-semibold text-color-black">{{ tires_load_index[0] }}</p>
                                                 </div>
+                                                {% comment %}
                                                 <div>
                                                     <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Numer seryjny producenta</p>
                                                     <p class="text-size-tiny text-weight-semibold text-color-black">{{ producer_serial_number[0] }}</p>
                                                 </div>
+                                                {% endcomment %}
                                             {% endif %}
                                             <div>
                                                 <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Sezon</p>
@@ -939,7 +945,7 @@
                                                     <p class="text-size-tiny text-weight-semibold text-color-black">Średnica: {{ tires_diameter[0] }}</p>
                                                     <p class="text-size-tiny text-weight-semibold text-color-black">Index prędkości: {{ tires_speed_index[0] }}</p>
                                                     <p class="text-size-tiny text-weight-semibold text-color-black">Index nośności: {{ tires_load_index[0] }}</p>
-                                                    <p class="text-size-tiny text-weight-semibold text-color-black">Numer seryjny producenta: {{ producer_serial_number[0] }}</p>
+                                                    {% comment %}<p class="text-size-tiny text-weight-semibold text-color-black">Numer seryjny producenta: {{ producer_serial_number[0] }}</p>{% endcomment %}
                                                 </div>
                                                 <div>
                                                     <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Tył</p>
@@ -983,6 +989,7 @@
                                                             {{ tires_load_index[1] }}
                                                         {% endif %}
                                                     </p>
+                                                    {% comment %}
                                                     <p class="text-size-tiny text-weight-semibold text-color-black">
                                                         Numer seryjny producenta:
                                                         {% if producer_serial_number[1] == blank %}
@@ -991,6 +998,7 @@
                                                             {{ producer_serial_number[1] }}
                                                         {% endif %}
                                                     </p>
+                                                    {% endcomment %}
                                                 </div>
                                             {% else %}
                                                 <div>
