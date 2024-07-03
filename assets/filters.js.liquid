@@ -25,6 +25,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                 if (element.dataset.name === 'car-generacja') {
                     optionDisplayValue = option.name !== '' ? option.name : index + 1;
                     optionActualValue = option.slug;
+                } else if (element.dataset.name === 'car-silnik') {
+                    optionDisplayValue = `${option.name} (${option.engine.power.PS} KM, ${option.engine.power.kW} kW)`;
+                    optionActualValue = option.slug;
                 } else {
                     optionDisplayValue = option.name || option.value;
                     optionActualValue = option.value || option.slug;
@@ -135,13 +138,13 @@ document.addEventListener('DOMContentLoaded', async function () {
                                     selectElement.value = urlParamValue ? urlParamValue : data.data[9].value ? data.data[9].value : data.data[9].slug;
                                     break;
                                 case 1:
-                                    selectElement.value = urlParamValue ? urlParamValue : data.data[26].value ? data.data[26].value : data.data[26].slug;
+                                    selectElement.value = urlParamValue ? urlParamValue : data.data[27].value ? data.data[27].value : data.data[27].slug;
                                     break;
                                 case 2:
                                     selectElement.value = urlParamValue ? urlParamValue : data.data[0].value ? data.data[0].value : data.data[0].slug;
                                     break;
                                 case 4:
-                                    selectElement.value = urlParamValue ? urlParamValue : data.data[2].value ? data.data[2].value : data.data[2].slug;
+                                    selectElement.value = urlParamValue ? urlParamValue : data.data[1].value ? data.data[1].value : data.data[1].slug;
                                     break;
                             }
                         }
