@@ -51,6 +51,8 @@
                                  {% endif %}
                             </span>
                             {% endcomment %}
+                            {% comment %} Second version {% endcomment %}
+                            {% comment %}
                             <span class="text-weight-normal">
                                 Opony {{ product.metafields.tires.season.value | downcase }}
                                  {% if double_parameters_tires == 'true' %}
@@ -61,6 +63,8 @@
                                      {% comment %}{{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}{% endcomment %}
                                  {% endif %}
                             </span>
+                            {% endcomment %}
+                            {{ product.title }}
                         {% elsif product.collections[0].handle == 'felgi' %}
                             {% comment %} 1st proper version {% endcomment %}
                             {% comment %}
