@@ -106,10 +106,12 @@ document.addEventListener('DOMContentLoaded', async function () {
                 selectedValues[apiParam] = urlParamValue;
             }
 
-            // W przypadku braku wartości URL, kontynuuj z logiką API
+            // Copy relevant selectedValues into fetchDataParams
             Object.keys(selectedValues).forEach(key => {
-                if (typeof selectedValues[key] === 'string') {
+                if (key !== apiParam && typeof selectedValues[key] === 'string') {
                     fetchDataParams[key] = selectedValues[key];
+                } else if (key !== apiParam && typeof selectedValues[key] === 'object' && selectedValues[key].slug) {
+                    fetchDataParams[key] = selectedValues[key].slug;
                 }
             });
 
@@ -133,36 +135,59 @@ document.addEventListener('DOMContentLoaded', async function () {
                         if (type === 'bySize') {
                             selectElement.value = urlParamValue ? urlParamValue : data.data[0].value ? data.data[0].value : data.data[0].slug;
                         } else if (type === 'byCar') {
+                            let foundItem;
                             switch (i) {
                                 case 0:
-                                    selectElement.value = urlParamValue ? urlParamValue : data.data[9].value ? data.data[9].value : data.data[9].slug;
+                                    foundItem = data.data.find(item => item.name === "BMW");
                                     break;
                                 case 1:
-                                    selectElement.value = urlParamValue ? urlParamValue : data.data[27].value ? data.data[27].value : data.data[27].slug;
+                                    foundItem = data.data.find(item => item.name === "M5");
                                     break;
                                 case 2:
-                                    selectElement.value = urlParamValue ? urlParamValue : data.data[0].value ? data.data[0].value : data.data[0].slug;
+                                    foundItem = data.data.find(item => item.slug === "96a0cc2f93");
                                     break;
                                 case 4:
-                                    selectElement.value = urlParamValue ? urlParamValue : data.data[1].value ? data.data[1].value : data.data[1].slug;
+                                    foundItem = data.data.find(item => item.name === "M5 Competition");
                                     break;
+                            }
+                            if (foundItem) {
+                                selectElement.value = urlParamValue ? urlParamValue : foundItem.value ? foundItem.value : foundItem.slug;
                             }
                         }
                     }
 
-                    selectedValues[apiParam] = elementName === 'car-generacja' ? data.data.find(item => item.slug === selectElement.value) : selectElement.value;
+                    if (elementName === 'car-generacja') {
+                        const selectedItem = data.data.find(item => item.slug === selectElement.value);
+                        selectedValues[apiParam] = selectedItem;
+
+                        if (selectedItem && selectedItem.year_ranges) {
+                            const years = selectedItem.year_ranges.flatMap(range => {
+                                const [start, end] = range.split('-').map(Number);
+                                return Array.from({ length: end - start + 1 }, (_, k) => start + k);
+                            });
+
+                            if (years.length > 0) {
+                                manageSelect(activeTabContent.querySelector(`select[data-name="car-rok"]`), years.map(year => ({ name: year, value: year })), true);
+                            }
+                        }
+                    } else {
+                        selectedValues[apiParam] = selectElement.value;
+                    }
                 }
             } else if (elementName === 'car-rok' && selectedValues['generation']) {
-                // Handle car-year based on selected generation
                 const generation = selectedValues['generation'];
-                const years = generation.years; // Selected generation object includes years
+                const years = generation.year_ranges.flatMap(range => {
+                    const [start, end] = range.split('-').map(Number);
+                    return Array.from({ length: end - start + 1 }, (_, k) => start + k);
+                });
+
                 manageSelect(selectElement, years.map(year => ({ name: year, value: year })), true);
                 if (years.length > 0) {
                     selectElement.value = years[0];
                 }
                 selectedValues['year'] = selectElement.value;
             } else {
-                manageSelect(selectElement, [], false); // Disable the select for other cases
+                manageSelect(selectElement, [], false);
             }
         }
     }
