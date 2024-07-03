@@ -203,8 +203,25 @@
                                     {% comment %} standard filters {% endcomment %}
                                     {% assign filters_do_not_display = "Szerokość opony,Profil opony,Średnica opony,Rozstaw śrub,Szerokość felgi,Średnica felgi,ET" | split: "," %}
                                     <form>
+                                        {%- assign isTireFilters = false -%}
+                                        {%- assign isRimFilters = false -%}
+
                                         {%- for filter in collection.filters -%}
                                             {%- unless filters_do_not_display contains filter.label -%}
+                                                {%- if request.path contains 'collections/kola' -%}
+                                                    {%- if filter.param_name contains 'tires' and isTireFilters == false -%}
+                                                        {%- assign isTireFilters = true -%}
+                                                        <hr style="border: 1px solid #000;">
+                                                        <div class="text-size-medium text-weight-semibold">FILTRY OPON</div>
+                                                    {%- elsif filter.param_name contains 'rims' and isRimFilters == false -%}
+                                                        {%- assign isRimFilters = true -%}
+                                                        {%- if isTireFilters == true -%}
+                                                            <hr style="border: 1px solid #000;">
+                                                        {%- endif -%}
+                                                        <div class="text-size-medium text-weight-semibold">FILTRY FELG</div>
+                                                    {%- endif -%}
+                                                {%- endif -%}
+
                                                 <details open class="filters2_filter-group">
                                                     <summary class="filters2_filter-group-heading">
                                                         <div class="text-size-medium text-weight-semibold">
@@ -243,7 +260,7 @@
                                                                                         {% if filter.true_value.active -%}
                                                                                             checked{%- endif %}
                                                                                         {% if filter.true_value.count == 0 and filter.true_value.active == false -%}
-                                                                                            disabled{%- endif -%}
+                                                                                            disabled{%- endif %}
                                                                                         onchange="this.form.submit()">
                                                                                 {{ filter.true_value.label }}
                                                                             </label>
@@ -618,10 +635,12 @@
                                                     <span class="text-weight-semibold">w serwisie</span>
                                                 </p>
                                             </div>
+                                            {% comment %}
                                             <div class="product_green-wrapper">
                                                 <p class="text-size-small text-color-green">Możliwość zakupu<span
                                                             class="text-weight-semibold">na raty</span></p>
                                             </div>
+                                            {% endcomment %}
                                         </div>
                                         <div class="product-header1_add-to-cart w-form">
                                             <form method="post" action="/cart/add">
