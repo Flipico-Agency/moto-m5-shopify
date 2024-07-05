@@ -53,7 +53,7 @@
                                                         Homologacja: {{ product.metafields.tires.homologation | map: 'value' | join: ', ' }}</div>
                                                 {%- endif -%}
                                             </a>
-                                            <div class="text-weight-bold">{{ product.metafields.tires.years }}</div>
+                                            <div class="text-weight-bold">{{ product.metafields.tires.years | remove: '"' | remove: '[' | remove: ']' | split: ',' | join: ' | ' | strip }}</div>
                                             <div class="text-weight-bold">{{ product.metafields.tires.condition }}
                                                 | {{ product.metafields.tires.tread }}</div>
                                             <div style="display: flex; align-items: center">
@@ -113,7 +113,7 @@
                                                         Homologacja: {{ product.metafields.tires.homologation | map: 'value' | join: ', ' }}</div>
                                                 {%- endif -%}
                                             </a>
-                                            <div class="text-weight-bold">{{ product.metafields.tires.years }}</div>
+                                            <div class="text-weight-bold">{{ product.metafields.tires.years | remove: '"' | remove: '[' | remove: ']' | split: ',' | join: ' | ' | strip }}</div>
                                             <div class="text-weight-bold">{{ product.metafields.tires.condition }}
                                                 | {{ product.metafields.tires.tread }}</div>
                                             <div style="display: flex; align-items: center">

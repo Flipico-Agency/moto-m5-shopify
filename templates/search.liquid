@@ -105,7 +105,7 @@
                                                                     </div>
                                                                     <div class="tooltip1_element-wrapper"
                                                                          data-relume-tooltip-setup="1">
-                                                                        <div class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.years }}</div>
+                                                                        <div class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.years | remove: '"' | remove: '[' | remove: ']' | split: ',' | join: ' | ' | strip }}</div>
                                                                     </div>
                                                                     <div class="tooltip1_responsive"></div>
                                                                 </div>
@@ -265,3 +265,4 @@
 </div>
 
 <script type="text/javascript" src="{{ 'delivery.js' | asset_url }}"></script>
+<script type="text/javascript" src="{{ 'tooltip.js' | asset_url }}"></script>

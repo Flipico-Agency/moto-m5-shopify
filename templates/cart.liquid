@@ -81,7 +81,7 @@
                                                             <div>
                                                                 <div class="text-size-tiny">
                                                                     <span class="text-color-grayiron600">Data produkcji:</span>
-                                                                    <span class="text-weight-bold">{{ item.product.metafields.tires.years }}</span>
+                                                                    <span class="text-weight-bold">{{ item.product.metafields.tires.years | remove: '"' | remove: '[' | remove: ']' | split: ',' | join: ' | ' | strip }}</span>
                                                                 </div>
                                                                 <div class="text-size-tiny">
                                                                     <span class="text-color-grayiron600">Stan i bieżnik:</span>

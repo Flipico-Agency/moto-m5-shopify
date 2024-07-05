@@ -286,7 +286,13 @@
                                                             {%- when 'list' -%}
                                                                 <div class="filters2_list-wrapper">
                                                                     <div class="filters2_list">
-                                                                        {%- for filter_value in filter.values -%}
+                                                                        {%- if filter.param_name == 'filter.p.m.tires.years' -%}
+                                                                            {%- assign sorted_values = filter.values | sort: 'value' | reverse -%}
+                                                                        {%- else -%}
+                                                                            {%- assign sorted_values = filter.values -%}
+                                                                        {%- endif -%}
+
+                                                                        {%- for filter_value in sorted_values -%}
                                                                             <div class="filters2_item">
                                                                                 <label class="w-checkbox filters2_form-checkbox1"
                                                                                        for="Filter-{{ filter.param_name }}-{{ forloop.index }}">
@@ -309,47 +315,33 @@
                                                                 </div>
                                                             {%- when 'price_range' -%}
                                                                 <div class="filter-group-display__price-range">
-                                                                    <div class="button-group-add-with-size">
-                                                                        <div class="filter-group-display__price-range-from">
-                                                                            <label for="Filter-{{ filter.min_value.param_name }}"></label>
-
-                                                                            <input
-                                                                                    name="{{ filter.min_value.param_name }}"
-                                                                                    class="form-input is-left-price"
-                                                                                    style="width:100%"
-                                                                                    id="Filter-{{ filter.min_value.param_name }}"
-                                                                                    {% if filter.min_value.value -%}
-                                                                                        value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
-                                                                                    {%- endif %}
-                                                                                    type="number"
-                                                                                    placeholder="od"
-                                                                                    min="0"
-                                                                                    max="{{ filter.range_max | money_without_currency | replace: ',', '' }}">
-                                                                        </div>
-                                                                        <div class="filter-group-display__price-range-to">
-                                                                            <label for="Filter-{{ filter.max_value.param_name }}"></label>
-                                                                            <input
-                                                                                    name="{{ filter.max_value.param_name }}"
-                                                                                    id="Filter-{{ filter.max_value.param_name }}"
-                                                                                    class="form-input is-right-price"
-                                                                                    style="width:100%"
-                                                                                    {% if filter.max_value.value -%}
-                                                                                        value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
-                                                                                    {%- endif %}
-                                                                                    type="number"
-                                                                                    placeholder="do"
-                                                                                    min="0"
-                                                                                    max="{{ filter.range_max | money_without_currency | replace: ',', '' }}">
-                                                                        </div>
+                                                                    <div class="filter-group-display__price-range-from">
+                                                                        <label for="Filter-price-from"></label>
+                                                                        <input
+                                                                                name="filter.v.price.gte"
+                                                                                class="form-input is-left-price"
+                                                                                style="width:100%"
+                                                                                id="Filter-price-from"
+                                                                                type="number"
+                                                                                placeholder="od"
+                                                                                min="0"
+                                                                        >
+                                                                    </div>
+                                                                    <div class="filter-group-display__price-range-to">
+                                                                        <label for="Filter-price-to"></label>
+                                                                        <input
+                                                                                name="filter.v.price.lte"
+                                                                                id="Filter-price-to"
+                                                                                class="form-input is-right-price"
+                                                                                style="width:100%"
+                                                                                type="number"
+                                                                                placeholder="do"
+                                                                                min="0"
+                                                                        >
                                                                     </div>
                                                                 </div>
-
-                                                                <div class="filter-group-display__submit"
-                                                                     style="margin-top: 1rem">
-                                                                    <input
-                                                                            type="submit"
-                                                                            value="Zastosuj"
-                                                                            class="button is-link">
+                                                                <div class="filter-group-display__submit" style="margin-top: 1rem">
+                                                                    <input type="submit" value="Zastosuj" class="button is-link">
                                                                 </div>
                                                         {%- endcase -%}
                                                     </div>
@@ -508,7 +500,7 @@
                                                                 </div>
                                                                 <div class="tooltip1_element-wrapper"
                                                                      data-relume-tooltip-setup="1">
-                                                                    <div class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.years }}</div>
+                                                                    <div class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.years | remove: '"' | remove: '[' | remove: ']' | split: ',' | join: ' | ' | strip }}</div>
                                                                 </div>
                                                                 <div class="tooltip1_responsive"></div>
                                                             </div>
@@ -772,33 +764,28 @@
 
             checkScreenWidth();
             window.addEventListener('resize', checkScreenWidth);
-
-            // Function to show tooltip
-            function showTooltip(event) {
-                const tooltipWrapper = event.currentTarget.querySelector('.tooltip1_tooltip-wrapper');
-                if (tooltipWrapper) {
-                    tooltipWrapper.style.display = 'block';
-                }
-            }
-
-            // Function to hide tooltip
-            function hideTooltip(event) {
-                const tooltipWrapper = event.currentTarget.querySelector('.tooltip1_tooltip-wrapper');
-                if (tooltipWrapper) {
-                    tooltipWrapper.style.display = 'none';
-                }
-            }
-
-            // Add event listeners to all tooltip components
-            const tooltipComponents = document.querySelectorAll('.tooltip1_component');
-            tooltipComponents.forEach(component => {
-                component.addEventListener('mouseenter', showTooltip);
-                component.addEventListener('mouseleave', hideTooltip);
-            });
         });
     })();
 </script>
 
+{% comment %} Manage price filters {% endcomment %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const priceFrom = urlParams.get('filter.v.price.gte');
+        const priceTo = urlParams.get('filter.v.price.lte');
+
+        if (priceFrom) {
+            document.getElementById('Filter-price-from').value = priceFrom;
+        }
+
+        if (priceTo) {
+            document.getElementById('Filter-price-to').value = priceTo;
+        }
+    });
+</script>
+
+<script type="text/javascript" src="{{ 'tooltip.js' | asset_url }}"></script>
 <script type="text/javascript" src="{{ 'filters.js' | asset_url }}"></script>
 <script type="text/javascript" src="{{ 'delivery.js' | asset_url }}"></script>
 

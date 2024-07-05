@@ -207,7 +207,7 @@
                             </div>
                             <div>
                                 <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Rocznik</p>
-                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.years }}</p>
+                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.years | remove: '"' | remove: '[' | remove: ']' | split: ',' | join: ' | ' | strip }}</p>
                             </div>
                             <div>
                                 <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Informacje dodatkowe</p>
@@ -397,7 +397,7 @@
                             </div>
                             <div>
                                 <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Rocznik</p>
-                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.years }}</p>
+                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.years | remove: '"' | remove: '[' | remove: ']' | split: ',' | join: ' | ' | strip }}</p>
                             </div>
                             <div>
                                 <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Informacje dodatkowe</p>
@@ -584,7 +584,7 @@
                             </div>
                             <div>
                                 <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Rocznik</p>
-                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.years }}</p>
+                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.years | remove: '"' | remove: '[' | remove: ']' | split: ',' | join: ' | ' | strip }}</p>
                             </div>
                             <div>
                                 <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Informacje dodatkowe</p>
@@ -830,7 +830,7 @@
                                             </div>
                                             <div>
                                                 <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Rocznik</p>
-                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.years }}</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.years | remove: '"' | remove: '[' | remove: ']' | split: ',' | join: ' | ' | strip }}</p>
                                             </div>
                                             <div>
                                                 <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Homologacja</p>
@@ -1059,7 +1059,7 @@
                                             </div>
                                             <div>
                                                 <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Rocznik</p>
-                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.years }}</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.years | remove: '"' | remove: '[' | remove: ']' | split: ',' | join: ' | ' | strip }}</p>
                                             </div>
                                             <div>
                                                 <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Homologacja</p>
@@ -1288,7 +1288,7 @@
                                             </div>
                                             <div>
                                                 <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Rocznik</p>
-                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.years }}</p>
+                                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.years | remove: '"' | remove: '[' | remove: ']' | split: ',' | join: ' | ' | strip }}</p>
                                             </div>
                                             <div>
                                                 <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Informacje dodatkowe</p>
