@@ -1549,6 +1549,15 @@
                     <div class="text-size-tiny text-weight-semibold text-color-green">Darmowa Dostawa</div>
                     <div class="product-buy_divider"></div>
                     <div class="add-delivery-text"></div>
+                    <div class="product_green-wrapper">
+                        <p class="text-size-small text-color-green">Możliwość montażu
+                            <span class="text-weight-semibold">w serwisie</span>
+                        </p>
+                    </div>
+                    <div class="product_green-wrapper">
+                        <p class="text-size-small text-color-green">Możliwość zakupu<span
+                                    class="text-weight-semibold">na raty</span></p>
+                    </div>
                     {% if product.available %}
                         <form
                                 method="post"
@@ -1950,6 +1959,8 @@
     padding: 2rem;
     position: absolute;
     overflow: scroll;
+    overflow-y: auto; /* Enable vertical scrollbar */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
 }
 
 .modal_background-overlay {
