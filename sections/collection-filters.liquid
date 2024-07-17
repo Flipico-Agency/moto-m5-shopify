@@ -202,7 +202,7 @@
 
                                     {% comment %} standard filters {% endcomment %}
                                     {% assign filters_do_not_display = "Szerokość opony,Profil opony,Średnica opony,Rozstaw śrub,Szerokość felgi,Średnica felgi" | split: "," %}
-                                    <form>
+                                    <form id="filtersForm">
                                         {%- assign isTireFilters = false -%}
                                         {%- assign isRimFilters = false -%}
 
@@ -261,7 +261,8 @@
                                                                                             checked{%- endif %}
                                                                                         {% if filter.true_value.count == 0 and filter.true_value.active == false -%}
                                                                                             disabled{%- endif %}
-                                                                                        onchange="this.form.submit()">
+                                                                                        {% comment %}onchange="this.form.submit()"{% endcomment %}
+                                                                                >
                                                                                 {{ filter.true_value.label }}
                                                                             </label>
                                                                         </div>
@@ -277,7 +278,8 @@
                                                                                             checked{%- endif %}
                                                                                         {% if filter.false_value.count == 0 and filter.false_value.active == false -%}
                                                                                             disabled{%- endif %}
-                                                                                        onchange="this.form.submit()">
+                                                                                        {% comment %}onchange="this.form.submit()"{% endcomment %}
+                                                                                >
                                                                                 {{ filter.false_value.label }}
                                                                             </label>
                                                                         </div>
@@ -339,7 +341,8 @@
                                                                                                         checked{%- endif %}
                                                                                                     {% if filter_value.count == 0 and filter_value.active == false -%}
                                                                                                         disabled{%- endif %}
-                                                                                                    onchange="this.form.submit()">
+                                                                                                    {% comment %}onchange="this.form.submit()"{% endcomment %}
+                                                                                            >
                                                                                             {{ filter_value.label }} ({{ filter_value.count }})
                                                                                         </label>
                                                                                 </div>
@@ -782,145 +785,9 @@
     </div>
 </section>
 
-{% comment %} Manage checkboxes, actual tab based on local storage, filters wrapper {% endcomment %}
-<script>
-    (async function () {
-        function toggleTab(searchByValue) {
-            // Menu
-            const tabSize = document.querySelector('a[data-w-tab="1"]');
-            const tabCar = document.querySelector('a[data-w-tab="2"]');
-
-            // Panels
-            const tabContentBySize = document.querySelector('.tab-pane-tab-1');
-            const tabContentByCar = document.querySelector('.tab-pane-tab-2');
-
-            // Sub tabs
-            const subTabContentBySize = document.querySelector('div[data-sub-tab="1.1"]');
-            const subTabContentByCar = document.querySelector('div[data-sub-tab="2.1"]');
-
-            // Check the value of c.searchBy and toggle classes accordingly
-            if (searchByValue === 'bySize') {
-                tabSize.classList.add('w--current');
-                tabContentBySize.style.display = "block";
-                tabContentBySize.classList.add('w--tab-active');
-                subTabContentBySize.classList.add('w--tab-active');
-
-                tabCar.classList.remove('w--current');
-                tabContentByCar.style.display = "none";
-                tabContentByCar.classList.remove('w--tab-active');
-                subTabContentByCar.classList.remove('w--tab-active');
-            } else if (searchByValue === 'byCar') {
-                tabCar.classList.add('w--current');
-                tabContentByCar.style.display = "block";
-                tabContentByCar.classList.add('w--tab-active');
-                subTabContentByCar.classList.add('w--tab-active');
-
-                tabSize.classList.remove('w--current');
-                tabContentBySize.style.display = "none";
-                tabContentBySize.classList.remove('w--tab-active');
-                subTabContentBySize.classList.remove('w--tab-active');
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            // Add event listeners to the checkboxes
-            const checkboxes = document.querySelectorAll('.form-checkbox-icon');
-
-            function handleCheckboxChange(event) {
-                const checkbox = event.target;
-                if (checkbox.checked) {
-                    checkbox.classList.add('w--redirected-checked');
-                    checkbox.classList.add('w-checkbox-input--inputType-custom');
-                } else {
-                    checkbox.classList.remove('w--redirected-checked');
-                    checkbox.classList.remove('w-checkbox-input--inputType-custom');
-                }
-            }
-
-            checkboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', handleCheckboxChange);
-            });
-
-            // Add event listeners to the tabs for click events
-            const tabSize = document.querySelector('a[data-w-tab="1"]');
-            const tabCar = document.querySelector('a[data-w-tab="2"]');
-
-            if (tabSize && tabCar) {
-                tabSize.addEventListener('click', function () {
-                    toggleTab('bySize');
-                });
-
-                tabCar.addEventListener('click', function () {
-                    toggleTab('byCar');
-                });
-            }
-
-            // Initialize tabs based on saved searchByValue or default to 'bySize'
-            const searchByValue = localStorage.getItem('searchBy') || 'bySize';
-            toggleTab(searchByValue);
-
-            // Expand filter on click, collapse on exit button, default hide filters on mobile
-            function checkScreenWidth() {
-                if (window.innerWidth < 992) {
-                    filtersWrapper.style.display = 'none';
-                } else {
-                    filtersWrapper.style.display = 'block';
-                }
-            }
-
-            const filtersWrapper = document.querySelector('.filters2_filters-wrapper');
-
-            const expandFiltersButton = document.querySelector('.filters2_tablet-filters-button');
-            expandFiltersButton.addEventListener('click', function () {
-                filtersWrapper.style.display = 'block';
-            })
-
-            const collapseFiltersButton = document.querySelector('.filters2_tablet-modal-close-button');
-            collapseFiltersButton.addEventListener('click', function () {
-                filtersWrapper.style.display = 'none';
-            })
-
-            checkScreenWidth();
-            window.addEventListener('resize', checkScreenWidth);
-        });
-    })();
-</script>
-
-{% comment %} Manage price filters {% endcomment %}
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const priceFrom = urlParams.get('filter.v.price.gte');
-        const priceTo = urlParams.get('filter.v.price.lte');
-
-        if (priceFrom) {
-            document.getElementById('Filter-price-from').value = priceFrom;
-        }
-
-        if (priceTo) {
-            document.getElementById('Filter-price-to').value = priceTo;
-        }
-    });
-</script>
-
-{% comment %} Manage ET custom filter {% endcomment %}
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Initialize ET filter values from URL parameters if they exist
-        const urlParams = new URLSearchParams(window.location.search);
-        const minET = urlParams.get('filter.v.rims.e_t.gte');
-        const maxET = urlParams.get('filter.v.rims.e_t.lte');
-        if (minET !== null) {
-            document.getElementById('minET').value = minET;
-        }
-        if (maxET !== null) {
-            document.getElementById('maxET').value = maxET;
-        }
-    });
-</script>
-
-<script type="text/javascript" src="{{ 'tooltip.js' | asset_url }}"></script>
+<script type="text/javascript" src="{{ 'collection-filters.js' | asset_url }}"></script>
 <script type="text/javascript" src="{{ 'filters.js' | asset_url }}"></script>
+<script type="text/javascript" src="{{ 'tooltip.js' | asset_url }}"></script>
 <script type="text/javascript" src="{{ 'delivery.js' | asset_url }}"></script>
 
 {% stylesheet %}
