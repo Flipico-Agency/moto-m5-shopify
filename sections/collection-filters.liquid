@@ -201,7 +201,7 @@
                                     </div>
 
                                     {% comment %} standard filters {% endcomment %}
-                                    {% assign filters_do_not_display = "Szerokość opony,Profil opony,Średnica opony,Rozstaw śrub,Szerokość felgi,Średnica felgi,ET" | split: "," %}
+                                    {% assign filters_do_not_display = "Szerokość opony,Profil opony,Średnica opony,Rozstaw śrub,Szerokość felgi,Średnica felgi" | split: "," %}
                                     <form>
                                         {%- assign isTireFilters = false -%}
                                         {%- assign isRimFilters = false -%}
@@ -292,25 +292,59 @@
                                                                             {%- assign sorted_values = filter.values -%}
                                                                         {%- endif -%}
 
-                                                                        {%- for filter_value in sorted_values -%}
-                                                                            <div class="filters2_item">
-                                                                                <label class="w-checkbox filters2_form-checkbox1"
-                                                                                       for="Filter-{{ filter.param_name }}-{{ forloop.index }}">
+                                                                        {% if filter.param_name == 'filter.p.m.rims.e_t' %}
+                                                                            <div class="filter-group-display__price-range">
+                                                                                <div class="filter-group-display__price-range-from">
+                                                                                    <label for="minET"></label>
                                                                                     <input
-                                                                                            class="w-checkbox-input form-checkbox-icon{% if filter_value.active %} w-checkbox-input--inputType-custom w--redirected-checked{% endif %}"
-                                                                                            type="checkbox"
-                                                                                            name="{{ filter_value.param_name }}"
-                                                                                            value="{{ filter_value.value }}"
-                                                                                            id="Filter-{{ filter.param_name }}-{{ forloop.index }}"
-                                                                                            {% if filter_value.active -%}
-                                                                                                checked{%- endif %}
-                                                                                            {% if filter_value.count == 0 and filter_value.active == false -%}
-                                                                                                disabled{%- endif %}
-                                                                                            onchange="this.form.submit()">
-                                                                                    {{ filter_value.label }} ({{ filter_value.count }})
-                                                                                </label>
+                                                                                            name="filter.v.rims.e_t.gte"
+                                                                                            class="form-input is-left-price"
+                                                                                            style="width:100%"
+                                                                                            id="minET"
+                                                                                            type="number"
+                                                                                            placeholder="od"
+                                                                                            min="0"
+                                                                                            step="0.1"
+                                                                                    >
+                                                                                </div>
+                                                                                <div class="filter-group-display__price-range-to">
+                                                                                    <label for="maxET"></label>
+                                                                                    <input
+                                                                                            name="filter.v.rims.e_t.lte"
+                                                                                            id="maxET"
+                                                                                            class="form-input is-right-price"
+                                                                                            style="width:100%"
+                                                                                            type="number"
+                                                                                            placeholder="do"
+                                                                                            min="0"
+                                                                                            step="0.1"
+                                                                                    >
+                                                                                </div>
                                                                             </div>
-                                                                        {%- endfor -%}
+                                                                            <div class="filter-group-display__submit" style="margin-top: 1rem">
+                                                                                <input type="submit" value="Zastosuj" class="button is-link">
+                                                                            </div>
+                                                                        {% else %}
+                                                                            {%- for filter_value in sorted_values -%}
+                                                                                <div class="filters2_item">
+                                                                                        <label class="w-checkbox filters2_form-checkbox1"
+                                                                                               for="Filter-{{ filter.param_name }}-{{ forloop.index }}">
+                                                                                            <input
+                                                                                                    class="w-checkbox-input form-checkbox-icon{% if filter_value.active %} w-checkbox-input--inputType-custom w--redirected-checked{% endif %}"
+                                                                                                    type="checkbox"
+                                                                                                    name="{{ filter_value.param_name }}"
+                                                                                                    value="{{ filter_value.value }}"
+                                                                                                    id="Filter-{{ filter.param_name }}-{{ forloop.index }}"
+                                                                                                    {% if filter_value.active -%}
+                                                                                                        checked{%- endif %}
+                                                                                                    {% if filter_value.count == 0 and filter_value.active == false -%}
+                                                                                                        disabled{%- endif %}
+                                                                                                    onchange="this.form.submit()">
+                                                                                            {{ filter_value.label }} ({{ filter_value.count }})
+                                                                                        </label>
+                                                                                </div>
+                                                                            {%- endfor -%}
+                                                                        {% endif %}
                                                                     </div>
                                                                 </div>
                                                             {%- when 'price_range' -%}
@@ -362,10 +396,13 @@
                                     {%- capture contentForQuerystring -%}{{ content_for_header }}{%- endcapture -%}
 
                                     {% comment %} Use string splitting to pull the value from content_for_header and apply some string clean up {% endcomment %}
-                                    {%- assign pageUrlWithoutHost= contentForQuerystring | split:'"pageurl":"' | last | split:'"' | first | split:'.myshopify.com' | last |
-                                            replace:'\/','/' |
-                                            replace:'%20',' ' |
-                                            replace:'\u0026','&'
+                                    {%- assign pageUrlWithoutHost = contentForQuerystring
+                                            | split: '"pageurl":"' | last
+                                            | split: '"' | first
+                                            | split: '.myshopify.com' | last
+                                            | replace: '\/', '/'
+                                            | replace: '%20', ' '
+                                            | replace: '\u0026', '&'
                                     -%}
 
                                     {% comment %}Page URL without a request host: {{ pageUrlWithoutHost }}{% endcomment %}
@@ -373,6 +410,28 @@
 
                                     {% assign show_custom_message = false %}
 
+                                    {%- assign url_params = pageUrlWithoutHost | split: '&' -%}
+                                    {%- assign min_et_param = '' -%}
+                                    {%- assign max_et_param = '' -%}
+
+                                    {%- for param in url_params -%}
+                                        {%- if param contains 'filter.v.rims.e_t.gte=' -%}
+                                            {%- assign min_et_param = param | split: 'filter.v.rims.e_t.gte=' | last -%}
+                                        {%- endif -%}
+
+                                        {%- if param contains 'filter.v.rims.e_t.lte=' -%}
+                                            {%- assign max_et_param = param | split: 'filter.v.rims.e_t.lte=' | last -%}
+                                        {%- endif -%}
+                                    {%- endfor -%}
+
+                                    {%- assign pageUrlWithoutETFilters = pageUrlWithoutHost
+                                            | remove: '&filter.v.rims.e_t.gte=' | remove: min_et_param
+                                            | remove: '&filter.v.rims.e_t.lte=' | remove: max_et_param
+                                            | remove: 'filter.v.rims.e_t.gte=' | remove: min_et_param
+                                            | remove: 'filter.v.rims.e_t.lte=' | remove: max_et_param
+                                    -%}
+
+                                    {% comment %} Collection filters {% endcomment %}
                                     {%- for filter in collection.filters -%}
                                         {%- if filter.type == "price_range" -%}
                                             {%- if filter.min_value.value != null or filter.max_value.value != null -%}
@@ -417,13 +476,53 @@
                                             {%- endif -%}
                                         {%- endif -%}
                                     {%- endfor -%}
+
+                                    {% comment %} Custom filters (ET) {% endcomment %}
+                                    {%- if min_et_param != blank or max_et_param != blank -%}
+                                        <div class="filters_tag-wrap text-size-small">
+                                            Osadzenie (ET):
+                                            <a href="{{ pageUrlWithoutETFilters }}" class="filters_tag">
+                                                {{ min_et_param | default: 0 }} - {{ max_et_param | default: 100 }}
+                                                <img
+                                                        src="{{ 'IcRoundCloseBlack.svg' | asset_url }}"
+                                                        class="icon-embed-xxsmall"
+                                                        alt="delete-param">
+                                            </a>
+                                        </div>
+                                    {%- endif -%}
                                 </div>
                                 <div class="filters2_results-wrapper">
                                     <div class="filters2_results-text">
+                                        {% comment %} Check custom filters count {% endcomment %}
+                                        {% assign visible_products_count = 0 %}
+                                        {% for product in collection.products %}
+                                            {% comment %} Rims ET parameters {% endcomment %}
+                                            {% assign rims_e_t = product.metafields.rims.e_t | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
+
+                                            {% comment %} Check if ET param exist and compare {% endcomment %}
+                                            {% capture display_product %}true{% endcapture %}
+                                            {% if min_et_param != blank or max_et_param != blank %}
+                                                {% assign rim_et_value_1 = rims_e_t[0] | default: 0 %}
+                                                {% assign rim_et_value_2 = rims_e_t[1] | default: 0 %}
+
+                                                {% if rim_et_value_1 < min_et_param or rim_et_value_1 > max_et_param %}
+                                                    {% if rim_et_value_2 < min_et_param or rim_et_value_2 > max_et_param %}
+                                                        {% capture display_product %}false{% endcapture %}
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% endif %}
+
+                                            {% if display_product == "true" %}
+                                                {% assign visible_products_count = visible_products_count | plus: 1 %}
+                                            {% endif %}
+                                        {% endfor %}
+
                                         {% if paginate %}
-                                            Wyświetlam {{ paginate.page_size | times: paginate.current_page | minus: paginate.page_size | plus: 1 }} - {{ paginate.items | size }} z {{ paginate.items_count }} wyników
+                                            {% comment %}Wyświetlam {{ paginate.page_size | times: paginate.current_page | minus: paginate.page_size | plus: 1 }} - {{ paginate.items | size }} z {{ paginate.items_count }} wyników{% endcomment %}
+                                            Wyświetlam {{ paginate.page_size | times: paginate.current_page | minus: paginate.page_size | plus: 1 }} - {{ visible_products_count | plus: paginate.page_size | times: paginate.current_page | minus: paginate.page_size }} z {{ visible_products_count }} wyników
                                         {% else %}
-                                            Wyświetlam {{ collection.products.count }} z {{ collection.products_count }} wyników
+                                            {% comment %}Wyświetlam {{ collection.products.count }} z {{ collection.products_count }} wyników{% endcomment %}
+                                            Wyświetlam {{ visible_products_count }} wyników
                                         {% endif %}
                                     </div>
                                 </div>
@@ -448,204 +547,225 @@
                                 {% capture double_parameters_rims %}{% if rims_diameter.size > 1 or rims_e_t.size > 1 or rims_width.size > 1 %}true{% else %}false{% endif %}{% endcapture %}
                                 {% comment %}{{ double_parameters_rims }}{% endcomment %}
 
-                                <div class="product-wide shadow-xsmall">
-                                    <a href="{{ product.url }}" class="product_content-wrapper w-inline-block">
-                                        {% if product.collections[0].handle == "opony" %}
-                                            <div class="div-block-47">
-                                                <div class="heading-style-h4">{{ product.metafields.tires.manufacturer.value.name.value }}</div>
-                                                <div class="div-block-46">
-                                                    <div class="text-size-large text-weight-semibold">{{ product.metafields.tires.model.value.model.value }}</div>
-                                                    <div class="text-size-large text-weight-semibold">
-                                                        {% if double_parameters_tires == 'true' %}
-                                                            2x {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }},
-                                                            2x
-                                                            {% if tires_width[1] == blank %}{{ tires_width[0] }}{% else %}{{ tires_width[1] }}{% endif %}/{% if tires_profile[1] == blank %}{{ tires_profile[0] }}{% else %}{{ tires_profile[1] }}{% endif %} R{% if tires_diameter[1] == blank %}{{ tires_diameter[0] }}{% else %}{{ tires_diameter[1] }}{% endif %}
-                                                            {% comment %}{{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }} {{ product.metafields.tires.speed_index | slice: 0 }}{% endcomment %}
-                                                        {% else %}
-                                                            {{ product.metafields.custom.quantity | slice: 0 }}x {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }}
-                                                            {% comment %}{{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}{% endcomment %}
-                                                        {% endif %}
-                                                    </div>
-                                                </div>
-                                                <div class="product_parameters-wrapper">
-                                                    {% if product.metafields.tires.tread != blank %}
-                                                        <div class="product_parameters">
-                                                            <div class="tooltip1_component">
-                                                                <div class="tooltip1_tooltip-wrapper">
-                                                                    <div class="tooltip1_card-wrapper">
-                                                                        <div class="text-size-tiny text-weight-semibold">
-                                                                            Ilość pozostałego bieżnika w oponach
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="tooltip1_pointer"></div>
-                                                                </div>
-                                                                <div class="tooltip1_element-wrapper"
-                                                                     data-relume-tooltip-setup="1">
-                                                                    <div class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.tread }}</div>
-                                                                </div>
-                                                                <div class="tooltip1_responsive"></div>
-                                                            </div>
-                                                        </div>
-                                                    {% endif %}
-                                                    {% if product.metafields.tires.years != blank %}
-                                                        <div class="product_parameters is-last">
-                                                            <div class="tooltip1_component">
-                                                                <div class="tooltip1_tooltip-wrapper">
-                                                                    <div class="tooltip1_card-wrapper">
-                                                                        <div class="text-size-tiny text-weight-semibold">
-                                                                            Rocznik produkcji opon z wybranej oferty
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="tooltip1_pointer"></div>
-                                                                </div>
-                                                                <div class="tooltip1_element-wrapper"
-                                                                     data-relume-tooltip-setup="1">
-                                                                    <div class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.years | remove: '"' | remove: '[' | remove: ']' | split: ',' | join: ' | ' | strip }}</div>
-                                                                </div>
-                                                                <div class="tooltip1_responsive"></div>
-                                                            </div>
-                                                        </div>
-                                                    {% endif %}
-                                                </div>
-                                                {% comment %}<div class="product_parameters-wrapper">{% endcomment %}
-                                                    {% comment %}{% if product.metafields.tires.load_index != blank %}{% endcomment %}
-                                                        {% comment %}<div class="product_parameters">{% endcomment %}
-                                                            {% comment %}<div class="tooltip1_component">{% endcomment %}
-                                                                {% comment %}<div class="tooltip1_tooltip-wrapper">{% endcomment %}
-                                                                    {% comment %}<div class="tooltip1_card-wrapper">{% endcomment %}
-                                                                        {% comment %}<div class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.load_index }}{% endcomment %}
-                                                                            {% comment %}. Indeks nośności, czyli maksymalne{% endcomment %}
-                                                                            {% comment %}obciążenie pojedynczej opony{% endcomment %}
-                                                                        {% comment %}</div>{% endcomment %}
-                                                                    {% comment %}</div>{% endcomment %}
-                                                                    {% comment %}<div class="tooltip1_pointer"></div>{% endcomment %}
-                                                                {% comment %}</div>{% endcomment %}
-                                                                {% comment %}<div class="tooltip1_element-wrapper"{% endcomment %}
-                                                                     {% comment %}data-relume-tooltip-setup="1">{% endcomment %}
-                                                                    {% comment %}<div class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}</div>{% endcomment %}
-                                                                {% comment %}</div>{% endcomment %}
-                                                                {% comment %}<div class="tooltip1_responsive"></div>{% endcomment %}
-                                                            {% comment %}</div>{% endcomment %}
-                                                        {% comment %}</div>{% endcomment %}
-                                                    {% comment %}{% endif %}{% endcomment %}
-                                                    {% comment %}{% if product.metafields.tires.speed_index != blank %}{% endcomment %}
-                                                        {% comment %}<div data-tippy-content="{{ product.metafields.tires.speed_index }}. Indeks prędkości, czyli maksymalna prędkość, do której przystosowana jest opona"{% endcomment %}
-                                                             {% comment %}class="product_parameters is-last">{% endcomment %}
-                                                            {% comment %}<div class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.speed_index | slice: 0 }}</div>{% endcomment %}
-                                                        {% comment %}</div>{% endcomment %}
-                                                    {% comment %}{% endif %}{% endcomment %}
-                                                {% comment %}</div>{% endcomment %}
-                                            </div>
-                                        {% elsif product.collections[0].handle == 'felgi' %}
-                                            <div class="div-block-47">
-                                                <div class="heading-style-h4">{{ product.metafields.rims.manufacturer.value.name.value }}</div>
-                                                <div class="div-block-46">
-                                                    <div class="text-size-large text-weight-semibold">{{ product.metafields.rims.model.value.model.value }}</div>
-                                                    <div class="text-size-large text-weight-semibold">
-                                                        {% if double_parameters_rims == 'true' %}
-                                                            2x R{{ rims_diameter[0] }}x{{ rims_width[0] }}J ET{{ rims_e_t[0] }},
-                                                            2x
-                                                            R{% if rims_diameter[1] == blank %}{{ rims_diameter[0] }}{% else %}{{ rims_diameter[1] }}{% endif %}x{% if rims_width[1] == blank %}{{ rims_width[0] }}{% else %}{{ rims_width[1] }}{% endif %} ET{% if rims_e_t[1] == blank %}{{ rims_e_t[0] }}{% else %}{{ rims_e_t[1] }}{% endif %}
-                                                        {% else %}
-                                                            {{ product.metafields.custom.quantity | slice: 0 }}x R{{ rims_diameter[0] }}x{{ rims_width[0] }}J ET{{ rims_e_t[0] }}
-                                                        {% endif %}
-                                                        {{ product.metafields.rims.bolt_spacing }}
-                                                    </div>
-                                                </div>
-                                                <div class="product_parameters-wrapper"></div>
-                                                <div class="product_parameters-wrapper"></div>
-                                            </div>
-                                        {% elsif product.collections[0].handle == 'akcesoria' or  product.collections[0].handle == 'kola' or product.collections[0].handle == 'kola-dojazdowe' %}
-                                            <div class="div-block-47">
-                                                <div class="heading-style-h4">{{ product.title }}</div>
-                                            </div>
+                                {% comment %} Check if ET param exist and compare {% endcomment %}
+                                {% capture display_product %}true{% endcapture %}
+                                {% if min_et_param != blank or max_et_param != blank %}
+                                    {% assign rim_et_value_1 = rims_e_t[0] | default: 0 %}
+                                    {% assign rim_et_value_2 = rims_e_t[1] | default: 0 %}
+
+                                    {% if rim_et_value_1 < min_et_param or rim_et_value_1 > max_et_param %}
+                                        {% if rim_et_value_2 < min_et_param or rim_et_value_2 > max_et_param %}
+                                            {% capture display_product %}false{% endcapture %}
                                         {% endif %}
-                                        <div class="margin-top margin-xsmall">
-                                            <div class="product_pictures-wrapper">
-                                                <div class="product_season-wrapper">
-                                                    {% if product.metafields.tires.season.value == 'Letnie' %}
-                                                        <img
-                                                                src="{{ 'IcRoundSun.svg' | asset_url }}"
-                                                                class="icon-embed-small"
-                                                                alt="summer-icon">
-                                                    {% elsif product.metafields.tires.season.value == 'Zimowe' %}
-                                                        <img
-                                                                src="{{ 'IcRoundWinter.svg' | asset_url }}"
-                                                                class="icon-embed-small"
-                                                                alt="winter-icon">
-                                                    {% elsif product.metafields.tires.season.value == 'Całoroczne' %}
-                                                        <img
-                                                                src="{{ 'IcRoundAllSeason.svg' | asset_url }}"
-                                                                class="icon-embed-small"
-                                                                alt="year-round-icon">
-                                                    {% endif %}
-                                                </div>
-                                                {% if product.collections[0].handle == 'opony' or product.collections[0].handle == 'kola' %}
-                                                    <div class="product_badge-wrapper">
-                                                        <div class="text-size-small text-weight-bold text-color-white">
-                                                            Klasa {{ product.metafields.tires.model.value.marka.value.class.value }}</div>
+                                    {% endif %}
+                                {% endif %}
+
+                                {% if display_product == "true" %}
+                                    {% assign visible_products_count = visible_products_count | plus: 1 %}
+                                {% endif %}
+
+                                {% if display_product == "true" %}
+                                    <div class="product-wide shadow-xsmall">
+                                        <a href="{{ product.url }}" class="product_content-wrapper w-inline-block">
+                                            {% if product.collections[0].handle == "opony" %}
+                                                <div class="div-block-47">
+                                                    <div class="heading-style-h4">{{ product.metafields.tires.manufacturer.value.name.value }}</div>
+                                                    <div class="div-block-46">
+                                                        <div class="text-size-large text-weight-semibold">{{ product.metafields.tires.model.value.model.value }}</div>
+                                                        <div class="text-size-large text-weight-semibold">
+                                                            {% if double_parameters_tires == 'true' %}
+                                                                2x {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }},
+                                                                2x
+                                                                {% if tires_width[1] == blank %}{{ tires_width[0] }}{% else %}{{ tires_width[1] }}{% endif %}/{% if tires_profile[1] == blank %}{{ tires_profile[0] }}{% else %}{{ tires_profile[1] }}{% endif %} R{% if tires_diameter[1] == blank %}{{ tires_diameter[0] }}{% else %}{{ tires_diameter[1] }}{% endif %}
+                                                                {% comment %}{{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }} {{ product.metafields.tires.speed_index | slice: 0 }}{% endcomment %}
+                                                            {% else %}
+                                                                {{ product.metafields.custom.quantity | slice: 0 }}x {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }}
+                                                                {% comment %}{{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}{% endcomment %}
+                                                            {% endif %}
+                                                        </div>
                                                     </div>
-                                                {% endif %}
-                                                <div class="product_image-wrapper">
-                                                    {% if product.featured_image %}
-                                                        <img
-                                                                src="{{ product.featured_image | image_url: width: 800 }}"
-                                                                alt="{{ product.title }}"
-                                                                class="image-2">
-                                                    {% elsif product.collections[0].handle == 'opony' and product.metafields.tires.model.value.zdjecie.value != blank %}
-                                                        <img
-                                                                src="{{ product.metafields.tires.model.value.zdjecie.value | image_url: width: 800 }}"
-                                                                alt="{{ product.title }}"
-                                                                class="image-2">
-                                                    {% elsif product.collections[0].handle == 'felgi' and product.metafields.rims.model.value.zdjecie.value != blank %}
-                                                        <img
-                                                                src="{{ product.metafields.rims.model.value.zdjecie.value | image_url: width: 800 }}"
-                                                                alt="{{ product.title }}"
-                                                                class="image-2">
-                                                    {% else %}
-                                                        <img
-                                                                src="{{ 'ProductPlaceholder.webp' | asset_url }}"
-                                                                alt="{{ product.title }}"
-                                                                class="image-2">
+                                                    <div class="product_parameters-wrapper">
+                                                        {% if product.metafields.tires.tread != blank %}
+                                                            <div class="product_parameters">
+                                                                <div class="tooltip1_component">
+                                                                    <div class="tooltip1_tooltip-wrapper">
+                                                                        <div class="tooltip1_card-wrapper">
+                                                                            <div class="text-size-tiny text-weight-semibold">
+                                                                                Ilość pozostałego bieżnika w oponach
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="tooltip1_pointer"></div>
+                                                                    </div>
+                                                                    <div class="tooltip1_element-wrapper"
+                                                                         data-relume-tooltip-setup="1">
+                                                                        <div class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.tread }}</div>
+                                                                    </div>
+                                                                    <div class="tooltip1_responsive"></div>
+                                                                </div>
+                                                            </div>
+                                                        {% endif %}
+                                                        {% if product.metafields.tires.years != blank %}
+                                                            <div class="product_parameters is-last">
+                                                                <div class="tooltip1_component">
+                                                                    <div class="tooltip1_tooltip-wrapper">
+                                                                        <div class="tooltip1_card-wrapper">
+                                                                            <div class="text-size-tiny text-weight-semibold">
+                                                                                Rocznik produkcji opon z wybranej oferty
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="tooltip1_pointer"></div>
+                                                                    </div>
+                                                                    <div class="tooltip1_element-wrapper"
+                                                                         data-relume-tooltip-setup="1">
+                                                                        <div class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.years | remove: '"' | remove: '[' | remove: ']' | split: ',' | join: ' | ' | strip }}</div>
+                                                                    </div>
+                                                                    <div class="tooltip1_responsive"></div>
+                                                                </div>
+                                                            </div>
+                                                        {% endif %}
+                                                    </div>
+                                                    {% comment %}
+                                                    <div class="product_parameters-wrapper">
+                                                        {% if product.metafields.tires.load_index != blank %}
+                                                            <div class="product_parameters">
+                                                                <div class="tooltip1_component">
+                                                                    <div class="tooltip1_tooltip-wrapper">
+                                                                        <div class="tooltip1_card-wrapper">
+                                                                            <div class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.load_index }}
+                                                                                . Indeks nośności, czyli maksymalne
+                                                                                obciążenie pojedynczej opony
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="tooltip1_pointer"></div>
+                                                                    </div>
+                                                                    <div class="tooltip1_element-wrapper"
+                                                                         data-relume-tooltip-setup="1">
+                                                                        <div class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}</div>
+                                                                    </div>
+                                                                    <div class="tooltip1_responsive"></div>
+                                                                </div>
+                                                            </div>
+                                                        {% endif %}
+                                                        {% if product.metafields.tires.speed_index != blank %}
+                                                            <div data-tippy-content="{{ product.metafields.tires.speed_index }}. Indeks prędkości, czyli maksymalna prędkość, do której przystosowana jest opona"
+                                                                 class="product_parameters is-last">
+                                                                <div class="text-size-tiny text-weight-semibold">{{ product.metafields.tires.speed_index | slice: 0 }}</div>
+                                                            </div>
+                                                        {% endif %}
+                                                    </div>
+                                                    {% endcomment %}
+                                                </div>
+                                            {% elsif product.collections[0].handle == 'felgi' %}
+                                                <div class="div-block-47">
+                                                    <div class="heading-style-h4">{{ product.metafields.rims.manufacturer.value.name.value }}</div>
+                                                    <div class="div-block-46">
+                                                        <div class="text-size-large text-weight-semibold">{{ product.metafields.rims.model.value.model.value }}</div>
+                                                        <div class="text-size-large text-weight-semibold">
+                                                            {% if double_parameters_rims == 'true' %}
+                                                                2x R{{ rims_diameter[0] }}x{{ rims_width[0] }}J ET{{ rims_e_t[0] }},
+                                                                2x
+                                                                R{% if rims_diameter[1] == blank %}{{ rims_diameter[0] }}{% else %}{{ rims_diameter[1] }}{% endif %}x{% if rims_width[1] == blank %}{{ rims_width[0] }}{% else %}{{ rims_width[1] }}{% endif %} ET{% if rims_e_t[1] == blank %}{{ rims_e_t[0] }}{% else %}{{ rims_e_t[1] }}{% endif %}
+                                                            {% else %}
+                                                                {{ product.metafields.custom.quantity | slice: 0 }}x R{{ rims_diameter[0] }}x{{ rims_width[0] }}J ET{{ rims_e_t[0] }}
+                                                            {% endif %}
+                                                            {{ product.metafields.rims.bolt_spacing }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="product_parameters-wrapper"></div>
+                                                    <div class="product_parameters-wrapper"></div>
+                                                </div>
+                                            {% elsif product.collections[0].handle == 'akcesoria' or  product.collections[0].handle == 'kola' or product.collections[0].handle == 'kola-dojazdowe' %}
+                                                <div class="div-block-47">
+                                                    <div class="heading-style-h4">{{ product.title }}</div>
+                                                </div>
+                                            {% endif %}
+                                            <div class="margin-top margin-xsmall">
+                                                <div class="product_pictures-wrapper">
+                                                    <div class="product_season-wrapper">
+                                                        {% if product.metafields.tires.season.value == 'Letnie' %}
+                                                            <img
+                                                                    src="{{ 'IcRoundSun.svg' | asset_url }}"
+                                                                    class="icon-embed-small"
+                                                                    alt="summer-icon">
+                                                        {% elsif product.metafields.tires.season.value == 'Zimowe' %}
+                                                            <img
+                                                                    src="{{ 'IcRoundWinter.svg' | asset_url }}"
+                                                                    class="icon-embed-small"
+                                                                    alt="winter-icon">
+                                                        {% elsif product.metafields.tires.season.value == 'Całoroczne' %}
+                                                            <img
+                                                                    src="{{ 'IcRoundAllSeason.svg' | asset_url }}"
+                                                                    class="icon-embed-small"
+                                                                    alt="year-round-icon">
+                                                        {% endif %}
+                                                    </div>
+                                                    {% if product.collections[0].handle == 'opony' or product.collections[0].handle == 'kola' %}
+                                                        <div class="product_badge-wrapper">
+                                                            <div class="text-size-small text-weight-bold text-color-white">
+                                                                Klasa {{ product.metafields.tires.model.value.marka.value.class.value }}</div>
+                                                        </div>
                                                     {% endif %}
+                                                    <div class="product_image-wrapper">
+                                                        {% if product.featured_image %}
+                                                            <img
+                                                                    src="{{ product.featured_image | image_url: width: 800 }}"
+                                                                    alt="{{ product.title }}"
+                                                                    class="image-2">
+                                                        {% elsif product.collections[0].handle == 'opony' and product.metafields.tires.model.value.zdjecie.value != blank %}
+                                                            <img
+                                                                    src="{{ product.metafields.tires.model.value.zdjecie.value | image_url: width: 800 }}"
+                                                                    alt="{{ product.title }}"
+                                                                    class="image-2">
+                                                        {% elsif product.collections[0].handle == 'felgi' and product.metafields.rims.model.value.zdjecie.value != blank %}
+                                                            <img
+                                                                    src="{{ product.metafields.rims.model.value.zdjecie.value | image_url: width: 800 }}"
+                                                                    alt="{{ product.title }}"
+                                                                    class="image-2">
+                                                        {% else %}
+                                                            <img
+                                                                    src="{{ 'ProductPlaceholder.webp' | asset_url }}"
+                                                                    alt="{{ product.title }}"
+                                                                    class="image-2">
+                                                        {% endif %}
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </a>
-                                    <div class="product_info-wrapper">
-                                        <div class="product_price-wrapper">
-                                            <div class="div-block-39">
-                                                <div class="heading-style-h4 text-color-red600">{{ product.price | money }}
-                                                    <span class="text-size-regular">
-                                                        / {{ product.metafields.custom.quantity }}
-                                                    </span>
+                                        </a>
+                                        <div class="product_info-wrapper">
+                                            <div class="product_price-wrapper">
+                                                <div class="div-block-39">
+                                                    <div class="heading-style-h4 text-color-red600">{{ product.price | money }}
+                                                        <span class="text-size-regular">
+                                                            / {{ product.metafields.custom.quantity }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="add-delivery-text"></div>
+                                                <div class="product_green-wrapper">
+                                                    <p class="text-size-small text-color-green">Możliwość montażu
+                                                        <span class="text-weight-semibold">w serwisie</span>
+                                                    </p>
+                                                </div>
+                                                <div class="product_green-wrapper">
+                                                    <p class="text-size-small text-color-green">Możliwość zakupu<span
+                                                                class="text-weight-semibold"> na raty</span></p>
                                                 </div>
                                             </div>
-                                            <div class="add-delivery-text"></div>
-                                            <div class="product_green-wrapper">
-                                                <p class="text-size-small text-color-green">Możliwość montażu
-                                                    <span class="text-weight-semibold">w serwisie</span>
-                                                </p>
+                                            <div class="product-header1_add-to-cart w-form">
+                                                <form method="post" action="/cart/add">
+                                                    <input
+                                                            type="hidden"
+                                                            name="id"
+                                                            value="{{ product.variants.first.id }}">
+                                                    <input
+                                                            type="submit"
+                                                            value="Dodaj do koszyka"
+                                                            class="button max-width-full">
+                                                </form>
                                             </div>
-                                            <div class="product_green-wrapper">
-                                                <p class="text-size-small text-color-green">Możliwość zakupu<span
-                                                            class="text-weight-semibold"> na raty</span></p>
-                                            </div>
-                                        </div>
-                                        <div class="product-header1_add-to-cart w-form">
-                                            <form method="post" action="/cart/add">
-                                                <input
-                                                        type="hidden"
-                                                        name="id"
-                                                        value="{{ product.variants.first.id }}">
-                                                <input
-                                                        type="submit"
-                                                        value="Dodaj do koszyka"
-                                                        class="button max-width-full">
-                                            </form>
                                         </div>
                                     </div>
-                                </div>
+                                {% endif %}
                             {% else %}
                                 {% if show_custom_message %}
                                     <p>Przykro nam!<br>
@@ -779,6 +899,22 @@
 
         if (priceTo) {
             document.getElementById('Filter-price-to').value = priceTo;
+        }
+    });
+</script>
+
+{% comment %} Manage ET custom filter {% endcomment %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize ET filter values from URL parameters if they exist
+        const urlParams = new URLSearchParams(window.location.search);
+        const minET = urlParams.get('filter.v.rims.e_t.gte');
+        const maxET = urlParams.get('filter.v.rims.e_t.lte');
+        if (minET !== null) {
+            document.getElementById('minET').value = minET;
+        }
+        if (maxET !== null) {
+            document.getElementById('maxET').value = maxET;
         }
     });
 </script>
