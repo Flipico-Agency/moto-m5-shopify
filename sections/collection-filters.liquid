@@ -608,6 +608,8 @@
                             </div>
 
                             {% for product in collection.products %}
+                                {% assign vehicle_type = product.metafields.custom.type %}
+
                                 {% comment %} Tires main parameters {% endcomment %}
                                 {% assign tires_width = product.metafields.tires.width | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
                                 {% assign tires_profile = product.metafields.tires.profile | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
@@ -665,12 +667,12 @@
                                                         <div class="text-size-large text-weight-semibold">{{ product.metafields.tires.model.value.model.value }}</div>
                                                         <div class="text-size-large text-weight-semibold">
                                                             {% if double_parameters_tires == 'true' %}
-                                                                2x {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }},
+                                                                2x {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }}{% if vehicle_type == 'Dostawcze' %}C{% elsif vehicle_type == 'Kempingowe' %}CP{% endif %},
                                                                 2x
-                                                                {% if tires_width[1] == blank %}{{ tires_width[0] }}{% else %}{{ tires_width[1] }}{% endif %}/{% if tires_profile[1] == blank %}{{ tires_profile[0] }}{% else %}{{ tires_profile[1] }}{% endif %} R{% if tires_diameter[1] == blank %}{{ tires_diameter[0] }}{% else %}{{ tires_diameter[1] }}{% endif %}
+                                                                {% if tires_width[1] == blank %}{{ tires_width[0] }}{% else %}{{ tires_width[1] }}{% endif %}/{% if tires_profile[1] == blank %}{{ tires_profile[0] }}{% else %}{{ tires_profile[1] }}{% endif %} R{% if tires_diameter[1] == blank %}{{ tires_diameter[0] }}{% else %}{{ tires_diameter[1] }}{% endif %}{% if vehicle_type == 'Dostawcze' %}C{% elsif vehicle_type == 'Kempingowe' %}CP{% endif %}
                                                                 {% comment %}{{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }} {{ product.metafields.tires.speed_index | slice: 0 }}{% endcomment %}
                                                             {% else %}
-                                                                {{ product.metafields.custom.quantity | slice: 0 }}x {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }}
+                                                                {{ product.metafields.custom.quantity | slice: 0 }}x {{ tires_width[0] }}/{{ tires_profile[0] }} R{{ tires_diameter[0] }}{% if vehicle_type == 'Dostawcze' %}C{% elsif vehicle_type == 'Kempingowe' %}CP{% endif %}
                                                                 {% comment %}{{ product.metafields.tires.load_index | slice: 0, 3 | rstrip }}{{ product.metafields.tires.speed_index | slice: 0 }}{% endcomment %}
                                                             {% endif %}
                                                         </div>
