@@ -411,8 +411,17 @@ document.addEventListener('DOMContentLoaded', async function () {
             event.preventDefault();
             localStorage.setItem('searchBy', 'bySize');
 
+            // Clone the existing URL parameters to preserve them
+            const queryParams = new URLSearchParams(urlParams);
+
             // Build query parameters based on the active sub-tab and selected options
-            const queryParams = await buildSizeQueryParameters(activeSubTabNumber, tire, rim, isCollectionsPage);
+            const newParams = await buildSizeQueryParameters(activeSubTabNumber, tire, rim, isCollectionsPage);
+
+            // Append new parameters to the existing ones
+            for (const [key, value] of newParams.entries()) {
+                queryParams.set(key, value);
+            }
+
             window.location.href = `${formAction}?${queryParams.toString().replace('%2B', '+')}`;
         });
     }
