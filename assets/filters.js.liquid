@@ -571,25 +571,24 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             const updateMatchingSizeAndRedirect = () => {
                 const selectedOption = document.getElementById('matching_sizes').value;
-                let queryParams = new URLSearchParams();
+                const currentUrlParams = new URLSearchParams(window.location.search);
 
                 if (window.location.pathname.includes('collections/opony')) {
                     const tireMatch = selectedOption.match(/(\d+)\/(\d+)\/R(\d+)/);
                     if (tireMatch) {
                         const [_, tireWidth, tireProfile, tireDiameter] = tireMatch;
-                        queryParams.set('filter.p.m.tires.width', tireWidth);
-                        queryParams.set('filter.p.m.tires.profile', tireProfile);
-                        queryParams.set('filter.p.m.tires.diameter', tireDiameter);
+                        currentUrlParams.set('filter.p.m.tires.width', tireWidth);
+                        currentUrlParams.set('filter.p.m.tires.profile', tireProfile);
+                        currentUrlParams.set('filter.p.m.tires.diameter', tireDiameter);
                     }
                 } else if (window.location.pathname.includes('collections/felgi')) {
                     const rimMatch = selectedOption.match(/(\d+\.?\d*)Jx(\d+\.?\d*) ET(\d+)/);
                     if (rimMatch) {
                         const [_, rimWidth, rimDiameter, rimOffset] = rimMatch;
-                        queryParams.set('filter.p.m.rims.width', rimWidth);
-                        queryParams.set('filter.p.m.rims.diameter', rimDiameter);
-                        {% comment %}queryParams.set('filter.p.m.rims.e_t', rimOffset);{% endcomment %}
-                        queryParams.set('filter.v.rims.e_t.gte', (parseFloat(rimOffset) - 5).toFixed(1));
-                        queryParams.set('filter.v.rims.e_t.lte', (parseFloat(rimOffset) + 5).toFixed(1));
+                        currentUrlParams.set('filter.p.m.rims.width', rimWidth);
+                        currentUrlParams.set('filter.p.m.rims.diameter', rimDiameter);
+                        currentUrlParams.set('filter.v.rims.e_t.gte', (parseFloat(rimOffset) - 5).toFixed(1));
+                        currentUrlParams.set('filter.v.rims.e_t.lte', (parseFloat(rimOffset) + 5).toFixed(1));
                     }
                 } else if (window.location.pathname.includes('collections/kola')) {
                     const tireMatch = selectedOption.match(/(\d+)\/(\d+)\/R(\d+)/);
@@ -597,19 +596,18 @@ document.addEventListener('DOMContentLoaded', async function () {
                     if (tireMatch && rimMatch) {
                         const [_, tireWidth, tireProfile, tireDiameter] = tireMatch;
                         const [__, rimWidth, rimDiameter, rimOffset] = rimMatch;
-                        queryParams.set('filter.p.m.tires.width', tireWidth);
-                        queryParams.set('filter.p.m.tires.profile', tireProfile);
-                        queryParams.set('filter.p.m.tires.diameter', tireDiameter);
-                        queryParams.set('filter.p.m.rims.width', rimWidth);
-                        queryParams.set('filter.p.m.rims.diameter', rimDiameter);
-                        {% comment %}queryParams.set('filter.p.m.rims.e_t', rimOffset);{% endcomment %}
-                        queryParams.set('filter.v.rims.e_t.gte', (parseFloat(rimOffset) - 5).toFixed(1));
-                        queryParams.set('filter.v.rims.e_t.lte', (parseFloat(rimOffset) + 5).toFixed(1));
+                        currentUrlParams.set('filter.p.m.tires.width', tireWidth);
+                        currentUrlParams.set('filter.p.m.tires.profile', tireProfile);
+                        currentUrlParams.set('filter.p.m.tires.diameter', tireDiameter);
+                        currentUrlParams.set('filter.p.m.rims.width', rimWidth);
+                        currentUrlParams.set('filter.p.m.rims.diameter', rimDiameter);
+                        currentUrlParams.set('filter.v.rims.e_t.gte', (parseFloat(rimOffset) - 5).toFixed(1));
+                        currentUrlParams.set('filter.v.rims.e_t.lte', (parseFloat(rimOffset) + 5).toFixed(1));
                     }
                 }
 
-                if (queryParams.toString()) {
-                    window.location.href = `${formAction}?${queryParams.toString()}`;
+                if (currentUrlParams.toString()) {
+                    window.location.href = `${window.location.pathname}?${currentUrlParams.toString()}`;
                 } else {
                     console.error('Matching size format is incorrect:', selectedOption);
                 }
