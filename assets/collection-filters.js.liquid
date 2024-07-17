@@ -70,6 +70,24 @@
             }
         }
 
+        // Initialize year filter values from URL parameters if they exist
+        const minYearElement = document.getElementById('minYear');
+        const maxYearElement = document.getElementById('maxYear');
+
+        if (minYearElement) {
+            const minYear = urlParams.get('filter.v.tires.years.gte');
+            if (minYear !== null) {
+                minYearElement.value = minYear;
+            }
+        }
+
+        if (maxYearElement) {
+            const maxYear = urlParams.get('filter.v.tires.years.lte');
+            if (maxYear !== null) {
+                maxYearElement.value = maxYear;
+            }
+        }
+
         // Add event listeners to the checkboxes
         const checkboxes = document.querySelectorAll('.form-checkbox-icon');
 
@@ -173,6 +191,25 @@
                     urlParams.set('filter.v.rims.e_t.lte', maxETValue);
                 } else {
                     urlParams.delete('filter.v.rims.e_t.lte');
+                }
+            }
+
+            // Add year filter values to the URL parameters if elements exist
+            if (minYearElement) {
+                const minYearValue = minYearElement.value;
+                if (minYearValue) {
+                    urlParams.set('filter.v.tires.years.gte', minYearValue);
+                } else {
+                    urlParams.delete('filter.v.tires.years.gte');
+                }
+            }
+
+            if (maxYearElement) {
+                const maxYearValue = maxYearElement.value;
+                if (maxYearValue) {
+                    urlParams.set('filter.v.tires.years.lte', maxYearValue);
+                } else {
+                    urlParams.delete('filter.v.tires.years.lte');
                 }
             }
 

@@ -294,6 +294,7 @@
                                                                             {%- assign sorted_values = filter.values -%}
                                                                         {%- endif -%}
 
+                                                                        {% comment %} Rims ET filter range min-max {% endcomment %}
                                                                         {% if filter.param_name == 'filter.p.m.rims.e_t' %}
                                                                             <div class="filter-group-display__price-range">
                                                                                 <div class="filter-group-display__price-range-from">
@@ -326,6 +327,36 @@
                                                                             <div class="filter-group-display__submit" style="margin-top: 1rem">
                                                                                 <input type="submit" value="Zastosuj" class="button is-link">
                                                                             </div>
+                                                                        {% comment %} Tire years filter range min-max {% endcomment %}
+                                                                        {% elsif filter.param_name == 'filter.p.m.tires.years' %}
+                                                                            <div class="filter-group-display__price-range">
+                                                                                <div class="filter-group-display__price-range-from">
+                                                                                    <label for="minYear"></label>
+                                                                                    <input
+                                                                                            name="filter.v.tires.years.gte"
+                                                                                            class="form-input is-left-price"
+                                                                                            style="width:100%"
+                                                                                            id="minYear"
+                                                                                            type="number"
+                                                                                            placeholder="od"
+                                                                                    >
+                                                                                </div>
+                                                                                <div class="filter-group-display__price-range-to">
+                                                                                    <label for="maxYear"></label>
+                                                                                    <input
+                                                                                            name="filter.v.tires.years.lte"
+                                                                                            id="maxYear"
+                                                                                            class="form-input is-right-price"
+                                                                                            style="width:100%"
+                                                                                            type="number"
+                                                                                            placeholder="do"
+                                                                                    >
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="filter-group-display__submit" style="margin-top: 1rem">
+                                                                                <input type="submit" value="Zastosuj" class="button is-link">
+                                                                            </div>
+                                                                        {% comment %} Normal filters {% endcomment %}
                                                                         {% else %}
                                                                             {%- for filter_value in sorted_values -%}
                                                                                 <div class="filters2_item">
@@ -416,6 +447,8 @@
                                     {%- assign url_params = pageUrlWithoutHost | split: '&' -%}
                                     {%- assign min_et_param = '' -%}
                                     {%- assign max_et_param = '' -%}
+                                    {%- assign min_year_param = '' -%}
+                                    {%- assign max_year_param = '' -%}
 
                                     {%- for param in url_params -%}
                                         {%- if param contains 'filter.v.rims.e_t.gte=' -%}
@@ -425,6 +458,14 @@
                                         {%- if param contains 'filter.v.rims.e_t.lte=' -%}
                                             {%- assign max_et_param = param | split: 'filter.v.rims.e_t.lte=' | last -%}
                                         {%- endif -%}
+
+                                        {%- if param contains 'filter.v.tires.years.gte=' -%}
+                                            {%- assign min_year_param = param | split: 'filter.v.tires.years.gte=' | last -%}
+                                        {%- endif -%}
+
+                                        {%- if param contains 'filter.v.tires.years.lte=' -%}
+                                            {%- assign max_year_param = param | split: 'filter.v.tires.years.lte=' | last -%}
+                                        {%- endif -%}
                                     {%- endfor -%}
 
                                     {%- assign pageUrlWithoutETFilters = pageUrlWithoutHost
@@ -432,6 +473,13 @@
                                             | remove: '&filter.v.rims.e_t.lte=' | remove: max_et_param
                                             | remove: 'filter.v.rims.e_t.gte=' | remove: min_et_param
                                             | remove: 'filter.v.rims.e_t.lte=' | remove: max_et_param
+                                    -%}
+
+                                    {%- assign pageUrlWithoutYearFilters = pageUrlWithoutHost
+                                            | remove: '&filter.v.tires.years.gte=' | remove: min_year_param
+                                            | remove: '&filter.v.tires.years.lte=' | remove: max_year_param
+                                            | remove: 'filter.v.tires.years.gte=' | remove: min_year_param
+                                            | remove: 'filter.v.tires.years.lte=' | remove: max_year_param
                                     -%}
 
                                     {% comment %} Collection filters {% endcomment %}
@@ -493,6 +541,22 @@
                                             </a>
                                         </div>
                                     {%- endif -%}
+
+                                    {% comment %} Custom filters (Years) {% endcomment %}
+                                    {%- if min_year_param != blank or max_year_param != blank -%}
+                                        <div class="filters_tag-wrap text-size-small">
+                                            Rocznik produkcji opon:
+                                            <a href="{{ pageUrlWithoutYearFilters }}" class="filters_tag">
+                                                {% assign current_year = "now" | date: "%Y" %}
+
+                                                {{ min_year_param | default: 2020 }} - {{ max_year_param | default: current_year }}
+                                                <img
+                                                        src="{{ 'IcRoundCloseBlack.svg' | asset_url }}"
+                                                        class="icon-embed-xxsmall"
+                                                        alt="delete-param">
+                                            </a>
+                                        </div>
+                                    {%- endif -%}
                                 </div>
                                 <div class="filters2_results-wrapper">
                                     <div class="filters2_results-text">
@@ -502,17 +566,29 @@
                                             {% comment %} Rims ET parameters {% endcomment %}
                                             {% assign rims_e_t = product.metafields.rims.e_t | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
 
-                                            {% comment %} Check if ET param exist and compare {% endcomment %}
+                                            {% comment %} Tires year parameters {% endcomment %}
+                                            {% assign tire_years = product.metafields.tires.years | remove: '"' | remove: '[' | remove: ']' | strip | split: ',' %}
+
+                                            {% comment %} Check if ET param or Year param exist and compare {% endcomment %}
                                             {% capture display_product %}true{% endcapture %}
                                             {% if min_et_param != blank or max_et_param != blank %}
                                                 {% assign rim_et_value_1 = rims_e_t[0] | default: 0 %}
                                                 {% assign rim_et_value_2 = rims_e_t[1] | default: 0 %}
-
                                                 {% if rim_et_value_1 < min_et_param or rim_et_value_1 > max_et_param %}
                                                     {% if rim_et_value_2 < min_et_param or rim_et_value_2 > max_et_param %}
                                                         {% capture display_product %}false{% endcapture %}
                                                     {% endif %}
                                                 {% endif %}
+                                            {% endif %}
+
+                                            {% if min_year_param != blank or max_year_param != blank %}
+                                                {% assign display_product = "false" %}
+                                                {% for year in tire_years %}
+                                                    {% if year >= min_year_param and year <= max_year_param %}
+                                                        {% capture display_product %}true{% endcapture %}
+                                                        {% break %}
+                                                    {% endif %}
+                                                {% endfor %}
                                             {% endif %}
 
                                             {% if display_product == "true" %}
@@ -561,6 +637,18 @@
                                             {% capture display_product %}false{% endcapture %}
                                         {% endif %}
                                     {% endif %}
+                                {% endif %}
+
+                                {% comment %} Check if tire years param exist and compare {% endcomment %}
+                                {% if min_year_param != blank or max_year_param != blank %}
+                                    {% assign tire_years = product.metafields.tires.years | remove: '"' | remove: '[' | remove: ']' | split: ',' %}
+                                    {% assign display_product = "true" %}
+
+                                    {% for tire_year in tire_years %}
+                                        {% if tire_year < min_year_param or tire_year > max_year_param %}
+                                            {% assign display_product = "false" %}
+                                        {% endif %}
+                                    {% endfor %}
                                 {% endif %}
 
                                 {% if display_product == "true" %}
