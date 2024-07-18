@@ -180,7 +180,7 @@
                         <div data-w-tab="1.2" class="w-tab-pane tab-pane-tab-2">
                             <form id="single-tab-form"
                                   class="div-block-8-copy last-item-grid-full is-car w-tab-pane tab-pane-tab-2"
-                                  style="border-top: none">
+                                  style="border-top: none; margin-top: 1rem">
                                 {% assign form_fields = "Marka,Model,Generacja,Rok,Silnik" | split: "," %}
                                 {% for field in form_fields %}
                                     <div class="form-field-wrapper">
@@ -288,27 +288,27 @@
 
 {% stylesheet %}
 .div-block-8-copy.last-item-grid-full > :last-child {
-grid-column: 1 / -1; /* Make the last child span the entire row */
+    grid-column: 1 / -1; /* Make the last child span the entire row */
 }
 
 .header_manufacturer-suggested_sizes-wrapper {
-display: grid;
-grid-column-gap: 1rem;
-grid-row-gap: 1rem;
-grid-template-rows: auto;
-grid-template-columns: 1fr 1fr 1fr 1fr;
+    display: grid;
+    grid-column-gap: 1rem;
+    grid-row-gap: 1rem;
+    grid-template-rows: auto;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
 @media screen and (max-width: 991px) {
-.header_manufacturer-suggested_sizes-wrapper {
-grid-template-columns: 1fr 1fr;
-}
+    .header_manufacturer-suggested_sizes-wrapper {
+        grid-template-columns: 1fr 1fr;
+    }
 }
 
 @media screen and (max-width: 767px) {
-.header_manufacturer-suggested_sizes-wrapper {
-grid-template-columns: 1fr;
-}
+    .header_manufacturer-suggested_sizes-wrapper {
+        grid-template-columns: 1fr;
+    }
 }
 
 {% endstylesheet %}
