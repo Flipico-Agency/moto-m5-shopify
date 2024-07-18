@@ -569,8 +569,27 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             const processSearchByModel = () => {
                 if (!window.location.pathname.includes('collections')) {
-                    const queryParams = buildCarQueryParameters(activeTabContent, elements, new URLSearchParams(window.location.search));
-                    const queryString = new URLSearchParams(queryParams).toString();
+                    const queryParamsObject = buildCarQueryParameters(activeTabContent, elements, new URLSearchParams(window.location.search));
+                    const queryParams = new URLSearchParams(queryParamsObject);
+
+                    // Check for 'opony-run-flat' in the path segments
+                    const pathSegments = window.location.pathname.split('/');
+                    if (pathSegments.includes('opony-run-flat')) {
+                        queryParams.set('filter.p.m.tires.additional_information', 'Run+flat');
+                    }
+
+                    // Check for 'pages/opony' but not 'opony-run-flat' in the path segments
+                    if (pathSegments.includes('pages') && pathSegments.includes('opony') && !pathSegments.includes('opony-run-flat')) {
+                        queryParams.set('filter.p.m.custom.type', 'Osobowe');
+                    }
+
+                    // Handle a special materials case
+                    if (pathSegments[2] && (pathSegments[2] === 'felgi-aluminiowe' || pathSegments[2] === 'felgi-stalowe')) {
+                        let material = pathSegments[2].slice(6);
+                        queryParams.set('filter.p.m.rims.material', material.charAt(0).toUpperCase() + material.slice(1));
+                    }
+
+                    const queryString = queryParams.toString();
                     window.location.href = `${formAction}?${queryString}`;
                 } else {
                     if (searchByModel === undefined) {
@@ -642,8 +661,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         const pathToSubTabNumber = {
             '/collections/opony': '1',
+            '/pages/opony': '1',
             '/collections/kola': '2',
-            '/collections/felgi': '3'
+            '/pages/kola': '2',
+            '/collections/felgi': '3',
+            '/pages/felgi': '3'
         };
 
         if (activePage === '/') {
@@ -654,8 +676,13 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         } else {
             if (activePage.includes('/pages/')) {
-                activeTabContent = document.getElementById('single-tab-form');
-                activeSubTabNumber = activeTabContent.getAttribute('data-w-tab').split('.')[1];
+                activeTabContent = document.querySelector('div[data-w-tab].w-tab-pane.w--tab-active');
+                for (const [path, subTabNumber] of Object.entries(pathToSubTabNumber)) {
+                    if (activePage.includes(path)) {
+                        activeSubTabNumber = subTabNumber;
+                        break;
+                    }
+                }
             } else if (activePage.includes('/collections/')) {
                 activeTabContent = document.querySelector('div[data-sub-tab].w-tab-pane.w--tab-active');
                 activeSubTabNumber = pathToSubTabNumber[activePage] || null;

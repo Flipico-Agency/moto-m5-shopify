@@ -1,264 +1,314 @@
 <div class="padding-global">
-  <div class="container-large">
-    <div class="header_manufacturer-category_content">
-      <div class="margin-bottom margin-large">
-        <div class="max-width-large">
-          <div class="margin-bottom margin-xsmall">
-            <h1 class="text-color-white">
-              {{ section.settings.header }}
-            </h1>
-          </div>
-          <p class="text-weight-semibold text-color-white">
-            {{ section.settings.krotki-opis }}
-          </p>
-        </div>
-      </div>
-      <div class="header_manufacturer-category_content-wrapper">
-        <div class="form-block-2 w-form">
-          <form
-            id="single-tab-form"
-            class="div-block-8-copy last-item-grid-full {% if section.settings.typ_sekcji contains 'Opony'%}is-tire{% elsif section.settings.typ_sekcji == 'Koła' %}is-wheel{% elsif section.settings.typ_sekcji == 'Felgi' %}is-rim{% endif %} w-tab-pane tab-pane-tab-1 w--tab-active"
-            data-w-tab="1.{% if section.settings.typ_sekcji contains 'Opony'%}1{% elsif section.settings.typ_sekcji == 'Koła' %}2{% elsif section.settings.typ_sekcji == 'Felgi' %}3{% endif %}"
-            style="border-top: none">
-            {% assign tire_fields_label = "Szerokość,Profil,Średnica" | split: "," %}
-            {% assign wheel_fields_label = "Szerokość,Profil,Średnica,Rozstaw śrub,Szerokość" | split: "," %}
-            {% assign rim_fields_label = "Średnica,Rozstaw śrub,Szerokość,ET" | split: "," %}
-
-            {% assign season_options = "Letnie,Zimowe,Całoroczne" | split: "," %}
-
-            {% assign tire_fields_data_name = "tire-width,tire-profile,tire-diameter" | split: "," %}
-            {% assign wheel_fields_data_name = "tire-width,tire-profile,tire-diameter,rim-bolt,rim-width" | split: "," %}
-            {% assign rim_fields_data_name = "rim-diameter,rim-bolt,rim-width,rim-et" | split: "," %}
-
-            {% assign select_position = "is-left,is-middle,is-right" | split: "," %}
-
-            {% assign types_do_not_display_season = "Opony Letnie,Opony Zimowe,Opony Całoroczne" | split: "," %}
-
-            {% if section.settings.typ_sekcji contains 'Opony'%}
-              <div class="div-block-21-copy" {% if types_do_not_display_season contains section.settings.typ_sekcji %} style="grid-area: span 1 / span 2 / span 1 / span 2" {% endif %}>
-                {% for i in (0..2) %}
-                  <div class="form-field-wrapper">
-                    <label for="{{ tire_fields_data_name[i] | downcase }}" class="field-label">{{ tire_fields_label[i] }}</label>
-                    <select
-                            id="{{ tire_fields_data_name[i] | downcase }}"
-                            data-name="{{ tire_fields_data_name[i] }}"
-                            required="required"
-                            class="select-field w-select {{ select_position[i] }}"></select>
-                    {% render 'select-arrow' %}
-                  </div>
-                {% endfor %}
-              </div>
-            {% endif %}
-
-            {% if section.settings.typ_sekcji == 'Koła' %}
-              <div>
-                <div>Opony</div>
-                <div class="div-block-21-copy">
-                  {% for i in (0..2) %}
-                    <div class="form-field-wrapper">
-                      <label for="{{ wheel_fields_data_name[i] | downcase }}" class="field-label">{{ wheel_fields_label[i] }}</label>
-                      <select
-                              id="{{ wheel_fields_data_name[i] | downcase }}"
-                              data-name="{{ wheel_fields_data_name[i] }}"
-                              required="required"
-                              class="select-field w-select {{ select_position[i] }}"></select>
-                      {% render 'select-arrow' %}
+    <div class="container-large">
+        <div class="header_manufacturer-category_content">
+            <div class="margin-bottom margin-large">
+                <div class="max-width-large">
+                    <div class="margin-bottom margin-xsmall">
+                        <h1 class="text-color-white">
+                            {{ section.settings.header }}
+                        </h1>
                     </div>
-                  {% endfor %}
+                    <p class="text-weight-semibold text-color-white">
+                        {{ section.settings.krotki-opis }}
+                    </p>
                 </div>
-              </div>
-
-              <div>
-                Felgi
-                <div class="div-block-21-copy" style="grid-template-columns: 1fr 1fr;">
-                  {% for i in (3..4) %}
-                    <div class="form-field-wrapper">
-                      <label for="{{ wheel_fields_data_name[i] | downcase }}" class="field-label">{{ wheel_fields_label[i] }}</label>
-                      <select
-                              id="{{ wheel_fields_data_name[i] | downcase }}"
-                              data-name="{{ wheel_fields_data_name[i] }}"
-                              required="required"
-                              class="select-field w-select {% if i ==3  %} {{ select_position[0] }} {% else %} {{ select_position[2] }} {% endif %}"></select>
-                      {% render 'select-arrow' %}
-                    </div>
-                  {% endfor %}
-                </div>
-              </div>
-            {% endif %}
-
-            {% if section.settings.typ_sekcji == 'Felgi' %}
-              {% for i in (0..3) %}
-                <div class="form-field-wrapper">
-                  <label for="{{ rim_fields_data_name[i] | downcase }}" class="field-label">{{ rim_fields_label[i] }}</label>
-                  <select
-                          id="{{ rim_fields_data_name[i] | downcase }}"
-                          data-name="{{ rim_fields_data_name[i] }}"
-                          required="required"
-                          class="select-field w-select">
-                  </select>
-                  {% render 'select-arrow' %}
-                </div>
-              {% endfor %}
-            {% endif %}
-
-            {% unless section.settings.typ_sekcji == 'Felgi' %}
-              <div class="form-field-wrapper {% if types_do_not_display_season contains section.settings.typ_sekcji %}hide{% endif %}">
-                <label for="tire-season" class="field-label">Sezon</label>
-                <select
-                        id="tire-season"
-                        data-name="tire-season"
-                        required="required"
-                        class="select-field w-select">
-                  {% for option in season_options %}
-                    {% assign selected = false %}
-                    {% if section.settings.typ_sekcji == 'Opony Letnie' and option == 'Letnie' %}
-                      {% assign selected = true %}
-                    {% elsif section.settings.typ_sekcji == 'Opony Zimowe' and option == 'Zimowe' %}
-                      {% assign selected = true %}
-                    {% elsif section.settings.typ_sekcji == 'Opony Całoroczne' and option == 'Całoroczne' %}
-                      {% assign selected = true %}
-                    {% endif %}
-                    <option value="{{ option }}" {% if selected %}selected="selected"{% endif %}>{{ option }}</option>
-                  {% endfor %}
-                </select>
-                {% render 'select-arrow' %}
-              </div>
-            {% endunless %}
-            <input
-              type="submit"
-              data-wait="Zaczekaj..."
-              class="button w-button"
-              id="submit-manufacturer-form"
-              data-model-gid="gid://shopify/Metaobject/{{ metaobject.system.id }}"
-              value="Szukaj {{ section.settings.header }}">
-            <div class="header_manufacturer-suggested_sizes-wrapper">
-              <div>Popularne rozmiary {{ metaobject.name.value }}:</div>
-              {% if section.settings.typ_sekcji contains 'Opony'%}
-                <a href="/collections/opony?filter.p.m.tires.width=205&filter.p.m.tires.profile=55&filter.p.m.tires.diameter=16&{% if metaobject.system.type == 'brand_page_tires'%}&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}{% endif %}">Opony {{ metaobject.name.value }}
-                  <span class="text-weight-bold">205/55 R16</span>
-                </a>
-                <a href="/collections/opony?filter.p.m.tires.width=195&filter.p.m.tires.profile=65&filter.p.m.tires.diameter=15&{% if metaobject.system.type == 'brand_page_tires'%}&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}{% endif %}">Opony {{ metaobject.name.value }}
-                  <span class="text-weight-bold">195/65 R15</span>
-                </a>
-                <a href="/collections/opony?filter.p.m.tires.width=225&filter.p.m.tires.profile=45&filter.p.m.tires.diameter=17&{% if metaobject.system.type == 'brand_page_tires'%}&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}{% endif %}">Opony {{ metaobject.name.value }}
-                  <span class="text-weight-bold">225/45 R17</span>
-                </a>
-                {% render 'tire-help' %}
-              {% elsif section.settings.typ_sekcji == 'Felgi' %}
-                <a href="/collections/felgi?filter.p.m.rims.diameter=10&filter.p.m.rims.bolt_spacing=4x101.6&filter.p.m.rims.width=3.5&filter.p.m.rims.e_t=24&{% if metaobject.system.type == 'brand_page_tires'%}&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}{% endif %}">Felgi {{ metaobject.name.value }}
-                  <span class="text-weight-bold">R10 4x101 3.5J ET24</span>
-                </a>
-                <a href="/collections/felgi?filter.p.m.rims.diameter=19&filter.p.m.rims.bolt_spacing=5x120&filter.p.m.rims.width=9&filter.p.m.rims.e_t=37&{% if metaobject.system.type == 'brand_page_tires'%}&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}{% endif %}">Felgi {{ metaobject.name.value }}
-                  <span class="text-weight-bold">R19 5x120 9J ET37</span>
-                </a>
-                <a href="/collections/felgi?filter.p.m.rims.diameter=18&filter.p.m.rims.bolt_spacing=5x120&filter.p.m.rims.width=9.5&filter.p.m.rims.e_t=25&{% if metaobject.system.type == 'brand_page_tires'%}&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}{% endif %}">Felgi {{ metaobject.name.value }}
-                  <span class="text-weight-bold">R18 5x120 9.5J ET25</span>
-                </a>
-              {% endif %}
             </div>
-          </form>
+            <div class="header_manufacturer-category_content-wrapper">
+                <div class="form-block-2 w-form">
+                    <div class="header-main-tabs">
+                        <img src="//moto-m5.myshopify.com/cdn/shop/t/5/assets/TireSearch.webp?v=39403575885792371691712928921"
+                             class="image" alt="tire-image">
+                        <div class="tabs-menu-2 w-tab-menu">
+                            <a data-w-tab="1.1" class="tab-link-top-search w-inline-block w-tab-link w--current"
+                               style="white-space: nowrap;">Szukaj wg rozmiaru</a>
+                            <a data-w-tab="1.2" class="tab-link-top-search w-inline-block w-tab-link"
+                               style="white-space: nowrap;">Szukaj wg auta</a>
+                        </div>
+                    </div>
+                    <div class="tabs-content">
+                        <!-- Tab 1: Szukaj wg Rozmiaru -->
+                        <div data-w-tab="1.1" class="w-tab-pane tab-pane-tab-1 w--tab-active">
+                            <form
+                                    id="single-tab-form"
+                                    class="div-block-8-copy last-item-grid-full {% if section.settings.typ_sekcji contains 'Opony' %}is-tire{% elsif section.settings.typ_sekcji == 'Koła' %}is-wheel{% elsif section.settings.typ_sekcji == 'Felgi' %}is-rim{% endif %}"
+                                    data-w-tab="1.{% if section.settings.typ_sekcji contains 'Opony' %}1{% elsif section.settings.typ_sekcji == 'Koła' %}2{% elsif section.settings.typ_sekcji == 'Felgi' %}3{% endif %}"
+                                    style="border-top: none; margin-top: 1rem">
+                                {% assign tire_fields_label = "Szerokość,Profil,Średnica" | split: "," %}
+                                {% assign wheel_fields_label = "Szerokość,Profil,Średnica,Rozstaw śrub,Szerokość" | split: "," %}
+                                {% assign rim_fields_label = "Średnica,Rozstaw śrub,Szerokość,ET" | split: "," %}
+
+                                {% assign season_options = "Letnie,Zimowe,Całoroczne" | split: "," %}
+
+                                {% assign tire_fields_data_name = "tire-width,tire-profile,tire-diameter" | split: "," %}
+                                {% assign wheel_fields_data_name = "tire-width,tire-profile,tire-diameter,rim-bolt,rim-width" | split: "," %}
+                                {% assign rim_fields_data_name = "rim-diameter,rim-bolt,rim-width,rim-et" | split: "," %}
+
+                                {% assign select_position = "is-left,is-middle,is-right" | split: "," %}
+
+                                {% assign types_do_not_display_season = "Opony Letnie,Opony Zimowe,Opony Całoroczne" | split: "," %}
+
+                                {% if section.settings.typ_sekcji contains 'Opony' %}
+                                    <div class="div-block-21-copy" {% if types_do_not_display_season contains section.settings.typ_sekcji %} style="grid-area: span 1 / span 2 / span 1 / span 2" {% endif %}>
+                                        {% for i in (0..2) %}
+                                            <div class="form-field-wrapper">
+                                                <label for="{{ tire_fields_data_name[i] | downcase }}"
+                                                       class="field-label">{{ tire_fields_label[i] }}</label>
+                                                <select
+                                                        id="{{ tire_fields_data_name[i] | downcase }}"
+                                                        data-name="{{ tire_fields_data_name[i] }}"
+                                                        required="required"
+                                                        class="select-field w-select {{ select_position[i] }}"></select>
+                                                {% render 'select-arrow' %}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+
+                                {% if section.settings.typ_sekcji == 'Koła' %}
+                                    <div>
+                                        <div>Opony</div>
+                                        <div class="div-block-21-copy">
+                                            {% for i in (0..2) %}
+                                                <div class="form-field-wrapper">
+                                                    <label for="{{ wheel_fields_data_name[i] | downcase }}"
+                                                           class="field-label">{{ wheel_fields_label[i] }}</label>
+                                                    <select
+                                                            id="{{ wheel_fields_data_name[i] | downcase }}"
+                                                            data-name="{{ wheel_fields_data_name[i] }}"
+                                                            required="required"
+                                                            class="select-field w-select {{ select_position[i] }}"></select>
+                                                    {% render 'select-arrow' %}
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        Felgi
+                                        <div class="div-block-21-copy" style="grid-template-columns: 1fr 1fr;">
+                                            {% for i in (3..4) %}
+                                                <div class="form-field-wrapper">
+                                                    <label for="{{ wheel_fields_data_name[i] | downcase }}"
+                                                           class="field-label">{{ wheel_fields_label[i] }}</label>
+                                                    <select
+                                                            id="{{ wheel_fields_data_name[i] | downcase }}"
+                                                            data-name="{{ wheel_fields_data_name[i] }}"
+                                                            required="required"
+                                                            class="select-field w-select {% if i == 3 %} {{ select_position[0] }} {% else %} {{ select_position[2] }} {% endif %}"></select>
+                                                    {% render 'select-arrow' %}
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                                {% if section.settings.typ_sekcji == 'Felgi' %}
+                                    {% for i in (0..3) %}
+                                        <div class="form-field-wrapper">
+                                            <label for="{{ rim_fields_data_name[i] | downcase }}"
+                                                   class="field-label">{{ rim_fields_label[i] }}</label>
+                                            <select
+                                                    id="{{ rim_fields_data_name[i] | downcase }}"
+                                                    data-name="{{ rim_fields_data_name[i] }}"
+                                                    required="required"
+                                                    class="select-field w-select">
+                                            </select>
+                                            {% render 'select-arrow' %}
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+
+                                {% unless section.settings.typ_sekcji == 'Felgi' %}
+                                    <div class="form-field-wrapper {% if types_do_not_display_season contains section.settings.typ_sekcji %}hide{% endif %}">
+                                        <label for="tire-season" class="field-label">Sezon</label>
+                                        <select
+                                                id="tire-season"
+                                                data-name="tire-season"
+                                                required="required"
+                                                class="select-field w-select">
+                                            {% for option in season_options %}
+                                                {% assign selected = false %}
+                                                {% if section.settings.typ_sekcji == 'Opony Letnie' and option == 'Letnie' %}
+                                                    {% assign selected = true %}
+                                                {% elsif section.settings.typ_sekcji == 'Opony Zimowe' and option == 'Zimowe' %}
+                                                    {% assign selected = true %}
+                                                {% elsif section.settings.typ_sekcji == 'Opony Całoroczne' and option == 'Całoroczne' %}
+                                                    {% assign selected = true %}
+                                                {% endif %}
+                                                <option value="{{ option }}"
+                                                        {% if selected %}selected="selected"{% endif %}>{{ option }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        {% render 'select-arrow' %}
+                                    </div>
+                                {% endunless %}
+                                <input
+                                        type="submit"
+                                        data-wait="Zaczekaj..."
+                                        class="button w-button"
+                                        id="submit-manufacturer-form"
+                                        data-model-gid="gid://shopify/Metaobject/{{ metaobject.system.id }}"
+                                        value="Szukaj {{ section.settings.header }}">
+                                <div class="header_manufacturer-suggested_sizes-wrapper">
+                                    <div>Popularne rozmiary {{ metaobject.name.value }}:</div>
+                                    {% if section.settings.typ_sekcji contains 'Opony' %}
+                                        <a href="/collections/opony?filter.p.m.tires.width=205&filter.p.m.tires.profile=55&filter.p.m.tires.diameter=16&{% if metaobject.system.type == 'brand_page_tires' %}&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}{% endif %}">Opony {{ metaobject.name.value }}
+                                            <span class="text-weight-bold">205/55 R16</span>
+                                        </a>
+                                        <a href="/collections/opony?filter.p.m.tires.width=195&filter.p.m.tires.profile=65&filter.p.m.tires.diameter=15&{% if metaobject.system.type == 'brand_page_tires' %}&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}{% endif %}">Opony {{ metaobject.name.value }}
+                                            <span class="text-weight-bold">195/65 R15</span>
+                                        </a>
+                                        <a href="/collections/opony?filter.p.m.tires.width=225&filter.p.m.tires.profile=45&filter.p.m.tires.diameter=17&{% if metaobject.system.type == 'brand_page_tires' %}&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}{% endif %}">Opony {{ metaobject.name.value }}
+                                            <span class="text-weight-bold">225/45 R17</span>
+                                        </a>
+                                        {% render 'tire-help' %}
+                                    {% elsif section.settings.typ_sekcji == 'Felgi' %}
+                                        <a href="/collections/felgi?filter.p.m.rims.diameter=10&filter.p.m.rims.bolt_spacing=4x101.6&filter.p.m.rims.width=3.5&filter.p.m.rims.e_t=24&{% if metaobject.system.type == 'brand_page_tires' %}&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}{% endif %}">Felgi {{ metaobject.name.value }}
+                                            <span class="text-weight-bold">R10 4x101 3.5J ET24</span>
+                                        </a>
+                                        <a href="/collections/felgi?filter.p.m.rims.diameter=19&filter.p.m.rims.bolt_spacing=5x120&filter.p.m.rims.width=9&filter.p.m.rims.e_t=37&{% if metaobject.system.type == 'brand_page_tires' %}&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}{% endif %}">Felgi {{ metaobject.name.value }}
+                                            <span class="text-weight-bold">R19 5x120 9J ET37</span>
+                                        </a>
+                                        <a href="/collections/felgi?filter.p.m.rims.diameter=18&filter.p.m.rims.bolt_spacing=5x120&filter.p.m.rims.width=9.5&filter.p.m.rims.e_t=25&{% if metaobject.system.type == 'brand_page_tires' %}&filter.p.m.tires.manufacturer=gid%3A%2F%2Fshopify%2FMetaobject%2F{{ metaobject.system.id }}{% endif %}">Felgi {{ metaobject.name.value }}
+                                            <span class="text-weight-bold">R18 5x120 9.5J ET25</span>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </form>
+                        </div>
+                        <!-- Tab 2: Szukaj wg Auta -->
+                        <div data-w-tab="1.2" class="w-tab-pane tab-pane-tab-2">
+                            <form id="single-tab-form"
+                                  class="div-block-8-copy last-item-grid-full is-car w-tab-pane tab-pane-tab-2"
+                                  style="border-top: none">
+                                {% assign form_fields = "Marka,Model,Generacja,Rok,Silnik" | split: "," %}
+                                {% for field in form_fields %}
+                                    <div class="form-field-wrapper">
+                                        <label for="car-{{ field | downcase }}" class="field-label">{{ field }}</label>
+                                        <select
+                                                id="car-{{ field | downcase }}"
+                                                data-name="car-{{ field | downcase }}"
+                                                required="required"
+                                                class="select-field w-select"></select>
+                                        {% render 'select-arrow' %}
+                                    </div>
+                                {% endfor %}
+                                <input
+                                        type="submit"
+                                        data-wait="Zaczekaj..."
+                                        class="button w-button"
+                                        id="submit-car-form"
+                                        data-model-gid="gid://shopify/Metaobject/{{ metaobject.system.id }}"
+                                        value="Szukaj {{ section.settings.header }}">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 <div class="header_manufacturer-category_background-image-wrapper">
-  <div class="image-overlay-layer-dark"></div>
-  {{ section.settings.zdjecie-w-tle | image_url: height: 1080 | image_tag: class: "header_manufacturer-category_background-image" }}
+    <div class="image-overlay-layer-dark"></div>
+    {{ section.settings.zdjecie-w-tle | image_url: height: 1080 | image_tag: class: "header_manufacturer-category_background-image" }}
 </div>
 
 <script type="text/javascript" src="{{ 'filters.js' | asset_url }}"></script>
+<script type="text/javascript" src="{{ 'switch-filter-category-tabs.js' | asset_url }}"></script>
 
 {% schema %}
-  {
-    "name": "Single Tabs Header",
-    "tag": "header",
-    "class": "section_header_manufacturer-category",
-    "limit": 1,
-    "presets": [
-      {
-        "name": "Single Tabs Header"
-      }
-    ],
-    "settings": [
-      {
-        "type": "select",
-        "id": "typ_sekcji",
-        "label": "Typ sekcji",
-        "default": "Opony",
-        "options": [
-          {
-            "value": "Opony",
-            "label": "Opony"
-          },
-          {
-            "value": "Opony Letnie",
-            "label": "Opony Letnie"
-          },
-          {
-            "value": "Opony Zimowe",
-            "label": "Opony Zimowe"
-          },
-          {
-            "value": "Opony Całoroczne",
-            "label": "Opony Całoroczne"
-          },
-          {
-            "value": "Koła",
-            "label": "Koła"
-          },
-          {
-            "value": "Felgi",
-            "label": "Felgi"
-          }
-        ]
-      },
-      {
-        "type": "image_picker",
-        "id": "zdjecie-w-tle",
-        "label": "Zdjęcie w tle"
-      }, {
-        "type": "image_picker",
-        "id": "zdjecie-producenta",
-        "label": "Logo producenta"
-      }, {
-        "type": "text",
-        "id": "header",
-        "label": "Header",
-        "default": "Header"
-      }, {
-        "type": "text",
-        "id": "krotki-opis",
-        "label": "Krótki opis",
-        "default": "Krótki opis"
-      }
-    ]
-  }
+{
+  "name": "Single Tabs Header",
+  "tag": "header",
+  "class": "section_header_manufacturer-category",
+  "limit": 1,
+  "presets": [
+    {
+      "name": "Single Tabs Header"
+    }
+  ],
+  "settings": [
+    {
+      "type": "select",
+      "id": "typ_sekcji",
+      "label": "Typ sekcji",
+      "default": "Opony",
+      "options": [
+        {
+          "value": "Opony",
+          "label": "Opony"
+        },
+        {
+          "value": "Opony Letnie",
+          "label": "Opony Letnie"
+        },
+        {
+          "value": "Opony Zimowe",
+          "label": "Opony Zimowe"
+        },
+        {
+          "value": "Opony Całoroczne",
+          "label": "Opony Całoroczne"
+        },
+        {
+          "value": "Koła",
+          "label": "Koła"
+        },
+        {
+          "value": "Felgi",
+          "label": "Felgi"
+        }
+      ]
+    },
+    {
+      "type": "image_picker",
+      "id": "zdjecie-w-tle",
+      "label": "Zdjęcie w tle"
+    },
+    {
+      "type": "image_picker",
+      "id": "zdjecie-producenta",
+      "label": "Logo producenta"
+    },
+    {
+      "type": "text",
+      "id": "header",
+      "label": "Header",
+      "default": "Header"
+    },
+    {
+      "type": "text",
+      "id": "krotki-opis",
+      "label": "Krótki opis",
+      "default": "Krótki opis"
+    }
+  ]
+}
 {% endschema %}
 
 {% stylesheet %}
-  .div-block-8-copy.last-item-grid-full > :last-child {
-    grid-column: 1 / -1; /* Make the last child span the entire row */
-  }
+.div-block-8-copy.last-item-grid-full > :last-child {
+grid-column: 1 / -1; /* Make the last child span the entire row */
+}
 
-  .header_manufacturer-suggested_sizes-wrapper {
-    display: grid;
-    grid-column-gap: 1rem;
-    grid-row-gap: 1rem;
-    grid-template-rows: auto;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-  }
+.header_manufacturer-suggested_sizes-wrapper {
+display: grid;
+grid-column-gap: 1rem;
+grid-row-gap: 1rem;
+grid-template-rows: auto;
+grid-template-columns: 1fr 1fr 1fr 1fr;
+}
 
-  @media screen and (max-width: 991px) {
-    .header_manufacturer-suggested_sizes-wrapper {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
+@media screen and (max-width: 991px) {
+.header_manufacturer-suggested_sizes-wrapper {
+grid-template-columns: 1fr 1fr;
+}
+}
 
-  @media screen and (max-width: 767px) {
-    .header_manufacturer-suggested_sizes-wrapper {
-      grid-template-columns: 1fr;
-    }
-  }
+@media screen and (max-width: 767px) {
+.header_manufacturer-suggested_sizes-wrapper {
+grid-template-columns: 1fr;
+}
+}
 
 {% endstylesheet %}

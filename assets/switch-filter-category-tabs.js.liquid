@@ -1,0 +1,52 @@
+(async function () {
+    function toggleTab(searchByValue) {
+        // Menu
+        const tabSize = document.querySelector('a[data-w-tab="1.1"]');
+        const tabCar = document.querySelector('a[data-w-tab="1.2"]');
+
+        // Panels
+        const tabContentBySize = document.querySelector('div[data-w-tab="1.1"]');
+        const tabContentByCar = document.querySelector('div[data-w-tab="1.2"]');
+
+        // Check the value of searchByValue and toggle classes accordingly
+        if (searchByValue === 'bySize') {
+            tabSize.classList.add('w--current');
+            tabContentBySize.style.display = "block";
+            tabContentBySize.classList.add('w--tab-active');
+
+            tabCar.classList.remove('w--current');
+            tabContentByCar.style.display = "none";
+            tabContentByCar.classList.remove('w--tab-active');
+        } else if (searchByValue === 'byCar') {
+            tabCar.classList.add('w--current');
+            tabContentByCar.style.display = "block";
+            tabContentByCar.classList.add('w--tab-active');
+
+            tabSize.classList.remove('w--current');
+            tabContentBySize.style.display = "none";
+            tabContentBySize.classList.remove('w--tab-active');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Add event listeners to the tabs for click events
+        const tabSize = document.querySelector('a[data-w-tab="1.1"]');
+        const tabCar = document.querySelector('a[data-w-tab="1.2"]');
+
+        if (tabSize && tabCar) {
+            tabSize.addEventListener('click', function () {
+                toggleTab('bySize');
+                localStorage.setItem('searchBy', 'bySize'); // Save tab state
+            });
+
+            tabCar.addEventListener('click', function () {
+                toggleTab('byCar');
+                localStorage.setItem('searchBy', 'byCar'); // Save tab state
+            });
+        }
+
+        // Initialize tabs based on saved searchByValue or default to 'bySize'
+        const searchByValue = localStorage.getItem('searchBy') || 'bySize';
+        toggleTab(searchByValue);
+    });
+})();
