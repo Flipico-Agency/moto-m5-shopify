@@ -313,6 +313,11 @@ document.addEventListener('DOMContentLoaded', async function () {
             if (pathSegments.includes('opony-run-flat')) {
                 queryParams.set('filter.p.m.tires.additional_information', 'Run+flat');
             }
+
+            // Check for 'pages/opony' but not 'opony-run-flat' in the path segments
+            if (pathSegments.includes('pages') && pathSegments.includes('opony') && !pathSegments.includes('opony-run-flat')) {
+                queryParams.set('filter.p.m.custom.type', 'Osobowe');
+            }
         }
 
         // For subtab 2, include rim parameters along with base tire parameters
