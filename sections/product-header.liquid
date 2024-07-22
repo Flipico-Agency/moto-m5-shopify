@@ -129,9 +129,8 @@
                     </div>
                 </div>
                 <div class="product-header_info">
-                    <div class="product-header_info-top">
-                        {% assign collection_handle = product.collections[0].handle %}
-
+                    {% assign collection_handle = product.collections[0].handle %}
+                    <div class="product-header_info-top" {% if collection_handle == 'akcesoria'%}style="display: none"{%endif%}>
                         {% if collection_handle == 'opony' %}
                             {% if double_parameters_tires == 'true' %}
                                 <div>
@@ -320,188 +319,192 @@
                             {% endcomment %}
                             <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Cena nie dotyczy dekielków</p>
                         {% elsif collection_handle == 'kola' %}
-                            <div class="product-parameters_heading">
-                                <div class="heading-style-h6">Opony</div>
-                            </div>
-                            {% if double_parameters_tires == 'true' %}
-                                <div>
-                                    <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Przód</p>
-                                    <p class="text-size-tiny text-weight-semibold text-color-black">Szerokość: {{ tires_width[0] }}</p>
-                                    <p class="text-size-tiny text-weight-semibold text-color-black">Profil: {{ tires_profile[0] }}</p>
-                                    <p class="text-size-tiny text-weight-semibold text-color-black">Średnica: {{ tires_diameter[0] }}</p>
+                            <div class="wheels-column">
+                                <div class="product-parameters_heading">
+                                    <div class="heading-style-h6">Opony</div>
                                 </div>
-                                <div>
-                                    <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Tył</p>
-                                    <p class="text-size-tiny text-weight-semibold text-color-black">
-                                        Szerokość:
-                                        {% if tires_width[1] == blank %}
-                                            {{ tires_width[0] }}
-                                        {% else %}
-                                            {{ tires_width[1] }}
-                                        {% endif %}
-                                    </p>
-                                    <p class="text-size-tiny text-weight-semibold text-color-black">
-                                        Profil:
-                                        {% if tires_profile[1] == blank %}
-                                            {{ tires_profile[0] }}
-                                        {% else %}
-                                            {{ tires_profile[1] }}
-                                        {% endif %}
-                                    </p>
-                                    <p class="text-size-tiny text-weight-semibold text-color-black">
-                                        Średnica:
-                                        {% if tires_diameter[1] == blank %}
-                                            {{ tires_diameter[0] }}
-                                        {% else %}
-                                            {{ tires_diameter[1] }}
-                                        {% endif %}
-                                    </p>
-                                </div>
-                            {% else %}
-                                <div>
-                                    <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Szerokość</p>
-                                    <p class="text-size-tiny text-weight-semibold text-color-black">{{ tires_width[0] }}</p>
-                                </div>
-                                <div>
-                                    <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Profil</p>
-                                    <p class="text-size-tiny text-weight-semibold text-color-black">{{ tires_profile[0] }}</p>
-                                </div>
-                                <div>
-                                    <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Średnica</p>
-                                    <p class="text-size-tiny text-weight-semibold text-color-black">{{ tires_diameter[0] }}</p>
-                                </div>
-                            {% endif %}
-                            <div>
-                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Sezon</p>
-                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.season }}</p>
-                            </div>
-                            <div>
-                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Stan</p>
-                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.condition }}</p>
-                            </div>
-                            <div>
-                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Producent</p>
-                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.manufacturer.value.name.value }}</p>
-                            </div>
-                            <div>
-                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Model</p>
-                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.model.value.model.value }}</p>
-                            </div>
-                            <div>
-                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Bieżnik</p>
-                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.tread }}</p>
-                            </div>
-                            <div>
-                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Klasa</p>
-                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.class }}</p>
-                            </div>
-                            <div>
-                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Rocznik</p>
-                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.years | remove: '"' | remove: '[' | remove: ']' | split: ',' | join: ' | ' | strip }}</p>
-                            </div>
-                            <div>
-                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Informacje dodatkowe</p>
-                                {% assign additional_info = product.metafields.tires.additional_information %}
-                                {% if additional_info != blank %}
-                                    {% assign additional_info_list = additional_info | split: ',' %}
-                                    <p class="text-size-tiny text-weight-semibold text-color-black">
-                                        {% for item in additional_info_list %}
-                                            {{ item | remove: '"' | remove: '[' | remove: ']' | strip }}{% if forloop.last == false %}<br>{% endif %}
-                                        {% endfor %}
-                                    </p>
+                                {% if double_parameters_tires == 'true' %}
+                                    <div>
+                                        <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Przód</p>
+                                        <p class="text-size-tiny text-weight-semibold text-color-black">Szerokość: {{ tires_width[0] }}</p>
+                                        <p class="text-size-tiny text-weight-semibold text-color-black">Profil: {{ tires_profile[0] }}</p>
+                                        <p class="text-size-tiny text-weight-semibold text-color-black">Średnica: {{ tires_diameter[0] }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Tył</p>
+                                        <p class="text-size-tiny text-weight-semibold text-color-black">
+                                            Szerokość:
+                                            {% if tires_width[1] == blank %}
+                                                {{ tires_width[0] }}
+                                            {% else %}
+                                                {{ tires_width[1] }}
+                                            {% endif %}
+                                        </p>
+                                        <p class="text-size-tiny text-weight-semibold text-color-black">
+                                            Profil:
+                                            {% if tires_profile[1] == blank %}
+                                                {{ tires_profile[0] }}
+                                            {% else %}
+                                                {{ tires_profile[1] }}
+                                            {% endif %}
+                                        </p>
+                                        <p class="text-size-tiny text-weight-semibold text-color-black">
+                                            Średnica:
+                                            {% if tires_diameter[1] == blank %}
+                                                {{ tires_diameter[0] }}
+                                            {% else %}
+                                                {{ tires_diameter[1] }}
+                                            {% endif %}
+                                        </p>
+                                    </div>
                                 {% else %}
-                                    <p class="text-size-tiny text-weight-semibold text-color-black">Brak dodatkowych informacji</p>
+                                    <div>
+                                        <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Szerokość</p>
+                                        <p class="text-size-tiny text-weight-semibold text-color-black">{{ tires_width[0] }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Profil</p>
+                                        <p class="text-size-tiny text-weight-semibold text-color-black">{{ tires_profile[0] }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Średnica</p>
+                                        <p class="text-size-tiny text-weight-semibold text-color-black">{{ tires_diameter[0] }}</p>
+                                    </div>
                                 {% endif %}
-                            </div>
-                            <div class="product-parameters_heading">
-                                <div class="heading-style-h6">Felgi</div>
-                            </div>
-                            {% if double_parameters_rims == 'true' %}
                                 <div>
-                                    <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Przód</p>
-                                    <p class="text-size-tiny text-weight-semibold text-color-black">Średnica: {{ rims_diameter[0] }}</p>
-                                    <p class="text-size-tiny text-weight-semibold text-color-black">ET: {{ rims_e_t[0] }}</p>
-                                    <p class="text-size-tiny text-weight-semibold text-color-black">Szerokość: {{ rims_width[0] }}</p>
+                                    <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Sezon</p>
+                                    <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.season }}</p>
                                 </div>
                                 <div>
-                                    <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Tył</p>
-                                    <p class="text-size-tiny text-weight-semibold text-color-black">
-                                        Średnica:
-                                        {% if rims_diameter[1] == blank %}
-                                            {{ rims_diameter[0] }}
-                                        {% else %}
-                                            {{ rims_diameter[1] }}
-                                        {% endif %}
-                                    </p>
-                                    <p class="text-size-tiny text-weight-semibold text-color-black">
-                                        ET:
-                                        {% if rims_e_t[1] == blank %}
-                                            {{ rims_e_t[0] }}
-                                        {% else %}
-                                            {{ rims_e_t[1] }}
-                                        {% endif %}
-                                    </p>
-                                    <p class="text-size-tiny text-weight-semibold text-color-black">
-                                        Szerokość:
-                                        {% if rims_width[1] == blank %}
-                                            {{ rims_width[0] }}
-                                        {% else %}
-                                            {{ rims_width[1] }}
-                                        {% endif %}
-                                    </p>
-                                </div>
-                            {% else %}
-                                <div>
-                                    <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Średnica</p>
-                                    <p class="text-size-tiny text-weight-semibold text-color-black">{{ rims_diameter[0] }}</p>
+                                    <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Stan</p>
+                                    <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.condition }}</p>
                                 </div>
                                 <div>
-                                    <p class="text-size-tiny text-weight-semibold text-color-grayiron600">ET</p>
-                                    <p class="text-size-tiny text-weight-semibold text-color-black">{{ rims_e_t[0] }}</p>
+                                    <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Producent</p>
+                                    <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.manufacturer.value.name.value }}</p>
                                 </div>
                                 <div>
-                                    <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Szerokość</p>
-                                    <p class="text-size-tiny text-weight-semibold text-color-black">{{ rims_width[0] }}</p>
+                                    <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Model</p>
+                                    <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.model.value.model.value }}</p>
                                 </div>
-                            {% endif %}
-                            <div>
-                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Producent</p>
-                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.manufacturer.value.name.value }}</p>
-                            </div>
-                            <div>
-                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Model</p>
-                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.model.value.model.value }}</p>
-                            </div>
-                            <div>
-                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Stan</p>
-                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.condition }}</p>
-                            </div>
-                            <div>
-                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Kolor</p>
-                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.color }}</p>
-                            </div>
-                            <div>
-                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Powłoka</p>
-                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.coating }}</p>
-                            </div>
-                            <div>
-                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Otwór centralny</p>
-                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.center_hole }}</p>
-                            </div>
-                            <div>
-                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Rozstaw śrub</p>
-                                <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.bolt_spacing }}</p>
-                            </div>
-                            {% comment %}
-                            {% assign producer_serial_number = product.metafields.custom.producer_serial_number %}
-                            {% if producer_serial_number != blank %}
                                 <div>
-                                    <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Numer seryjny producenta</p>
-                                    <p class="text-size-tiny text-weight-semibold text-color-black">{{ producer_serial_number }}</p>
+                                    <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Bieżnik</p>
+                                    <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.tread }}</p>
                                 </div>
-                            {% endif %}
-                            {% endcomment %}
-                            <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Cena nie dotyczy dekielków</p>
+                                <div>
+                                    <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Klasa</p>
+                                    <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.class }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Rocznik</p>
+                                    <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.tires.years | remove: '"' | remove: '[' | remove: ']' | split: ',' | join: ' | ' | strip }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Informacje dodatkowe</p>
+                                    {% assign additional_info = product.metafields.tires.additional_information %}
+                                    {% if additional_info != blank %}
+                                        {% assign additional_info_list = additional_info | split: ',' %}
+                                        <p class="text-size-tiny text-weight-semibold text-color-black">
+                                            {% for item in additional_info_list %}
+                                                {{ item | remove: '"' | remove: '[' | remove: ']' | strip }}{% if forloop.last == false %}<br>{% endif %}
+                                            {% endfor %}
+                                        </p>
+                                    {% else %}
+                                        <p class="text-size-tiny text-weight-semibold text-color-black">Brak dodatkowych informacji</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="wheels-column">
+                                <div class="product-parameters_heading">
+                                    <div class="heading-style-h6">Felgi</div>
+                                </div>
+                                {% if double_parameters_rims == 'true' %}
+                                    <div>
+                                        <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Przód</p>
+                                        <p class="text-size-tiny text-weight-semibold text-color-black">Średnica: {{ rims_diameter[0] }}</p>
+                                        <p class="text-size-tiny text-weight-semibold text-color-black">ET: {{ rims_e_t[0] }}</p>
+                                        <p class="text-size-tiny text-weight-semibold text-color-black">Szerokość: {{ rims_width[0] }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Tył</p>
+                                        <p class="text-size-tiny text-weight-semibold text-color-black">
+                                            Średnica:
+                                            {% if rims_diameter[1] == blank %}
+                                                {{ rims_diameter[0] }}
+                                            {% else %}
+                                                {{ rims_diameter[1] }}
+                                            {% endif %}
+                                        </p>
+                                        <p class="text-size-tiny text-weight-semibold text-color-black">
+                                            ET:
+                                            {% if rims_e_t[1] == blank %}
+                                                {{ rims_e_t[0] }}
+                                            {% else %}
+                                                {{ rims_e_t[1] }}
+                                            {% endif %}
+                                        </p>
+                                        <p class="text-size-tiny text-weight-semibold text-color-black">
+                                            Szerokość:
+                                            {% if rims_width[1] == blank %}
+                                                {{ rims_width[0] }}
+                                            {% else %}
+                                                {{ rims_width[1] }}
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                {% else %}
+                                    <div>
+                                        <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Średnica</p>
+                                        <p class="text-size-tiny text-weight-semibold text-color-black">{{ rims_diameter[0] }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-size-tiny text-weight-semibold text-color-grayiron600">ET</p>
+                                        <p class="text-size-tiny text-weight-semibold text-color-black">{{ rims_e_t[0] }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Szerokość</p>
+                                        <p class="text-size-tiny text-weight-semibold text-color-black">{{ rims_width[0] }}</p>
+                                    </div>
+                                {% endif %}
+                                <div>
+                                    <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Producent</p>
+                                    <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.manufacturer.value.name.value }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Model</p>
+                                    <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.model.value.model.value }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Stan</p>
+                                    <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.condition }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Kolor</p>
+                                    <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.color }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Powłoka</p>
+                                    <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.coating }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Otwór centralny</p>
+                                    <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.center_hole }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Rozstaw śrub</p>
+                                    <p class="text-size-tiny text-weight-semibold text-color-black">{{ product.metafields.rims.bolt_spacing }}</p>
+                                </div>
+                                {% comment %}
+                                {% assign producer_serial_number = product.metafields.custom.producer_serial_number %}
+                                {% if producer_serial_number != blank %}
+                                    <div>
+                                        <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Numer seryjny producenta</p>
+                                        <p class="text-size-tiny text-weight-semibold text-color-black">{{ producer_serial_number }}</p>
+                                    </div>
+                                {% endif %}
+                                {% endcomment %}
+                                <p class="text-size-tiny text-weight-semibold text-color-grayiron600">Cena nie dotyczy dekielków</p>
+                            </div>
                         {% elsif collection_handle == 'akcesoria' %}
                             {% comment %} Accesories content empty {% endcomment %}
                         {% elsif collection_handle == 'kola-dojazdowe' %}
@@ -1666,19 +1669,34 @@
 
 {% javascript %}
     document.addEventListener('DOMContentLoaded', function() {
-            var selectElement = document.getElementById('size-selector');
+        const infoTop = document.querySelector('.product-header_info-top');
+        const mainImageWrapper = document.querySelector('.product-header_gallery_main-image_wrapper');
+        const imagesWrapper = document.querySelector('.product-header_gallery-images_wrapper');
 
+        if (infoTop && mainImageWrapper && imagesWrapper) {
+            const galleryHeight = mainImageWrapper.offsetHeight + imagesWrapper.offsetHeight - 100;
+            const infoTopHeight = infoTop.scrollHeight;
+
+            if (infoTopHeight > galleryHeight) {
+                infoTop.style.setProperty('--gallery-height', `${galleryHeight}px`);
+                infoTop.classList.add('overflowed');
+            }
+        }
+
+        var selectElement = document.getElementById('size-selector');
+
+        if (selectElement) {
             selectElement.addEventListener('change', function() {
-            var selectedValue = this.value;
+                var selectedValue = this.value;
 
-            // Assuming you want to change the window's location to the selected value
-            window.location.href = selectedValue;
-        });
+                // Assuming you want to change the window's location to the selected value
+                window.location.href = selectedValue;
+            });
+        }
     });
 {% endjavascript %}
 
 {% stylesheet %}
-
 .product-parameters_heading {
     border-bottom: 1px solid var(--color-grayiron--grayiron400);
     justify-content: space-between;
@@ -1801,7 +1819,6 @@
     //display: grid;
     grid-area: span 1 / span 8 / span 1 / span 8;
 }
-{% endcomment %}
 
 .product-header_manufacturer-logo {
     background-color: var(--color--white);
@@ -2041,8 +2058,43 @@
     }
 }
 
+.wheels-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
 @media screen and (max-width: 479px) {
 
+}
+
+@media (min-width: 1024px) {
+    .product-header_info-top {
+        position: relative;
+        transition: max-height 0.3s ease;
+    }
+
+    .product-header_info-top::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 50%;
+        background: linear-gradient(to bottom, rgba(244, 244, 245, 0) 0%, rgba(244, 244, 245, 1) 100%);
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .product-header_info-top.overflowed {
+        max-height: var(--gallery-height);
+        overflow: hidden;
+    }
+
+    .product-header_info-top.overflowed::after {
+        opacity: 1;
+    }
 }
 
 {% endstylesheet %}
