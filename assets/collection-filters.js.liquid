@@ -70,6 +70,30 @@
             }
         }
 
+        const singleET = urlParams.get('filter.p.m.rims.e_t');
+        const minET = urlParams.get('filter.v.rims.e_t.gte');
+        const maxET = urlParams.get('filter.v.rims.e_t.lte');
+
+        if (singleET) {
+            if (minETElement) minETElement.value = singleET;
+            if (maxETElement) maxETElement.value = singleET;
+        }
+
+        if (minETElement && minET) {
+            minETElement.value = minET;
+        }
+
+        if (maxETElement && maxET) {
+            maxETElement.value = maxET;
+        }
+
+        // Ensure only one type of ET filter is present in URL
+        function manageETFilters() {
+            if (urlParams.has('filter.v.rims.e_t.gte') || urlParams.has('filter.v.rims.e_t.lte')) {
+                urlParams.delete('filter.p.m.rims.e_t');
+            }
+        }
+
         // Initialize year filter values from URL parameters if they exist
         const minYearElement = document.getElementById('minYear');
         const maxYearElement = document.getElementById('maxYear');
@@ -147,12 +171,12 @@
         const expandFiltersButton = document.querySelector('.filters2_tablet-filters-button');
         expandFiltersButton.addEventListener('click', function () {
             filtersWrapper.style.display = 'block';
-        })
+        });
 
         const collapseFiltersButton = document.querySelector('.filters2_tablet-modal-close-button');
         collapseFiltersButton.addEventListener('click', function () {
             filtersWrapper.style.display = 'none';
-        })
+        });
 
         checkScreenWidth();
         window.addEventListener('resize', checkScreenWidth);
@@ -193,6 +217,8 @@
                     urlParams.delete('filter.v.rims.e_t.lte');
                 }
             }
+
+            manageETFilters();
 
             // Add year filter values to the URL parameters if elements exist
             if (minYearElement) {

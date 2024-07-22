@@ -427,6 +427,11 @@ document.addEventListener('DOMContentLoaded', async function () {
                 queryParams.set(key, value);
             }
 
+            if (queryParams.has('filter.v.rims.e_t.gte') || queryParams.has('filter.v.rims.e_t.lte')) {
+                queryParams.delete('filter.v.rims.e_t.gte');
+                queryParams.delete('filter.v.rims.e_t.lte');
+            }
+
             window.location.href = `${formAction}?${queryParams.toString().replace('%2B', '+')}`;
         });
     }
@@ -622,6 +627,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                         currentUrlParams.set('filter.p.m.rims.diameter', rimDiameter);
                         currentUrlParams.set('filter.v.rims.e_t.gte', (parseFloat(rimOffset) - 5).toFixed(1));
                         currentUrlParams.set('filter.v.rims.e_t.lte', (parseFloat(rimOffset) + 5).toFixed(1));
+                        currentUrlParams.delete('filter.p.m.rims.e_t');
                     }
                 } else if (window.location.pathname.includes('collections/kola')) {
                     const tireMatch = selectedOption.match(/(\d+)\/(\d+)\/R(\d+)/);
@@ -636,6 +642,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                         currentUrlParams.set('filter.p.m.rims.diameter', rimDiameter);
                         currentUrlParams.set('filter.v.rims.e_t.gte', (parseFloat(rimOffset) - 5).toFixed(1));
                         currentUrlParams.set('filter.v.rims.e_t.lte', (parseFloat(rimOffset) + 5).toFixed(1));
+                        currentUrlParams.delete('filter.p.m.rims.e_t');
                     }
                 }
 
