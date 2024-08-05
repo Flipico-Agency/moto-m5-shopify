@@ -24,6 +24,14 @@ document.addEventListener('DOMContentLoaded', async function () {
 
                 if (element.dataset.name === 'car-generacja') {
                     optionDisplayValue = option.name !== '' ? option.name : index + 1;
+
+                    if (option.years && Array.isArray(option.years) && option.years.length > 0) {
+                        const minYear = Math.min(...option.years);
+                        const maxYear = Math.max(...option.years);
+                        const yearRange = minYear === maxYear ? minYear.toString() : `${minYear}-${maxYear}`;
+                        optionDisplayValue += ` (${yearRange})`;
+                    }
+
                     optionActualValue = option.slug;
                 } else if (element.dataset.name === 'car-silnik') {
                     optionDisplayValue = `${option.name} (${option.engine.power.PS} KM, ${option.engine.power.kW} kW)`;
@@ -152,6 +160,13 @@ document.addEventListener('DOMContentLoaded', async function () {
                             }
                             if (foundItem) {
                                 selectElement.value = urlParamValue ? urlParamValue : foundItem.value ? foundItem.value : foundItem.slug;
+                            } else {
+                                // Fallback mechanism for empty selectElement.value
+                                if (!selectElement.value) {
+                                    let fallbackItem = data.data[0]; // Default to the first item in the data array
+                                    selectElement.value = urlParamValue ? urlParamValue : fallbackItem.value ? fallbackItem.value : fallbackItem.slug;
+                                    selectedValues[apiParam] = selectElement.value;
+                                }
                             }
                         }
                     }
@@ -183,18 +198,18 @@ document.addEventListener('DOMContentLoaded', async function () {
 
                 manageSelect(selectElement, years.map(year => ({ name: year, value: year })), true);
                 if (years.length > 0) {
-                    selectElement.value = years[0];
+                    selectElement.value = urlParamValue ? urlParamValue : years[0];
                 }
-                selectedValues['year'] = selectElement.value;
+                selectedValues['year'] = urlParamValue ? urlParamValue : selectElement.value;
             } else {
                 manageSelect(selectElement, [], false);
             }
         }
     }
 
-    let generationsData = {};
+    async function setupEventListeners(activeTabContent, elements, fetchDataEndpoints) {
+        let generationsData = {}; // Zmienna na dane o generacjach
 
-    function setupEventListeners(activeTabContent, elements, fetchDataEndpoints) {
         elements.forEach((elementName, index) => {
             const selectElement = activeTabContent.querySelector(`select[data-name="${elementName}"]`);
 
@@ -210,13 +225,44 @@ document.addEventListener('DOMContentLoaded', async function () {
                 });
 
                 if (elementName === 'car-generacja') {
-                    // Bezpośrednia aktualizacja selektora roku na podstawie wybranej generacji
-                    const years = generationsData[selectElement.value]; // Pobierz lata na podstawie wybranej generacji
-                    const yearSelectElement = activeTabContent.querySelector(`select[data-name="car-rok"]`);
-                    if (years) {
-                        manageSelect(yearSelectElement, years.map(year => ({ name: year, value: year })), true);
+                    // Wywołanie API na podstawie wybranej generacji
+                    const fetchDataParams = { region: 'eudm' };
+                    elements.slice(0, index).forEach(prevName => {
+                        const prevSelect = activeTabContent.querySelector(`select[data-name="${prevName}"]`);
+                        const prevApiParam = mapSelectNameToApiParam(prevName);
+                        if (prevSelect && prevSelect.value) fetchDataParams[prevApiParam] = prevSelect.value;
+                    });
+
+                    // Dodaj wybraną generację do parametrów
+                    const selectedGeneration = selectElement.value;
+                    if (selectedGeneration) {
+                        fetchDataParams['generation'] = selectedGeneration;
+                    }
+
+                    // Pobranie danych o rocznikach dla wybranej generacji
+                    const data = await fetchData(fetchDataEndpoints['car-generacja'], fetchDataParams);
+                    if (data && data.data) {
+                        // Filtrowanie danych, aby znaleźć wybraną generację
+                        const selectedGenerationData = data.data.find(item => item.slug === selectedGeneration);
+
+                        if (selectedGenerationData && selectedGenerationData.year_ranges) {
+                            const years = selectedGenerationData.year_ranges.flatMap(range => {
+                                const [start, end] = range.split('-').map(Number);
+                                return Array.from({ length: end - start + 1 }, (_, k) => start + k);
+                            });
+
+                            const yearSelectElement = activeTabContent.querySelector(`select[data-name="car-rok"]`);
+                            if (years.length > 0) {
+                                manageSelect(yearSelectElement, years.map(year => ({ name: year, value: year })), true);
+                                //yearSelectElement.value = years[0]; // Ustaw domyślną wartość
+                            } else {
+                                manageSelect(yearSelectElement, [], false); // W przypadku braku lat, wyłącz selektor roku
+                            }
+                        } else {
+                            manageSelect(activeTabContent.querySelector(`select[data-name="car-rok"]`), [], false);
+                        }
                     } else {
-                        manageSelect(yearSelectElement, [], false); // W przypadku braku informacji o latach, wyłącz selektor roku
+                        manageSelect(activeTabContent.querySelector(`select[data-name="car-rok"]`), [], false);
                     }
                 } else if (index < elements.length - 1) {
                     const nextElementName = elements[index + 1];
