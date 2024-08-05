@@ -40,14 +40,14 @@ document.addEventListener("DOMContentLoaded", function() {
             return 'Zamów dzisiaj, wyślemy po świętach.';
         } else {
             if (dayOfWeek >= 1 && dayOfWeek <= 4) { // Monday - Thursday
-                if (hour < 14) {
-                    return 'Zamów przed 14:00, wyślemy dzisiaj.';
+                if (hour < 10) {
+                    return 'Zamów przed 10:00, wyślemy dzisiaj.';
                 } else {
                     return `Zamów dzisiaj, wyślemy ${isHoliday(getNextWorkingDay(today)) ? 'po świętach' : 'jutro'}.`;
                 }
             } else if (dayOfWeek === 5) { // Friday
-                if (hour < 14) {
-                    return 'Zamów przed 14:00, wyślemy dzisiaj.';
+                if (hour < 10) {
+                    return 'Zamów przed 10:00, wyślemy dzisiaj.';
                 } else {
                     return `Zamów dzisiaj, wyślemy ${isHoliday(getNextWorkingDay(today)) ? 'po świętach' : 'w poniedziałek'}.`;
                 }
