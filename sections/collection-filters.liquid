@@ -660,6 +660,7 @@
                                 {% if display_product == "true" %}
                                     <div class="product-wide shadow-xsmall">
                                         <a href="{{ product.url }}" class="product_content-wrapper w-inline-block">
+                                            {% comment %}
                                             {% if product.collections[0].handle == "opony" %}
                                                 <div class="div-block-47">
                                                     <div class="heading-style-h4">{{ product.metafields.tires.manufacturer.value.name.value }}</div>
@@ -748,6 +749,8 @@
                                                     </div>
                                                     {% endcomment %}
                                                 </div>
+                                                {% endcomment %}
+                                                {% comment %}
                                             {% elsif product.collections[0].handle == 'felgi' %}
                                                 <div class="div-block-47">
                                                     <div class="heading-style-h4">{{ product.metafields.rims.manufacturer.value.name.value }}</div>
@@ -767,7 +770,8 @@
                                                     <div class="product_parameters-wrapper"></div>
                                                     <div class="product_parameters-wrapper"></div>
                                                 </div>
-                                            {% elsif product.collections[0].handle == 'akcesoria' or  product.collections[0].handle == 'kola' or product.collections[0].handle == 'kola-dojazdowe' %}
+                                                {% endcomment %}
+                                            {% if product.collections[0].handle == 'akcesoria' or product.collections[0].handle == 'kola' or product.collections[0].handle == 'opony' or product.collections[0].handle == 'felgi' or product.collections[0].handle == 'kola-dojazdowe' %}
                                                 <div class="div-block-47">
                                                     <div class="heading-style-h4">{{ product.title }}</div>
                                                 </div>
