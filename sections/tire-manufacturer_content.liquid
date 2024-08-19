@@ -44,11 +44,14 @@
           </div>
         {% when 'seo-description' %}
           <div class="padding-section-{{ section.settings.padding }}">
-            {% if block.settings.logo %}
+            {% comment %}
+            {% comment %}{% if block.settings.logo %}{% endcomment %}
               <div class="margin-bottom margin-medium">
-                {{ block.settings.logo | image_url: width: 400 | image_tag }}
+                {% comment %}{{ block.settings.logo | image_url: width: 400 | image_tag }}{% endcomment %}
+                {{ metaobject.name }}
               </div>
-            {% endif %}
+            {% comment %}{% endif %}{% endcomment %}
+            {% endcomment %}
             <div class="content7_component">
               <div class="text-rich-text">
                 {{ block.settings.first-description }}
