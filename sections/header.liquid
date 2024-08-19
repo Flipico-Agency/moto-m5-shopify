@@ -195,14 +195,28 @@
                         {% when 1 %}
                             <div class="navbar7_dropdown-content-left">
                                 {% for block in section.blocks %}
+                                    {% assign index = forloop.index0 %}
                                     {% case block.type %}
                                         {% when 'navigation_tires' %}
                                             <div class="navbar7_dropdown-link-list">
                                                 <h4 class="heading-style-h6" style="text-align: left">{{ block.settings.nav_list.title }}</h4>
                                                 {% for link in block.settings.nav_list.links %}
                                                     <a class="navbar7_dropdown-link w-inline-block"
-                                                       href="{{ link.url }}">{{ link.title }}</a>
+                                                       href="{{ link.url }}">{{ link.title }}
+                                                    </a>
                                                 {% endfor %}
+                                                {% if index == 1 %}
+                                                    <a class="navbar7_dropdown-link w-inline-block"
+                                                       href="/collections/opony?filter.p.m.tires.season=Całoroczne">Opony Całoroczne
+                                                    </a>
+                                                {% endif %}
+                                                {% comment %}
+                                                {% if index == 0 %}
+                                                    <a class="navbar7_dropdown-link w-inline-block"
+                                                       href="/collections/opony?filter.p.m.custom.type=Ciężarowe">Opony Ciężarowe
+                                                    </a>
+                                                {% endif %}
+                                                {% endcomment %}
                                             </div>
                                     {% endcase %}
                                 {% endfor %}
@@ -211,11 +225,13 @@
                             <div class="navbar7_dropdown-content-rims">
                                 {% assign rims_titles = "Felgi Aluminiowe,Felgi Stalowe,Felgi Motocyklowe" | split: "," %}
                                 {% assign images = "rim-aluminium.webp,rim-steel.webp,rim-moto.webp" | split: "," %}
+                                {% assign links = "filter.p.m.rims.material=Aluminiowe&filter.p.m.custom.type=Osobowe,filter.p.m.rims.material=Stalowe&filter.p.m.custom.type=Osobowe,filter.p.m.custom.type=Motocykle" | split: "," %}
 
                                 {% for rim_title in rims_titles %}
-                                    {% assign href_slug = rim_title | replace: ' ', '-' | downcase %}
+                                    {% comment %}{% assign href_slug = rim_title | replace: ' ', '-' | downcase %}{% endcomment %}
                                     {% assign index = forloop.index0 %}
-                                    <a href="/pages/{{ href_slug }}" class="link-block-2 w-inline-block" tabindex="0">
+                                    {% comment %}<a href="/pages/{{ href_slug }}" class="link-block-2 w-inline-block" tabindex="0">{% endcomment %}
+                                    <a href="/collections/felgi?{{ links[index] }}" class="link-block-2 w-inline-block" tabindex="0">
                                         <div class="div-block-26">
                                             <img src="{{ images[index] | asset_url }}" loading="lazy" sizes="100vw" alt="tire-image">
                                         </div>
