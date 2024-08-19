@@ -18,7 +18,7 @@
                             </p>
                             <div class="tire-model_image-wrapper">
                                 <div class="tire-model_logo-wrapper">
-                                    {{ section.settings.zdjecie-producenta | image_url: height: 64 | image_tag: class: "tire-model_producer-logo" }}
+                                    {% comment %}{{ section.settings.zdjecie-producenta | image_url: height: 64 | image_tag: class: "tire-model_producer-logo" }}{% endcomment %}
                                 </div>
                                 {{ section.settings.zdjecie-opony | image_url: height: 1000 | image_tag: class: "tire-model_main-image" }}
                             </div>
